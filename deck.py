@@ -16,28 +16,25 @@ class Deck():
         else:
             self.cards = cards
 
-    def display(self):
-        for i, c in enumerate(self.cards):
-            if i % 13 == 0 and i != 0:
-                print()
-            # print(c.rank + c.suit)
-            #  print(str(c), ' ', end='')
-            print('{} '.format(str(c)), end='')
-        print()
-
     def shuffle(self):
         random.shuffle(self.cards)
-        # self.cards.shuffle()
 
     def sort(self):
-        #  sorted(self.cards)
-        self.cards.sort()
+        #  self.cards.sort()
+        self.cards.sort(key=lambda x: x.val())
 
     def deal(self):
         return self.cards.pop()
 
-    def str(self):
-        self.display()
+    def __str__(self):
+        _str = ''
+        for i, c in enumerate(self.cards):
+            if i % 13 == 0 and i != 0:
+                _str += '\n'
+                print()
+            #  print('{} '.format(str(c)), end='')
+            _str += '{} '.format(str(c))
+        return _str
 
     def __len__(self):
         return len(self.cards)
@@ -52,21 +49,24 @@ def create_deck():
 
 if __name__ == '__main__':
     print('New Deck')
-    d = Deck()
-    d.display()
+    d1 = Deck()
+    print(d1)
     print('')
     print('Shuffling the deck')
-    d.shuffle()
-    d.display()
+    d1.shuffle()
+    print(d1)
 
     print('')
     print('dealing out 10 cards and creating a new deck')
 
-    cards = [d.deal() for c in range(10)]
+    cards = [d1.deal() for c in range(10)]
     d2 = Deck(cards)
-    d2.display()
+    print(d2)
 
+    d1 = Deck()
+    d1.shuffle()
     print('')
     print('Sorting the deck')
-    d3 = Deck(d2.sort())
-    d3.display()
+    d1.sort()
+
+    print(d1)

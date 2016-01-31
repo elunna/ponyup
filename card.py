@@ -3,9 +3,8 @@
 # Use tuples instead of lists
 RANKS = ('2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A')
 SUITS = ('c', 'd', 'h', 's')
-#  SUITS = ('Clubs', 'Diamonds', 'Hearts', 'Spades')
 
-cardvalues = {
+VALUES = {
     '2': 2,
     '3': 3,
     '4': 4,
@@ -26,16 +25,14 @@ class Card:
     def __init__(self, rank, suit):
         if rank not in RANKS:
             raise ValueError('Corrupt card construction - {} is not a valid rank!'.format(rank))
-            #  exit()
         if suit.lower() not in SUITS:
             raise ValueError('Corrupt card construction - {} is not a valid suit!'.format(suit))
-            #  exit()
 
         self.rank = rank
         self.suit = suit.lower()
 
     def val(self):
-        return cardvalues[self.rank]
+        return VALUES[self.rank]
 
     def __str__(self):
         return self.rank + self.suit
@@ -44,13 +41,14 @@ class Card:
         return self.rank == other.rank and self.suit == other.suit
 
     def __gt__(self, other):
-        return cardvalues[self.rank] > cardvalues[other.rank]
+        return VALUES[self.rank] > VALUES[other.rank]
 
     def __lt__(self, other):
-        return cardvalues[self.rank] < cardvalues[other.rank]
+        return VALUES[self.rank] < VALUES[other.rank]
 
 
 if __name__ == "__main__":
+    print('Card module tests')
     print('Test card construction')
     c1 = Card('A', 's')
     print(c1)
@@ -73,12 +71,9 @@ if __name__ == "__main__":
     except ValueError as v:
         print(v.args)
 
-    print
+    print('')
     print('Test equality operators')
     print('{} > {}: {}'.format(c1, c2, c1 > c2))
     print('{} < {}: {}'.format(c1, c2, c1 < c2))
     print('{} = {}: {}'.format(c1, c1, c1 == c1))
     print('{} = {}: {}'.format(c1, c2, c1 == c2))
-    print
-
-
