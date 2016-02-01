@@ -6,14 +6,10 @@ import card
 import hand
 import itertools
 
-MULTIPLIERS = (
-    1,
-    100,
-    10000,
-    1000000,
-    100000000)
+#  MULTIPLIERS = (1, 100, 10000, 1000000, 100000000)
+MULTIPLIERS = (100000000, 1000000, 10000, 100, 1)
 
-VALUES = {
+HANDTYPES = {
     #                   100000000   # Largest multiplier
     'ROYAL FLUSH':      100000000000,
     'STRAIGHT FLUSH':   90000000000,
@@ -31,38 +27,27 @@ VALUES = {
 
 def get_type(value):
     # Determine the hand given the numerical value
-    #  print('hand value: {}'.format(value))
-    #  print('value % 1000000: {}'.format(value % 1000000))
-    #  print('value / 1000000: {}'.format(value / 1000000))
-    #  print('round(value, -1): {}'.format(round(value, -1)))
-    #  print('round(value, -2): {}'.format(round(value, -2)))
-    #  print('round(value, -3): {}'.format(round(value, -3)))
-    #  print('round(value, -4): {}'.format(round(value, -4)))
-    #  print('round(value, -5): {}'.format(round(value, -5)))
     roundedval = round(value, -10)
-    #  print('Rounded value: {}'.format(roundedval))
 
-    for v in VALUES:
-        if VALUES[v] == roundedval:
+    for v in HANDTYPES:
+        if HANDTYPES[v] == roundedval:
             return v
     else:
         return 'Type error: Cannot find type!'
 
 
 def valid_hand(hand):
-    # Is it 5 cards?
+    # Is it a valid poker hand?
     if len(hand) > 5:
         print('INVALID HAND: More than 5 cards!')
         return False
     elif len(hand) < 5:
         print('INVALID HAND: Less than 5 cards!')
         return False
-    #  elif len(set(hand.cards)) < 5:
     elif not is_set(hand):
+        # Are all the cards unique (and valid)?
         print('INVALID HAND: Contains duplicate cards!')
         return False
-    # Are all the cards unique (and valid)?
-    #  print('Valid hand!')
     return True
 
 
@@ -77,91 +62,82 @@ def is_set(hand):
         return True
 
 
-def counted_dictionary(hand):
+def sort_values(hand):
+    # Build a dictionary of quantity:rank pairs
     ranks = {}
     for c in hand:
         if c.rank in ranks:
             ranks[c.rank] += 1
         else:
             ranks[c.rank] = 1
-    return ranks
 
-
-def sort_dict_values(dictionary):
     # Build a list using value/key pairs
     # Potentially could make into a list comp
     L = []
-    for r in dictionary:
-        L.append((dictionary[r], r))
+    for r in ranks:
+        L.append((ranks[r], r))
 
-    return sorted(L, key=lambda x: (-x[0], -card.cardvalues[x[1]]))
+    return sorted(L, key=lambda x: (-x[0], -card.VALUES[x[1]]))
 
-
+"""
 def score(hand):
     score = 0
     for i in range(5):
         score += hand[i].val() * MULTIPLIERS[i]
     return score
+"""
+
+
+def score(hand):
+    # Hand should be ordered by highest value first, lowest last
+    score = 0
+    for i, c in enumerate(hand):
+        score += card.VALUES[c[1]] * MULTIPLIERS[i]
+    return score
+
+    # card.VALUES[sorted_values[0][1]] * MULTIPLIERS[4] +\
 
 
 def get_value(hand):
     # Calculate the type of hand and return a string descripting the hand and an integer
     # that correspond to its value
-    value_dict = counted_dictionary(hand)
-    L = sort_dict_values(value_dict)
-    hand = sorted(hand, key=lambda x: card.cardvalues[x.rank])
+    #  value_dict = counted_dict(hand)
+    hand = sorted(hand, key=lambda x: card.VALUES[x.rank])
+    sorted_values = sort_values(hand)
 
-    #  print('sorted hand: ', end='')
-    #  print_hand(hand)
-
-    if len(value_dict) == 5:
+    if len(sorted_values) == 5:
         # Hand cannot contain any pair-type hands
         if is_royal_flush(hand):
-            return VALUES['ROYAL FLUSH']
+            return HANDTYPES['ROYAL FLUSH']
         elif is_straight_flush(hand):
             if hand[0].rank == '2':
-                return VALUES['STRAIGHT FLUSH']
-            return VALUES['STRAIGHT FLUSH'] + MULTIPLIERS[4] * hand[4].val()
+                return HANDTYPES['STRAIGHT FLUSH']
+            return HANDTYPES['STRAIGHT FLUSH'] \
+                + card.VALUES[sorted_values[4][1]] * MULTIPLIERS[0]
         elif is_flush(hand):
-            return VALUES['FLUSH'] + score(hand)
+            return HANDTYPES['FLUSH'] + score(sorted_values)
+
         elif is_low_straight(hand):
-            return VALUES['STRAIGHT']
+            return HANDTYPES['STRAIGHT']
         elif is_straight(hand):
-            return VALUES['STRAIGHT'] + score(hand)
+            return HANDTYPES['STRAIGHT'] + score(sorted_values)
+
         else:
-            return VALUES['HIGH CARD'] + score(hand)
+            return HANDTYPES['HIGH CARD'] + score(sorted_values)
 
-    elif len(value_dict) > 1:
-        if L[0][0] == 4:
-            return VALUES['FOUR OF A KIND'] +\
-                card.cardvalues[L[0][1]] * MULTIPLIERS[4] +\
-                card.cardvalues[L[1][1]] * MULTIPLIERS[3]
+    elif len(sorted_values) > 1:
+        if sorted_values[0][0] == 4:
+            return HANDTYPES['FOUR OF A KIND'] + score(sorted_values)
+        elif sorted_values[0][0] == 3 and sorted_values[1][0] == 2:
+            return HANDTYPES['FULL HOUSE'] + score(sorted_values)
+        elif sorted_values[0][0] == 3 and sorted_values[1][0] == 1:
+            return HANDTYPES['THREE OF A KIND'] + score(sorted_values)
+        elif sorted_values[0][0] == 2 and sorted_values[1][0] == 2:
+            return HANDTYPES['TWO PAIR'] + score(sorted_values)
+        elif sorted_values[0][0] == 2 and sorted_values[1][0] == 1:
+            return HANDTYPES['PAIR'] + score(sorted_values)
 
-        elif L[0][0] == 3 and L[1][0] == 2:
-            return VALUES['FULL HOUSE'] +\
-                card.cardvalues[L[0][1]] * MULTIPLIERS[4] +\
-                card.cardvalues[L[1][1]] * MULTIPLIERS[3]
-
-        elif L[0][0] == 3 and L[1][0] == 1:
-            return VALUES['THREE OF A KIND'] +\
-                card.cardvalues[L[0][1]] * MULTIPLIERS[4] +\
-                card.cardvalues[L[1][1]] * MULTIPLIERS[3] +\
-                card.cardvalues[L[2][1]] * MULTIPLIERS[2]
-
-        elif L[0][0] == 2 and L[1][0] == 2:
-            return VALUES['TWO PAIR'] +\
-                card.cardvalues[L[0][1]] * MULTIPLIERS[4] +\
-                card.cardvalues[L[1][1]] * MULTIPLIERS[3] +\
-                card.cardvalues[L[2][1]] * MULTIPLIERS[2]
-
-        elif L[0][0] == 2 and L[1][0] == 1:
-            return VALUES['PAIR'] +\
-                card.cardvalues[L[0][1]] * MULTIPLIERS[4] +\
-                card.cardvalues[L[1][1]] * MULTIPLIERS[3] +\
-                card.cardvalues[L[2][1]] * MULTIPLIERS[2] +\
-                card.cardvalues[L[3][1]] * MULTIPLIERS[1]
-
-    return VALUES['INVALID']
+    return HANDTYPES['INVALID']
 
 
 def is_royal_flush(hand):
@@ -206,27 +182,10 @@ def is_low_straight(hand):
         and hand[4].rank == 'A'
 
 
-def print_list(mylist):
-    for i in mylist:
-        print(i)
-
-
-def print_cardlist(hand):
-    display = ''
-    for c in hand:
-        #  print('{} '.format(str(c)), end='')
-        display += '{} '.format(str(c))
-    return display
-
-
-def get_combos(source, n):
-    return itertools.combinations(source, n)
-
-
 def find_best_hand(cards):
     if len(cards) < 5:
         return None
-    hands = [hand.Hand(c) for c in get_combos(cards, 5)]
+    hands = [hand.Hand(c) for c in itertools.combinations(cards, 5)]
 
     besthand = hands[0]
 
@@ -234,3 +193,18 @@ def find_best_hand(cards):
         if h.value > besthand.value:
             besthand = h
     return besthand
+
+
+def print_cardlist(cards):
+    display = ''
+    for c in cards:
+        display += '{} '.format(str(c))
+    return display
+
+
+"""
+def print_list(mylist):
+    for i in mylist:
+        print(i)
+
+"""

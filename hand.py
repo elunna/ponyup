@@ -12,16 +12,11 @@ class Hand():
             self.cards = cards
         self.update()
 
-    def display(self):
+    def __str__(self):
         handstr = ''
         for c in self.cards:
-            #  print('\'{}\''.format(str(c)), end='')
-            #  print('{}'.format(str(c)), end=' ')
             handstr += str(c) + ' '
         return handstr
-
-    def __str__(self):
-        return self.display()
 
     def add(self, card):
         self.cards.append(card)

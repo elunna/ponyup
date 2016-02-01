@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 import deck
-import random
-#  import combotests
+#  import random
 import pickle
-#  import evaluator
 import hand
+
+TRIALS = 10000
 
 
 def copy_list(listx):
@@ -14,11 +14,45 @@ def copy_list(listx):
         newlist.append(i)
     return newlist
 
+
+def run_trial(testhand, trials):
+    # Then return a list of: value/type/cards/win %
+
+    hero = hand.Hand(testhand)
+    d = deck.Deck()
+    #  Removing cards in the hand from the deck
+    for h in hero.cards:
+        d.cards.remove(h)
+
+    WINS = 0
+
+    # Begin trials
+    for i in range(TRIALS):
+        deck_copy = deck.Deck(copy_list(d.cards))
+        deck_copy.shuffle()
+        villain = hand.Hand([deck_copy.deal() for x in range(5)])
+        if hero.value > villain.value:
+            WINS += 1
+
+    WIN_PERCENT = WINS / TRIALS
+    #  print('Win percent: %{}'.format(WIN_PERCENT * 100))
+    print('{:<15}{:<15}{:<15}{}'.format(hero.value, hero.handrank, str(hero), WIN_PERCENT))
+
+    return [hero.value, hero.handrank, hero, WIN_PERCENT]
+
+
+def write_handtrials(results):
+    print('Creating a report in handtrials.dat')
+
+    with open('handtrials.dat', 'w') as f:
+        for r in results:
+            f.write('{:<15}{:<15}{:<15}{}\n'.format(r[0], r[1], str(r[2]), r[3]))
+
+
 if __name__ == "__main__":
     print('SIMULATION:')
     print('Test the winrates of all 5 card poker hands.')
-    REPS = 1000000
-    print('Run {} trials for each unique hand.'.format(REPS))
+    print('Run {} trials for each unique hand.'.format(TRIALS))
     print('*'*80)
 
     print('')
@@ -28,37 +62,13 @@ if __name__ == "__main__":
     with open('handcombos.dat', 'rb') as db:
         hands = pickle.load(db)
 
-    print('db length = {}'.format(len(hands)))
+    resultlist = []
+    for h in hands:
+        resultlist.append(run_trial(h[2], TRIALS))
 
-    #  r = hands.popitem()
-    hero = hand.Hand(random.choice(hands)[2])
+    write_handtrials(resultlist)
 
-    #  print('random hand = {}'.format(evaluator.print_cardlist(hero[2])))
-    print('random hand = {}'.format(hero.display()))
-    #  print('rank: {}'.format(hero[1]))
-    print('rank: {}'.format(hero.handrank))
-    print('value: {}'.format(hero.value))
-
-    d = deck.Deck()
-    print('Removing cards in the hand from the deck')
-    for h in hero.cards:
-        d.cards.remove(h)
-        #  print(h in d.cards)
-    print('modified deck size: {}'.format(len(d)))
-
-    TRIALS = 10000
-    WINS = 0
-    # Begin trials
-
-    for i in range(TRIALS):
-        deck_copy = deck.Deck(copy_list(d.cards))
-        deck_copy.shuffle()
-        villain = hand.Hand([deck_copy.deal() for x in range(5)])
-        if hero.value > villain.value:
-            WINS += 1
-
-    print('='*80)
-    print('Performs {} trials'.format(TRIALS))
-    print('Hero won {} times.'.format(WINS))
-    WIN_PERCENT = WINS / TRIALS
-    print('Win percent: %{}'.format(WIN_PERCENT * 100))
+    #  hero = hand.Hand(random.choice(hands)[2])
+    #  print('random hand = {}'.format(hero.display()))
+    #  print('rank: {}'.format(hero.handrank))
+    #  print('value: {}'.format(hero.value))

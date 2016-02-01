@@ -201,11 +201,11 @@ def test_hand(cards):
     h = deck.Deck(cards)
     #  hand.cards = hand.sort()
     #  hand.sort()
-    h.display()
+    print(h)
     if not ev.valid_hand(h):
         return
     value = ev.get_value(h.cards)
-    #  print('Hand Value: {}'.format(value))
+    print('Hand Value: {}'.format(value))
     print('Hand Type: {}'.format(ev.get_type(value)))
     print('')
 
@@ -291,11 +291,11 @@ if __name__ == "__main__":
     hands.append(hand.Hand(deal_pair_A()))
     hands.append(hand.Hand(deal_pair_B()))
 
-    for h in hands:
-        print('')
-        h.display()
-        print('value: {}'.format(h.value))
-        print('type: {}'.format(h.handrank))
+    #  for h in hands:
+        #  print('')
+        #  print(h)
+        #  print('value: {}'.format(h.value))
+        #  print('type: {}'.format(h.handrank))
 
     print('#'*80)
     print('')
@@ -304,7 +304,7 @@ if __name__ == "__main__":
     handA = hand.Hand(dealhand(5))
 
     for h in hands:
-        print('{}(A) vs {}(B)'.format(handA.display(), h.display()))
+        print('{}(A) vs {}(B)'.format(handA, h))
         if handA.value > h.value:
             print('Hand A wins!')
         elif handA.value < h.value:
@@ -321,5 +321,5 @@ if __name__ == "__main__":
         ev.print_cardlist(group)
         besthand = ev.find_best_hand(group)
         print('Best hand in the group: ', end='')
-        print(besthand.display())
+        print(besthand)
         print('')

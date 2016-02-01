@@ -1,10 +1,9 @@
 from __future__ import print_function
 import random
 
-VALID_SIZES = [2, 6, 9, 10]
-
 # Table class
 # 4 types of tables, 2-handed, 6-handed, 9-handed, 10-handed
+VALID_SIZES = [2, 6, 9, 10]
 
 
 class Table():
@@ -23,26 +22,25 @@ class Table():
         return len(self.seats)
 
     def __str__(self):
-        display = '{:3}{:12}{:8}{:4}{:10}'.format('#', 'Player', 'Chips', '     ', 'Cards')
-        display += '\n-----------------------------------'
-        display += '\n'
+        _str = '{:3}{:12}{:8}{:4}{:10}'.format('#', 'Player', 'Chips', '     ', 'Cards')
+        _str += '\n-----------------------------------'
+        _str += '\n'
 
         for i, s in enumerate(self.seats):
             if s is None:
-                display += '{}\n'.format(i)
+                _str += '{}\n'.format(i)
             else:
-                display += '{:<3}{:12}${:<7}'.format(i, str(s), s.chips, )
-                #  display += '{: >5}: {: >12}({: >7})'.format(i, s, s.chips)
+                _str += '{:<3}{:12}${:<7}'.format(i, str(s), s.chips, )
                 # Show button if it has been set
                 if self.btn > 1 and i == self.btn:
-                    display += '[BTN]'
+                    _str += '[BTN]'
                 else:
-                    display += ' '*4
+                    _str += ' '*4
                 if s.hand is not None:
-                    display += str(s.hand)
-                display += '\n'
+                    _str += str(s.hand)
+                _str += '\n'
 
-        return display
+        return _str
 
     def add_player(self, s, p):
         """ Adds a player p to the table at seat s"""
@@ -59,18 +57,10 @@ class Table():
 
     def randomize_button(self):
         # Place the button at a random seat
-        #  self.button = random.randint(0, len(self.seats)))
         self.btn = random.randint(0, len(self.seats) - 1)
 
     def move_button(self):
         # Move the button to the next valid player/seat
-        """
-        searching = True
-        while searching:
-            self.btn = (self.btn + 1) % len(self.seats)
-            if self.seats[self.btn] is not None:
-                searching = False
-        """
         self.btn = self.next(self.btn)
 
     def get_players(self):
@@ -81,7 +71,7 @@ class Table():
             return self.seats[self.btn:] + self.seats[0:self.btn]
 
     def next(self, from_seat):
-        # Return the next available player
+        # Return the next available player from from_seat
         length = len(self.seats)
 
         for i in range(1, length + 1):
@@ -95,7 +85,7 @@ class Table():
 def test_table(testnum):
     table = Table(testnum)
 
-    # We will fill the table spots with the numbers they originall correspond with
+    # Fill the table spots with the numbers they originally correspond with
     # This will aid in testing the get_playerlist function.
     for s in range(len(table)):
         table.add_player(s, s)
@@ -127,7 +117,5 @@ def test_table(testnum):
 if __name__ == "__main__":
     # Tests
 
-    table_sizes = [2, 6, 9, 10]
-
-    for t in table_sizes:
+    for t in VALID_SIZES:
         test_table(t)

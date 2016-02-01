@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from __future__ import print_function
-#  import deck
 import gametools
 
 # Rules:
@@ -34,15 +33,19 @@ def playround(warlevel):
 
     if players[0][0].val() > players[1][0].val():
         print('Player 1 takes the round!')
+        # Add the compared cards to player 1's stack
         players[0].append(players[0].pop(0))
         players[0].append(players[1].pop(0))
         return 1
     elif players[0][0].val() < players[1][0].val():
+        # Add the compared cards to player 2's stack
         print('Player 2 takes the round!')
         players[1].append(players[0].pop(0))
         players[1].append(players[1].pop(0))
         return 2
     else:
+        # Go into the 'war' mode.
+        # Use a counter to count what level of war we're at
         warlevel += 1
         result = war(warlevel)
         return result
