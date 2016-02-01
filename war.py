@@ -2,6 +2,9 @@
 
 from __future__ import print_function
 import gametools
+import sys
+import time
+import random
 
 # Rules:
 # If a player runs out of cards they lose.
@@ -13,15 +16,15 @@ players = gametools.deal_players(2, 26)
 def checkstatus():
     if len(players[0]) == 0 and len(players[1]) == 0:
         print('Tie!')
-        exit()
+        sys.exit()
         #  return 0  # Tie
     elif len(players[0]) == 0:
         print('Player 2 wins!')
-        exit()
+        sys.exit()
         #  return 2  # Player 2 wins
     elif len(players[1]) == 0:
         print('Player 1 wins!')
-        exit()
+        sys.exit()
         #  return 1  # Player 1 wins
     else:
         return 0
@@ -54,7 +57,10 @@ def playround(warlevel):
 def war(warlevel):
     # Check player stacks first
     print('WAR!!! LEVEL {}'.format(warlevel))
-    input()
+
+    # Pause button
+    #  input()
+
     spoils = []
     for i in range(4):
         checkstatus()
@@ -77,10 +83,20 @@ def war(warlevel):
 def gameloop():
     rounds = 0
     while True:
+
+        # Optional sleep
+        time.sleep(.05)
+
+        random.shuffle(players[0])
+        random.shuffle(players[1])
+
         rounds += 1
         print('\nRound {}....Player1 = {}    Player2 = {}'.format(
             rounds, len(players[0]), len(players[1])))
+
+        #  Pause button
         #  input()
+
         playround(warlevel=0)
 
 
