@@ -36,7 +36,7 @@ def get_type(value):
         return 'Type error: Cannot find type!'
 
 
-def valid_hand(hand):
+def is_validhand(hand):
     # Is it a valid poker hand?
     if len(hand) > 5:
         print('INVALID HAND: More than 5 cards!')
@@ -62,7 +62,7 @@ def is_set(hand):
         return True
 
 
-def sort_values(hand):
+def sort_ranks(hand):
     # Build a dictionary of quantity:rank pairs
     ranks = {}
     for c in hand:
@@ -79,13 +79,16 @@ def sort_values(hand):
 
     return sorted(L, key=lambda x: (-x[0], -card.VALUES[x[1]]))
 
-"""
-def score(hand):
-    score = 0
-    for i in range(5):
-        score += hand[i].val() * MULTIPLIERS[i]
-    return score
-"""
+
+def sort_suits(hand):
+    # Build a dictionary of quantity:suit counts
+    suits = {}
+    for c in hand:
+        if c.suit in suits:
+            suits[c.suit] += 1
+        else:
+            suits[c.suit] = 1
+    return suits
 
 
 def score(hand):
@@ -103,7 +106,7 @@ def get_value(hand):
     # that correspond to its value
     #  value_dict = counted_dict(hand)
     hand = sorted(hand, key=lambda x: card.VALUES[x.rank])
-    sorted_values = sort_values(hand)
+    sorted_values = sort_ranks(hand)
 
     if len(sorted_values) == 5:
         # Hand cannot contain any pair-type hands
@@ -116,12 +119,10 @@ def get_value(hand):
                 + card.VALUES[sorted_values[4][1]] * MULTIPLIERS[0]
         elif is_flush(hand):
             return HANDTYPES['FLUSH'] + score(sorted_values)
-
         elif is_low_straight(hand):
             return HANDTYPES['STRAIGHT']
         elif is_straight(hand):
             return HANDTYPES['STRAIGHT'] + score(sorted_values)
-
         else:
             return HANDTYPES['HIGH CARD'] + score(sorted_values)
 
@@ -155,13 +156,31 @@ def is_straight_flush(hand):
     else:
         return False
 
-
+"""
 def is_flush(hand):
     suit = hand[0].suit
     for c in hand:
         if c.suit != suit:
             return False
     return True
+"""
+
+
+def is_flush(hand):
+    if len(hand) > 5:
+        ValueError('Hand is too large to measure!')
+
+    return count_suited(hand) == 5
+
+
+def count_suited(hand):
+    #  print_cardlist(hand)
+    suitdict = sort_suits(hand)
+    #  print(suitdict)
+    for i in range(13, 1, -1):
+        if i in suitdict.values():
+            return i
+    print('Suit counting error!')
 
 
 # Assumes the hand is sorted
