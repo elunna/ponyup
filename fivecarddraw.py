@@ -2,7 +2,9 @@
 
 import gametools
 import deck
-#  import hand
+import handtests
+import evaluator
+import hand
 #  import table
 #  import player
 
@@ -47,6 +49,51 @@ class Round():
         pass
 
 
+def pop_ranks(hand, ranks):
+    # Remove ALL BUT the rank given.
+    discard = []
+    keep = []
+    print('')
+    print('Rank = {}'.format(ranks))
+    for c in hand:
+        #  if c.rank == str(ranks):
+        if c.rank in ranks:
+            keep.append(c)
+        else:
+            discard.append(c)
+    # Return both the remainder and the discards
+    return keep, discard
+
+
+def auto_discard(hand):
+    # hand is a Hand object
+    DIS_RANKS = ['HIGH CARD', 'PAIR', 'THREE OF A KIND', 'FOUR OF A KIND']
+
+    h = evaluator.sort_ranks(hand.cards)
+
+    # Draws
+    # Test for straight/flush draw
+    # Test for flush draw
+    #  if evaluator.count_suited(hand) == 4:
+        # Figure out what the suit it
+    # Test for straight draw(s)
+
+    if hand.handrank in DIS_RANKS:
+        print('Performing standard discard')
+        highcards = h[0][1]
+        keep, discard = pop_ranks(hand.cards, highcards)
+
+    elif hand.handrank == 'TWO PAIR':
+        print('Performing two-pair discard')
+        # Keep the twp pair, discard 1.
+        highcards = h[0][1] + h[1][1]
+
+        keep, discard = pop_ranks(hand.cards, highcards)
+
+    # Obviously we will stand pat on:
+    #   Straight, Flush, Full House, Straight/Royal Flush
+    return keep, discard
+
 def main():
     # Make hands
 
@@ -58,14 +105,25 @@ def main():
 
 
 def test():
-    print('This... Is.... Five Card Draw.')
+    print('Five Card Draw tests')
     print('')
-    print('Testing a new game')
-    print('Creating a 2/4 game with a 2 player table')
     print('*'*80)
-    _table = gametools.setup_test_table(2)
-    game = gametools.Game('2/4', _table)
-    print(game)
+    print('Testing discard function')
+    print('')
+    r = handtests.dealhand(5)
+    print('Random 5 cards: {}'.format(evaluator.print_cardlist(r)))
+    print('Creating a hand...')
+    h = hand.Hand(r)
+    print(h)
+    print('Value: {}'.format(h.value))
+    print('Rank: {}'.format(h.handrank))
+
+    print('auto_discard()')
+    k, d = auto_discard(h)
+
+    print('Keep: {}'.format(evaluator.print_cardlist(k)))
+    print('Discard: {}'.format(evaluator.print_cardlist(d)))
+
 
 if __name__ == "__main__":
     test()

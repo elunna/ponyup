@@ -12,6 +12,9 @@ class Hand():
             self.cards = cards
         self.update()
 
+        self.value = evaluator.get_value(self.cards)
+        self.handrank = evaluator.get_type(self.value)
+
     def __str__(self):
         handstr = ''
         for c in self.cards:

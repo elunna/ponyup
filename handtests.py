@@ -202,7 +202,7 @@ def test_hand(cards):
     #  hand.cards = hand.sort()
     #  hand.sort()
     print(h)
-    if not ev.valid_hand(h):
+    if not ev.is_validhand(h):
         return
     value = ev.get_value(h.cards)
     print('Hand Value: {}'.format(value))
