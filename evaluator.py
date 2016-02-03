@@ -5,6 +5,7 @@ from __future__ import print_function
 import card
 import hand
 import itertools
+#  import operator
 
 #  MULTIPLIERS = (1, 100, 10000, 1000000, 100000000)
 MULTIPLIERS = (100000000, 1000000, 10000, 100, 1)
@@ -170,17 +171,24 @@ def is_flush(hand):
     if len(hand) > 5:
         ValueError('Hand is too large to measure!')
 
-    return count_suited(hand) == 5
-
-
-def count_suited(hand):
-    #  print_cardlist(hand)
     suitdict = sort_suits(hand)
-    #  print(suitdict)
+    maxsuit = max(suitdict.keys(), key=(lambda k: suitdict[k]))
+    return suitdict[maxsuit] == 5
+
+
+def get_longest_suit(hand):
+    suitdict = sort_suits(hand)
+    #  maxsuit = max(suitdict.iteritems(), key=operator.itemgetter(1))[0]
+    maxsuit = max(suitdict.keys(), key=(lambda k: suitdict[k]))
+
+    # Return both the most common suit and the number of occurrences.
+    return maxsuit, suitdict[maxsuit]
+    """
     for i in range(13, 1, -1):
         if i in suitdict.values():
             return i
     print('Suit counting error!')
+    """
 
 
 # Assumes the hand is sorted

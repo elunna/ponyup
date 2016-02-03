@@ -51,13 +51,28 @@ class Round():
 
 def pop_ranks(hand, ranks):
     # Remove ALL BUT the rank given.
-    discard = []
     keep = []
+    discard = []
     print('')
     print('Rank = {}'.format(ranks))
     for c in hand:
         #  if c.rank == str(ranks):
         if c.rank in ranks:
+            keep.append(c)
+        else:
+            discard.append(c)
+    # Return both the remainder and the discards
+    return keep, discard
+
+
+def pop_suits(hand, suit):
+    # Remove ALL BUT the suit given.
+    keep = []
+    discard = []
+    print('')
+    print('Suit = {}'.format(suit))
+    for c in hand:
+        if c.suit == suit:
             keep.append(c)
         else:
             discard.append(c)
@@ -73,12 +88,17 @@ def auto_discard(hand):
 
     # Draws
     # Test for straight/flush draw
+    maxsuit, qty = evaluator.get_longest_suit(hand.cards)
+    if qty == 4:
+        print('Found a flush draw! for {}'.format(maxsuit))
+        keep, discard = pop_suits(hand.cards, maxsuit)
+
     # Test for flush draw
     #  if evaluator.count_suited(hand) == 4:
         # Figure out what the suit it
     # Test for straight draw(s)
 
-    if hand.handrank in DIS_RANKS:
+    elif hand.handrank in DIS_RANKS:
         print('Performing standard discard')
         highcards = h[0][1]
         keep, discard = pop_ranks(hand.cards, highcards)
