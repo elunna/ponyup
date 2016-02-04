@@ -191,13 +191,81 @@ def get_longest_suit(hand):
     """
 
 
-# Assumes the hand is sorted
+def get_gap(card1, card2):
+    # Paired cards have no gap
+    if card1.rank == card2.rank:
+        return -1
+
+    # minus the extra 1 to offset the connectness
+    # Example: For 87, 8 - 7 = 1, but the gap is actually 0
+    return abs(card1.val() - card2.val()) - 1
+
+
+def is_connected(cards):
+    # Determine if all the cards are consecutive ranks
+    # (should work regardless of order)
+
+    ordered = sorted(cards)
+
+    for i, c in enumerate(ordered):
+        if i == len(cards) - 1:
+            break
+        elif get_gap(ordered[i], ordered[i + 1]) != 0:
+            return False
+    return True
+
+    #  c = (min(cards))
+    #  print(c)
+    #  cards.remove(c)
+    #  print(cards)
+
+    """
+    # Copy the cards to avoid destroying the original
+    copy = cards[:]
+
+    currentcard = (min(copy))
+    copy.remove(currentcard)
+
+    while copy:
+        c = (min(copy))
+        if get_gap(currentcard, c) != 0:
+            return False
+        copy.remove(c)
+
+    return True
+    """
+
+    # print(max(cards))
+    # print(min(cards))
+    # while cards:
+        # print(cards.pop(min(cards.val())))
+
+    """
+    ordered = sorted(cards)
+
+    for i, c in enumerate(ordered):
+        if i == len(cards) - 1:
+            break
+        elif ordered[i].val() != ordered[i + 1].val() - 1:
+            return False
+    return True
+    """
+
+
 def is_straight(hand):
+    if len(hand) != 5:
+        return False
+    else:
+        return is_connected(hand)
+
+    # Assumes the hand is sorted
+    """
     #  return hand[4].val() < hand[0].val() + 4
     return hand[0].val() == hand[1].val() - 1 \
         and hand[1].val() == hand[2].val() - 1 \
         and hand[2].val() == hand[3].val() - 1 \
         and hand[3].val() == hand[4].val() - 1
+    """
 
 
 def is_low_straight(hand):
