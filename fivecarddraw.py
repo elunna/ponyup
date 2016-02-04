@@ -54,7 +54,7 @@ def pop_ranks(hand, ranks):
     keep = []
     discard = []
     print('')
-    print('Rank = {}'.format(ranks))
+    #  print('Rank = {}'.format(ranks))
     for c in hand:
         #  if c.rank == str(ranks):
         if c.rank in ranks:
@@ -70,7 +70,7 @@ def pop_suits(hand, suit):
     keep = []
     discard = []
     print('')
-    print('Suit = {}'.format(suit))
+    #  print('Suit = {}'.format(suit))
     for c in hand:
         if c.suit == suit:
             keep.append(c)
@@ -82,21 +82,42 @@ def pop_suits(hand, suit):
 
 def auto_discard(hand):
     # hand is a Hand object
-    DIS_RANKS = ['HIGH CARD', 'PAIR', 'THREE OF A KIND', 'FOUR OF A KIND']
+    DIS_RANKS = ['PAIR', 'THREE OF A KIND', 'FOUR OF A KIND']
+    discard = []
+    #  discard = None
 
     h = evaluator.sort_ranks(hand.cards)
 
-    # Draws
-    # Test for straight/flush draw
-    maxsuit, qty = evaluator.get_longest_suit(hand.cards)
-    if qty == 4:
-        print('Found a flush draw! for {}'.format(maxsuit))
-        keep, discard = pop_suits(hand.cards, maxsuit)
+    if hand.handrank == 'HIGH CARD':
+        # Draws
+        copy = sorted(hand.cards[:])
 
-    # Test for flush draw
-    #  if evaluator.count_suited(hand) == 4:
-        # Figure out what the suit it
-    # Test for straight draw(s)
+        # Test for flush draw
+        maxsuit, qty = evaluator.get_longest_suit(copy)
+        if qty == 4:
+            print('Found a flush draw! for {}'.format(maxsuit))
+            keep, discard = pop_suits(copy, maxsuit)
+
+        # Test for open-ended straight draw(s)
+        elif evaluator.get_connectedness(copy[0:4]) == 0:
+            keep = copy[0:4]
+        elif evaluator.get_connectedness(copy[1:5]) == 0:
+            keep = copy[1:5]
+
+        # Test for gutshot straight draw(s)
+        elif evaluator.get_connectedness(copy[0:4]) == 1:
+            keep = copy[0:4]
+        elif evaluator.get_connectedness(copy[1:5]) == 1:
+            keep = copy[1:5]
+        else:
+            highcards = h[0][1]
+            keep, discard = pop_ranks(hand.cards, highcards)
+
+        if len(discard) == 0:
+            print('straight draw?')
+            for c in hand.cards:
+                if c not in keep:
+                    discard.append(c)
 
     elif hand.handrank in DIS_RANKS:
         print('Performing standard discard')
@@ -112,7 +133,9 @@ def auto_discard(hand):
 
     # Obviously we will stand pat on:
     #   Straight, Flush, Full House, Straight/Royal Flush
+
     return keep, discard
+
 
 def main():
     # Make hands
@@ -132,13 +155,13 @@ def test():
     print('')
     r = handtests.dealhand(5)
     print('Random 5 cards: {}'.format(evaluator.print_cardlist(r)))
-    print('Creating a hand...')
     h = hand.Hand(r)
-    print(h)
-    print('Value: {}'.format(h.value))
-    print('Rank: {}'.format(h.handrank))
+    #  print('Creating a hand...: {}'.format(h))
+    #  print(h)
+    print('Value: {:<15} Rank: {:<15}'.format(h.value, h.handrank))
+    #  print('Rank: {}'.format(h.handrank))
 
-    print('auto_discard()')
+    #  print('auto_discard()')
     k, d = auto_discard(h)
 
     print('Keep: {}'.format(evaluator.print_cardlist(k)))

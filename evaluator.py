@@ -201,18 +201,21 @@ def get_gap(card1, card2):
     return abs(card1.val() - card2.val()) - 1
 
 
-def is_connected(cards):
+def get_connectedness(cards):
     # Determine if all the cards are consecutive ranks
     # (should work regardless of order)
 
     ordered = sorted(cards)
+    gaps = 0
 
     for i, c in enumerate(ordered):
         if i == len(cards) - 1:
             break
-        elif get_gap(ordered[i], ordered[i + 1]) != 0:
-            return False
-    return True
+        g = get_gap(ordered[i], ordered[i + 1])
+        if g == -1:
+            raise ValueError('Pair detected while attempting to parse connected cards!')
+        gaps += g
+    return gaps
 
     #  c = (min(cards))
     #  print(c)
@@ -235,11 +238,6 @@ def is_connected(cards):
     return True
     """
 
-    # print(max(cards))
-    # print(min(cards))
-    # while cards:
-        # print(cards.pop(min(cards.val())))
-
     """
     ordered = sorted(cards)
 
@@ -256,7 +254,7 @@ def is_straight(hand):
     if len(hand) != 5:
         return False
     else:
-        return is_connected(hand)
+        return get_connectedness(hand) == 0
 
     # Assumes the hand is sorted
     """
