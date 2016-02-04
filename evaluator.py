@@ -52,12 +52,12 @@ def is_validhand(hand):
     return True
 
 
-def is_set(hand):
+def is_set(cards):
     # Test if a hand contains any duplicate entries
-    handcopy = [c for c in hand.cards]
-    while handcopy:
-        tempcard = handcopy.pop()
-        if tempcard in handcopy:
+    _cards = cards[:]
+    while _cards:
+        tempcard = _cards.pop()
+        if tempcard in _cards:
             return False
     else:
         return True

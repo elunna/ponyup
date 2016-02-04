@@ -18,285 +18,159 @@ def dealhand(quantity):
 
 
 def deal_duplicates():
-    h = []
-    h.append(card.Card('A', 's'))
-    h.append(card.Card('3', 'h'))
-    h.append(card.Card('A', 's'))
-    h.append(card.Card('4', 'd'))
-    h.append(card.Card('5', 'c'))
-    return h
+    dupes = [('A', 's'), ('3', 'h'), ('A', 's'), ('4', 'd'), ('5', 'c')]
+    return [card.Card(x[0], x[1]) for x in dupes]
 
 
 def deal_royalflush():
-    h = []
-    h.append(card.Card('A', 's'))
-    h.append(card.Card('K', 's'))
-    h.append(card.Card('J', 's'))
-    h.append(card.Card('T', 's'))
-    h.append(card.Card('Q', 's'))
-    return h
+    rf = [('A', 's'), ('K', 's'), ('J', 's'), ('T', 's'), ('Q', 's')]
+    return [card.Card(x[0], x[1]) for x in rf]
 
 
 def deal_straightflush_A():
-    h = []
-    h.append(card.Card('9', 's'))
-    h.append(card.Card('K', 's'))
-    h.append(card.Card('Q', 's'))
-    h.append(card.Card('J', 's'))
-    h.append(card.Card('T', 's'))
-    return h
+    sf = [('9', 's'), ('K', 's'), ('Q', 's'), ('J', 's'), ('T', 's')]
+    return [card.Card(x[0], x[1]) for x in sf]
 
 
-def deal_straightflush_B():
-    h = []
-    h.append(card.Card('2', 's'))
-    h.append(card.Card('A', 's'))
-    h.append(card.Card('3', 's'))
-    h.append(card.Card('4', 's'))
-    h.append(card.Card('5', 's'))
-    return h
+def deal_lowstraightflush():
+    sf = [('2', 's'), ('A', 's'), ('3', 's'), ('4', 's'), ('5', 's')]
+    return [card.Card(x[0], x[1]) for x in sf]
 
 
 def deal_4ofakind_A():
-    h = []
-    h.append(card.Card('A', 's'))
-    h.append(card.Card('A', 'd'))
-    h.append(card.Card('A', 'h'))
-    h.append(card.Card('A', 'c'))
-    h.append(card.Card('8', 'c'))
-    return h
+    quads = [('A', 's'), ('A', 'd'), ('A', 'h'), ('A', 'c'), ('8', 'c')]
+    return [card.Card(x[0], x[1]) for x in quads]
 
 
 def deal_4ofakind_B():
-    h = []
-    h.append(card.Card('8', 's'))
-    h.append(card.Card('8', 'd'))
-    h.append(card.Card('8', 'h'))
-    h.append(card.Card('8', 'c'))
-    h.append(card.Card('A', 'c'))
-    return h
+    quads = [('8', 's'), ('8', 'd'), ('8', 'h'), ('8', 'c'), ('A', 'c')]
+    return [card.Card(x[0], x[1]) for x in quads]
 
 
 def deal_fullhouse_A():
-    h = []
-    h.append(card.Card('A', 's'))
-    h.append(card.Card('A', 'd'))
-    h.append(card.Card('A', 'h'))
-    h.append(card.Card('K', 'd'))
-    h.append(card.Card('K', 'c'))
-    return h
+    fullhouse = [('A', 's'), ('A', 'd'), ('A', 'h'), ('K', 'd'), ('K', 'c')]
+    return [card.Card(x[0], x[1]) for x in fullhouse]
 
 
 def deal_fullhouse_B():
-    h = []
-    h.append(card.Card('K', 's'))
-    h.append(card.Card('K', 'd'))
-    h.append(card.Card('K', 'h'))
-    h.append(card.Card('A', 'd'))
-    h.append(card.Card('A', 'c'))
-    return h
+    fullhouse = [('K', 's'), ('K', 'd'), ('K', 'h'), ('A', 'd'), ('A', 'c')]
+    return [card.Card(x[0], x[1]) for x in fullhouse]
 
 
 def deal_flush():
-    h = []
-    h.append(card.Card('A', 's'))
-    h.append(card.Card('3', 's'))
-    h.append(card.Card('5', 's'))
-    h.append(card.Card('9', 's'))
-    h.append(card.Card('7', 's'))
-    return h
+    flush = [('A', 's'), ('3', 's'), ('5', 's'), ('9', 's'), ('7', 's')]
+    return [card.Card(x[0], x[1]) for x in flush]
 
 
 def deal_high_straight():
-    h = []
-    h.append(card.Card('A', 's'))
-    h.append(card.Card('T', 'c'))
-    h.append(card.Card('K', 's'))
-    h.append(card.Card('J', 'd'))
-    h.append(card.Card('Q', 'h'))
-    return h
+    straight = [('A', 's'), ('T', 'c'), ('K', 's'), ('J', 'd'), ('Q', 'h')]
+    return [card.Card(x[0], x[1]) for x in straight]
 
 
 def deal_mid_straight():
-    h = []
-    h.append(card.Card('7', 's'))
-    h.append(card.Card('8', 'c'))
-    h.append(card.Card('9', 's'))
-    h.append(card.Card('T', 'd'))
-    h.append(card.Card('J', 'h'))
-    return h
+    straight = [('8', 's'), ('7', 'h'), ('9', 's'), ('T', 'd'), ('J', 'h')]
+    return [card.Card(x[0], x[1]) for x in straight]
 
 
 def deal_low_straight():
-    h = []
-    h.append(card.Card('2', 's'))
-    h.append(card.Card('3', 'h'))
-    h.append(card.Card('A', 's'))
-    h.append(card.Card('4', 'd'))
-    h.append(card.Card('5', 'c'))
-    return h
+    straight = [('2', 's'), ('3', 'h'), ('A', 's'), ('4', 'd'), ('5', 'c')]
+    return [card.Card(x[0], x[1]) for x in straight]
 
 
 def deal_3ofakind_A():
-    h = []
-    h.append(card.Card('A', 's'))
-    h.append(card.Card('K', 'h'))
-    h.append(card.Card('A', 'h'))
-    h.append(card.Card('A', 'd'))
-    h.append(card.Card('Q', 'c'))
-    return h
+    trips = [('A', 's'), ('K', 'h'), ('A', 'h'), ('A', 'd'), ('Q', 'c')]
+    return [card.Card(x[0], x[1]) for x in trips]
 
 
 def deal_3ofakind_B():
-    h = []
-    h.append(card.Card('K', 's'))
-    h.append(card.Card('Q', 'h'))
-    h.append(card.Card('K', 'h'))
-    h.append(card.Card('K', 'd'))
-    h.append(card.Card('A', 'c'))
-    return h
+    trips = [('K', 's'), ('Q', 'h'), ('K', 'h'), ('K', 'd'), ('A', 'c')]
+    return [card.Card(x[0], x[1]) for x in trips]
 
 
 def deal_twopair_A():
-    h = []
-    h.append(card.Card('K', 's'))
-    h.append(card.Card('8', 'h'))
-    h.append(card.Card('A', 's'))
-    h.append(card.Card('A', 'd'))
-    h.append(card.Card('K', 'c'))
-    return h
+    twopair = [('K', 's'), ('8', 'h'), ('A', 's'), ('A', 'd'), ('K', 'c')]
+    return [card.Card(x[0], x[1]) for x in twopair]
 
 
 def deal_twopair_B():
-    h = []
-    h.append(card.Card('K', 's'))
-    h.append(card.Card('A', 'h'))
-    h.append(card.Card('8', 's'))
-    h.append(card.Card('8', 'd'))
-    h.append(card.Card('K', 'c'))
-    return h
+    twopair = [('K', 's'), ('A', 'h'), ('8', 's'), ('8', 'd'), ('K', 'c')]
+    return [card.Card(x[0], x[1]) for x in twopair]
 
 
 def deal_pair_A():
-    h = []
-    h.append(card.Card('2', 's'))
-    h.append(card.Card('3', 'h'))
-    h.append(card.Card('A', 's'))
-    h.append(card.Card('A', 'd'))
-    h.append(card.Card('5', 'c'))
-    return h
+    pair = [('2', 's'), ('3', 'h'), ('A', 's'), ('A', 'd'), ('5', 'c')]
+    return [card.Card(x[0], x[1]) for x in pair]
 
 
 def deal_pair_B():
-    h = []
-    h.append(card.Card('A', 's'))
-    h.append(card.Card('3', 'h'))
-    h.append(card.Card('2', 's'))
-    h.append(card.Card('2', 'd'))
-    h.append(card.Card('5', 'c'))
-    return h
+    pair = [('A', 's'), ('3', 'h'), ('2', 's'), ('2', 'd'), ('5', 'c')]
+    return [card.Card(x[0], x[1]) for x in pair]
 
 
 def test_hand(cards):
-    h = deck.Deck(cards)
-    #  hand.cards = hand.sort()
-    #  hand.sort()
-    print(h)
-    if not ev.is_validhand(h):
+    if not ev.is_validhand(cards):
         return
-    value = ev.get_value(h.cards)
-    print('Hand Value: {}'.format(value))
-    print('Hand Type: {}'.format(ev.get_type(value)))
-    print('')
+
+    value = ev.get_value(cards)
+    _type = ev.get_type(value)
+
+    print('{:15}{:15}{:15}'.format(_type, str(cards), value))
 
 if __name__ == "__main__":
     # Test the deck and cards
 
+    print('Testing boundary cases:\n')
     # Random cards
-    test_hand(dealhand(4))
-    test_hand(dealhand(5))
-    test_hand(dealhand(6))
+    print('')
+    random_4cards = dealhand(4)
+    print('Attempting to deal 4 cards')
+    print(random_4cards)
+    test_hand(random_4cards)
 
+    print('')
+    random_5cards = dealhand(5)
+    print('Attempting to deal 5 cards')
+    print(random_5cards)
+    test_hand(random_4cards)
+
+    print('')
+    random_6cards = dealhand(6)
+    print('Attempting to deal 6 cards')
+    print(random_6cards)
+    test_hand(random_6cards)
+
+    print('')
     print('Test hand with 2 As\'s')
     test_hand(deal_duplicates())
     print('')
-    print('')
-
-    print('Royal Flush: ', end='')
-    test_hand(deal_royalflush())
-
-    print('Straight Flush A:', end='')
-    test_hand(deal_straightflush_A())
-
-    print('Straight Flush B:', end='')
-    test_hand(deal_straightflush_B())
-
-    print('Quads A: ', end='')
-    test_hand(deal_4ofakind_A())
-
-    print('Quads B: ', end='')
-    test_hand(deal_4ofakind_B())
-
-    print('Full House A: ', end='')
-    test_hand(deal_fullhouse_A())
-
-    print('Full House B: ', end='')
-    test_hand(deal_fullhouse_B())
-
-    print('Flush: ', end='')
-    test_hand(deal_flush())
-
-    print('High straight: ', end='')
-    test_hand(deal_high_straight())
-
-    print('Middle straight: ', end='')
-    test_hand(deal_mid_straight())
-
-    print('Low straight: ', end='')
-    test_hand(deal_low_straight())
-
-    print('Set A: ', end='')
-    test_hand(deal_3ofakind_A())
-
-    print('Set B: ', end='')
-    test_hand(deal_3ofakind_B())
-
-    print('Two Pair A: ', end='')
-    test_hand(deal_twopair_A())
-
-    print('Two Pair B: ', end='')
-    test_hand(deal_twopair_B())
-
-    print('Pair A: ', end='')
-    test_hand(deal_pair_A())
-
-    print('Pair B: ', end='')
-    test_hand(deal_pair_B())
 
     print('#'*80)
     print('')
     print('Hand generation tests')
 
     hands = []
-    hands.append(hand.Hand(deal_royalflush()))
-    hands.append(hand.Hand(deal_straightflush_A()))
-    hands.append(hand.Hand(deal_4ofakind_A()))
-    hands.append(hand.Hand(deal_fullhouse_A()))
-    hands.append(hand.Hand(deal_flush()))
-    hands.append(hand.Hand(deal_high_straight()))
-    hands.append(hand.Hand(deal_mid_straight()))
-    hands.append(hand.Hand(deal_low_straight()))
-    hands.append(hand.Hand(deal_3ofakind_A()))
-    hands.append(hand.Hand(deal_twopair_A()))
-    hands.append(hand.Hand(deal_pair_A()))
-    hands.append(hand.Hand(deal_pair_B()))
+    hands.append(deal_royalflush())
+    hands.append(deal_straightflush_A())
+    hands.append(deal_lowstraightflush())
+    hands.append(deal_4ofakind_A())
+    hands.append(deal_4ofakind_B())
+    hands.append(deal_fullhouse_A())
+    hands.append(deal_fullhouse_B())
+    hands.append(deal_flush())
+    hands.append(deal_high_straight())
+    hands.append(deal_mid_straight())
+    hands.append(deal_low_straight())
+    hands.append(deal_3ofakind_A())
+    hands.append(deal_3ofakind_B())
+    hands.append(deal_twopair_A())
+    hands.append(deal_twopair_B())
+    hands.append(deal_pair_A())
+    hands.append(deal_pair_B())
 
-    #  for h in hands:
-        #  print('')
-        #  print(h)
-        #  print('value: {}'.format(h.value))
-        #  print('type: {}'.format(h.handrank))
+    for h in hands:
+        test_hand(h)
 
+    """
     print('#'*80)
     print('')
     print('Hand comparison tests')
@@ -311,15 +185,17 @@ if __name__ == "__main__":
             print('Hand B wins!')
         else:
             print('Tie!')
+    """
 
     print('#'*80)
     print('')
-    print('Test the best hand finder')
+    print('Test the best hand finder:')
 
     for i in range(10):
         group = dealhand(7)
-        ev.print_cardlist(group)
+        #  ev.print_cardlist(group)
+        print(group)
         besthand = ev.find_best_hand(group)
-        print('Best hand in the group: ', end='')
+        print('\t\t\t\tBest hand: ', end='')
         print(besthand)
         print('')
