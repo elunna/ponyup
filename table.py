@@ -36,8 +36,8 @@ class Table():
                     _str += '[BTN]'
                 else:
                     _str += ' '*4
-                if s.hand is not None:
-                    _str += str(s.hand)
+                if s._hand is not None:
+                    _str += str(s._hand)
                 _str += '\n'
 
         return _str

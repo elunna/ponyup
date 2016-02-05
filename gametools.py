@@ -121,16 +121,18 @@ def get_winner(players):
     besthand = {'player': -1, 'value': -1}
 
     for i, p in enumerate(players):
-        print('Player#{}: {}'.format(i, p.display()))
+        print('Player#{}: {}'.format(i, str(p)))
 
-        if players[i].value > besthand['value']:
-            besthand['value'] = players[i].value
+        #  if players[i].hand.value > besthand['value']:
+        if p._hand.value > besthand['value']:
+            besthand['value'] = players[i]._hand.value
             besthand['player'] = i
+
     print('')
-    print('')
-    print('The player with the best hand is: {}'.format(besthand['player']))
-    print('The best hand is:                 {}'.format(players[besthand['player']].display()))
-    print('Type: {}'.format(players[besthand['player']].handrank))
+    #  print('')
+    #  print('Seat {} has the winner.'.format(besthand['player']))
+    print('{} wins!'.format(str(players[besthand['player']])))
+    print('Best Hand: {}'.format(players[besthand['player']]._hand.handrank))
 
 
 def print_playerlist(players):

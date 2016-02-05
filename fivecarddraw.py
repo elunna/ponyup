@@ -6,8 +6,9 @@ import handtests
 import evaluator
 import hand
 import card
+import sys
 #  import table
-#  import player
+import player
 
 
 class Round():
@@ -16,15 +17,24 @@ class Round():
         self.street = 0
         self.pot = 0
         self.d = deck.Deck()
+        # Get activeplayers
         self.players = self.game.table.get_players()
 
     def play(self):
-        # Advance round counter
+        self.d.shuffle()
+        self.d.shuffle()
+        self.d.shuffle()
 
-        # Get activeplayers
-        for p in self.players:
-            for c in range(5):
-                p.hand.add(self.d.deal())
+        # Advance round counter
+        self.game.rounds += 1
+
+        # Check that no players have lingering cards
+        #  print('displaying hand lengths')
+        #  for p in self.players:
+            #  print(len(p._hand))
+            #  if p is not None:
+                #  if len(p._hand) > 0:
+                    #  raise ValueError('Player has cards when they should not!')
 
         # Remember starting stacks of all playerso
         #  self.startingstacks = []
@@ -32,10 +42,15 @@ class Round():
         # Postblinds
 
         # Deal cards
+        for i in range(5):
+            self.players[0].add(self.d.deal())
+            self.players[1].add(self.d.deal())
 
         # Pre-draw betting round
 
         # Check for winners
+        print('Seat 1: {}'.format(self.players[0]._hand))
+        print('Seat 2: {}'.format(self.players[1]._hand))
 
         # Discard/redraw phase
 
@@ -46,8 +61,11 @@ class Round():
 
         # Award pot
 
+        # Clear hands
+        for p in self.players:
+            p.fold()
         # Move the table button
-        pass
+        self.game.table.move_button()
 
 
 def pop_ranks(hand, ranks):
@@ -174,12 +192,27 @@ def auto_discard(hand):
 
 def main():
     # Make hands
-
+    hero = player.Player('Hero')
     _table = gametools.setup_test_table(2)
+    _table.remove_player(0)
+    _table.add_player(0, hero)
+
     game = gametools.Game('2/4', _table)
 
-    r = Round(game)
-    r.play()
+    print('Randomizing the button position.')
+    _table.randomize_button()
+    print(game)
+    print(_table)
+
+    playing = True
+
+    while playing:
+        newround = Round(game)
+        newround.play()
+        choice = input('keep playing? >')
+        if choice == 'n':
+            playing = False
+    exit()
 
 
 def test():
@@ -204,5 +237,5 @@ def test():
 
 
 if __name__ == "__main__":
-    #  main()
-    test()
+    main()
+    #  test()

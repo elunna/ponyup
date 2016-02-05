@@ -1,4 +1,5 @@
 import re
+import hand
 
 
 class Player():
@@ -16,7 +17,7 @@ class Player():
         self.chips = chips
 
         # Should we have any hand management?
-        self.hand = None
+        self._hand = hand.Hand()
 
     def __str__(self):
         #  print('{} -- a {}'.format(self.name, self.playertype))
@@ -35,9 +36,23 @@ class Player():
         self.chips += amt
 
     def fold(self):
-        copy = self.hand[:]
-        self.hand = None
+        copy = self._hand.cards[:]
+        self._hand.cards = []
         return copy
+
+    # hand management
+    def add(self, card):
+        self._hand.cards.append(card)
+        self._hand.update()
+
+    def remove(self, card):
+        # Test if the card is actually in the hand
+        if card not in self._hand.cards:
+            raise ValueError('Card not in players hand!')
+        else:
+            copy = self._hand.cards.pop(card)
+            self._hand.update()
+            return copy
 
 
 def isValidUsername(username):
