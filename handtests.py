@@ -5,6 +5,7 @@ import deck
 import card
 import hand
 import evaluator as ev
+import fivecarddraw
 
 
 def dealhand(quantity):
@@ -21,6 +22,9 @@ def deal_duplicates():
     dupes = [('A', 's'), ('3', 'h'), ('A', 's'), ('4', 'd'), ('5', 'c')]
     return [card.Card(x[0], x[1]) for x in dupes]
 
+
+##########################################################################
+# Made Hands
 
 def deal_royalflush():
     rf = [('A', 's'), ('K', 's'), ('J', 's'), ('T', 's'), ('Q', 's')]
@@ -106,15 +110,58 @@ def deal_pair_B():
     pair = [('A', 's'), ('3', 'h'), ('2', 's'), ('2', 'd'), ('5', 'c')]
     return [card.Card(x[0], x[1]) for x in pair]
 
+##########################################################################
+# Draws
+
+
+def deal_OESFD():
+    pair = [('J', 's'), ('T', 's'), ('8', 's'), ('2', 'd'), ('9', 's')]
+    return [card.Card(x[0], x[1]) for x in pair]
+
+
+def deal_GSSFD():
+    pair = [('J', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
+    return [card.Card(x[0], x[1]) for x in pair]
+
+
+def deal_flushdraw_hi():
+    pair = [('A', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
+    return [card.Card(x[0], x[1]) for x in pair]
+
+
+def deal_flushdraw():
+    pair = [('3', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
+    return [card.Card(x[0], x[1]) for x in pair]
+
+
+def deal_OESD():
+    pair = [('J', 'h'), ('T', 's'), ('8', 'c'), ('2', 'd'), ('9', 's')]
+    return [card.Card(x[0], x[1]) for x in pair]
+
+
+def deal_GSSD():
+    pair = [('J', 'h'), ('T', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')]
+    return [card.Card(x[0], x[1]) for x in pair]
+
+
+def deal_wheeldraw():
+    pair = [('3', 'h'), ('4', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')]
+    return [card.Card(x[0], x[1]) for x in pair]
+
 
 def test_hand(cards):
     if not ev.is_validhand(cards):
         return
 
-    value = ev.get_value(cards)
-    _type = ev.get_type(value)
+    h = hand.Hand(cards)
+    #  value = ev.get_value(cards)
+    #  _type = ev.get_type(value)
 
-    print('{:15}{:15}{:15}'.format(_type, str(cards), value))
+    print('{:15}{:15}{:15}'.format(h.handrank, str(h), h.value))
+    k, d = fivecarddraw.auto_discard(h)
+    print('keep:{} discard:{}'.format(k, d))
+    print('')
+
 
 if __name__ == "__main__":
     # Test the deck and cards
@@ -166,6 +213,14 @@ if __name__ == "__main__":
     hands.append(deal_twopair_B())
     hands.append(deal_pair_A())
     hands.append(deal_pair_B())
+    # Draws
+    hands.append(deal_OESFD())
+    hands.append(deal_GSSFD())
+    hands.append(deal_flushdraw_hi())
+    hands.append(deal_flushdraw())
+    hands.append(deal_OESD())
+    hands.append(deal_GSSD())
+    hands.append(deal_wheeldraw())
 
     for h in hands:
         test_hand(h)

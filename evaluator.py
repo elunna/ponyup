@@ -22,6 +22,9 @@ HANDTYPES = {
     'TWO PAIR':         30000000000,
     'PAIR':             20000000000,
     'HIGH CARD':        0,
+    #  'STRAIGHT-FLUSH DRAW': 0,
+    #  'FLUSH DRAW':       0,
+    #  'STRAIGHT DRAW':    0,
     'INVALID': -1
 }
 
@@ -157,15 +160,6 @@ def is_straight_flush(hand):
     else:
         return False
 
-"""
-def is_flush(hand):
-    suit = hand[0].suit
-    for c in hand:
-        if c.suit != suit:
-            return False
-    return True
-"""
-
 
 def is_flush(hand):
     if len(hand) > 5:
@@ -183,12 +177,6 @@ def get_longest_suit(hand):
 
     # Return both the most common suit and the number of occurrences.
     return maxsuit, suitdict[maxsuit]
-    """
-    for i in range(13, 1, -1):
-        if i in suitdict.values():
-            return i
-    print('Suit counting error!')
-    """
 
 
 def get_gap(card1, card2):
@@ -201,7 +189,7 @@ def get_gap(card1, card2):
     return abs(card1.val() - card2.val()) - 1
 
 
-def get_connectedness(cards):
+def get_allgaps(cards):
     # Determine if all the cards are consecutive ranks
     # (should work regardless of order)
 
@@ -254,7 +242,7 @@ def is_straight(hand):
     if len(hand) != 5:
         return False
     else:
-        return get_connectedness(hand) == 0
+        return get_allgaps(hand) == 0
 
     # Assumes the hand is sorted
     """
