@@ -48,10 +48,10 @@ class Round():
             self.players[1].add(self.d.deal())
 
         # Pre-draw betting round
-
+        print(self.game.table)
         # Check for winners
-        print('Seat 1: {}'.format(self.players[0]._hand))
-        print('Seat 2: {}'.format(self.players[1]._hand))
+        #  print('Seat 1: {}'.format(self.players[0]._hand))
+        #  print('Seat 2: {}'.format(self.players[1]._hand))
 
         # Discard/redraw phase
 
@@ -203,12 +203,13 @@ def main():
 
     print('Randomizing the button position.')
     _table.randomize_button()
-    print(game)
-    print(_table)
 
     playing = True
 
     while playing:
+        print('*'*80)
+        print(game)
+        #  print(_table)
         newround = Round(game)
         newround.play()
         choice = input('keep playing? >')

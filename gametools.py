@@ -114,7 +114,7 @@ def get_winner(players):
     besthand = {'player': -1, 'value': -1}
 
     for i, p in enumerate(players):
-        print('Player#{}: {}'.format(i, str(p)))
+        #  print('Player#{}: {}'.format(i, str(p)))
 
         #  if players[i].hand.value > besthand['value']:
         if p._hand.value > besthand['value']:
@@ -124,14 +124,19 @@ def get_winner(players):
     print('')
     #  print('')
     #  print('Seat {} has the winner.'.format(besthand['player']))
-    print('{} wins!'.format(str(players[besthand['player']])))
-    print('Best Hand: {}'.format(players[besthand['player']]._hand.handrank))
+    #  print('{} wins!'.format(str(players[besthand['player']])))
+    #  print('Best Hand: {}'.format(players[besthand['player']]._hand.handrank))
 
+    print('{} wins with a {}!'.format(
+        str(players[besthand['player']]),
+        players[besthand['player']]._hand.handrank))
+    #  print('Best Hand: {}'.format(players[besthand['player']]._hand.handrank))
 
+"""
 def print_playerlist(players):
     for i, p in enumerate(players):
         print('{}: {}({})'.format(i, p, p.chips))
-
+"""
 
 if __name__ == "__main__":
     # Tests
