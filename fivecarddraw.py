@@ -19,6 +19,7 @@ class Round():
         self.d = deck.Deck()
         # Get activeplayers
         self.players = self.game.table.get_players()
+        self.muck = deck.Deck([])
 
     def play(self):
         self.d.shuffle()
@@ -191,7 +192,8 @@ def auto_discard(hand):
 
 
 def main():
-    # Make hands
+    print('FIVE CARD DRAW!')
+    print('Initializing new game...\n')
     hero = player.Player('Hero')
     _table = gametools.setup_test_table(2)
     _table.remove_player(0)

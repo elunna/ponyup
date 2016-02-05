@@ -18,14 +18,16 @@ class Game():
         self.rounds = 0
 
     def __str__(self):
-        display = 'Game details\n'
-        display += 'Blinds: {}/{}\n'.format(self.blinds[1], self.blinds[2])
-        display += 'Bet cap limit: {}\n'.format(self.betcap)
-        display += 'Table size: {}\n'.format(len(self.table))
-        display += 'Current Round: {}\n'.format(self.rounds)
+        #  display = 'Game details\n'
+        display = ''
+        #  display += 'Blinds: {}/{}\n'.format(self.blinds[1], self.blinds[2])
+        display += '${}/${}\n'.format(self.blinds[1], self.blinds[2])
+        #  display += 'Bet cap limit: {}\n'.format(self.betcap)
+        #  display += 'Table size: {}\n'.format(len(self.table))
+        display += 'Round: {}\n'.format(self.rounds)
         return display
 
-    def get_startingstacks(self):
+    def get_stacks(self):
         # Create a list(or tuple) beginning with the button that contains:
         # seat, username, chips
         """
@@ -49,38 +51,29 @@ def dealhand(quantity):
     # Deal a regular 5 card hand from a new deck
     d = deck.Deck()
     d.shuffle()
-    #  dealtcards = [d.deal() for i in range(quantity)]
-    #  newhand = hand.Hand(dealtcards)
-    #  return newhand
     return [d.deal() for i in range(quantity)]
 
 
-def deal_players(players, handsize):
+def deal_players(players, deck, qty):
     """
-    Returns a list of hands according to how many players are specified and how large
-    the hands should be
+    Take a list of Players and deals qty hands to each.
     """
 
     # Check that the requirements of the players and handsizes don't over deplete the deck
-    if players * handsize > 52:
+    if len(players) * qty > len(deck):
         print('The required players and hand sizes would deplete the deck below negative!')
         return ValueError()
 
-    playerlist = []
-    d = deck.Deck()
-    d.shuffle()
-
-    for i in range(players):
-        playerlist.append(None)
-        playerlist[i] = [d.deal() for i in range(handsize)]
+    for i in range(qty):
+        for p in players:
+            p._hand.add(deck.deal())
 
     # Verify hand sizes
-    for p in playerlist:
-        if not len(p) == handsize:
+    for p in players:
+        if not len(p._hand) == qty:
             print('Corrupt player decks, uneven starting numbers.')
-            exit()
-
-    return playerlist
+            return False
+    return True
 
 
 def setup_test_table(num):
@@ -143,7 +136,6 @@ def print_playerlist(players):
 if __name__ == "__main__":
     # Tests
     print('Testing table setup')
-    """
     t = setup_test_table(2)
     print(t)
 
@@ -152,7 +144,6 @@ if __name__ == "__main__":
 
     t = setup_test_table(9)
     print(t)
-    """
 
     t = setup_test_table(10)
     print(t)
@@ -184,3 +175,13 @@ if __name__ == "__main__":
     for i in range(10):
         t.move_button()
         print(t)
+
+    print('Testing deal_players')
+    playertable = setup_test_table(6)
+    d = deck.Deck()
+    print(playertable)
+    print('The tables players: {}'.format(playertable.get_players()))
+    print('dealing cards')
+    deal_players(playertable.get_players(), d, 5)
+    print('Deck size: {}'.format(len(d)))
+    print(playertable)
