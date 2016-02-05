@@ -34,6 +34,11 @@ class Player():
     def win(self, amt):
         self.chips += amt
 
+    def fold(self):
+        copy = self.hand[:]
+        self.hand = None
+        return copy
+
 
 def isValidUsername(username):
     re1 = re.compile(r"[<>/{}[\]~`^'\\]")
