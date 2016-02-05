@@ -23,6 +23,9 @@ class Player():
         #  print('{} -- a {}'.format(self.name, self.playertype))
         return '{}'.format(self.name)
 
+    def __repr__(self):
+        return str(self)
+
     def bet(self, bet):
         if bet > self.chips:
             print('Invalid bet amount - more than player has!')
