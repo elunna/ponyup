@@ -56,10 +56,10 @@ class Round():
         #  print('Seat 2: {}'.format(self.players[1]._hand))
 
         # Discard/redraw phase
-        k1, d1 = auto_discard(self.players[0]._hand)
+        d1 = auto_discard(self.players[0]._hand)
         print('{} discards {}'.format(self.players[0], d1))
 
-        k2, d2 = auto_discard(self.players[1]._hand)
+        d2 = auto_discard(self.players[1]._hand)
         print('{} discards {}'.format(self.players[1], d2))
         print('')
 
@@ -67,15 +67,12 @@ class Round():
             self.players[0].discard(c)
             self.players[0].add(self.d.deal())
 
-
         for c in d2:
             self.players[1].discard(c)
             self.players[1].add(self.d.deal())
 
         # Show table post draw
         print(self.game.table)
-
-
 
         # Post-draw betting round
 
@@ -97,22 +94,23 @@ def auto_discard(hand):
     # Obviously we will stand pat on:
     PAT_HANDS = ['STRAIGHT', 'FLUSH', 'FULL HOUSE', 'STRAIGHT FLUSH', 'ROYAL FLUSH']
     DIS_RANKS = ['PAIR', 'THREE OF A KIND', 'FOUR OF A KIND']
-    keep, discard = [], []
+    discard = []
 
     h = ev.sort_ranks(hand.cards)
 
     if hand.handrank in PAT_HANDS:
-        keep = hand.cards
+        #  keep = hand.cards
+        pass
     elif hand.handrank in DIS_RANKS:
         #  standard discard
         highcards = h[0][1]
-        keep, discard = ev.pop_ranks(hand.cards, highcards)
+        discard = ev.pop_ranks(hand.cards, highcards)
     elif hand.handrank == 'TWO PAIR':
         #  print('Performing two-pair discard')
         # Keep the twp pair, discard 1.
         highcards = h[0][1] + h[1][1]
 
-        keep, discard = ev.pop_ranks(hand.cards, highcards)
+        discard = ev.pop_ranks(hand.cards, highcards)
 
     elif hand.handrank == 'HIGH CARD':
         # Draws
@@ -123,7 +121,7 @@ def auto_discard(hand):
 
         if qty == 4:
             #  print('Found a flush draw! for {}'.format(maxsuit))
-            keep, discard = ev.pop_suits(copy, maxsuit)
+            discard = ev.pop_suits(copy, maxsuit)
 
         # Test for open-ended straight draw(s)
         elif ev.get_allgaps(copy[0:4]) == 0:
@@ -140,18 +138,18 @@ def auto_discard(hand):
         # Draw to high cards
         elif card.VALUES[h[2][1]] > 9:
             highcards = h[0][1] + h[1][1] + h[2][1]
-            keep, discard = ev.pop_ranks(hand.cards, highcards)
+            discard = ev.pop_ranks(hand.cards, highcards)
         elif card.VALUES[h[1][1]] > 9:
             highcards = h[0][1] + h[1][1]
-            keep, discard = ev.pop_ranks(hand.cards, highcards)
+            discard = ev.pop_ranks(hand.cards, highcards)
 
         elif qty == 3:
             # Backdoor flush draw
-            keep, discard = ev.pop_suits(copy, maxsuit)
+            discard = ev.pop_suits(copy, maxsuit)
 
         # Draw to an Ace almost as a last resort
         elif h[1][1] == 'A':
-            keep, discard = ev.pop_ranks(hand.cards, 'A')
+            discard = ev.pop_ranks(hand.cards, 'A')
 
         # Backdoor straight draws are pretty desparate
         elif ev.get_allgaps(copy[0:3]) == 0:
@@ -171,20 +169,20 @@ def auto_discard(hand):
         else:
             # Last ditch - just draw to the best 2???
             highcards = h[0][1] + h[1][1]
-            keep, discard = ev.pop_ranks(hand.cards, highcards)
+            discard = ev.pop_ranks(hand.cards, highcards)
 
-    if len(discard) == 0:
-        #  print('straight draw?')
-        for c in hand.cards:
-            if c not in keep:
-                discard.append(c)
+        if len(discard) == 0:
+            for c in hand.cards:
+                if c not in keep:
+                    discard.append(c)
 
-    return keep, discard
+    return discard
 
 
 def main():
     print('FIVE CARD DRAW!')
     print('Initializing new game...\n')
+
     hero = player.Player('Hero')
     _table = gametools.setup_test_table(2)
     _table.remove_player(0)
@@ -224,12 +222,12 @@ def test():
     #  print('Rank: {}'.format(h.handrank))
 
     #  print('auto_discard()')
-    k, d = auto_discard(h)
+    d = auto_discard(h)
 
-    print('Keep: {}'.format(k))
+    #  print('Keep: {}'.format(k))
     print('Discard: {}'.format(d))
 
 
 if __name__ == "__main__":
-    main()
-    #  test()
+    #  main()
+    test()

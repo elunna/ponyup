@@ -285,33 +285,20 @@ def print_cardlist(cards):
 
 def pop_ranks(hand, ranks):
     # Remove ALL BUT the rank given.
-    keep = []
     discard = []
-    #  print('')
-    #  print('Rank = {}'.format(ranks))
     for c in hand:
-        #  if c.rank == str(ranks):
-        if c.rank in ranks:
-            keep.append(c)
-        else:
+        if c.rank not in ranks:
             discard.append(c)
-    # Return both the remainder and the discards
-    return keep, discard
+    return discard
 
 
 def pop_suits(hand, suit):
     # Remove ALL BUT the suit given.
-    keep = []
     discard = []
-    #  print('')
-    #  print('Suit = {}'.format(suit))
     for c in hand:
-        if c.suit == suit:
-            keep.append(c)
-        else:
+        if c.suit != suit:
             discard.append(c)
-    # Return both the remainder and the discards
-    return keep, discard
+    return discard
 
 
 """
