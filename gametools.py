@@ -56,7 +56,7 @@ def dealhand(quantity):
 
 def deal_players(players, deck, qty):
     """
-    Take a list of Players and deals qty hands to each.
+    Take a list of Players and their Deck. Deals qty hands to each.
     """
 
     # Check that the requirements of the players and handsizes don't over deplete the deck
@@ -76,7 +76,9 @@ def deal_players(players, deck, qty):
     return True
 
 
-def setup_test_table(num):
+def setup_test_table(num, hero=None):
+    # The hero variable lets someone pass in a Human player name
+    # If they don't want any human players, just let it be None.
 
     names = ['Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'Mortensen',
              'Antonius', 'Harman', 'Ungar', 'Dwan', 'Greenstein', 'Chan', 'Moss', 'Ivey',
@@ -99,7 +101,9 @@ def setup_test_table(num):
                 break
 
     for i, n in enumerate(nameset):
-        t.add_player(i, player.Player(n))
+        if i == 0 and hero is not None:
+            t.add_player(0, player.Player(hero, 'HUMAN'))
+        t.add_player(i, player.Player(n, 'CPU'))
 
     return t
 
