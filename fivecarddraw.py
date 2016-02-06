@@ -88,6 +88,33 @@ class Round():
         self.game.table.move_button()
 
 
+def is_integer(num):
+    """ Determines if the variable is an integer"""
+    try:
+        int(num)
+        return True
+    except ValueError:
+        return False
+
+
+def human_discard(hand):
+    print('Please enter the cards you want to discard:')
+    print('Example: 0 to discard the first card, 01 to discard the first 2, etc')
+    for i, c in enumerate(hand.cards):
+        print('#{}: {}'.format(i, c))
+
+    choice = input(':> ')
+    # Split up the #s, and reverse them so we can remove them without the list
+    # collapsing and disrupting the numbering.
+    choice = sorted(list(choice), reverse=True)
+    discards = []
+    for c in choice:
+        if is_integer(c):
+            discards.append(hand.cards.pop(c))
+        else:
+            pass
+
+
 def auto_discard(hand):
     # hand is a Hand object
 
@@ -183,7 +210,7 @@ def main():
     print('FIVE CARD DRAW!')
     print('Initializing new game...\n')
 
-    hero = player.Player('Hero')
+    hero = player.Player('Hero', 'HUMAN')
     _table = gametools.setup_test_table(2)
     _table.remove_player(0)
     _table.add_player(0, hero)
@@ -229,5 +256,5 @@ def test():
 
 
 if __name__ == "__main__":
-    #  main()
-    test()
+    main()
+    #  test()
