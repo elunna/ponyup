@@ -6,7 +6,7 @@ import handtests
 import evaluator as ev
 import hand
 import card
-import sys
+#  import sys
 #  import table
 import player
 
@@ -48,12 +48,34 @@ class Round():
             self.players[1].add(self.d.deal())
 
         # Pre-draw betting round
+        # Show table post draw
         print(self.game.table)
+
         # Check for winners
         #  print('Seat 1: {}'.format(self.players[0]._hand))
         #  print('Seat 2: {}'.format(self.players[1]._hand))
 
         # Discard/redraw phase
+        k1, d1 = auto_discard(self.players[0]._hand)
+        print('{} discards {}'.format(self.players[0], d1))
+
+        k2, d2 = auto_discard(self.players[1]._hand)
+        print('{} discards {}'.format(self.players[1], d2))
+        print('')
+
+        for c in d1:
+            self.players[0].discard(c)
+            self.players[0].add(self.d.deal())
+
+
+        for c in d2:
+            self.players[1].discard(c)
+            self.players[1].add(self.d.deal())
+
+        # Show table post draw
+        print(self.game.table)
+
+
 
         # Post-draw betting round
 
@@ -209,5 +231,5 @@ def test():
 
 
 if __name__ == "__main__":
-    #  main()
-    test()
+    main()
+    #  test()
