@@ -3,7 +3,7 @@
 import gametools
 import deck
 import handtests
-import evaluator
+import evaluator as ev
 import hand
 import card
 import sys
@@ -69,37 +69,6 @@ class Round():
         self.game.table.move_button()
 
 
-def pop_ranks(hand, ranks):
-    # Remove ALL BUT the rank given.
-    keep = []
-    discard = []
-    #  print('')
-    #  print('Rank = {}'.format(ranks))
-    for c in hand:
-        #  if c.rank == str(ranks):
-        if c.rank in ranks:
-            keep.append(c)
-        else:
-            discard.append(c)
-    # Return both the remainder and the discards
-    return keep, discard
-
-
-def pop_suits(hand, suit):
-    # Remove ALL BUT the suit given.
-    keep = []
-    discard = []
-    #  print('')
-    #  print('Suit = {}'.format(suit))
-    for c in hand:
-        if c.suit == suit:
-            keep.append(c)
-        else:
-            discard.append(c)
-    # Return both the remainder and the discards
-    return keep, discard
-
-
 def auto_discard(hand):
     # hand is a Hand object
 
@@ -108,79 +77,79 @@ def auto_discard(hand):
     DIS_RANKS = ['PAIR', 'THREE OF A KIND', 'FOUR OF A KIND']
     keep, discard = [], []
 
-    h = evaluator.sort_ranks(hand.cards)
+    h = ev.sort_ranks(hand.cards)
 
     if hand.handrank in PAT_HANDS:
         keep = hand.cards
     elif hand.handrank in DIS_RANKS:
         #  standard discard
         highcards = h[0][1]
-        keep, discard = pop_ranks(hand.cards, highcards)
+        keep, discard = ev.pop_ranks(hand.cards, highcards)
     elif hand.handrank == 'TWO PAIR':
         #  print('Performing two-pair discard')
         # Keep the twp pair, discard 1.
         highcards = h[0][1] + h[1][1]
 
-        keep, discard = pop_ranks(hand.cards, highcards)
+        keep, discard = ev.pop_ranks(hand.cards, highcards)
 
     elif hand.handrank == 'HIGH CARD':
         # Draws
         copy = sorted(hand.cards[:])
 
         # Test for flush draw
-        maxsuit, qty = evaluator.get_longest_suit(copy)
+        maxsuit, qty = ev.get_longest_suit(copy)
 
         if qty == 4:
             #  print('Found a flush draw! for {}'.format(maxsuit))
-            keep, discard = pop_suits(copy, maxsuit)
+            keep, discard = ev.pop_suits(copy, maxsuit)
 
         # Test for open-ended straight draw(s)
-        elif evaluator.get_allgaps(copy[0:4]) == 0:
+        elif ev.get_allgaps(copy[0:4]) == 0:
             keep = copy[0:4]
-        elif evaluator.get_allgaps(copy[1:5]) == 0:
+        elif ev.get_allgaps(copy[1:5]) == 0:
             keep = copy[1:5]
 
         # Test for gutshot straight draw(s)
-        elif evaluator.get_allgaps(copy[0:4]) == 1:
+        elif ev.get_allgaps(copy[0:4]) == 1:
             keep = copy[0:4]
-        elif evaluator.get_allgaps(copy[1:5]) == 1:
+        elif ev.get_allgaps(copy[1:5]) == 1:
             keep = copy[1:5]
 
         # Draw to high cards
         elif card.VALUES[h[2][1]] > 9:
             highcards = h[0][1] + h[1][1] + h[2][1]
-            keep, discard = pop_ranks(hand.cards, highcards)
+            keep, discard = ev.pop_ranks(hand.cards, highcards)
         elif card.VALUES[h[1][1]] > 9:
             highcards = h[0][1] + h[1][1]
-            keep, discard = pop_ranks(hand.cards, highcards)
+            keep, discard = ev.pop_ranks(hand.cards, highcards)
 
         elif qty == 3:
             # Backdoor flush draw
-            keep, discard = pop_suits(copy, maxsuit)
+            keep, discard = ev.pop_suits(copy, maxsuit)
 
         # Draw to an Ace almost as a last resort
         elif h[1][1] == 'A':
-            keep, discard = pop_ranks(hand.cards, 'A')
+            keep, discard = ev.pop_ranks(hand.cards, 'A')
 
         # Backdoor straight draws are pretty desparate
-        elif evaluator.get_allgaps(copy[0:3]) == 0:
+        elif ev.get_allgaps(copy[0:3]) == 0:
             keep = copy[0:3]
-        elif evaluator.get_allgaps(copy[1:4]) == 0:
+        elif ev.get_allgaps(copy[1:4]) == 0:
             keep = copy[1:4]
-        elif evaluator.get_allgaps(copy[2:5]) == 0:
+        elif ev.get_allgaps(copy[2:5]) == 0:
             keep = copy[2:5]
 
         # 1-gap Backdoor straight draws are truly desparate!
-        elif evaluator.get_allgaps(copy[0:3]) == 1:
+        elif ev.get_allgaps(copy[0:3]) == 1:
             keep = copy[0:3]
-        elif evaluator.get_allgaps(copy[1:4]) == 1:
+        elif ev.get_allgaps(copy[1:4]) == 1:
             keep = copy[1:4]
-        elif evaluator.get_allgaps(copy[2:5]) == 1:
+        elif ev.get_allgaps(copy[2:5]) == 1:
             keep = copy[2:5]
         else:
             # Last ditch - just draw to the best 2???
             highcards = h[0][1] + h[1][1]
-            keep, discard = pop_ranks(hand.cards, highcards)
+            keep, discard = ev.pop_ranks(hand.cards, highcards)
 
     if len(discard) == 0:
         #  print('straight draw?')
@@ -225,7 +194,7 @@ def test():
     print('Testing discard function')
     print('')
     r = handtests.dealhand(5)
-    print('Random 5 cards: {}'.format(evaluator.print_cardlist(r)))
+    print('Random 5 cards: {}'.format(ev.print_cardlist(r)))
     h = hand.Hand(r)
     #  print('Creating a hand...: {}'.format(h))
     #  print(h)
