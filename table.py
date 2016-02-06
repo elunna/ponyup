@@ -22,7 +22,8 @@ class Table():
         return len(self.seats)
 
     def __str__(self):
-        _str = '{:3}{:12}{:8}{:4}{:10}'.format('#', 'Player', 'Chips', '     ', 'Cards')
+        _str = '{:3}{:12}{:6}{:8}{:4}{:10}'.format(
+            '#', 'Player', 'Type', 'Chips', '     ', 'Cards')
         _str += '\n-----------------------------------'
         _str += '\n'
 
@@ -30,7 +31,7 @@ class Table():
             if s is None:
                 _str += '{}\n'.format(i)
             else:
-                _str += '{:<3}{:12}${:<7}'.format(i, str(s), s.chips, )
+                _str += '{:<3}{:12}{:6}${:<7}'.format(i, str(s), s.playertype, s.chips, )
                 # Show button if it has been set
                 if self.btn > 1 and i == self.btn:
                     _str += '[BTN]'
