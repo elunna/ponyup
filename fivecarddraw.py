@@ -6,6 +6,7 @@ import handtests
 import evaluator as ev
 import hand
 import card
+import os
 #  import sys
 #  import table
 import player
@@ -17,9 +18,10 @@ class Round():
         self.street = 0
         self.pot = 0
         self.d = deck.Deck()
-        # Get activeplayers
-        self.players = self.game.table.get_players()
         self.muck = deck.Deck([])
+
+        # Create a list of the players from the table, and place the button at index 0
+        self.players = self.game.table.get_players()
 
     def play(self):
         self.d.shuffle()
@@ -51,11 +53,23 @@ class Round():
         # Show table post draw
         print(self.game.table)
 
-        # Check for winners
-        #  print('Seat 1: {}'.format(self.players[0]._hand))
-        #  print('Seat 2: {}'.format(self.players[1]._hand))
-
         # Discard/redraw phase
+        # Make sure the button goes last!
+        for i in range(1, len(self.players) + 1):
+            plyr = i % len(self.players)
+
+            if self.players[plyr].playertype == 'HUMAN':
+                discards = human_discard(self.players[plyr]._hand)
+            else:
+                discards = auto_discard(self.players[plyr]._hand)
+
+            print('{} discards {}'.format(self.players[plyr], discards))
+
+            for c in discards:
+                self.players[plyr].discard(c)
+                self.players[plyr].add(self.d.deal())
+
+        """
         d1 = auto_discard(self.players[0]._hand)
         print('{} discards {}'.format(self.players[0], d1))
 
@@ -70,6 +84,7 @@ class Round():
         for c in d2:
             self.players[1].discard(c)
             self.players[1].add(self.d.deal())
+        """
 
         # Show table post draw
         print(self.game.table)
@@ -110,9 +125,10 @@ def human_discard(hand):
     discards = []
     for c in choice:
         if is_integer(c):
-            discards.append(hand.cards.pop(c))
+            discards.append(hand.cards[int(c)])
         else:
             pass
+    return discards
 
 
 def auto_discard(hand):
@@ -207,6 +223,7 @@ def auto_discard(hand):
 
 
 def main():
+    os.system('clear')
     print('FIVE CARD DRAW!')
     print('Initializing new game...\n')
 
@@ -223,6 +240,7 @@ def main():
     playing = True
 
     while playing:
+        os.system('clear')
         print('*'*80)
         print(game)
         #  print(_table)
