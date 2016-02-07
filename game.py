@@ -2,6 +2,9 @@ from __future__ import print_function
 import table
 import deck
 import fivecarddraw
+import gametools
+import game
+import card
 
 # blindstructures = [ante, sb, bb]
 
@@ -176,7 +179,7 @@ class Round():
         handlist = [(p._hand.value, p) for p in self.players]
         #  print(handlist)
 
-        bestvalue = max(handlist)
+        bestvalue = max(handlist, key=lambda x: handlist[0])
         #  print('best value is {}'.format(bestvalue))
         winners = []
 
@@ -237,3 +240,40 @@ def calculate_odds(bet, pot):
     odds = pot / bet
     print('The odds are {}-to-1'.format(odds))
     return odds
+
+
+def test_winner(*hands):
+    print('Test player ties')
+    t = gametools.setup_test_table(len(hands))
+    g = game.Game('2/4', t)
+    t.randomize_button()
+
+    newround = Round(g)
+    #  hc1 = [('A', 'h'), ('K', 's'), ('Q', 's'), ('J', 'd'), ('9', 'h')]
+    #  hc2 = [('A', 's'), ('K', 'h'), ('Q', 'h'), ('J', 'h'), ('9', 'c')]
+    for i in range(len(hands)):
+
+        for c in hands[i]:
+            newround.players[i].add(card.Card(c[0], c[1]))
+
+    # Print test info
+    print(g)
+    print(t)
+    for p in newround.players:
+        print('Player 0: {}'.format(p._hand.value))
+
+    winners = newround.get_winner()
+    print('')
+    print('Winners list:')
+    print(winners)
+
+if __name__ == "__main__":
+    # Perorm unit tests
+
+    hc1 = [('A', 'h'), ('K', 's'), ('Q', 's'), ('J', 'd'), ('9', 'h')]
+    hc2 = [('A', 's'), ('K', 'h'), ('Q', 'h'), ('J', 'h'), ('9', 'c')]
+    test_winner(hc1, hc2)
+    print('*'*80)
+    hc1 = [('A', 'h'), ('A', 's'), ('K', 's'), ('Q', 'd'), ('J', 'h')]
+    hc2 = [('A', 'c'), ('A', 'd'), ('K', 'h'), ('Q', 'h'), ('J', 'c')]
+    test_winner(hc1, hc2)

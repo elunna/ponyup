@@ -136,7 +136,7 @@ def main():
     print('Initializing new game...\n')
 
     hero = player.Player('Hero', 'HUMAN')
-    t = gametools.setup_test_table(2)
+    t = gametools.setup_test_table(6)
     t.remove_player(0)
     t.add_player(0, hero)
 
