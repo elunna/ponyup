@@ -179,13 +179,15 @@ class Round():
         handlist = [(p._hand.value, p) for p in self.players]
         #  print(handlist)
 
-        bestvalue = max(handlist, key=lambda x: handlist[0])
+        #  bestvalue = max(handlist, key=lambda x: handlist[0])
+        bestvalue = max(handlist)
         #  print('best value is {}'.format(bestvalue))
-        winners = []
 
+        winners = []
         for h in handlist:
             if h[0] == bestvalue[0]:
                 winners.append(h)
+
         print('-'*40)
         print('')
         if len(winners) == 1:
