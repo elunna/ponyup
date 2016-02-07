@@ -39,28 +39,10 @@ class Game():
         display += 'Round: {}\n'.format(self.rounds)
         return display
 
-    def get_stacks(self):
-        # Create a list(or tuple) beginning with the button that contains:
-        # seat, username, chips
-        """
-        startingstacks = []
-        num_players = len(table)
-        c = table.btn
-        for i in range(num_players):
-            #  currentindex = (num_players + i) % num_players
-            startingstacks.append(tuple(
-                currentseatable.seats[currentindex])
-
-        #  return self.table.seats
-        """
-        startingstacks = {}
-        for i in len(table):
-            startingstacks[i] = self._table.seats[i].chips
-        return startingstacks
 
     def playround(self):
-
         newround = Round(self)
+        #  print(newround.startingstacks)
 
         newround.check_for_stale_cards()
 
@@ -111,7 +93,9 @@ class Round():
         self.players = game._table.get_players()
 
         #  Remember starting stacks of all playerso
-        self.startingstacks = []
+        self.startingstacks = {}
+        for p in self.players:
+            self.startingstacks[p.name] = p.chips
 
     def post_blinds(self):
         pass
