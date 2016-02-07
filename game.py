@@ -203,3 +203,14 @@ def pick_table():
     else:
         print('Selection not available, going with default: 2 seats')
         return 2
+
+
+def calculate_odds(bet, pot):
+    print('first draft')
+    print('Bet = {}, pot = {}'.format(bet, pot))
+    #  diff = pot - bet
+    print('bet is {}% of the pot'.format(bet/pot * 100))
+
+    odds = pot / bet
+    print('The odds are {}-to-1'.format(odds))
+    return odds
