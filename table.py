@@ -1,9 +1,17 @@
 from __future__ import print_function
 import random
+import player
 
 # Table class
 # 4 types of tables, 2-handed, 6-handed, 9-handed, 10-handed
 VALID_SIZES = [2, 6, 9, 10]
+
+names = ['Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'Mortensen',
+         'Antonius', 'Harman', 'Ungar', 'Dwan', 'Greenstein', 'Chan', 'Moss', 'Ivey', 'Brunson',
+         'Reese', 'Esfandiari', 'Juanda', 'Duhamel', 'Gold', 'Cada', 'Mizrachi', 'Schulman',
+         'Selbst', 'Duke', 'Rousso', 'Liebert', 'Galfond', 'Elezra', 'Benyamine', 'Booth',
+         'DAgostino', 'Eastgate', 'Farha', 'Ferguson', 'Forrest', 'Hansen', 'Hachem', 'Kaplan',
+         'Laak', 'Lederer', 'Lindren', 'Matusow', 'Minieri']
 
 
 class Table():
@@ -22,21 +30,26 @@ class Table():
         return len(self.seats)
 
     def __str__(self):
-        _str = '{:3}{:12}{:6}{:8}{:4}{:10}'.format(
-            '#', 'Player', 'Type', 'Chips', '     ', 'Cards')
-        _str += '\n-----------------------------------'
-        _str += '\n'
+        _str = '{:3}{:4}{:12}{:6}{:8}{:4}{:10}'.format(
+            '#', 'BTN', 'Player', 'Type', 'Chips', '     ', 'Cards')
+        _str += '\n-----------------------------------\n'
 
         for i, s in enumerate(self.seats):
             if s is None:
+                # No player is occupying the seat
                 _str += '{}\n'.format(i)
             else:
-                _str += '{:<3}{:12}{:6}${:<7}'.format(i, str(s), s.playertype, s.chips, )
-                # Show button if it has been set
-                if self.btn > 1 and i == self.btn:
-                    _str += '[BTN]'
+                _str += '{:<3}'.format(i)
+
+                # Display button if it has been set
+                if self.btn >= 0 and i == self.btn:
+                    _str += '[D] '
                 else:
                     _str += ' '*4
+
+                _str += '{:12}{:6}${:<7}'.format(str(s), s.playertype, s.chips, )
+
+                # Display hand if available
                 if s._hand is not None:
                     _str += str(s._hand)
                 _str += '\n'
@@ -83,37 +96,60 @@ class Table():
             return -1
 
 
+def setup_test_table(num, hero=None):
+    # The hero variable lets someone pass in a Human player name
+    # If they don't want any human players, just let it be None.
+
+    t = Table(num)
+
+    nameset = []
+    for i in range(num):
+        #  t.add_player(i, player.Player(names.pop()))
+
+        # Make sure all the names are unique
+        while True:
+            nextname = random.choice(names)
+            if nextname not in nameset:
+                nameset.append(nextname)
+                break
+
+    for i, n in enumerate(nameset):
+        if i == 0 and hero is not None:
+            t.add_player(0, player.Player(hero, 'HUMAN'))
+        t.add_player(i, player.Player(n, 'CPU'))
+
+    return t
+
+
 def test_table(testnum):
-    table = Table(testnum)
+    #  t = Table(testnum)
+    t = setup_test_table(testnum)
 
-    # Fill the table spots with the numbers they originally correspond with
-    # This will aid in testing the get_playerlist function.
-    for s in range(len(table)):
-        table.add_player(s, s)
+    t.randomize_button()
+    print('button position is {}'.format(t.btn))
 
-    print('Made a table of {} seats. actual seats: {}'.format(testnum, len(table)))
-    print(table.seats)
+    print('Made a table of {} seats. actual seats: {}'.format(testnum, len(t)))
+    print(t.seats)
 
-    table.randomize_button()
-    print('button position is {}'.format(table.btn))
-
-    if table.btn > len(table):
+    if t.btn > len(t):
         print('Button position is out of the table bounds!!!')
 
     print('Testing get_playerlist')
-    pl = table.get_players()
+    pl = t.get_players()
     print(pl)
-    print('Testing move_button(* denotes the BTN)')
-    for i in range(10):
-        table.move_button()
-        for s in table.seats:
+    print('')
+    print('Testing move_button(* = button)')
+    for i in range(5):
+        t.move_button()
+        for i, s in enumerate(t.seats):
             print('{}'.format(s), end='')
-            if table.btn == s:
+            if t.btn == i:
                 print('*', end='')
             print(' ', end='')
         print('')
     print('')
 
+    print(t)
 
 if __name__ == "__main__":
     # Tests
