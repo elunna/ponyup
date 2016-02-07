@@ -168,21 +168,33 @@ class Round():
         for p in self.players:
             p.showhand()
 
-        # besthand tuple is (player index, hand value)
-        besthand = {'player': -1, 'value': -1}
-
         for i, p in enumerate(self.players):
-            print('{:15} holds {} for a: {}'.format(
+            print('{:15} holds {} with a: {}'.format(
                 str(p), p._hand, p._hand.handrank))
-            if p._hand.value > besthand['value']:
-                besthand['value'] = self.players[i]._hand.value
-                besthand['player'] = i
 
+        #  print('creating a list of value/player values')
+        handlist = [(p._hand.value, p) for p in self.players]
+        #  print(handlist)
+
+        bestvalue = max(handlist)
+        #  print('best value is {}'.format(bestvalue))
+        winners = []
+
+        for h in handlist:
+            if h[0] == bestvalue[0]:
+                winners.append(h)
+        print('-'*40)
         print('')
+        if len(winners) == 1:
+            print('The winner is: {}'.format(winners[0][1]))
+        elif len(winners) > 1:
+            print('We have a TIE!')
+            print('The winners are:', end='')
+            for w in winners:
 
-        print('{} wins with a {}!'.format(
-            str(self.players[besthand['player']]),
-            self.players[besthand['player']]._hand.handrank))
+                print('{}, '.format(w[1]), end='')
+
+        return winners
 
 
 def pick_limit():
