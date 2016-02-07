@@ -31,3 +31,7 @@ class Hand():
     def update(self):
         self.value = evaluator.get_value(self.cards)
         self.handrank = evaluator.get_type(self.value)
+
+    def unhide(self):
+        for c in self.cards:
+            c.hidden = False

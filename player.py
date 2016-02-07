@@ -39,9 +39,10 @@ class Player():
         self.chips += amt
 
     def showhand(self):
-        if len(self._hand) > 0:
-            for c in self._hand.cards:
-                c.hidden = False
+        self._hand.unhide()
+        #  if len(self._hand) > 0:
+            #  for c in self._hand.cards:
+                #  c.hidden = False
 
     def fold(self):
         copy = self._hand.cards[:]
