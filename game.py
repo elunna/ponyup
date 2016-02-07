@@ -72,7 +72,7 @@ class Game():
         newround.discard_phase()
 
         # Show table post draw
-        print(self._table)
+        #  print(self._table)
 
         # Post-draw betting round
 
@@ -99,6 +99,7 @@ class Round():
         self.muck = []
 
         self.d = deck.Deck()
+        self.DECKSIZE = len(self.d)
         for i in range(3):
             self.d.shuffle()
 
@@ -147,11 +148,14 @@ class Round():
         # Clear hands
         for p in self.players:
             self.muck.extend(p.fold())
-        print('muck size = {}'.format(len(self.muck)))
-        print('adding the remainder of the deck')
+        #  print('muck size = {}'.format(len(self.muck)))
+        #  print('adding the remainder of the deck')
         # Add the remainder of the deck
         self.muck.extend(self.d.cards)
-        print('muck size = {}'.format(len(self.muck)))
+        #  print('muck size = {}'.format(len(self.muck)))
+        if len(self.muck) != self.DECKSIZE:
+            raise ValueError('Deck became corrupted! Muck doesn\'t equal starting deck!')
+            exit()
 
     def get_winner(self):
         """
@@ -159,10 +163,15 @@ class Round():
         * Should we return just the Player?
         """
 
+        # Un-hide all cards involved in a showdown.
+        for p in self.players:
+            p.showhand()
+
         # besthand tuple is (player index, hand value)
         besthand = {'player': -1, 'value': -1}
 
         for i, p in enumerate(self.players):
+            print('{} holds {} for a: {}'.format(p, p._hand, p._hand.handrank))
             if p._hand.value > besthand['value']:
                 besthand['value'] = self.players[i]._hand.value
                 besthand['player'] = i

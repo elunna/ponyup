@@ -38,6 +38,11 @@ class Player():
     def win(self, amt):
         self.chips += amt
 
+    def showhand(self):
+        if len(self._hand) > 0:
+            for c in self._hand.cards:
+                c.hidden = False
+
     def fold(self):
         copy = self._hand.cards[:]
         self._hand.cards = []
@@ -45,6 +50,9 @@ class Player():
 
     # hand management
     def add(self, card):
+        # Make sure we can see the card! (if we're human...)
+        if self.playertype == 'HUMAN':
+            card.hidden = False
         self._hand.cards.append(card)
         self._hand.update()
 

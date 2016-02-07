@@ -31,11 +31,18 @@ class Card:
         self.rank = rank
         self.suit = suit.lower()
 
+        # Hide cards by default?
+        # Probably works better that way since they originate from decks first.
+        self.hidden = True
+
     def val(self):
         return VALUES[self.rank]
 
     def __str__(self):
-        return self.rank + self.suit
+        if self.hidden:
+            return 'Xx'
+        else:
+            return self.rank + self.suit
 
     def __repr__(self):
         return str(self)
