@@ -22,8 +22,8 @@ def is_integer(num):
 
 
 def human_discard(hand):
-    print('Please enter the cards you want to discard:')
-    print('Example: 0 to discard the first card, 01 to discard the first 2, etc')
+    print('Enter the cards you want to discard:')
+    print('Example: "0" discards card 0, "01" discards cards 0 and 1, etc.')
     print('Index: 0   1   2   3   4')
     print('Card : ', end='')
     for c in hand.cards:

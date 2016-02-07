@@ -132,6 +132,7 @@ class Round():
                 p.add(self.d.deal())
 
     def discard_phase(self):
+        print('\nDiscard phase...')
         # Make sure the button goes last!
         for i in range(1, len(self.players) + 1):
             plyr = i % len(self.players)
@@ -141,7 +142,7 @@ class Round():
             else:
                 discards = fivecarddraw.auto_discard(self.players[plyr]._hand)
 
-            print('{} discards {}'.format(self.players[plyr], discards))
+            print('{:15} discards {}'.format(str(self.players[plyr]), discards))
 
             for c in discards:
                 self.muck.append(self.players[plyr].discard(c))
