@@ -7,11 +7,9 @@ import hand
 import itertools
 #  import operator
 
-#  MULTIPLIERS = (1, 100, 10000, 1000000, 100000000)
 MULTIPLIERS = (100000000, 1000000, 10000, 100, 1)
 
 HANDTYPES = {
-    #                   100000000   # Largest multiplier
     'ROYAL FLUSH':      100000000000,
     'STRAIGHT FLUSH':   90000000000,
     'FOUR OF A KIND':   80000000000,
@@ -102,13 +100,10 @@ def score(hand):
         score += card.VALUES[c[1]] * MULTIPLIERS[i]
     return score
 
-    # card.VALUES[sorted_values[0][1]] * MULTIPLIERS[4] +\
-
 
 def get_value(hand):
     # Calculate the type of hand and return a string descripting the hand and an integer
     # that correspond to its value
-    #  value_dict = counted_dict(hand)
     hand = sorted(hand, key=lambda x: card.VALUES[x.rank])
     sorted_values = sort_ranks(hand)
 
@@ -172,7 +167,6 @@ def is_flush(hand):
 
 def get_longest_suit(hand):
     suitdict = sort_suits(hand)
-    #  maxsuit = max(suitdict.iteritems(), key=operator.itemgetter(1))[0]
     maxsuit = max(suitdict.keys(), key=(lambda k: suitdict[k]))
 
     # Return both the most common suit and the number of occurrences.
@@ -205,53 +199,12 @@ def get_allgaps(cards):
         gaps += g
     return gaps
 
-    #  c = (min(cards))
-    #  print(c)
-    #  cards.remove(c)
-    #  print(cards)
-
-    """
-    # Copy the cards to avoid destroying the original
-    copy = cards[:]
-
-    currentcard = (min(copy))
-    copy.remove(currentcard)
-
-    while copy:
-        c = (min(copy))
-        if get_gap(currentcard, c) != 0:
-            return False
-        copy.remove(c)
-
-    return True
-    """
-
-    """
-    ordered = sorted(cards)
-
-    for i, c in enumerate(ordered):
-        if i == len(cards) - 1:
-            break
-        elif ordered[i].val() != ordered[i + 1].val() - 1:
-            return False
-    return True
-    """
-
 
 def is_straight(hand):
     if len(hand) != 5:
         return False
     else:
         return get_allgaps(hand) == 0
-
-    # Assumes the hand is sorted
-    """
-    #  return hand[4].val() < hand[0].val() + 4
-    return hand[0].val() == hand[1].val() - 1 \
-        and hand[1].val() == hand[2].val() - 1 \
-        and hand[2].val() == hand[3].val() - 1 \
-        and hand[3].val() == hand[4].val() - 1
-    """
 
 
 def is_low_straight(hand):
@@ -276,16 +229,19 @@ def find_best_hand(cards):
     return besthand
 
 
-def print_cardlist(cards):
-    display = ''
-    for c in cards:
-        display += '{} '.format(str(c))
-    return display
+def pop_ranks(hand, ranks):
+    # Remove ALL BUT the rank given.
+    discard = []
+    for c in hand:
+        if c.rank not in ranks:
+            discard.append(c)
+    return discard
 
 
-"""
-def print_list(mylist):
-    for i in mylist:
-        print(i)
-
-"""
+def pop_suits(hand, suit):
+    # Remove ALL BUT the suit given.
+    discard = []
+    for c in hand:
+        if c.suit != suit:
+            discard.append(c)
+    return discard

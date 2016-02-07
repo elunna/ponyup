@@ -48,12 +48,15 @@ class Player():
         self._hand.cards.append(card)
         self._hand.update()
 
-    def remove(self, card):
+    def discard(self, card):
         # Test if the card is actually in the hand
         if card not in self._hand.cards:
             raise ValueError('Card not in players hand!')
         else:
-            copy = self._hand.cards.pop(card)
+            i = self._hand.cards.index(card)
+            #  copy = self._hand.cards[i]
+            #  self._hand.cards.pop(i)
+            copy = self._hand.cards.pop(i)
             self._hand.update()
             return copy
 

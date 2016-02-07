@@ -1,103 +1,42 @@
 #!/usr/bin/env python3
 
 import gametools
-import deck
+#  import deck
 import handtests
-import evaluator
+import evaluator as ev
 import hand
 import card
-import sys
-#  import table
+import os
 import player
+import game
 
 
-class Round():
-    def __init__(self, game):
-        self.game = game
-        self.street = 0
-        self.pot = 0
-        self.d = deck.Deck()
-        # Get activeplayers
-        self.players = self.game.table.get_players()
-        self.muck = deck.Deck([])
-
-    def play(self):
-        self.d.shuffle()
-        self.d.shuffle()
-        self.d.shuffle()
-
-        # Advance round counter
-        self.game.rounds += 1
-
-        # Check that no players have lingering cards
-        #  print('displaying hand lengths')
-        #  for p in self.players:
-            #  print(len(p._hand))
-            #  if p is not None:
-                #  if len(p._hand) > 0:
-                    #  raise ValueError('Player has cards when they should not!')
-
-        # Remember starting stacks of all playerso
-        #  self.startingstacks = []
-
-        # Postblinds
-
-        # Deal cards
-        for i in range(5):
-            self.players[0].add(self.d.deal())
-            self.players[1].add(self.d.deal())
-
-        # Pre-draw betting round
-        print(self.game.table)
-        # Check for winners
-        #  print('Seat 1: {}'.format(self.players[0]._hand))
-        #  print('Seat 2: {}'.format(self.players[1]._hand))
-
-        # Discard/redraw phase
-
-        # Post-draw betting round
-
-        # Check for winners/showdown
-        gametools.get_winner(self.players)
-
-        # Award pot
-
-        # Clear hands
-        for p in self.players:
-            p.fold()
-        # Move the table button
-        self.game.table.move_button()
+def is_integer(num):
+    """ Determines if the variable is an integer"""
+    try:
+        int(num)
+        return True
+    except ValueError:
+        return False
 
 
-def pop_ranks(hand, ranks):
-    # Remove ALL BUT the rank given.
-    keep = []
-    discard = []
-    #  print('')
-    #  print('Rank = {}'.format(ranks))
-    for c in hand:
-        #  if c.rank == str(ranks):
-        if c.rank in ranks:
-            keep.append(c)
+def human_discard(hand):
+    print('Please enter the cards you want to discard:')
+    print('Example: 0 to discard the first card, 01 to discard the first 2, etc')
+    for i, c in enumerate(hand.cards):
+        print('#{}: {}'.format(i, c))
+
+    choice = input(':> ')
+    # Split up the #s, and reverse them so we can remove them without the list
+    # collapsing and disrupting the numbering.
+    choice = sorted(list(choice), reverse=True)
+    discards = []
+    for c in choice:
+        if is_integer(c):
+            discards.append(hand.cards[int(c)])
         else:
-            discard.append(c)
-    # Return both the remainder and the discards
-    return keep, discard
-
-
-def pop_suits(hand, suit):
-    # Remove ALL BUT the suit given.
-    keep = []
-    discard = []
-    #  print('')
-    #  print('Suit = {}'.format(suit))
-    for c in hand:
-        if c.suit == suit:
-            keep.append(c)
-        else:
-            discard.append(c)
-    # Return both the remainder and the discards
-    return keep, discard
+            pass
+    return discards
 
 
 def auto_discard(hand):
@@ -106,112 +45,114 @@ def auto_discard(hand):
     # Obviously we will stand pat on:
     PAT_HANDS = ['STRAIGHT', 'FLUSH', 'FULL HOUSE', 'STRAIGHT FLUSH', 'ROYAL FLUSH']
     DIS_RANKS = ['PAIR', 'THREE OF A KIND', 'FOUR OF A KIND']
-    keep, discard = [], []
+    discard = []
 
-    h = evaluator.sort_ranks(hand.cards)
+    h = ev.sort_ranks(hand.cards)
 
     if hand.handrank in PAT_HANDS:
-        keep = hand.cards
+        pass
     elif hand.handrank in DIS_RANKS:
         #  standard discard
         highcards = h[0][1]
-        keep, discard = pop_ranks(hand.cards, highcards)
+        discard = ev.pop_ranks(hand.cards, highcards)
     elif hand.handrank == 'TWO PAIR':
-        #  print('Performing two-pair discard')
         # Keep the twp pair, discard 1.
         highcards = h[0][1] + h[1][1]
 
-        keep, discard = pop_ranks(hand.cards, highcards)
+        discard = ev.pop_ranks(hand.cards, highcards)
 
     elif hand.handrank == 'HIGH CARD':
         # Draws
         copy = sorted(hand.cards[:])
 
         # Test for flush draw
-        maxsuit, qty = evaluator.get_longest_suit(copy)
+        maxsuit, qty = ev.get_longest_suit(copy)
 
         if qty == 4:
-            #  print('Found a flush draw! for {}'.format(maxsuit))
-            keep, discard = pop_suits(copy, maxsuit)
+            discard = ev.pop_suits(copy, maxsuit)
 
         # Test for open-ended straight draw(s)
-        elif evaluator.get_allgaps(copy[0:4]) == 0:
+        elif ev.get_allgaps(copy[0:4]) == 0:
             keep = copy[0:4]
-        elif evaluator.get_allgaps(copy[1:5]) == 0:
+        elif ev.get_allgaps(copy[1:5]) == 0:
             keep = copy[1:5]
 
         # Test for gutshot straight draw(s)
-        elif evaluator.get_allgaps(copy[0:4]) == 1:
+        elif ev.get_allgaps(copy[0:4]) == 1:
             keep = copy[0:4]
-        elif evaluator.get_allgaps(copy[1:5]) == 1:
+        elif ev.get_allgaps(copy[1:5]) == 1:
             keep = copy[1:5]
 
         # Draw to high cards
         elif card.VALUES[h[2][1]] > 9:
             highcards = h[0][1] + h[1][1] + h[2][1]
-            keep, discard = pop_ranks(hand.cards, highcards)
+            discard = ev.pop_ranks(hand.cards, highcards)
         elif card.VALUES[h[1][1]] > 9:
             highcards = h[0][1] + h[1][1]
-            keep, discard = pop_ranks(hand.cards, highcards)
+            discard = ev.pop_ranks(hand.cards, highcards)
 
         elif qty == 3:
             # Backdoor flush draw
-            keep, discard = pop_suits(copy, maxsuit)
+            discard = ev.pop_suits(copy, maxsuit)
 
         # Draw to an Ace almost as a last resort
         elif h[1][1] == 'A':
-            keep, discard = pop_ranks(hand.cards, 'A')
+            discard = ev.pop_ranks(hand.cards, 'A')
 
         # Backdoor straight draws are pretty desparate
-        elif evaluator.get_allgaps(copy[0:3]) == 0:
+        elif ev.get_allgaps(copy[0:3]) == 0:
             keep = copy[0:3]
-        elif evaluator.get_allgaps(copy[1:4]) == 0:
+        elif ev.get_allgaps(copy[1:4]) == 0:
             keep = copy[1:4]
-        elif evaluator.get_allgaps(copy[2:5]) == 0:
+        elif ev.get_allgaps(copy[2:5]) == 0:
             keep = copy[2:5]
 
         # 1-gap Backdoor straight draws are truly desparate!
-        elif evaluator.get_allgaps(copy[0:3]) == 1:
+        elif ev.get_allgaps(copy[0:3]) == 1:
             keep = copy[0:3]
-        elif evaluator.get_allgaps(copy[1:4]) == 1:
+        elif ev.get_allgaps(copy[1:4]) == 1:
             keep = copy[1:4]
-        elif evaluator.get_allgaps(copy[2:5]) == 1:
+        elif ev.get_allgaps(copy[2:5]) == 1:
             keep = copy[2:5]
         else:
             # Last ditch - just draw to the best 2???
             highcards = h[0][1] + h[1][1]
-            keep, discard = pop_ranks(hand.cards, highcards)
+            discard = ev.pop_ranks(hand.cards, highcards)
 
-    if len(discard) == 0:
-        #  print('straight draw?')
-        for c in hand.cards:
-            if c not in keep:
-                discard.append(c)
+        if len(discard) == 0:
+            for c in hand.cards:
+                if c not in keep:
+                    discard.append(c)
 
-    return keep, discard
+    return discard
 
 
 def main():
+    os.system('clear')
     print('FIVE CARD DRAW!')
     print('Initializing new game...\n')
-    hero = player.Player('Hero')
-    _table = gametools.setup_test_table(2)
-    _table.remove_player(0)
-    _table.add_player(0, hero)
 
-    game = gametools.Game('2/4', _table)
+    hero = player.Player('Hero', 'HUMAN')
+    t = gametools.setup_test_table(2)
+    t.remove_player(0)
+    t.add_player(0, hero)
+
+    g = game.Game('2/4', t)
 
     print('Randomizing the button position.')
-    _table.randomize_button()
+    t.randomize_button()
 
     playing = True
 
     while playing:
+        os.system('clear')
         print('*'*80)
-        print(game)
+        print(g)
         #  print(_table)
-        newround = Round(game)
-        newround.play()
+        #  newround = game.Round(g)
+        # Play a round of five card draw
+        #  game.playround(g)
+        g.playround()
         choice = input('keep playing? >')
         if choice == 'n':
             playing = False
@@ -225,20 +166,14 @@ def test():
     print('Testing discard function')
     print('')
     r = handtests.dealhand(5)
-    print('Random 5 cards: {}'.format(evaluator.print_cardlist(r)))
+    print('Random 5 cards: {}'.format(r))
     h = hand.Hand(r)
-    #  print('Creating a hand...: {}'.format(h))
-    #  print(h)
     print('Value: {:<15} Rank: {:<15}'.format(h.value, h.handrank))
-    #  print('Rank: {}'.format(h.handrank))
 
-    #  print('auto_discard()')
-    k, d = auto_discard(h)
-
-    print('Keep: {}'.format(k))
+    d = auto_discard(h)
     print('Discard: {}'.format(d))
 
 
 if __name__ == "__main__":
-    #  main()
-    test()
+    main()
+    #  test()
