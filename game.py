@@ -1,12 +1,21 @@
+from __future__ import print_function
 import table
 import deck
 import fivecarddraw
 
 # blindstructures = [ante, sb, bb]
+
 structures = {}
-structures['2/4'] = [0, 2, 4]
-structures['3/6'] = [0, 3, 6]
-structures['4/8'] = [0, 4, 8]
+structures['2/4'] = [1, 2, 0]
+structures['3/6'] = [1, 3, 0]
+structures['4/8'] = [2, 4, 0]
+structures['6/12'] = [3, 6, 0]
+structures['8/16'] = [4, 8, 0]
+structures['10/20'] = [5, 10, 0]
+structures['15/30'] = [10, 15, 0]
+structures['20/40'] = [10, 20, 0]
+structures['30/60'] = [10, 30, 0]
+structures['50/100'] = [20, 50, 0]
 
 
 class Game():
@@ -134,6 +143,7 @@ class Round():
                 self.players[plyr].add(self.d.deal())
 
     def verify_muck(self):
+
         # Clear hands
         for p in self.players:
             self.muck.extend(p.fold())
@@ -162,3 +172,19 @@ class Round():
         print('{} wins with a {}!'.format(
             str(self.players[besthand['player']]),
             self.players[besthand['player']]._hand.handrank))
+
+
+def pick_limit():
+    print('Please enter what limit you want to play:(default 2/4)')
+
+    struct_list = sorted(structures.keys())
+    for l in struct_list:
+        print('{}, '.format(l), end='')
+
+    choice = input(':> ')
+    if choice in structures:
+        print('You selected {}'.format(choice))
+        return structures[choice]
+    else:
+        print('Selection not available, going with default blinds: 2/4')
+        return structures['2/4']
