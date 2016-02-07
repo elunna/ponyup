@@ -70,6 +70,54 @@ def print_holdem_startinghands():
     for c in list(get_combos(d.cards, 2)):
         print('[{}] '.format(evaluator.print_cardlist(c)))
 
+
+def get_combos_all_sizes(cards):
+    combos = []
+    for i in range(1, 6):
+        for c in list(get_combos(cards, i)):
+            combos.append(c)
+        #  combos.append(list(get_combos(cards, i)))
+        #  combos.append(list(get_combos(cards, i)))
+    return combos
+
+
+def n_choose_k(n, k):
+    if n < 0 or k < 0:
+        raise ValueError('Value passed is below 0!')
+    elif k > n:
+        raise ValueError('pick is larger than quantity of objects!')
+
+    numerator = [x for x in range(1, n + 1)]
+
+    diff = n - k
+    denominator = [x for x in range(1, diff + 1)]
+    denominator.extend([x for x in range(1, k + 1)])
+
+    #  print('starting lists')
+    #  print(numerator)
+    #  print('/')
+    #  print(denominator)
+    #  print('duplicates')
+    #  print(set(numerator) & set(denominator))
+    dups = list(set(numerator) & set(denominator))
+    for d in dups:
+        numerator.remove(d)
+        denominator.remove(d)
+
+    #  print('After removing duplicates')
+    #  print(numerator)
+    #  print('/')
+    #  print(denominator)
+
+    numproduct, denproduct = 1, 1
+    for n in numerator:
+        numproduct *= n
+    for n in denominator:
+        denproduct *= n
+
+    return int(numproduct / denproduct)
+
+
 if __name__ == "__main__":
     print('#'*80)
     print('')
