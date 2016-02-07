@@ -188,3 +188,18 @@ def pick_limit():
     else:
         print('Selection not available, going with default blinds: 2/4')
         return structures['2/4']
+
+
+def pick_table():
+    print('What size table do you want to play? (default is 2 seats)')
+
+    for l in table.VALID_SIZES:
+        print('{}, '.format(l), end='')
+
+    choice = input(':> ')
+    if int(choice) in table.VALID_SIZES:
+        print('You selected {}'.format(choice))
+        return choice
+    else:
+        print('Selection not available, going with default: 2 seats')
+        return 2
