@@ -25,6 +25,12 @@ class Hand():
         self.cards.append(card)
         self.update()
 
+    def discard(self, card):
+        i = self.cards.index(card)
+        copy = self.cards.pop(i)
+        self.update()
+        return copy
+
     def __len__(self):
         return len(self.cards)
 
