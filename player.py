@@ -54,8 +54,7 @@ class Player():
         # Make sure we can see the card! (if we're human...)
         if self.playertype == 'HUMAN':
             card.hidden = False
-        self._hand.cards.append(card)
-        self._hand.update()
+        self._hand.add(card)
 
     def discard(self, card):
         # Test if the card is actually in the hand
