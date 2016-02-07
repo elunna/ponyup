@@ -137,16 +137,35 @@ class Round():
         for i in range(1, len(self.players) + 1):
             plyr = i % len(self.players)
 
-            if self.players[plyr].playertype == 'HUMAN':
+            ishuman = self.players[plyr].playertype == 'HUMAN'
+            # Discard!
+            if ishuman:
                 discards = fivecarddraw.human_discard(self.players[plyr]._hand)
             else:
                 discards = fivecarddraw.auto_discard(self.players[plyr]._hand)
 
-            print('{:15} discards {}'.format(str(self.players[plyr]), discards))
+            if discards:
+                # Easier to put this here...
+                if ishuman:
+                    print('{:15} discards {}, draws: '.format(
+                        str(self.players[plyr]), discards), end='')
+                else:
+                    print('{:15} discards {}.'.format(
+                        str(self.players[plyr]), discards), end='')
+            else:
+                print('{:15} stands pat.'.format(str(self.players[plyr])))
 
+            # Redraw!
             for c in discards:
                 self.muck.append(self.players[plyr].discard(c))
-                self.players[plyr].add(self.d.deal())
+
+                draw = self.d.deal()
+                if ishuman:
+                    draw.hidden = False
+                    print('{} '.format(draw), end='')
+
+                self.players[plyr].add(draw)
+            print('')
         print('')
 
     def verify_muck(self):
