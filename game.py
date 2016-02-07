@@ -141,9 +141,9 @@ class Round():
             for c in discards:
                 self.muck.append(self.players[plyr].discard(c))
                 self.players[plyr].add(self.d.deal())
+        print('')
 
     def verify_muck(self):
-
         # Clear hands
         for p in self.players:
             self.muck.extend(p.fold())

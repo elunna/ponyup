@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from __future__ import print_function
 import gametools
 #  import deck
 import handtests
@@ -23,9 +24,11 @@ def is_integer(num):
 def human_discard(hand):
     print('Please enter the cards you want to discard:')
     print('Example: 0 to discard the first card, 01 to discard the first 2, etc')
-    for i, c in enumerate(hand.cards):
-        print('#{}: {}'.format(i, c))
-
+    print('Index: 0   1   2   3   4')
+    print('Card : ', end='')
+    for c in hand.cards:
+        print('{:3} '.format(str(c)), end='')
+    print('')
     choice = input(':> ')
     # Split up the #s, and reverse them so we can remove them without the list
     # collapsing and disrupting the numbering.
