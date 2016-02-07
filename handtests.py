@@ -149,17 +149,23 @@ def deal_wheeldraw():
     return [card.Card(x[0], x[1]) for x in pair]
 
 
-def test_hand(cards):
+def test_hand(cards, value=-1):
     if not ev.is_validhand(cards):
         return
 
     h = hand.Hand(cards)
-    #  value = ev.get_value(cards)
-    #  _type = ev.get_type(value)
+    h.unhide()
 
     print('{:15}{:15}{:15}'.format(h.handrank, str(h), h.value))
-    k, d = fivecarddraw.auto_discard(h)
-    print('keep:{} discard:{}'.format(k, d))
+    if value != -1:
+        # Test value
+        if h.value != value:
+            raise ValueError('Hand Value error! {}'.format(cards))
+        else:
+            print('Evaluation is correct!')
+
+    d = fivecarddraw.auto_discard(h)
+    print('Discard:{}'.format(d))
     print('')
 
 
@@ -196,51 +202,33 @@ if __name__ == "__main__":
     print('Hand generation tests')
 
     hands = []
-    hands.append(deal_royalflush())
-    hands.append(deal_straightflush_A())
-    hands.append(deal_lowstraightflush())
-    hands.append(deal_4ofakind_A())
-    hands.append(deal_4ofakind_B())
-    hands.append(deal_fullhouse_A())
-    hands.append(deal_fullhouse_B())
-    hands.append(deal_flush())
-    hands.append(deal_high_straight())
-    hands.append(deal_mid_straight())
-    hands.append(deal_low_straight())
-    hands.append(deal_3ofakind_A())
-    hands.append(deal_3ofakind_B())
-    hands.append(deal_twopair_A())
-    hands.append(deal_twopair_B())
-    hands.append(deal_pair_A())
-    hands.append(deal_pair_B())
+    hands.append((deal_royalflush(),        100000000000))
+    hands.append((deal_straightflush_A(),   90900000000))
+    hands.append((deal_lowstraightflush(),  90000000000))
+    hands.append((deal_4ofakind_A(),        81408000000))
+    hands.append((deal_4ofakind_B(),        80814000000))
+    hands.append((deal_fullhouse_A(),       71413000000))
+    hands.append((deal_fullhouse_B(),       71314000000))
+    hands.append((deal_flush(),             61409070503))
+    hands.append((deal_high_straight(),     51413121110))
+    hands.append((deal_mid_straight(),      51110090807))
+    hands.append((deal_low_straight(),      50000000000))
+    hands.append((deal_3ofakind_A(),        41413120000))
+    hands.append((deal_3ofakind_B(),        41314120000))
+    hands.append((deal_twopair_A(),         31413080000))
+    hands.append((deal_twopair_B(),         31308140000))
+    hands.append((deal_pair_A(),            21405030200))
+    hands.append((deal_pair_B(),            20214050300))
     # Draws
-    hands.append(deal_OESFD())
-    hands.append(deal_GSSFD())
-    hands.append(deal_flushdraw_hi())
-    hands.append(deal_flushdraw())
-    hands.append(deal_OESD())
-    hands.append(deal_GSSD())
-    hands.append(deal_wheeldraw())
-
+    hands.append((deal_OESFD(),             1110090802))
+    hands.append((deal_GSSFD(),             1110090702))
+    hands.append((deal_flushdraw_hi(),      1410090702))
+    hands.append((deal_flushdraw(),         1009070302))
+    hands.append((deal_OESD(),              1110090802))
+    hands.append((deal_GSSD(),              1413111002))
+    hands.append((deal_wheeldraw(),         1413040302))
     for h in hands:
-        test_hand(h)
-
-    """
-    print('#'*80)
-    print('')
-    print('Hand comparison tests')
-
-    handA = hand.Hand(dealhand(5))
-
-    for h in hands:
-        print('{}(A) vs {}(B)'.format(handA, h))
-        if handA.value > h.value:
-            print('Hand A wins!')
-        elif handA.value < h.value:
-            print('Hand B wins!')
-        else:
-            print('Tie!')
-    """
+        test_hand(h[0], h[1])
 
     print('#'*80)
     print('')
