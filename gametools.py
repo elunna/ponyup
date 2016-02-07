@@ -3,49 +3,6 @@ import table
 import player
 import random
 
-# blindstructures = [ante, sb, bb]
-structures = {}
-structures['2/4'] = [0, 2, 4]
-structures['3/6'] = [0, 3, 6]
-structures['4/8'] = [0, 4, 8]
-
-
-class Game():
-    def __init__(self, struct, mytable):
-        self.blinds = structures[struct]
-        self.table = mytable
-        self.betcap = 4
-        self.rounds = 0
-
-    def __str__(self):
-        #  display = 'Game details\n'
-        display = ''
-        #  display += 'Blinds: {}/{}\n'.format(self.blinds[1], self.blinds[2])
-        display += '${}/${}\n'.format(self.blinds[1], self.blinds[2])
-        #  display += 'Bet cap limit: {}\n'.format(self.betcap)
-        #  display += 'Table size: {}\n'.format(len(self.table))
-        display += 'Round: {}\n'.format(self.rounds)
-        return display
-
-    def get_stacks(self):
-        # Create a list(or tuple) beginning with the button that contains:
-        # seat, username, chips
-        """
-        startingstacks = []
-        num_players = len(table)
-        c = table.btn
-        for i in range(num_players):
-            #  currentindex = (num_players + i) % num_players
-            startingstacks.append(tuple(
-                currentseatable.seats[currentindex])
-
-        #  return self.table.seats
-        """
-        startingstacks = {}
-        for i in len(table):
-            startingstacks[i] = self.table.seats[i].chips
-        return startingstacks
-
 
 def dealhand(quantity):
     # Deal a regular 5 card hand from a new deck
@@ -107,40 +64,6 @@ def setup_test_table(num, hero=None):
 
     return t
 
-
-def get_winner(players):
-    """
-    Takes in a list of Players and determines who has the best hand
-    * Should we return just the Player?
-    """
-
-    # besthand tuple is (player index, hand value)
-    besthand = {'player': -1, 'value': -1}
-
-    for i, p in enumerate(players):
-        #  print('Player#{}: {}'.format(i, str(p)))
-
-        #  if players[i].hand.value > besthand['value']:
-        if p._hand.value > besthand['value']:
-            besthand['value'] = players[i]._hand.value
-            besthand['player'] = i
-
-    print('')
-    #  print('')
-    #  print('Seat {} has the winner.'.format(besthand['player']))
-    #  print('{} wins!'.format(str(players[besthand['player']])))
-    #  print('Best Hand: {}'.format(players[besthand['player']]._hand.handrank))
-
-    print('{} wins with a {}!'.format(
-        str(players[besthand['player']]),
-        players[besthand['player']]._hand.handrank))
-    #  print('Best Hand: {}'.format(players[besthand['player']]._hand.handrank))
-
-"""
-def print_playerlist(players):
-    for i, p in enumerate(players):
-        print('{}: {}({})'.format(i, p, p.chips))
-"""
 
 if __name__ == "__main__":
     # Tests

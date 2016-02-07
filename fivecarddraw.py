@@ -1,106 +1,14 @@
 #!/usr/bin/env python3
 
 import gametools
-import deck
+#  import deck
 import handtests
 import evaluator as ev
 import hand
 import card
 import os
-#  import sys
-#  import table
 import player
-
-
-class Round():
-    def __init__(self, game):
-        self.game = game
-        self.street = 0
-        self.pot = 0
-        self.d = deck.Deck()
-        self.muck = deck.Deck([])
-
-        # Create a list of the players from the table, and place the button at index 0
-        self.players = self.game.table.get_players()
-
-    def play(self):
-        self.d.shuffle()
-        self.d.shuffle()
-        self.d.shuffle()
-
-        # Advance round counter
-        self.game.rounds += 1
-
-        # Check that no players have lingering cards
-        #  print('displaying hand lengths')
-        #  for p in self.players:
-            #  print(len(p._hand))
-            #  if p is not None:
-                #  if len(p._hand) > 0:
-                    #  raise ValueError('Player has cards when they should not!')
-
-        # Remember starting stacks of all playerso
-        #  self.startingstacks = []
-
-        # Postblinds
-
-        # Deal cards
-        for i in range(5):
-            self.players[0].add(self.d.deal())
-            self.players[1].add(self.d.deal())
-
-        # Pre-draw betting round
-        # Show table post draw
-        print(self.game.table)
-
-        # Discard/redraw phase
-        # Make sure the button goes last!
-        for i in range(1, len(self.players) + 1):
-            plyr = i % len(self.players)
-
-            if self.players[plyr].playertype == 'HUMAN':
-                discards = human_discard(self.players[plyr]._hand)
-            else:
-                discards = auto_discard(self.players[plyr]._hand)
-
-            print('{} discards {}'.format(self.players[plyr], discards))
-
-            for c in discards:
-                self.players[plyr].discard(c)
-                self.players[plyr].add(self.d.deal())
-
-        """
-        d1 = auto_discard(self.players[0]._hand)
-        print('{} discards {}'.format(self.players[0], d1))
-
-        d2 = auto_discard(self.players[1]._hand)
-        print('{} discards {}'.format(self.players[1], d2))
-        print('')
-
-        for c in d1:
-            self.players[0].discard(c)
-            self.players[0].add(self.d.deal())
-
-        for c in d2:
-            self.players[1].discard(c)
-            self.players[1].add(self.d.deal())
-        """
-
-        # Show table post draw
-        print(self.game.table)
-
-        # Post-draw betting round
-
-        # Check for winners/showdown
-        gametools.get_winner(self.players)
-
-        # Award pot
-
-        # Clear hands
-        for p in self.players:
-            p.fold()
-        # Move the table button
-        self.game.table.move_button()
+import game
 
 
 def is_integer(num):
@@ -142,14 +50,12 @@ def auto_discard(hand):
     h = ev.sort_ranks(hand.cards)
 
     if hand.handrank in PAT_HANDS:
-        #  keep = hand.cards
         pass
     elif hand.handrank in DIS_RANKS:
         #  standard discard
         highcards = h[0][1]
         discard = ev.pop_ranks(hand.cards, highcards)
     elif hand.handrank == 'TWO PAIR':
-        #  print('Performing two-pair discard')
         # Keep the twp pair, discard 1.
         highcards = h[0][1] + h[1][1]
 
@@ -163,7 +69,6 @@ def auto_discard(hand):
         maxsuit, qty = ev.get_longest_suit(copy)
 
         if qty == 4:
-            #  print('Found a flush draw! for {}'.format(maxsuit))
             discard = ev.pop_suits(copy, maxsuit)
 
         # Test for open-ended straight draw(s)
@@ -228,24 +133,26 @@ def main():
     print('Initializing new game...\n')
 
     hero = player.Player('Hero', 'HUMAN')
-    _table = gametools.setup_test_table(2)
-    _table.remove_player(0)
-    _table.add_player(0, hero)
+    t = gametools.setup_test_table(2)
+    t.remove_player(0)
+    t.add_player(0, hero)
 
-    game = gametools.Game('2/4', _table)
+    g = game.Game('2/4', t)
 
     print('Randomizing the button position.')
-    _table.randomize_button()
+    t.randomize_button()
 
     playing = True
 
     while playing:
         os.system('clear')
         print('*'*80)
-        print(game)
+        print(g)
         #  print(_table)
-        newround = Round(game)
-        newround.play()
+        #  newround = game.Round(g)
+        # Play a round of five card draw
+        #  game.playround(g)
+        g.playround()
         choice = input('keep playing? >')
         if choice == 'n':
             playing = False
@@ -259,17 +166,11 @@ def test():
     print('Testing discard function')
     print('')
     r = handtests.dealhand(5)
-    print('Random 5 cards: {}'.format(ev.print_cardlist(r)))
+    print('Random 5 cards: {}'.format(r))
     h = hand.Hand(r)
-    #  print('Creating a hand...: {}'.format(h))
-    #  print(h)
     print('Value: {:<15} Rank: {:<15}'.format(h.value, h.handrank))
-    #  print('Rank: {}'.format(h.handrank))
 
-    #  print('auto_discard()')
     d = auto_discard(h)
-
-    #  print('Keep: {}'.format(k))
     print('Discard: {}'.format(d))
 
 

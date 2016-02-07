@@ -276,13 +276,6 @@ def find_best_hand(cards):
     return besthand
 
 
-def print_cardlist(cards):
-    display = ''
-    for c in cards:
-        display += '{} '.format(str(c))
-    return display
-
-
 def pop_ranks(hand, ranks):
     # Remove ALL BUT the rank given.
     discard = []
@@ -299,11 +292,3 @@ def pop_suits(hand, suit):
         if c.suit != suit:
             discard.append(c)
     return discard
-
-
-"""
-def print_list(mylist):
-    for i in mylist:
-        print(i)
-
-"""
