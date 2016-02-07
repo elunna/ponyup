@@ -5,17 +5,18 @@ import fivecarddraw
 
 # blindstructures = [ante, sb, bb]
 
-structures = {}
-structures['2/4'] = [1, 2, 0]
-structures['3/6'] = [1, 3, 0]
-structures['4/8'] = [2, 4, 0]
-structures['6/12'] = [3, 6, 0]
-structures['8/16'] = [4, 8, 0]
-structures['10/20'] = [5, 10, 0]
-structures['15/30'] = [10, 15, 0]
-structures['20/40'] = [10, 20, 0]
-structures['30/60'] = [10, 30, 0]
-structures['50/100'] = [20, 50, 0]
+structures = {
+    '2/4': (1, 2),
+    '3/6': (1, 3),
+    '4/8': (2, 4),
+    '6/12': (3, 6),
+    '8/16': (4, 8),
+    '10/20': (5, 10),
+    '15/30': (10, 15),
+    '20/40': (10, 20),
+    '30/60': (10, 30),
+    '50/100': (20, 50),
+}
 
 
 class Game():
@@ -29,7 +30,7 @@ class Game():
         #  display = 'Game details\n'
         display = ''
         #  display += 'Blinds: {}/{}\n'.format(self.blinds[1], self.blinds[2])
-        display += '${}/${}\n'.format(self.blinds[1], self.blinds[2])
+        display += 'Stakes: ${}/${}\n'.format(self.blinds[1], self.blinds[1] * 2)
         #  display += 'Bet cap limit: {}\n'.format(self.betcap)
         #  display += 'Table size: {}\n'.format(len(self.table))
         display += 'Round: {}\n'.format(self.rounds)
@@ -171,7 +172,8 @@ class Round():
         besthand = {'player': -1, 'value': -1}
 
         for i, p in enumerate(self.players):
-            print('{} holds {} for a: {}'.format(p, p._hand, p._hand.handrank))
+            print('{:15} holds {} for a: {}'.format(
+                str(p), p._hand, p._hand.handrank))
             if p._hand.value > besthand['value']:
                 besthand['value'] = self.players[i]._hand.value
                 besthand['player'] = i
