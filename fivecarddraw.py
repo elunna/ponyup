@@ -134,8 +134,8 @@ def main():
     os.system('clear')
     print('FIVE CARD DRAW!')
     print('Initializing new game...\n')
-
-    hero = player.Player('Hero', 'HUMAN')
+    heroname = game.pick_name()
+    hero = player.Player(heroname, 'HUMAN')
     t = gametools.setup_test_table(6)
     t.remove_player(0)
     t.add_player(0, hero)

@@ -253,6 +253,17 @@ def pick_table():
         return 2
 
 
+def pick_name():
+    print('Please enter your username.')
+    while True:
+        name = input(':> ')
+        if len(name) > 15:
+            print('Name is too long! Must be less than 15 characters.')
+        else:
+            break
+    return name
+
+
 def calculate_odds(bet, pot):
     print('first draft')
     print('Bet = {}, pot = {}'.format(bet, pot))
