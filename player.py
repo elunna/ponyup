@@ -15,12 +15,9 @@ class Player():
             self.playertype = 'Unknown'
 
         self.chips = chips
-
-        # Should we have any hand management?
         self._hand = hand.Hand()
 
     def __str__(self):
-        #  print('{} -- a {}'.format(self.name, self.playertype))
         return '{}'.format(self.name)
 
     def __repr__(self):
@@ -40,9 +37,6 @@ class Player():
 
     def showhand(self):
         self._hand.unhide()
-        #  if len(self._hand) > 0:
-            #  for c in self._hand.cards:
-                #  c.hidden = False
 
     def fold(self):
         copy = self._hand.cards[:]
@@ -62,14 +56,7 @@ class Player():
             raise ValueError('Card not in players hand!')
         else:
             return self._hand.discard(card)
-            """
-            i = self._hand.cards.index(card)
-            #  copy = self._hand.cards[i]
-            #  self._hand.cards.pop(i)
-            copy = self._hand.cards.pop(i)
-            self._hand.update()
-            return copy
-            """
+
 
 def isValidUsername(username):
     re1 = re.compile(r"[<>/{}[\]~`^'\\]")
