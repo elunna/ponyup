@@ -2,7 +2,6 @@
 
 from __future__ import print_function
 import gametools
-#  import deck
 import handtests
 import evaluator as ev
 import hand
@@ -134,13 +133,7 @@ def main():
     os.system('clear')
     print('FIVE CARD DRAW!')
     print('Initializing new game...\n')
-    #  heroname = game.pick_name()
-    #  stakes = game.pick_limit()
-    #  tablesize = game.pick_table()
     g = game.Game('FIVE CARD DRAW', '50/100', 6, 'LUNA')
-
-    #  print('Randomizing the button position.')
-    #  t.randomize_button()
 
     playing = True
 
@@ -148,10 +141,6 @@ def main():
         os.system('clear')
         print('*'*80)
         print(g)
-        #  print(_table)
-        #  newround = game.Round(g)
-        # Play a round of five card draw
-        #  game.playround(g)
         g.playround()
         choice = input('keep playing? >')
         if choice == 'n':
