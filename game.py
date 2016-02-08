@@ -191,16 +191,9 @@ class Round():
 
         #  print('creating a list of value/player values')
         handlist = [(p._hand.value, p) for p in self.players]
-        #  print(handlist)
-
-        #  bestvalue = max(handlist, key=lambda x: handlist[0])
         bestvalue = max(handlist)
-        #  print('best value is {}'.format(bestvalue))
 
-        winners = []
-        for h in handlist:
-            if h[0] == bestvalue[0]:
-                winners.append(h)
+        winners = [h for h in handlist if h[0] == bestvalue[0]]
 
         print('-'*40)
         print('')
