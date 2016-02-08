@@ -27,9 +27,8 @@ class Game():
         self.blinds = structures[stakes]
         self.betcap = 4
         self.rounds = 1
-
-        self._table = gametools.setup_test_table(tablesize, hero)
-
+        self._table = table.setup_test_table(tablesize, hero)
+        self._table.randomize_button()
 
     def __str__(self):
         #  display = 'Game details\n'

@@ -1,7 +1,7 @@
 import deck
 import table
-import player
-import random
+#  import player
+#  import random
 
 
 def dealhand(quantity):
@@ -33,51 +33,19 @@ def deal_players(players, deck, qty):
     return True
 
 
-def setup_test_table(num, hero=None):
-    # The hero variable lets someone pass in a Human player name
-    # If they don't want any human players, just let it be None.
-
-    names = ['Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'Mortensen',
-             'Antonius', 'Harman', 'Ungar', 'Dwan', 'Greenstein', 'Chan', 'Moss', 'Ivey',
-             'Brunson', 'Reese', 'Esfandiari', 'Juanda', 'Duhamel', 'Gold', 'Cada', 'Mizrachi',
-             'Schulman', 'Selbst', 'Duke', 'Rousso', 'Liebert', 'Galfond', 'Elezra',
-             'Benyamine', 'Booth', 'D Agostino', 'Eastgate', 'Farha', 'Ferguson', 'Forrest',
-             'Hansen', 'Hachem', 'Kaplan', 'Laak', 'Lederer', 'Lindren', 'Matusow', 'Minieri']
-
-    t = table.Table(num)
-
-    nameset = []
-    for i in range(num):
-        #  t.add_player(i, player.Player(names.pop()))
-
-        # Make sure all the names are unique
-        while True:
-            nextname = random.choice(names)
-            if nextname not in nameset:
-                nameset.append(nextname)
-                break
-
-    for i, n in enumerate(nameset):
-        if i == 0 and hero is not None:
-            t.add_player(0, player.Player(hero, 'HUMAN'))
-        t.add_player(i, player.Player(n, 'CPU'))
-
-    return t
-
-
 if __name__ == "__main__":
     # Tests
     print('Testing table setup')
-    t = setup_test_table(2)
+    t = table.setup_test_table(2)
     print(t)
 
-    t = setup_test_table(6)
+    t = table.setup_test_table(6)
     print(t)
 
-    t = setup_test_table(9)
+    t = table.setup_test_table(9)
     print(t)
 
-    t = setup_test_table(10)
+    t = table.setup_test_table(10)
     print(t)
 
     print('#'*80)
@@ -109,7 +77,7 @@ if __name__ == "__main__":
         print(t)
 
     print('Testing deal_players')
-    playertable = setup_test_table(6)
+    playertable = table.setup_test_table(6)
     d = deck.Deck()
     print(playertable)
     print('The tables players: {}'.format(playertable.get_players()))
