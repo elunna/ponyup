@@ -38,6 +38,33 @@ def get_type(value):
         return 'Type error: Cannot find type!'
 
 
+def get_description(value, cards):
+    ranks = sort_ranks(cards)
+    ctype = get_type(value)
+
+    if ctype in ['STRAIGHT', 'STRAIGHT FLUSH']:
+        if value % 10000000000 == 0:
+            return '5 High'
+        else:
+            #  return '{} High'.format(int((value % 1000000000) / 100000000))
+            return '{} High'.format(ranks[0][1])
+
+    elif ctype in ['FOUR OF A KIND', 'THREE OF A KIND', 'PAIR']:
+        return '{}\'s'.format(ranks[0][1])
+
+    elif ctype == 'FULL HOUSE':
+        return '{}\'s full of {}\'s'.format(
+            ranks[0][1], ranks[1][1])
+
+    elif ctype == 'TWO PAIR':
+        return '{}\'s and {}\'s'.format(
+            ranks[0][1], ranks[1][1])
+
+    #  elif ctype in ['FLUSH', 'HIGH CARD']:
+    else:
+        return '{} High'.format(ranks[0][1])
+
+
 def is_validhand(cards):
     # Is it a valid poker hand?
     if len(cards) > 5:

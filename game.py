@@ -186,8 +186,8 @@ class Round():
             p.showhand()
 
         for i, p in enumerate(self.players):
-            print('{:15} holds {} with a: {}'.format(
-                str(p), p._hand, p._hand.handrank))
+            print('{:15} holds {} with a: {}, {}'.format(
+                str(p), p._hand, p._hand.handrank, p._hand.description))
 
         #  print('creating a list of value/player values')
         handlist = [(p._hand.value, p) for p in self.players]

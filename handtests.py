@@ -11,6 +11,8 @@ import fivecarddraw
 def dealhand(quantity):
     # Deal a regular 5 card hand from a new deck
     d = deck.Deck()
+    for c in d.cards:
+        c.hidden = False
     d.shuffle()
     #  dealtcards = [d.deal() for i in range(quantity)]
     #  newhand = hand.Hand(dealtcards)
@@ -156,7 +158,8 @@ def test_hand(cards, value=-1):
     h = hand.Hand(cards)
     h.unhide()
 
-    print('{:15}{:15}{:15}'.format(h.handrank, str(h), h.value))
+    print('{:15}Value = {:15}'.format(str(h), h.value))
+    print('{:15}{:15}'.format(h.handrank, h.description))
     if value != -1:
         # Test value
         if h.value != value:

@@ -12,9 +12,6 @@ class Hand():
             self.cards = cards
         self.update()
 
-        self.value = evaluator.get_value(self.cards)
-        self.handrank = evaluator.get_type(self.value)
-
     def __str__(self):
         handstr = ''
         for c in self.cards:
@@ -39,6 +36,10 @@ class Hand():
         self.cards = sorted(self.cards)
         self.value = evaluator.get_value(self.cards)
         self.handrank = evaluator.get_type(self.value)
+        #  self.value = evaluator.get_value(self.cards)
+        #  self.handrank = evaluator.get_type(self.value)
+        if len(self) == 5:
+            self.description = evaluator.get_description(self.value, self.cards)
 
     def unhide(self):
         for c in self.cards:
