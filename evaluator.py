@@ -12,11 +12,11 @@ MULTIPLIERS = (100000000, 1000000, 10000, 100, 1)
 HANDTYPES = {
     'ROYAL FLUSH':      100000000000,
     'STRAIGHT FLUSH':   90000000000,
-    'FOUR OF A KIND':   80000000000,
+    'QUADS':   80000000000,
     'FULL HOUSE':       70000000000,
     'FLUSH':            60000000000,
     'STRAIGHT':         50000000000,
-    'THREE OF A KIND':  40000000000,
+    'TRIPS':  40000000000,
     'TWO PAIR':         30000000000,
     'PAIR':             20000000000,
     'HIGH CARD':        0,
@@ -49,7 +49,7 @@ def get_description(value, cards):
             #  return '{} High'.format(int((value % 1000000000) / 100000000))
             return '{} High'.format(ranks[0][1])
 
-    elif ctype in ['FOUR OF A KIND', 'THREE OF A KIND', 'PAIR']:
+    elif ctype in ['QUADS', 'TRIPS', 'PAIR']:
         return '{}\'s'.format(ranks[0][1])
 
     elif ctype == 'FULL HOUSE':
@@ -154,11 +154,11 @@ def get_value(cards):
 
     elif len(sorted_values) > 1:
         if sorted_values[0][0] == 4:
-            return HANDTYPES['FOUR OF A KIND'] + score(sorted_values)
+            return HANDTYPES['QUADS'] + score(sorted_values)
         elif sorted_values[0][0] == 3 and sorted_values[1][0] == 2:
             return HANDTYPES['FULL HOUSE'] + score(sorted_values)
         elif sorted_values[0][0] == 3 and sorted_values[1][0] == 1:
-            return HANDTYPES['THREE OF A KIND'] + score(sorted_values)
+            return HANDTYPES['TRIPS'] + score(sorted_values)
         elif sorted_values[0][0] == 2 and sorted_values[1][0] == 2:
             return HANDTYPES['TWO PAIR'] + score(sorted_values)
         elif sorted_values[0][0] == 2 and sorted_values[1][0] == 1:
