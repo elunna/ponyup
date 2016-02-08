@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 
 from __future__ import print_function
-import gametools
 import handtests
 import evaluator as ev
 import hand
 import card
 import os
-import player
 import game
 
 
@@ -47,7 +45,7 @@ def auto_discard(hand):
 
     # Obviously we will stand pat on:
     PAT_HANDS = ['STRAIGHT', 'FLUSH', 'FULL HOUSE', 'STRAIGHT FLUSH', 'ROYAL FLUSH']
-    DIS_RANKS = ['PAIR', 'THREE OF A KIND', 'FOUR OF A KIND']
+    DIS_RANKS = ['PAIR', 'TRIPS', 'QUADS']
     discard = []
 
     h = ev.sort_ranks(hand.cards)
