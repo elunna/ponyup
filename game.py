@@ -47,6 +47,7 @@ class Game():
 
         # todo: Postblinds
 
+        # A simple 1-bet
         newround.ante_up()
         print(newround)
 
@@ -114,14 +115,10 @@ class Round():
         pass
 
     def check_for_stale_cards(self):
-        pass
-        # Check that no players have lingering cards
-        #  print('displaying hand lengths')
-        #  for p in self.players:
-            #  print(len(p._hand))
-            #  if p is not None:
-                #  if len(p._hand) > 0:
-                    #  raise ValueError('Player has cards when they should not!')
+        #  Check that no players have lingering cards
+        for p in self.players:
+            if len(p._hand) > 0:
+                raise ValueError('Player has cards when they should not!')
 
     def deal_hands(self):
         for i in range(5):
