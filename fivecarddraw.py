@@ -134,16 +134,13 @@ def main():
     os.system('clear')
     print('FIVE CARD DRAW!')
     print('Initializing new game...\n')
-    heroname = game.pick_name()
-    hero = player.Player(heroname, 'HUMAN')
-    t = gametools.setup_test_table(6)
-    t.remove_player(0)
-    t.add_player(0, hero)
+    #  heroname = game.pick_name()
+    #  stakes = game.pick_limit()
+    #  tablesize = game.pick_table()
+    g = game.Game('FIVE CARD DRAW', '50/100', 6, 'LUNA')
 
-    g = game.Game('2/4', t)
-
-    print('Randomizing the button position.')
-    t.randomize_button()
+    #  print('Randomizing the button position.')
+    #  t.randomize_button()
 
     playing = True
 

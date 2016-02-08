@@ -23,11 +23,13 @@ structures = {
 
 
 class Game():
-    def __init__(self, struct, table):
-        self.blinds = structures[struct]
-        self._table = table
+    def __init__(self, gametype, stakes, tablesize, hero=None):
+        self.blinds = structures[stakes]
         self.betcap = 4
         self.rounds = 1
+
+        self._table = gametools.setup_test_table(tablesize, hero)
+
 
     def __str__(self):
         #  display = 'Game details\n'
