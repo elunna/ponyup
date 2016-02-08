@@ -25,9 +25,10 @@ class Player():
 
     def bet(self, bet):
         if bet > self.chips:
-            print('Invalid bet amount - more than player has!')
-            raise ValueError()
-            return -1
+            # Put the player all-in
+            bet = self.chips
+            self.chips = 0
+            return bet
         else:
             self.chips -= bet
             return bet
@@ -113,12 +114,21 @@ if __name__ == "__main__":
     p = Player('lunatunez')
     print(p)
     print('lunatunez stack = {}'.format(p.chips))
-    print('betting 100')
-    p.bet(100)
+    print('betting {}'.format(p.bet(100)))
+
     print('lunatunez stack = {}'.format(p.chips))
-    print('Won 500')
-    p.win(500)
+    print('Won {}'.format(p.win(500)))
+
     print('lunatunez stack = {}'.format(p.chips))
-    print('betting 100')
-    p.win(100)
+    print('betting {}'.format(p.win(100)))
+
+    print('lunatunez stack = {}'.format(p.chips))
+
+    print('betting {}'.format(p.bet(1000)))
+
+    print('lunatunez stack = {}'.format(p.chips))
+    print('')
+    print('Attempting to bet 1000')
+    print('betting {}'.format(p.bet(1000)))
+
     print('lunatunez stack = {}'.format(p.chips))
