@@ -39,7 +39,6 @@ class Game():
         display += 'Round: {}\n'.format(self.rounds)
         return display
 
-
     def playround(self):
         newround = Round(self)
         #  print(newround.startingstacks)
@@ -47,6 +46,9 @@ class Game():
         newround.check_for_stale_cards()
 
         # todo: Postblinds
+
+        newround.ante_up()
+        print(newround)
 
         newround.deal_hands()
 
@@ -63,9 +65,10 @@ class Game():
         # Post-draw betting round
 
         # Check for winners/showdown
-        newround.get_winner()
+        winners = newround.get_winner()
 
         # Award pot
+        newround.award_pot(winners)
 
         # ================== CLEANUP
         newround.verify_muck()
@@ -96,6 +99,16 @@ class Round():
         self.startingstacks = {}
         for p in self.players:
             self.startingstacks[p.name] = p.chips
+
+    def __str__(self):
+        _str = 'Round info: Street {}\n'.format(self.street)
+        _str += 'Pot: ${}'.format(self.pot)
+        return _str
+
+    def ante_up(self):
+        # This just puts a bet in for everybody
+        for p in self.players:
+            self.pot += p.bet(self._game.blinds[1])
 
     def post_blinds(self):
         pass
@@ -204,6 +217,12 @@ class Round():
                 print('{}, '.format(w[1]), end='')
 
         return winners
+
+    def award_pot(self, winners):
+        if len(winners) == 1:
+            p = winners[0][1]
+            print('Player {} wins {} chips.'.format(p.name, self.pot))
+            p.win(self.pot)
 
 
 def pick_limit():
