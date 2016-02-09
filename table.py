@@ -20,11 +20,15 @@ class Table():
             print('Not a valid table size!')
             exit()  # Crash hard.
 
+        self.TOKENS = {
+            'D': -1,
+            'SB': -1,
+            'BB': -1
+        }
+
         self.seats = []
         for i in range(size):
             self.seats.append(None)
-
-        self.btn = -1
 
     def __len__(self):
         # Return the number of players occupying seats
@@ -35,8 +39,8 @@ class Table():
         return num
 
     def __str__(self):
-        _str = '{:3}{:4}{:12}{:6}{:8}{:4}{:10}'.format(
-            '#', 'BTN', 'Player', 'Type', 'Chips', '     ', 'Cards')
+        _str = '{:3}{:7}{:12}{:6}{:8}{:4}{:10}'.format(
+            '#', 'Tokens', 'Player', 'Type', 'Chips', '     ', 'Cards')
         _str += '\n-----------------------------------\n'
 
         for i, s in enumerate(self.seats):
@@ -46,13 +50,11 @@ class Table():
             else:
                 _str += '{:<3}'.format(i)
 
-                # Display button if it has been set
-                if self.btn >= 0 and i == self.btn:
-                    _str += '[D] '
-                else:
-                    _str += ' '*4
-
-                _str += '{:12}{:6}${:<7}'.format(str(s), s.playertype, s.chips, )
+                tokens = ''
+                for t in self.TOKENS:
+                    if self.TOKENS[t] == i:
+                        tokens += '[{}]'.format(t)
+                _str += '{:7}{:12}{:6}${:<7}'.format(tokens, str(s), s.playertype, s.chips, )
 
                 # Display hand if available
                 if s._hand is not None:
@@ -60,6 +62,9 @@ class Table():
                 _str += '\n'
 
         return _str
+
+    def btn(self):
+        return self.TOKENS['D']
 
     def add_player(self, s, p):
         """ Adds a player p to the table at seat s"""
@@ -78,18 +83,18 @@ class Table():
         # Place the button at a random seat
         place = random.randint(0, len(self.seats) - 1)
         for i in range(place):
-            self.btn = self.next(self.btn)
+            self.TOKENS['D'] = self.next(self.btn())
 
     def move_button(self):
         # Move the button to the next valid player/seat
-        self.btn = self.next(self.btn)
+        self.TOKENS['D'] = self.next(self.btn())
 
     def get_players(self):
         # Sort players so the BTN is indexed at 0.
-        if self.btn < 0:
+        if self.btn() < 0:
             self.randomize_button()
 
-        players = self.seats[self.btn:] + self.seats[0:self.btn]
+        players = self.seats[self.btn():] + self.seats[0:self.btn()]
         return [p for p in players if p is not None]
 
     def next(self, from_seat):

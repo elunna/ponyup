@@ -47,16 +47,19 @@ class Game():
         newround.check_for_stale_cards()
 
         # todo: Postblinds
+        newround.post_blinds()
 
         # A simple 1-bet
-        newround.ante_up()
+        #  newround.ante_up()
+
         print(newround)
 
         newround.deal_hands()
 
         # Pre-draw betting round
+        #  newround.betting()
 
-        # Show table post draw
+        # Show table pre draw
         print(self._table)
 
         newround.discard_phase()
@@ -87,8 +90,10 @@ class Round():
         self._game = game
         self.street = 0
         self.pot = 0
-        self.muck = []
+        self.betsize = 0
+        self.level = 0
 
+        self.muck = []
         self.d = deck.Deck()
         self.DECKSIZE = len(self.d)
         for i in range(3):
@@ -96,7 +101,8 @@ class Round():
 
         # Create a list of the players from the table, and place the button at index 0
         self.players = game._table.get_players()
-
+        self.current_bettor = None
+        self.last_bettor = None
         #  Remember starting stacks of all playerso
         self.startingstacks = {}
         for p in self.players:
@@ -106,14 +112,6 @@ class Round():
         _str = 'Round info: Street {}\n'.format(self.street)
         _str += 'Pot: ${}'.format(self.pot)
         return _str
-
-    def ante_up(self):
-        # This just puts a bet in for everybody
-        for p in self.players:
-            self.pot += p.bet(self._game.blinds[1])
-
-    def post_blinds(self):
-        pass
 
     def check_for_stale_cards(self):
         #  Check that no players have lingering cards
@@ -214,6 +212,64 @@ class Round():
             p = winners[0][1]
             print('Player {} wins {} chips.'.format(p.name, self.pot))
             p.win(self.pot)
+
+    def ante_up(self):
+        # All players bet the ante amount and it's added to the pot
+        for p in self.players:
+            self.pot += p.bet(self._game.blinds[2])
+
+    def post_blinds(self):
+        # Preflop: Headsup
+        if self.street > 0:
+            print('Blinds are not applicable past street 0!')
+            exit()
+        if len(self.players) == 2:
+            # Post blinds
+            sb = self._game._table.btn()
+            self._game._table.TOKENS['SB'] = sb
+            self._game._table.TOKENS['BB'] = self._game._table.next(sb)
+
+            self.pot += self.players[0].bet(self._game.blinds[0])
+            self.pot += self.players[1].bet(self._game.blinds[1])
+        elif len(self.players) > 2:
+            # Post blinds
+            sb = self._game._table.next(self._game._table.btn())
+            self._game._table.TOKENS['SB'] = sb
+            self._game._table.TOKENS['BB'] = self._game._table.next(sb)
+
+            self.pot += self.players[0].bet(self._game.blinds[0])
+            self.pot += self.players[1].bet(self._game.blinds[1])
+
+    def set_bets_and_bettors(self):
+        # Set betsize, betlevel, currentbettor and lastbettor
+        # Preflop: Headsup
+        if self.street == 0 and len(self.players) == 2:
+            self.level = 1
+            self.betsize = self._game.blinds[1]
+            self.last_bettor = self.players[1]
+            self.current_bettor = self.players[0]
+
+        elif self.street == 0 and len(self.players) > 2:
+            self.level = 1
+            self.betsize = self._game.blinds[1]
+            self.lastbettor = self.players[2]
+            self.currentbettor = self.players[0]
+
+        elif self.street > 0:
+            self.level = 0
+            self.betsize = self._game.blinds[1] * 2
+            self.lastbettor = self.players[0]
+            self.currentbettor = self.players[1]
+
+    def betting(self):
+        playing = True
+        print('Currentbettor: {}'.format(self.current_bettor))
+        print('Lastbettor: {}'.format(self.last_bettor))
+        print('Playing: {}'.format(playing))
+
+        # All players bet the ante amount and it's added to the pot
+        for p in self.players:
+            self.pot += p.bet(self._game.blinds[1])
 
 
 def pick_limit():
