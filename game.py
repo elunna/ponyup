@@ -220,25 +220,30 @@ class Round():
 
     def post_blinds(self):
         # Preflop: Headsup
+        sb, bb = -1, -1
         if self.street > 0:
             print('Blinds are not applicable past street 0!')
             exit()
         if len(self.players) == 2:
             # Post blinds
             sb = self._game._table.btn()
+            bb = self._game._table.next(sb)
             self._game._table.TOKENS['SB'] = sb
-            self._game._table.TOKENS['BB'] = self._game._table.next(sb)
-
+            self._game._table.TOKENS['BB'] = bb
             self.pot += self.players[0].bet(self._game.blinds[0])
             self.pot += self.players[1].bet(self._game.blinds[1])
         elif len(self.players) > 2:
             # Post blinds
             sb = self._game._table.next(self._game._table.btn())
+            bb = self._game._table.next(sb)
             self._game._table.TOKENS['SB'] = sb
-            self._game._table.TOKENS['BB'] = self._game._table.next(sb)
+            self._game._table.TOKENS['BB'] = bb
 
             self.pot += self.players[0].bet(self._game.blinds[0])
             self.pot += self.players[1].bet(self._game.blinds[1])
+
+        print('{} posts the small blind.'.format(self._game._table.seats[sb]))
+        print('{} posts the big blind.'.format(self._game._table.seats[bb]))
 
     def set_bets_and_bettors(self):
         # Set betsize, betlevel, currentbettor and lastbettor
