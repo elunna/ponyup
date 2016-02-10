@@ -52,14 +52,14 @@ class Game():
         # A simple 1-bet
         #  newround.ante_up()
 
-        print(newround)
-
         newround.deal_hands()
 
         # Pre-draw betting round
-        #  newround.betting()
+        newround.setup_betting()
+        newround.betting()
 
         # Show table pre draw
+        print(newround)
         print(self._table)
 
         newround.discard_phase()
@@ -242,39 +242,38 @@ class Round():
             self.pot += self.players[0].bet(self._game.blinds[0])
             self.pot += self.players[1].bet(self._game.blinds[1])
 
-        print('{} posts the small blind.'.format(self._game._table.seats[sb]))
-        print('{} posts the big blind.'.format(self._game._table.seats[bb]))
+        print('{} posts the small blind: ${}'.format(
+            self._game._table.seats[sb], self._game.blinds[0]))
+        print('{} posts the big blind: ${}'.format(
+            self._game._table.seats[bb], self._game.blinds[1]))
 
-    def set_bets_and_bettors(self):
+    def setup_betting(self):
         # Set betsize, betlevel, currentbettor and lastbettor
         # Preflop: Headsup
-        if self.street == 0 and len(self.players) == 2:
+        if self.street == 0:
             self.level = 1
             self.betsize = self._game.blinds[1]
-            self.last_bettor = self.players[1]
-            self.current_bettor = self.players[0]
-
-        elif self.street == 0 and len(self.players) > 2:
-            self.level = 1
-            self.betsize = self._game.blinds[1]
-            self.lastbettor = self.players[2]
-            self.currentbettor = self.players[0]
+            self.last_bettor = self._game._table.TOKENS['BB']
+            self.current_bettor = self._game._table.next(self.last_bettor)
 
         elif self.street > 0:
             self.level = 0
             self.betsize = self._game.blinds[1] * 2
-            self.lastbettor = self.players[0]
-            self.currentbettor = self.players[1]
+            self.last_bettor = 0
+            self.current_bettor = 1
 
     def betting(self):
-        playing = True
-        print('Currentbettor: {}'.format(self.current_bettor))
-        print('Lastbettor: {}'.format(self.last_bettor))
-        print('Playing: {}'.format(playing))
+        #  playing = True
+        #  print('Currentbettor: {}'.format(self.current_bettor))
+        #  print('Lastbettor: {}'.format(self.last_bettor))
+        #  print('Playing: {}'.format(playing))
 
         # All players bet the ante amount and it's added to the pot
-        for p in self.players:
-            self.pot += p.bet(self._game.blinds[1])
+        num = len(self.players)
+        for i in range(num):
+            cb = (i + self.current_bettor) % num
+            self.pot += self.players[cb].bet(self.betsize)
+            print('{} bets {}'.format(self.players[cb].name, self.betsize))
 
 
 def pick_limit():
