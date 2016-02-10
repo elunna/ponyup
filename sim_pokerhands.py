@@ -8,13 +8,6 @@ import hand
 TRIALS = 10000
 
 
-def copy_list(listx):
-    newlist = []
-    for i in listx:
-        newlist.append(i)
-    return newlist
-
-
 def run_trial(testhand, trials):
     # Then return a list of: value/type/cards/win %
 
@@ -28,14 +21,13 @@ def run_trial(testhand, trials):
 
     # Begin trials
     for i in range(TRIALS):
-        deck_copy = deck.Deck(copy_list(d.cards))
+        deck_copy = deck.Deck(d.cards[:])
         deck_copy.shuffle()
         villain = hand.Hand([deck_copy.deal() for x in range(5)])
         if hero.value > villain.value:
             WINS += 1
 
     WIN_PERCENT = WINS / TRIALS
-    #  print('Win percent: %{}'.format(WIN_PERCENT * 100))
     print('{:<15}{:<15}{:<15}{}'.format(hero.value, hero.handrank, str(hero), WIN_PERCENT))
 
     return [hero.value, hero.handrank, hero, WIN_PERCENT]
@@ -67,8 +59,3 @@ if __name__ == "__main__":
         resultlist.append(run_trial(h[2], TRIALS))
 
     write_handtrials(resultlist)
-
-    #  hero = hand.Hand(random.choice(hands)[2])
-    #  print('random hand = {}'.format(hero.display()))
-    #  print('rank: {}'.format(hero.handrank))
-    #  print('value: {}'.format(hero.value))
