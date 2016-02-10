@@ -79,22 +79,32 @@ class Table():
         else:
             print('Seat {} is already empty.'.format(s))
 
-    def randomize_button(self):
-        # Place the button at a random seat
-        place = random.randint(0, len(self.seats) - 1)
-        for i in range(place):
-            self.TOKENS['D'] = self.next(self.btn())
-
     def move_button(self):
         # Move the button to the next valid player/seat
         self.TOKENS['D'] = self.next(self.btn())
 
+    def get_playerdict(self):
+        players = {}
+        for i, s in enumerate(self.seats):
+            if s is not None:
+                players[i] = s
+        return players
+
+    def randomize_button(self):
+        # Place the button at a random seat
+        seats = list(self.get_playerdict().keys())
+        choice = random.choice(seats)
+        self.TOKENS['D'] = choice
+
     def get_players(self):
-        # Sort players so the BTN is indexed at 0.
+        # Returns a list of all the active players at the table
+        # If the button hasn't been set yet...
         if self.btn() < 0:
             self.randomize_button()
 
+        # Sort players so the BTN is indexed at 0.
         players = self.seats[self.btn():] + self.seats[0:self.btn()]
+
         return [p for p in players if p is not None]
 
     def next(self, from_seat):
@@ -109,14 +119,18 @@ class Table():
             return -1
 
 
-def generate_random_namelist(num):
+def generate_random_namelist(num, full=True):
     nameset = []
+    if full is True:
+        sparseness = 10
+    else:
+        sparseness = 7
 
     for i in range(num):
         # We'll use a 66% chance that a seat will be filled
         # So we can test the gaps/skipping/etc.
         chance = random.randint(0, 10)
-        if chance < 7:
+        if chance < sparseness:
             # Make sure all the names are unique
             while True:
                 nextname = random.choice(names)
@@ -131,9 +145,6 @@ def generate_random_namelist(num):
 def setup_test_table(num, hero=None):
     # The hero variable lets someone pass in a Human player name
     # If they don't want any human players, just let it be None.
-
-    #  import pdb
-    #  pdb.set_trace()
 
     t = Table(num)
     nameset = generate_random_namelist(num)
@@ -151,33 +162,36 @@ def setup_test_table(num, hero=None):
 def test_table(testnum):
     #  t = Table(testnum)
     t = setup_test_table(testnum)
-
     t.randomize_button()
-    print('button position is {}'.format(t.btn))
-
+    print('-'*70)
     print('Made a table of {} seats. actual seats: {}'.format(testnum, len(t)))
-    print(t.seats)
-
-    if t.btn > len(t):
+    print('button position is {}'.format(t.btn()))
+    print(t)
+    if t.btn() > len(t):
         print('Button position is out of the table bounds!!!')
 
-    print('Testing get_playerlist')
+    # Test next
+    btn_plus1 = t.next(t.btn())
+    btn_plus2 = t.next(btn_plus1)
+    print('next() from BTN is {}'.format(t.next(btn_plus1)))
+    print('next() from BTN+1 is {}'.format(t.next(btn_plus2)))
+
     pl = t.get_players()
-    print('There are {} players'.format(len(pl)))
+    print('get_playerlist: {} players'.format(len(pl)))
     print(pl)
     print('')
+
     print('Testing move_button(* = button)')
     for i in range(5):
-        t.move_button()
         for i, s in enumerate(t.seats):
             print('{}'.format(s), end='')
-            if t.btn == i:
+            if t.btn() == i:
                 print('*', end='')
             print(' ', end='')
         print('')
+        t.move_button()
     print('')
 
-    print(t)
 
 if __name__ == "__main__":
     # Tests
