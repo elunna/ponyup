@@ -26,6 +26,10 @@ class Deck():
     def deal(self):
         return self.cards.pop()
 
+    def remove(self, card):
+        if card in self.cards:
+            self.cards.remove(card)
+
     def __str__(self):
         _str = ''
         for i, c in enumerate(self.cards):
