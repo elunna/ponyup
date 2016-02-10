@@ -81,7 +81,17 @@ class Table():
 
     def move_button(self):
         # Move the button to the next valid player/seat
+        # Also set the blinds appropriately!
         self.TOKENS['D'] = self.next(self.btn())
+
+        if len(self) == 2:
+            self.TOKENS['SB'] = self.btn()
+            self.TOKENS['BB'] = self.next(self.btn())
+        elif len(self) > 2:
+            self.TOKENS['SB'] = self.next(self.btn())
+            self.TOKENS['BB'] = self.next(self.TOKENS['SB'])
+        else:
+            raise ValueError('Not enough players at the table!')
 
     def get_playerdict(self):
         players = {}
@@ -95,6 +105,9 @@ class Table():
         seats = list(self.get_playerdict().keys())
         choice = random.choice(seats)
         self.TOKENS['D'] = choice
+
+        # This will also set the blinds...
+        self.move_button()
 
     def get_players(self):
         # Returns a list of all the active players at the table

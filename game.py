@@ -101,12 +101,13 @@ class Round():
 
         # Create a list of the players from the table, and place the button at index 0
         self.players = game._table.get_players()
-        self.current_bettor = None
-        self.last_bettor = None
+        self.bettor = None
+        self.closer = None
+
         #  Remember starting stacks of all playerso
-        self.startingstacks = {}
+        self.stacks = {}
         for p in self.players:
-            self.startingstacks[p.name] = p.chips
+            self.stacks[p.name] = p.chips
 
     def __str__(self):
         _str = 'Round info: Street {}\n'.format(self.street)
@@ -225,55 +226,74 @@ class Round():
             print('Blinds are not applicable past street 0!')
             exit()
         if len(self.players) == 2:
-            # Post blinds
-            sb = self._game._table.btn()
-            bb = self._game._table.next(sb)
-            self._game._table.TOKENS['SB'] = sb
-            self._game._table.TOKENS['BB'] = bb
-            self.pot += self.players[0].bet(self._game.blinds[0])
-            self.pot += self.players[1].bet(self._game.blinds[1])
+            sb, bb = 0, 1
         elif len(self.players) > 2:
-            # Post blinds
-            sb = self._game._table.next(self._game._table.btn())
-            bb = self._game._table.next(sb)
-            self._game._table.TOKENS['SB'] = sb
-            self._game._table.TOKENS['BB'] = bb
+            sb, bb = 1, 2
+        elif len(self.players) < 2:
+            raise ValueError('Not enough players to play!')
+            exit()
 
-            self.pot += self.players[0].bet(self._game.blinds[0])
-            self.pot += self.players[1].bet(self._game.blinds[1])
+        self.pot += self.players[sb].bet(self._game.blinds[0])
+        self.pot += self.players[bb].bet(self._game.blinds[1])
 
         print('{} posts the small blind: ${}'.format(
-            self._game._table.seats[sb], self._game.blinds[0]))
+            self.players[sb], self._game.blinds[0]))
         print('{} posts the big blind: ${}'.format(
-            self._game._table.seats[bb], self._game.blinds[1]))
+            self.players[bb], self._game.blinds[1]))
 
     def setup_betting(self):
+        #  print('printing the list of players')
+        #  print(self.players)
         # Set betsize, betlevel, currentbettor and lastbettor
         # Preflop: Headsup
         if self.street == 0:
+            if len(self.players) == 2:
+                bb = 1
+            else:
+                #  sb, bb = 1, 2
+                bb = 2
             self.level = 1
             self.betsize = self._game.blinds[1]
-            self.last_bettor = self._game._table.TOKENS['BB']
-            self.current_bettor = self._game._table.next(self.last_bettor)
+            self.closer = bb
+            self.bettor = (bb + 1) % len(self.players)
 
         elif self.street > 0:
             self.level = 0
             self.betsize = self._game.blinds[1] * 2
-            self.last_bettor = 0
-            self.current_bettor = 1
+            self.closer = 0
+            self.bettor = 1
 
     def betting(self):
-        #  playing = True
-        #  print('Currentbettor: {}'.format(self.current_bettor))
-        #  print('Lastbettor: {}'.format(self.last_bettor))
-        #  print('Playing: {}'.format(playing))
-
-        # All players bet the ante amount and it's added to the pot
+        print('Current bettor = {}'.format(self.bettor))
+        """
         num = len(self.players)
         for i in range(num):
-            cb = (i + self.current_bettor) % num
-            self.pot += self.players[cb].bet(self.betsize)
-            print('{} bets {}'.format(self.players[cb].name, self.betsize))
+            # Index of currentbettor
+            p = self.players[(i + self.current_bettor) % num]
+            tocall = self.betsize - (self.stacks[p.name] - p.chips)
+
+            if tocall > 0:
+                self.pot += p.bet(tocall)
+                print('{} bets {}'.format(p.name, tocall))
+        """
+        while True:
+            p = self.players[self.bettor]
+
+            tocall = self.betsize - (self.stacks[p.name] - p.chips)
+
+            if tocall > 0:
+                self.pot += p.bet(tocall)
+                print('\t{} bets ${}'.format(p.name, tocall))
+            elif tocall == 0:
+                print('\t{} checks!'.format(p.name))
+
+            if self.bettor == self.closer:
+                break
+            else:
+                self.bettor = self.nextbettor()
+
+    def nextbettor(self):
+        return (self.bettor + 1) % len(self.players)
 
 
 def pick_limit():
