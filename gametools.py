@@ -36,16 +36,16 @@ def deal_players(players, deck, qty):
 if __name__ == "__main__":
     # Tests
     print('Testing table setup')
-    t = table.setup_test_table(2)
+    t = table.setup_table(2)
     print(t)
 
-    t = table.setup_test_table(6)
+    t = table.setup_table(6)
     print(t)
 
-    t = table.setup_test_table(9)
+    t = table.setup_table(9)
     print(t)
 
-    t = table.setup_test_table(10)
+    t = table.setup_table(10)
     print(t)
 
     print('#'*80)
@@ -77,7 +77,7 @@ if __name__ == "__main__":
         print(t)
 
     print('Testing deal_players')
-    playertable = table.setup_test_table(6)
+    playertable = table.setup_table(6)
     d = deck.Deck()
     print(playertable)
     print('The tables players: {}'.format(playertable.get_players()))

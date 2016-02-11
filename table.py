@@ -1,17 +1,11 @@
 from __future__ import print_function
 import random
 import player
+import names
 
 # Table class
 # 4 types of tables, 2-handed, 6-handed, 9-handed, 10-handed
 VALID_SIZES = [2, 6, 9, 10]
-
-names = ['Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'Mortensen',
-         'Antonius', 'Harman', 'Ungar', 'Dwan', 'Greenstein', 'Chan', 'Moss', 'Ivey', 'Brunson',
-         'Reese', 'Esfandiari', 'Juanda', 'Duhamel', 'Gold', 'Cada', 'Mizrachi', 'Schulman',
-         'Selbst', 'Duke', 'Rousso', 'Liebert', 'Galfond', 'Elezra', 'Benyamine', 'Booth',
-         'DAgostino', 'Eastgate', 'Farha', 'Ferguson', 'Forrest', 'Hansen', 'Hachem', 'Kaplan',
-         'Laak', 'Lederer', 'Lindren', 'Matusow', 'Minieri']
 
 
 class Table():
@@ -132,35 +126,12 @@ class Table():
             return -1
 
 
-def generate_random_namelist(num, full=True):
-    nameset = []
-    if full is True:
-        sparseness = 10
-    else:
-        sparseness = 7
-
-    for i in range(num):
-        # We'll use a 66% chance that a seat will be filled
-        # So we can test the gaps/skipping/etc.
-        chance = random.randint(0, 10)
-        if chance < sparseness:
-            # Make sure all the names are unique
-            while True:
-                nextname = random.choice(names)
-                if nextname not in nameset:
-                    nameset.append(nextname)
-                    break
-        else:
-            nameset.append(None)
-    return nameset
-
-
-def setup_test_table(num, hero=None):
+def setup_table(num, hero=None):
     # The hero variable lets someone pass in a Human player name
     # If they don't want any human players, just let it be None.
 
     t = Table(num)
-    nameset = generate_random_namelist(num)
+    nameset = names.generate_random_namelist(num)
 
     for i, s in enumerate(t.seats):
         if i == 0 and hero is not None:
@@ -174,7 +145,7 @@ def setup_test_table(num, hero=None):
 
 def test_table(testnum):
     #  t = Table(testnum)
-    t = setup_test_table(testnum)
+    t = setup_table(testnum)
     t.randomize_button()
     print('-'*70)
     print('Made a table of {} seats. actual seats: {}'.format(testnum, len(t)))
