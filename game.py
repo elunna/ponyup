@@ -287,12 +287,24 @@ class Round():
                 self.bettor = self.nextbettor()
 
     def process_option(self, option):
-        print('The option passed was: {}'.format(option))
-        print('Costs ${} and raises the betlevel by {}'.format(option[1], option[2]))
+        #  print('The option passed was: {}'.format(option))
+        #  print('Costs ${} and raises the betlevel by {}'.format(option[1], option[2]))
 
         p = self.players[self.bettor]
-        self.pot += p.bet(option[1])
-        self.level += option[2]
+
+        if option[0] == 'FOLD':
+            # Fold the players hand
+            foldedcards = self.players[self.bettor].fold()
+            self.muck.extend(foldedcards)
+            # Remove the player from the active list
+            self.players.remove(p)
+        elif option[2] > 0:
+            # It's a raise, so we'll need to reset last better.
+            self.closer = self.lastbettor()
+            self.pot += p.bet(option[1])
+            self.level += option[2]
+
+        print('{} {}\'s'.format(p, option[0]))
 
     def menu(self, options=None):
         # Sort by chip cost
@@ -350,6 +362,9 @@ class Round():
 
     def nextbettor(self):
         return (self.bettor + 1) % len(self.players)
+
+    def lastbettor(self):
+        return (self.bettor - 1) % len(self.players)
 
 
 def pick_limit():
