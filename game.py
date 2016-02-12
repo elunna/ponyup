@@ -5,6 +5,7 @@ import fivecarddraw
 import gametools
 import game
 import card
+import operator
 
 # blindstructures = [ante, sb, bb]
 
@@ -264,7 +265,7 @@ class Round():
             self.bettor = 1
 
     def betting(self):
-        print('Current bettor = {}'.format(self.bettor))
+        #  print('Current bettor = {}'.format(self.bettor))
 
         while True:
             p = self.players[self.bettor]
@@ -272,7 +273,8 @@ class Round():
             cost = self.betsize - (self.stacks[p.name] - p.chips)
 
             if p.playertype == 'HUMAN':
-                self.showoptions(cost)
+                options = self.showoptions(cost)
+                self.menu(options)
 
             if cost > 0:
                 self.pot += p.bet(cost)
@@ -285,33 +287,66 @@ class Round():
             else:
                 self.bettor = self.nextbettor()
 
+    def menu(self, options=None):
+        print('Menu:')
+        print('(H)elp, (Q)uit')
+
+        # Sort by chip cost
+        #  sorted_options =sorted(options.items(), key=operator.itemgetter(0)):
+        #  sorted(options, key=lambda x: x[0]):
+        for o in options:
+            print('({}){}--${} '.format(o[:1], o[1:], options[o][0]), end='')
+        print('')
+        choice = input(':> ')
+
+        return choice
+
     def showoptions(self, cost):
         # Shows the options available to the current bettor
-        raisecost = (self.level + 1) * self.betsize
+        #  raisecost = (self.level + 1) * self.betsize
         completing = (self.betsize - cost) == self._game.blinds[0]
+
+        OPTIONS = {}
 
         if self.street == 0 and completing:
             # Completing the small blind
-            print('FOLD')
-            print('COMPLETE: {}'.format(cost))
-            print('RAISE to {}'.format(raisecost))
+            #  print('FOLD')
+            #  print('COMPLETE: {}'.format(cost))
+            #  print('RAISE to {}'.format(raisecost))
+            OPTIONS['FOLD'] = (0, 0)
+            OPTIONS['COMPLETE'] = (cost, 0)
+            OPTIONS['RAISE'] = (cost + self.betsize, 1)
+
         elif cost == 0 and self.level >= 1:
             # Typical BB, Straddle, or post situation.
-            print('CHECK')
-            print('RAISE to {}'.format(raisecost))
+            #  print('CHECK')
+            #  print('RAISE to {}'.format(raisecost))
+            OPTIONS['CHECK'] = (0, 0)
+            OPTIONS['RAISE'] = (cost + self.betsize, 1)
+
         elif cost == 0 and self.level == 0:
             # Noone has opened betting yet on a postblind round
-            print('CHECK')
-            print('BET {}'.format(self.betsize))
+            #  print('CHECK')
+            #  print('BET {}'.format(self.betsize))
+            OPTIONS['CHECK'] = (0, 0)
+            OPTIONS['BET'] = (self.betsize, 1)
+
         elif cost > 0 and self.level < self.betcap:
             # There has been a bet/raises, but still can re-raise
-            print('FOLD')
-            print('CALL: {}'.format(cost))
-            print('RAISE to {}'.format(raisecost))
+            #  print('FOLD')
+            #  print('CALL: {}'.format(cost))
+            #  print('RAISE to {}'.format(raisecost))
+            OPTIONS['FOLD'] = (0, 0)
+            OPTIONS['CALL'] = (cost, 0)
+            OPTIONS['RAISE'] = (cost + self.betsize, 1)
+
         elif cost > 0 and self.level == self.betcap:
             # The raise cap has been met, can only call or fold.
-            print('FOLD')
-            print('CALL: {}'.format(cost))
+            #  print('FOLD')
+            #  print('CALL: {}'.format(cost))
+            OPTIONS['FOLD'] = (0, 0)
+            OPTIONS['CALL'] = (cost, 0)
+        return OPTIONS
 
     def nextbettor(self):
         return (self.bettor + 1) % len(self.players)
