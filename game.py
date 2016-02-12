@@ -243,8 +243,6 @@ class Round():
             self.players[bb], self._game.blinds[1]))
 
     def setup_betting(self):
-        #  print('printing the list of players')
-        #  print(self.players)
         # Set betsize, level, currentbettor and lastbettor
         # Preflop: Headsup
         if self.street == 0:
@@ -265,7 +263,6 @@ class Round():
             self.bettor = 1
 
     def betting(self):
-        #  print('Current bettor = {}'.format(self.bettor))
 
         while True:
             p = self.players[self.bettor]
@@ -275,8 +272,6 @@ class Round():
             if p.playertype == 'HUMAN':
                 options = self.get_options(cost)
                 o = self.menu(options)
-                #  print('option picked:')
-                #  print(o)
                 self.process_option(o)
 
             elif p.playertype == 'CPU':
@@ -300,10 +295,7 @@ class Round():
         self.level += option[2]
 
     def menu(self, options=None):
-
         # Sort by chip cost
-        #  sorted_options =sorted(options.items(), key=operator.itemgetter(0)):
-        #  sorted(options, key=lambda x: x[0]):
         optlist = [(options[o][1], o, options[o][0][1:]) for o in options]
 
         print('(H)elp, (Q)uit')
@@ -323,7 +315,6 @@ class Round():
 
     def get_options(self, cost):
         # Shows the options available to the current bettor
-        #  raisecost = (self.level + 1) * self.betsize
         completing = (self.betsize - cost) == self._game.blinds[0]
 
         OPTIONS = {}
