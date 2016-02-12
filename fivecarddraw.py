@@ -132,18 +132,18 @@ def main():
     os.system('clear')
     print('FIVE CARD DRAW!')
     print('Initializing new game...\n')
-    g = game.Game('FIVE CARD DRAW', '50/100', 6, 'LUNA')
+    g = game.Game('FIVE CARD DRAW', '50/100', 6, 'LUNNA')
 
     playing = True
 
     while playing:
-        os.system('clear')
-        print('*'*80)
         print(g)
         g.playround()
         choice = input('keep playing? >')
         if choice == 'n':
             playing = False
+
+        os.system('clear')
     exit()
 
 

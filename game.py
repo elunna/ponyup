@@ -31,19 +31,10 @@ class Game():
         self._table.randomize_button()
 
     def __str__(self):
-        #  display = 'Game details\n'
-        display = ''
-        #  display += 'Blinds: {}/{}\n'.format(self.blinds[1], self.blinds[2])
-        display += 'Stakes: ${}/${}\n'.format(self.blinds[1], self.blinds[1] * 2)
-        #  display += 'Bet cap limit: {}\n'.format(self.betcap)
-        #  display += 'Table size: {}\n'.format(len(self.table))
-        display += 'Round: {}\n'.format(self.rounds)
-        return display
+        return 'Round: {:<5} ${}/${}'.format(self.rounds, self.blinds[1], self.blinds[1] * 2)
 
     def playround(self):
         newround = Round(self)
-        #  print(newround.startingstacks)
-
         newround.check_for_stale_cards()
 
         # todo: Postblinds
@@ -54,13 +45,13 @@ class Game():
 
         newround.deal_hands()
 
-        # Pre-draw betting round
-        newround.setup_betting()
-        newround.betting()
-
         # Show table pre draw
         print(newround)
         print(self._table)
+
+        # Pre-draw betting round
+        newround.setup_betting()
+        newround.betting()
 
         newround.discard_phase()
 
@@ -304,7 +295,7 @@ class Round():
             self.pot += p.bet(option[1])
             self.level += option[2]
 
-        print('{} {}\'s'.format(p, option[0]))
+        print('\r{} {}\'s'.format(p, option[0]))
 
     def menu(self, options=None):
         # Sort by chip cost
