@@ -25,7 +25,6 @@ structures = {
 class Game():
     def __init__(self, gametype, stakes, tablesize, hero=None):
         self.blinds = structures[stakes]
-        self.betcap = 4
         self.rounds = 1
         self._table = table.setup_table(tablesize, hero)
         self._table.randomize_button()
@@ -90,6 +89,7 @@ class Round():
         self._game = game
         self.street = 0
         self.pot = 0
+        self.betcap = 4
         self.betsize = 0
         self.level = 0
 
@@ -244,7 +244,7 @@ class Round():
     def setup_betting(self):
         #  print('printing the list of players')
         #  print(self.players)
-        # Set betsize, betlevel, currentbettor and lastbettor
+        # Set betsize, level, currentbettor and lastbettor
         # Preflop: Headsup
         if self.street == 0:
             if len(self.players) == 2:
@@ -265,32 +265,53 @@ class Round():
 
     def betting(self):
         print('Current bettor = {}'.format(self.bettor))
-        """
-        num = len(self.players)
-        for i in range(num):
-            # Index of currentbettor
-            p = self.players[(i + self.current_bettor) % num]
-            tocall = self.betsize - (self.stacks[p.name] - p.chips)
 
-            if tocall > 0:
-                self.pot += p.bet(tocall)
-                print('{} bets {}'.format(p.name, tocall))
-        """
         while True:
             p = self.players[self.bettor]
 
-            tocall = self.betsize - (self.stacks[p.name] - p.chips)
+            cost = self.betsize - (self.stacks[p.name] - p.chips)
 
-            if tocall > 0:
-                self.pot += p.bet(tocall)
-                print('\t{} bets ${}'.format(p.name, tocall))
-            elif tocall == 0:
+            if p.playertype == 'HUMAN':
+                self.showoptions(cost)
+
+            if cost > 0:
+                self.pot += p.bet(cost)
+                print('\t{} bets ${}'.format(p.name, cost))
+            elif cost == 0:
                 print('\t{} checks!'.format(p.name))
 
             if self.bettor == self.closer:
                 break
             else:
                 self.bettor = self.nextbettor()
+
+    def showoptions(self, cost):
+        # Shows the options available to the current bettor
+        raisecost = (self.level + 1) * self.betsize
+        completing = (self.betsize - cost) == self._game.blinds[0]
+
+        if self.street == 0 and completing:
+            # Completing the small blind
+            print('FOLD')
+            print('COMPLETE: {}'.format(cost))
+            print('RAISE to {}'.format(raisecost))
+        elif cost == 0 and self.level >= 1:
+            # Typical BB, Straddle, or post situation.
+            print('CHECK')
+            print('RAISE to {}'.format(raisecost))
+        elif cost == 0 and self.level == 0:
+            # Noone has opened betting yet on a postblind round
+            print('CHECK')
+            print('BET {}'.format(self.betsize))
+        elif cost > 0 and self.level < self.betcap:
+            # There has been a bet/raises, but still can re-raise
+            print('FOLD')
+            print('CALL: {}'.format(cost))
+            print('RAISE to {}'.format(raisecost))
+        elif cost > 0 and self.level == self.betcap:
+            # The raise cap has been met, can only call or fold.
+            print('FOLD')
+            print('CALL: {}'.format(cost))
 
     def nextbettor(self):
         return (self.bettor + 1) % len(self.players)
