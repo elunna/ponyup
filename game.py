@@ -5,7 +5,7 @@ import fivecarddraw
 import gametools
 import game
 import card
-import operator
+#  import operator
 
 # blindstructures = [ante, sb, bb]
 
@@ -273,8 +273,11 @@ class Round():
             cost = self.betsize - (self.stacks[p.name] - p.chips)
 
             if p.playertype == 'HUMAN':
-                options = self.showoptions(cost)
-                self.menu(options)
+                options = self.get_options(cost)
+                o = self.menu(options)
+                print('option picked:')
+                print(o)
+                #  self.process_option(o)
 
             if cost > 0:
                 self.pot += p.bet(cost)
@@ -287,21 +290,48 @@ class Round():
             else:
                 self.bettor = self.nextbettor()
 
+    def process_option(option):
+        print('The option passed was: {}'.format(option))
+        print('Costs ${} and raises the betlevel by {}'.format(option[0], option[1]))
+        pass
+
     def menu(self, options=None):
-        print('Menu:')
-        print('(H)elp, (Q)uit')
 
         # Sort by chip cost
         #  sorted_options =sorted(options.items(), key=operator.itemgetter(0)):
         #  sorted(options, key=lambda x: x[0]):
-        for o in options:
-            print('({}){}--${} '.format(o[:1], o[1:], options[o][0]), end='')
+        optlist = [(options[o][0], o[:1], o[1:]) for o in options]
+
+        print('(H)elp, (Q)uit')
+        for o in sorted(optlist):
+            print('({}){}--${} '.format(o[1], o[2], o[0]), end='')
+
         print('')
-        choice = input(':> ')
+        while True:
+            choice = input(':> ')
 
-        return choice
+            if choice == 'q':
+                exit()
+            elif choice.lower() in options:
+                return options[choice]
+            else:
+                print('Invalid choice, try again.')
+            """
+            elif choice == 'f' and 'FOLD' in options:
+                return 'FOLD', options.popitem('FOLD')
+            elif choice == 'c' and 'CALL' in options:
+                return options['CALL']
+            elif choice == 'c' and 'CHECK' in options:
+                return options['CHECK']
+            elif choice == 'c' and 'COMPLETE' in options:
+                return options['COMPLETE']
+            elif choice == 'b' and 'BET' in options:
+                return options['BET']
+            elif choice == 'r' and 'RAISE' in options:
+                return options['RAISE']
+            """
 
-    def showoptions(self, cost):
+    def get_options(self, cost):
         # Shows the options available to the current bettor
         #  raisecost = (self.level + 1) * self.betsize
         completing = (self.betsize - cost) == self._game.blinds[0]
@@ -313,39 +343,42 @@ class Round():
             #  print('FOLD')
             #  print('COMPLETE: {}'.format(cost))
             #  print('RAISE to {}'.format(raisecost))
-            OPTIONS['FOLD'] = (0, 0)
-            OPTIONS['COMPLETE'] = (cost, 0)
-            OPTIONS['RAISE'] = (cost + self.betsize, 1)
+            OPTIONS['f'] = ('FOLD', 0, 0)
+            OPTIONS['c'] = ('COMPLETE', cost, 0)
+            OPTIONS['r'] = ('RAISE', cost + self.betsize, 1)
 
         elif cost == 0 and self.level >= 1:
             # Typical BB, Straddle, or post situation.
             #  print('CHECK')
             #  print('RAISE to {}'.format(raisecost))
-            OPTIONS['CHECK'] = (0, 0)
-            OPTIONS['RAISE'] = (cost + self.betsize, 1)
+            OPTIONS['c'] = ('CHECK', 0, 0)
+            OPTIONS['r'] = ('RAISE', cost + self.betsize, 1)
 
         elif cost == 0 and self.level == 0:
             # Noone has opened betting yet on a postblind round
             #  print('CHECK')
             #  print('BET {}'.format(self.betsize))
-            OPTIONS['CHECK'] = (0, 0)
-            OPTIONS['BET'] = (self.betsize, 1)
+            OPTIONS['c'] = ('CHECK', 0, 0)
+            OPTIONS['b'] = ('BET', self.betsize, 1)
 
         elif cost > 0 and self.level < self.betcap:
             # There has been a bet/raises, but still can re-raise
             #  print('FOLD')
             #  print('CALL: {}'.format(cost))
             #  print('RAISE to {}'.format(raisecost))
-            OPTIONS['FOLD'] = (0, 0)
-            OPTIONS['CALL'] = (cost, 0)
-            OPTIONS['RAISE'] = (cost + self.betsize, 1)
+            OPTIONS['f'] = ('FOLD', 0, 0)
+            OPTIONS['c'] = ('CALL', cost, 0)
+            OPTIONS['r'] = ('RAISE', cost + self.betsize, 1)
 
         elif cost > 0 and self.level == self.betcap:
             # The raise cap has been met, can only call or fold.
             #  print('FOLD')
             #  print('CALL: {}'.format(cost))
-            OPTIONS['FOLD'] = (0, 0)
-            OPTIONS['CALL'] = (cost, 0)
+            OPTIONS['f'] = ('FOLD', 0, 0)
+            OPTIONS['c'] = ('CALL', cost, 0)
+
+        #  print('--end of get_options--')
+        #  print('OPTIONS = {}'.format(OPTIONS))
         return OPTIONS
 
     def nextbettor(self):
