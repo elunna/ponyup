@@ -78,6 +78,7 @@ class Round():
         self.betcap = 4
         self.betsize = 0
         self.level = 0
+        self.tbl = game._table
 
         self.muck = []
         self.d = deck.Deck()
@@ -92,7 +93,7 @@ class Round():
 
         #  Remember starting stacks of all playerso
         self.stacks = {}
-        for p in self.players:
+        for p in self.tbl:
             self.stacks[p.name] = p.chips
 
     def __str__(self):
@@ -102,13 +103,13 @@ class Round():
 
     def check_for_stale_cards(self):
         #  Check that no players have lingering cards
-        for p in self.players:
+        for p in self.tbl:
             if len(p._hand) > 0:
                 raise ValueError('Player has cards when they should not!')
 
     def deal_hands(self):
         for i in range(5):
-            for p in self.players:
+            for p in self.tbl:
                 p.add(self.d.deal())
 
     def discard_phase(self):
@@ -204,7 +205,7 @@ class Round():
 
     def ante_up(self):
         # All players bet the ante amount and it's added to the pot
-        for p in self.players:
+        for p in self.tbl:
             self.pot += p.bet(self._game.blinds[2])
 
     def post_blinds(self):
