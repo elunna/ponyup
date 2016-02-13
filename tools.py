@@ -60,15 +60,15 @@ if __name__ == "__main__":
     t.remove_player(1)
     print(t)
 
-    print('Next player from 0: {}'.format(t.next(0)))
-    print('Next player from 2: {}'.format(t.next(2)))
+    print('Next player from 0: {}'.format(t.nextplayer(0)))
+    print('Next player from 2: {}'.format(t.nextplayer(2)))
 
     t.remove_player(3)
     t.remove_player(5)
     print(t)
 
-    print('Next player from 2: {}'.format(t.next(2)))
-    print('Next player from 9: {}'.format(t.next(9)))
+    print('Next player from 2: {}'.format(t.nextplayer(2)))
+    print('Next player from 9: {}'.format(t.nextplayer(9)))
 
     print('#'*80)
     print('testing the button movement')
