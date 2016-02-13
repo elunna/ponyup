@@ -107,12 +107,13 @@ class Table():
 
     def __iter__(self):
         self.counter = 0
+        self.players = [p for p in self.seats if p is not None]
         return self
 
     def __next__(self):
-        if self.counter > len(self.seats) - 1:
+        if self.counter > len(self.players) - 1:
             raise StopIteration
-        p = self.seats[self.counter]
+        p = self.players[self.counter]
         self.counter += 1
         return p
 
