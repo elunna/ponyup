@@ -32,10 +32,31 @@ class Table():
                 num -= 0
         return num
 
+    def horz_display(self):
+        _str = ''
+        # Seat # line
+        for i, s in enumerate(self.seats):
+            #  if s is not None:
+            _str += 'Seat {:<5}'.format(i)
+        _str += '\n'
+        # Player line
+        for i, s in enumerate(self.seats):
+            if s is not None:
+                _str += '{:<10}'.format(str(s))
+        _str += '\n'
+        # Chips line
+        for i, s in enumerate(self.seats):
+            if s is not None:
+                _str += '${:<9}'.format(s.chips)
+        _str += '\n'
+        return _str
+
     def __str__(self):
-        _str = '{:3}{:7}{:12}{:6}{:8}{:4}{:10}'.format(
-            '#', 'Tokens', 'Player', 'Type', 'Chips', '     ', 'Cards')
-        _str += '\n-----------------------------------\n'
+        _str = '{:3}{:7}{:15}{:8}{:4}{:10}\n'.format(
+            '#', 'Tokens', 'Player', 'Chips', '     ', 'Cards')
+        #  _str += '\n--------------------------------------------------\n'
+        _str += '-'*50
+        _str += '\n'
 
         for i, s in enumerate(self.seats):
             if s is None:
@@ -48,7 +69,7 @@ class Table():
                 for t in self.TOKENS:
                     if self.TOKENS[t] == i:
                         tokens += '[{}]'.format(t)
-                _str += '{:7}{:12}{:6}${:<7}'.format(tokens, str(s), s.playertype, s.chips, )
+                _str += '{:7}{:15}${:<7}'.format(tokens, str(s), s.chips, )
 
                 # Display hand if available
                 if s._hand is not None:

@@ -139,8 +139,8 @@ def main():
     while playing:
         print(g)
         g.playround()
-        choice = input('keep playing? >')
-        if choice == 'n':
+        choice = input('keep playing? > ')
+        if choice.lower() == 'n' or choice == 0:
             playing = False
 
         os.system('clear')

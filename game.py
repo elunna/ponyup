@@ -31,7 +31,11 @@ class Game():
         self._table.randomize_button()
 
     def __str__(self):
-        return 'Round: {:<5} ${}/${}'.format(self.rounds, self.blinds[1], self.blinds[1] * 2)
+        _str = 'Round: {:<5} '.format(self.rounds)
+        _str += 'Stakes: ${}/${}'.format(
+            self.blinds[1], self.blinds[1] * 2).rjust(36)
+
+        return _str
 
     def playround(self):
         newround = Round(self)
@@ -102,8 +106,8 @@ class Round():
             self.stacks[p.name] = p.chips
 
     def __str__(self):
-        _str = 'Round info: Street {}\n'.format(self.street)
-        _str += 'Pot: ${}'.format(self.pot)
+        #  _str = 'Street {}\t'.format(self.street)
+        _str = 'Pot: ${:}\n'.format(self.pot).rjust(50)
         return _str
 
     def check_for_stale_cards(self):
@@ -228,9 +232,9 @@ class Round():
         self.pot += self.players[sb].bet(self._game.blinds[0])
         self.pot += self.players[bb].bet(self._game.blinds[1])
 
-        print('{} posts the small blind: ${}'.format(
+        print('{} posts ${}'.format(
             self.players[sb], self._game.blinds[0]))
-        print('{} posts the big blind: ${}'.format(
+        print('{} posts ${}'.format(
             self.players[bb], self._game.blinds[1]))
 
     def setup_betting(self):
