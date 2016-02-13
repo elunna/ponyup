@@ -88,6 +88,12 @@ class Table():
     def btn(self):
         return self.TOKENS['D']
 
+    def get_sb(self):
+        return self.seats[self.TOKENS['SB']]
+
+    def get_bb(self):
+        return self.seats[self.TOKENS['BB']]
+
     def active(self):
         return self.TOKENS['ACTIVE']
 

@@ -210,25 +210,19 @@ class Round():
 
     def post_blinds(self):
         # Preflop: Headsup
-        sb, bb = -1, -1
-        if self.street > 0:
-            print('Blinds are not applicable past street 0!')
-            exit()
-        if len(self.players) == 2:
-            sb, bb = 0, 1
-        elif len(self.players) > 2:
-            sb, bb = 1, 2
-        elif len(self.players) < 2:
+        if len(self.tbl) < 2:
             raise ValueError('Not enough players to play!')
             exit()
+        sb = self.tbl.get_sb()
+        bb = self.tbl.get_bb()
 
-        self.pot += self.players[sb].bet(self._game.blinds[0])
-        self.pot += self.players[bb].bet(self._game.blinds[1])
+        self.pot += sb.bet(self._game.blinds[0])
+        self.pot += bb.bet(self._game.blinds[0])
 
         print('{} posts ${}'.format(
-            self.players[sb], self._game.blinds[0]))
+            sb, self._game.blinds[0]))
         print('{} posts ${}'.format(
-            self.players[bb], self._game.blinds[1]))
+            bb, self._game.blinds[0]))
 
     def setup_betting(self):
         # Set betsize, level, currentbettor and lastbettor
