@@ -2,7 +2,7 @@ from __future__ import print_function
 import table
 import deck
 import fivecarddraw
-import gametools
+#  import tools
 import game
 import card
 import blinds
@@ -348,7 +348,7 @@ class Round():
         return (self.bettor - 1) % len(self.players)
 
 
-def calculate_odds(bet, pot):
+def calc_odds(bet, pot):
     print('first draft')
     print('Bet = {}, pot = {}'.format(bet, pot))
     #  diff = pot - bet
@@ -361,7 +361,7 @@ def calculate_odds(bet, pot):
 
 def test_winner(*hands):
     print('Test player ties')
-    t = gametools.setup_test_table(len(hands))
+    t = table.setup_table(len(hands))
     g = game.Game('2/4', t)
     t.randomize_button()
 
