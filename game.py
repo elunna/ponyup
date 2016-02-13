@@ -43,18 +43,22 @@ class Game():
         newround.setup_betting()
         newround.betting()
 
-        newround.discard_phase()
+        if len(newround.players) > 1:
+            newround.discard_phase()
 
-        # Show table post draw
-        #  print(self._table)
+            # Show table post draw
+            #  print(self._table)
 
-        # Post-draw betting round
+            # Post-draw betting round
 
-        # Check for winners/showdown
-        winners = newround.get_winner()
+            # Check for winners/showdown
+            winners = newround.get_winner()
 
-        # Award pot
-        newround.award_pot(winners)
+            # Award pot
+            newround.award_pot(winners)
+
+        else:
+            newround.award_pot(newround.players)
 
         # ================== CLEANUP
         newround.verify_muck()
@@ -168,32 +172,34 @@ class Round():
             p.showhand()
 
         for i, p in enumerate(self.players):
-            print('{:15} holds {} with a: {}, {}'.format(
-                str(p), p._hand, p._hand.handrank, p._hand.description))
+            print('{:15} shows: {}'.format(
+                str(p), p._hand))
 
         #  print('creating a list of value/player values')
         handlist = [(p._hand.value, p) for p in self.players]
         bestvalue = max(handlist)
 
-        winners = [h for h in handlist if h[0] == bestvalue[0]]
+        winners = [h[1] for h in handlist if h[0] == bestvalue[0]]
 
         print('-'*40)
         print('')
         if len(winners) == 1:
-            print('The winner is: {}'.format(winners[0][1]))
+            #  print('The winner is: {}'.format(winners[0][1]))
+            print('{} wins with a {} - {}'.format(
+                #  winners[0][1], winners[0][1]._hand.handrank, winners[0][1]._hand.description))
+                winners[0], winners[0]._hand.handrank, winners[0]._hand.description))
         elif len(winners) > 1:
             print('We have a TIE!')
             print('The winners are:', end='')
             for w in winners:
-
-                print('{}, '.format(w[1]), end='')
+                print('{}, '.format(w), end='')
 
         return winners
 
     def award_pot(self, winners):
         if len(winners) == 1:
-            p = winners[0][1]
-            print('Player {} wins {} chips.'.format(p.name, self.pot))
+            p = winners[0]
+            print('{} wins {} chips.'.format(p.name, self.pot))
             p.win(self.pot)
 
     def ante_up(self):
@@ -245,26 +251,20 @@ class Round():
 
     def betting(self):
 
-        while True:
+        while len(self.players) > 1:
             p = self.players[self.bettor]
             #  o = None
             cost = self.betsize * self.level - (self.stacks[p.name] - p.chips)
             options = self.get_options(cost)
 
             if p.playertype == 'HUMAN':
+                print(self)
                 o = self.menu(options)
                 self.process_option(o)
 
             elif p.playertype == 'CPU':
                 o = p.makeplay(options)
                 self.process_option(o)
-                """
-                if cost > 0:
-                    self.pot += p.bet(cost)
-                    print('\t{} bets ${}'.format(p.name, cost))
-                elif cost == 0:
-                    print('\t{} checks!'.format(p.name))
-                """
 
             # This is complex and UGLY, we'll fix in the future
             if o[0] == 'FOLD' and self.bettor == self.closer:
@@ -282,6 +282,8 @@ class Round():
                 break
             else:
                 self.bettor = self.nextbettor()
+        else:
+            print('Only one player left!')
 
     def process_option(self, option):
         #  print('The option passed was: {}'.format(option))
@@ -309,7 +311,7 @@ class Round():
         else:
             self.pot += p.bet(option[1])
 
-        print('\r{} {}\'s'.format(p, option[0]))
+        print('\r{} {}s'.format(p, option[0].lower()))
 
     def menu(self, options=None):
         # Sort by chip cost

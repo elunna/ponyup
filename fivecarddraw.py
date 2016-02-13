@@ -132,7 +132,7 @@ def auto_discard(hand):
 def main():
     os.system('clear')
     print('FIVE CARD DRAW!')
-    print('Initializing new game...\n')
+    #  print('Initializing new game...\n')
     g = game.Game('FIVE CARD DRAW', '50/100', 6, 'LUNNA')
 
     playing = True
