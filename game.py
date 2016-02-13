@@ -5,27 +5,13 @@ import fivecarddraw
 import gametools
 import game
 import card
+import blinds
 #  import operator
-
-# blindstructures = [ante, sb, bb]
-
-structures = {
-    '2/4': (1, 2, .5),
-    '3/6': (1, 3, 1),
-    '4/8': (2, 4, 1),
-    '6/12': (3, 6, 2),
-    '8/16': (4, 8, 2),
-    '10/20': (5, 10, 3),
-    '15/30': (10, 15, 5),
-    '20/40': (10, 20, 5),
-    '30/60': (15, 30, 10),
-    '50/100': (25, 50, 10),
-}
 
 
 class Game():
     def __init__(self, gametype, stakes, tablesize, hero=None):
-        self.blinds = structures[stakes]
+        self.blinds = blinds.limit[stakes]
         self.rounds = 1
         self._table = table.setup_table(tablesize, hero)
         self._table.randomize_button()
@@ -365,17 +351,17 @@ class Round():
 def pick_limit():
     print('Please enter what limit you want to play:(default 2/4)')
 
-    struct_list = sorted(structures.keys())
+    struct_list = sorted(blinds.limit.keys())
     for l in struct_list:
         print('{}, '.format(l), end='')
 
     choice = input(':> ')
-    if choice in structures:
+    if choice in blinds.limit:
         print('You selected {}'.format(choice))
-        return structures[choice]
+        return blinds.limit[choice]
     else:
         print('Selection not available, going with default blinds: 2/4')
-        return structures['2/4']
+        return blinds.limit['2/4']
 
 
 def pick_table():
