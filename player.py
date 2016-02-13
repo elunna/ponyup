@@ -1,5 +1,6 @@
 import re
 import hand
+import strategy
 
 
 class Player():
@@ -9,10 +10,15 @@ class Player():
         else:
             raise ValueError('Invalid username "{}" for object!'.format(name))
 
-        if _type is not None:
-            self.playertype = _type
+        if _type is None:
+            self.playertype = 'CPU'
+        elif _type != 'HUMAN' and _type != 'CPU':
+            raise ValueError('Invalid player type passed!')
         else:
-            self.playertype = 'Unknown'
+            self.playertype = _type
+
+        if self.playertype == 'CPU':
+            self.strategy = strategy.get_normal()
 
         self.chips = chips
         self._hand = hand.Hand()
@@ -57,6 +63,9 @@ class Player():
             raise ValueError('Card not in players hand!')
         else:
             return self._hand.discard(card)
+
+    def makeplay(self, options):
+        return self.strategy.makeplay(options, self._hand.value)
 
 
 def isValidUsername(username):

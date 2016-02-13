@@ -247,22 +247,38 @@ class Round():
 
         while True:
             p = self.players[self.bettor]
-
+            #  o = None
             cost = self.betsize * self.level - (self.stacks[p.name] - p.chips)
+            options = self.get_options(cost)
 
             if p.playertype == 'HUMAN':
-                options = self.get_options(cost)
                 o = self.menu(options)
                 self.process_option(o)
 
             elif p.playertype == 'CPU':
+                o = p.makeplay(options)
+                self.process_option(o)
+                """
                 if cost > 0:
                     self.pot += p.bet(cost)
                     print('\t{} bets ${}'.format(p.name, cost))
                 elif cost == 0:
                     print('\t{} checks!'.format(p.name))
+                """
 
-            if self.bettor == self.closer:
+            # This is complex and UGLY, we'll fix in the future
+            if o[0] == 'FOLD' and self.bettor == self.closer:
+                # Player folded just before the last player
+                pass
+            elif o[0] == 'FOLD' and self.bettor < len(self.players):
+                # Don't further the position in the list,
+                # the player was deleted from the player list.
+                pass
+            elif o[0] == 'FOLD' and self.bettor == len(self.players):
+                # Last player was deleted from the player list.
+                # next player should be 0
+                self.bettor = 0
+            elif self.bettor == self.closer:
                 break
             else:
                 self.bettor = self.nextbettor()
@@ -279,11 +295,19 @@ class Round():
             self.muck.extend(foldedcards)
             # Remove the player from the active list
             self.players.remove(p)
+
+            # This is necessary to offset the item removal in the list
+            # It's ugly I know...
+            if self.bettor < self.closer:
+                self.closer -= 1
+
         elif option[2] > 0:
             # It's a raise, so we'll need to reset last better.
             self.closer = self.lastbettor()
             self.pot += p.bet(option[1])
             self.level += option[2]
+        else:
+            self.pot += p.bet(option[1])
 
         print('\r{} {}\'s'.format(p, option[0]))
 
@@ -291,7 +315,7 @@ class Round():
         # Sort by chip cost
         optlist = [(options[o][1], o, options[o][0][1:]) for o in options]
 
-        print('(H)elp, (Q)uit')
+        #  print('(H)elp, (Q)uit')
         for o in sorted(optlist):
             print('({}){}--${} '.format(o[1], o[2], o[0]), end='')
 
