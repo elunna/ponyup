@@ -88,6 +88,17 @@ class Table():
     def btn(self):
         return self.TOKENS['D']
 
+    def active(self):
+        return self.TOKENS['ACTIVE']
+
+    def next_active(self):
+        while True:
+            n = self.next(self.active())
+
+            if len(self.seats._hand) > 0:
+                self.TOKENS['ACTIVE'] = n
+                return self.seats[n]
+
     def add_player(self, s, p):
         """ Adds a player p to the table at seat s"""
         if self.seats[s] is None:
