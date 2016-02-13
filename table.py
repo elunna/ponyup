@@ -94,6 +94,39 @@ class Table():
         else:
             print('Seat {} is already empty.'.format(s))
 
+    def get_players(self):
+        # Returns a list of all the active players at the table
+        # If the button hasn't been set yet...
+        if self.btn() < 0:
+            self.randomize_button()
+
+        # Sort players so the BTN is indexed at 0.
+        players = self.seats[self.btn():] + self.seats[0:self.btn()]
+
+        return [p for p in players if p is not None]
+
+    def __iter__(self):
+        self.counter = 0
+        return self
+
+    def __next__(self):
+        if self.counter > len(self.seats) - 1:
+            raise StopIteration
+        p = self.seats[self.counter]
+        self.counter += 1
+        return p
+
+    def next(self, from_seat):
+        # Return the next available player from from_seat
+        length = len(self.seats)
+
+        for i in range(1, length + 1):
+            currentseat = (from_seat + i) % length
+            if self.seats[currentseat] is not None:
+                return currentseat
+        else:
+            return -1
+
     def move_button(self):
         # Move the button to the next valid player/seat
         # Also set the blinds appropriately!
@@ -123,28 +156,6 @@ class Table():
 
         # This will also set the blinds...
         self.move_button()
-
-    def get_players(self):
-        # Returns a list of all the active players at the table
-        # If the button hasn't been set yet...
-        if self.btn() < 0:
-            self.randomize_button()
-
-        # Sort players so the BTN is indexed at 0.
-        players = self.seats[self.btn():] + self.seats[0:self.btn()]
-
-        return [p for p in players if p is not None]
-
-    def next(self, from_seat):
-        # Return the next available player from from_seat
-        length = len(self.seats)
-
-        for i in range(1, length + 1):
-            currentseat = (from_seat + i) % length
-            if self.seats[currentseat] is not None:
-                return currentseat
-        else:
-            return -1
 
 
 def setup_table(num, hero=None):
