@@ -15,9 +15,16 @@ class Table():
             exit()  # Crash hard.
 
         self.TOKENS = {
+            'ACTIVE': -1,
             'D': -1,
             'SB': -1,
-            'BB': -1
+            'BB': -1,
+            'STRADDLE': -1,
+            'KILL': -1,
+            'LEGUP': -1,
+            'POST': None,
+            'MISSED BLINDS': None,
+            'SITTING OUT': None
         }
 
         self.seats = []
