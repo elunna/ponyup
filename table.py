@@ -52,8 +52,8 @@ class Table():
         return _str
 
     def __str__(self):
-        _str = '{:3}{:7}{:15}{:8}{:4}{:10}\n'.format(
-            '#', 'Tokens', 'Player', 'Chips', '     ', 'Cards')
+        _str = '{:3}{:7}{:15}{:10}{:10}\n'.format(
+            '#', 'Tokens', 'Player', 'Chips', 'Hand')
         #  _str += '\n--------------------------------------------------\n'
         _str += '-'*50
         _str += '\n'
@@ -69,7 +69,7 @@ class Table():
                 for t in self.TOKENS:
                     if self.TOKENS[t] == i:
                         tokens += '[{}]'.format(t)
-                _str += '{:7}{:15}${:<7}'.format(tokens, str(s), s.chips, )
+                _str += '{:7}{:15}${:<9}'.format(tokens, str(s), s.chips, )
 
                 # Display hand if available
                 if s._hand is not None:

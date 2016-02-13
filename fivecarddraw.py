@@ -20,12 +20,13 @@ def is_integer(num):
 
 def human_discard(hand):
     print('*'*40)
+    print(' '*35 + '0  1  2  3  4')
+    print(' '*35, end='')
+    for c in hand.cards:
+        print('{:3}'.format(str(c)), end='')
+    print('')
     print('Enter the cards you want to discard:')
     print('Example: "0" discards card 0, "01" discards cards 0 and 1, etc.')
-    print('Index: 0   1   2   3   4')
-    print('Card : ', end='')
-    for c in hand.cards:
-        print('{:3} '.format(str(c)), end='')
     print('')
     choice = input(':> ')
     # Split up the #s, and reverse them so we can remove them without the list
