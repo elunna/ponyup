@@ -15,7 +15,6 @@ class Table():
             exit()  # Crash hard.
 
         self.TOKENS = {
-            'ACTIVE': -1,
             'D': -1,
             'SB': -1,
             'BB': -1,
@@ -71,17 +70,6 @@ class Table():
     def get_bb(self):
         return self.TOKENS['BB']
 
-    def active(self):
-        return self.TOKENS['ACTIVE']
-
-    def next_active(self):
-        while True:
-            n = self.next(self.active())
-
-            if len(self.seats._hand) > 0:
-                self.TOKENS['ACTIVE'] = n
-                return self.seats[n]
-
     def add_player(self, s, p):
         """ Adds a player p to the table at seat s"""
         if self.seats[s] is None:
@@ -118,28 +106,53 @@ class Table():
         self.counter += 1
         return p
 
-    def next(self, from_seat):
-        # Return the next available player from from_seat
-        length = len(self.seats)
+    def next(self, from_seat, hascards=False):
+        # Return the next valid
+        # Seat must be NON-null and have chips
+        # Optional argument to specify if they should also have cards
+        length = len(self)
 
         for i in range(1, length + 1):
             currentseat = (from_seat + i) % length
-            if self.seats[currentseat] is not None:
-                return currentseat
+            p = self.seats[currentseat]
+
+            if p is not None and p.chips > 0:
+                if hascards is True and len(p._hand) == 5:
+                    return currentseat
+                elif hascards is False:
+                    return currentseat
+        else:
+            return -1
+
+    def prev(self, from_seat, hascards=False):
+        # Return the next valid
+        # Seat must be NON-null and have chips
+        # Optional argument to specify if they should also have cards
+        length = len(self)
+
+        for i in range(1, length + 1):
+            currentseat = (from_seat - i) % length
+            p = self.seats[currentseat]
+
+            if p is not None and p.chips > 0:
+                if hascards is True and len(p._hand) == 5:
+                    return currentseat
+                elif hascards is False:
+                    return currentseat
         else:
             return -1
 
     def move_button(self):
         # Move the button to the next valid player/seat
         # Also set the blinds appropriately!
-        self.TOKENS['D'] = self.next(self.btn())
+        self.TOKENS['D'] = self.next(self.btn(), hascards=False)
 
         if len(self) == 2:
             self.TOKENS['SB'] = self.btn()
             self.TOKENS['BB'] = self.next(self.btn())
         elif len(self) > 2:
             self.TOKENS['SB'] = self.next(self.btn())
-            self.TOKENS['BB'] = self.next(self.TOKENS['SB'])
+            self.TOKENS['BB'] = self.next(self.TOKENS['SB'], hascards=False)
         else:
             raise ValueError('Not enough players at the table!')
 
@@ -159,7 +172,7 @@ class Table():
         # This will also set the blinds...
         self.move_button()
 
-    def card_holders(self):
+    def get_cardholders(self):
         sb = self.get_sb()
         seats = list(range(len(self)))
         seats = seats[sb:] + seats[0:sb]
