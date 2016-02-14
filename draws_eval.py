@@ -4,7 +4,7 @@ import deck
 import hand
 import combos
 import handtests
-import fivecarddraw
+import draw5
 
 TRIALS = 10000
 

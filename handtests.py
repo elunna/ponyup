@@ -5,7 +5,7 @@ import deck
 import card
 import hand
 import evaluator as ev
-import fivecarddraw
+import draw5
 
 
 def dealhand(quantity):
@@ -167,7 +167,7 @@ def test_hand(cards, value=-1):
         else:
             print('Evaluation is correct!')
 
-    d = fivecarddraw.auto_discard(h)
+    d = draw5.auto_discard(h)
     print('Discard:{}'.format(d))
     print('')
 

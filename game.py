@@ -1,12 +1,10 @@
 from __future__ import print_function
 import table
 import deck
-import fivecarddraw
-#  import tools
+import draw5
 import game
 import card
 import blinds
-#  import operator
 
 
 class Game():
@@ -23,9 +21,9 @@ class Game():
 
         return _str
 
-    def playround(self):
+    def play(self):
         newround = Round(self)
-        newround.check_for_stale_cards()
+        newround.cheat_check()
 
         # todo: Postblinds
         newround.post_blinds()
@@ -44,7 +42,7 @@ class Game():
         newround.betting()
 
         if len(newround.tbl.card_holders()) > 1:
-            newround.discard_phase()
+            newround.discards()
 
             # Show table post draw
             #  print(self._table)
@@ -52,7 +50,7 @@ class Game():
             # Post-draw betting round
 
             # Check for winners/showdown
-            winners = newround.get_winner()
+            winners = newround.showdown()
 
             # Award pot
             newround.award_pot(winners)
@@ -61,7 +59,7 @@ class Game():
             newround.award_pot(newround.tbl.card_holders())
 
         # ================== CLEANUP
-        newround.verify_muck()
+        newround.check_muck()
 
         # Move the table button
         self._table.move_button()
@@ -101,7 +99,7 @@ class Round():
         _str = 'Pot: ${:}\n'.format(self.pot).rjust(50)
         return _str
 
-    def check_for_stale_cards(self):
+    def cheat_check(self):
         #  Check that no players have lingering cards
         for p in self.tbl:
             if len(p._hand) > 0:
@@ -112,7 +110,7 @@ class Round():
             for p in self.tbl:
                 p.add(self.d.deal())
 
-    def discard_phase(self):
+    def discards(self):
         print('\nDiscard phase...')
         # Make sure the button goes last!
         holdingcards = self.tbl.card_holders()
@@ -122,9 +120,9 @@ class Round():
             ishuman = p.playertype == 'HUMAN'
             # Discard!
             if ishuman:
-                discards = fivecarddraw.human_discard(p._hand)
+                discards = draw5.human_discard(p._hand)
             else:
-                discards = fivecarddraw.auto_discard(p._hand)
+                discards = draw5.auto_discard(p._hand)
 
             if discards:
                 # Easier to put this here...
@@ -150,7 +148,7 @@ class Round():
             print('')
         print('')
 
-    def verify_muck(self):
+    def check_muck(self):
         # Clear hands
         for p in self.tbl:
             self.muck.extend(p.fold())
@@ -160,7 +158,7 @@ class Round():
             raise ValueError('Deck is corrupted! Muck doesn\'t equal starting deck!')
             exit()
 
-    def get_winner(self):
+    def showdown(self):
         """
         Takes in a list of Players and determines who has the best hand
         * Should we return just the Player?
@@ -198,7 +196,7 @@ class Round():
             print('{} wins {} chips.'.format(p.name, self.pot))
             p.win(self.pot)
 
-    def ante_up(self):
+    def post_antes(self):
         # All players bet the ante amount and it's added to the pot
         for p in self.tbl:
             self.pot += p.bet(self._game.blinds[2])
@@ -394,7 +392,7 @@ def test_winner(*hands):
     for p in newround.tbl:
         print('Player 0: {}'.format(p._hand.value))
 
-    winners = newround.get_winner()
+    winners = newround.showdown()
     print('')
     print('Winners list:')
     print(winners)

@@ -139,7 +139,7 @@ def main():
 
     while playing:
         print(g)
-        g.playround()
+        g.play()
         choice = input('keep playing? > ')
         if choice.lower() == 'n' or choice == 0:
             playing = False
