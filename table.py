@@ -66,10 +66,10 @@ class Table():
         return self.TOKENS['D']
 
     def get_sb(self):
-        return self.seats[self.TOKENS['SB']]
+        return self.TOKENS['SB']
 
     def get_bb(self):
-        return self.seats[self.TOKENS['BB']]
+        return self.TOKENS['BB']
 
     def active(self):
         return self.TOKENS['ACTIVE']
@@ -158,6 +158,19 @@ class Table():
 
         # This will also set the blinds...
         self.move_button()
+
+    def card_holders(self):
+        sb = self.get_sb()
+        seats = list(range(len(self)))
+        seats = seats[sb:] + seats[0:sb]
+
+        return [self.seats[s] for s in seats if self.has_cards(s)]
+
+    def has_cards(self, seat):
+        if self.seats[seat] is None:
+            return False
+        else:
+            return len(self.seats[seat]._hand) == 5
 
 
 def setup_table(num, hero=None):

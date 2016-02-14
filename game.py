@@ -115,37 +115,38 @@ class Round():
     def discard_phase(self):
         print('\nDiscard phase...')
         # Make sure the button goes last!
-        for i in range(1, len(self.players) + 1):
-            plyr = i % len(self.players)
+        holdingcards = self.tbl.card_holders()
 
-            ishuman = self.players[plyr].playertype == 'HUMAN'
+        for p in holdingcards:
+
+            ishuman = p.playertype == 'HUMAN'
             # Discard!
             if ishuman:
-                discards = fivecarddraw.human_discard(self.players[plyr]._hand)
+                discards = fivecarddraw.human_discard(p._hand)
             else:
-                discards = fivecarddraw.auto_discard(self.players[plyr]._hand)
+                discards = fivecarddraw.auto_discard(p._hand)
 
             if discards:
                 # Easier to put this here...
                 if ishuman:
                     print('{:15} discards {}, draws: '.format(
-                        str(self.players[plyr]), discards), end='')
+                        str(p), discards), end='')
                 else:
                     print('{:15} discards {}.'.format(
-                        str(self.players[plyr]), discards), end='')
+                        str(p), discards), end='')
             else:
-                print('{:15} stands pat.'.format(str(self.players[plyr])))
+                print('{:15} stands pat.'.format(p))
 
             # Redraw!
             for c in discards:
-                self.muck.append(self.players[plyr].discard(c))
+                self.muck.append(p.discard(c))
 
                 draw = self.d.deal()
                 if ishuman:
                     draw.hidden = False
                     print('{} '.format(draw), end='')
 
-                self.players[plyr].add(draw)
+                p.add(draw)
             print('')
         print('')
 
@@ -213,16 +214,14 @@ class Round():
         if len(self.tbl) < 2:
             raise ValueError('Not enough players to play!')
             exit()
-        sb = self.tbl.get_sb()
-        bb = self.tbl.get_bb()
+        sb = self.tbl.seats[self.tbl.get_sb()]
+        bb = self.tbl.seats[self.tbl.get_bb()]
 
         self.pot += sb.bet(self._game.blinds[0])
-        self.pot += bb.bet(self._game.blinds[0])
+        self.pot += bb.bet(self._game.blinds[1])
 
-        print('{} posts ${}'.format(
-            sb, self._game.blinds[0]))
-        print('{} posts ${}'.format(
-            bb, self._game.blinds[0]))
+        print('{} posts ${}'.format(sb, self._game.blinds[0]))
+        print('{} posts ${}'.format(bb, self._game.blinds[1]))
 
     def setup_betting(self):
         # Set betsize, level, currentbettor and lastbettor
