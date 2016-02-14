@@ -39,9 +39,9 @@ class Game():
 
         # Pre-draw betting round
         newround.setup_betting()
-        newround.betting()
+        victor = newround.betting()
 
-        if len(newround.tbl.card_holders()) > 1:
+        if victor is None:
             newround.discards()
 
             # Show table post draw
@@ -56,7 +56,7 @@ class Game():
             newround.award_pot(winners)
 
         else:
-            newround.award_pot(newround.tbl.card_holders())
+            newround.award_pot(victor)
 
         # ================== CLEANUP
         newround.check_muck()
@@ -85,7 +85,7 @@ class Round():
             self.d.shuffle()
 
         # Create a list of the players from the table, and place the button at index 0
-        self.players = game._table.get_players()
+        #  self.players = game._table.get_players()
         self.bettor = None
         self.closer = None
 
@@ -113,7 +113,7 @@ class Round():
     def discards(self):
         print('\nDiscard phase...')
         # Make sure the button goes last!
-        holdingcards = self.tbl.card_holders()
+        holdingcards = self.tbl.get_cardholders()
 
         for p in holdingcards:
 
@@ -166,7 +166,7 @@ class Round():
 
         handlist = []
         # Un-hide all cards involved in a showdown.
-        for p in self.tbl.card_holders():
+        for p in self.tbl.get_cardholders():
             p.showhand()
             print('{:15} shows: {}'.format(str(p), p._hand))
 
@@ -219,27 +219,21 @@ class Round():
         # Set betsize, level, currentbettor and lastbettor
         # Preflop: Headsup
         if self.street == 0:
-            if len(self.players) == 2:
-                bb = 1
-            else:
-                #  sb, bb = 1, 2
-                bb = 2
             self.level = 1
             self.betsize = self._game.blinds[1]
-            self.closer = bb
-            self.bettor = (bb + 1) % len(self.players)
+            self.closer = self.tbl.get_bb()
+            self.bettor = self.tbl.next(self.closer)
 
         elif self.street > 0:
             self.level = 0
             self.betsize = self._game.blinds[1] * 2
-            self.closer = 0
-            self.bettor = 1
+            self.closer = self.tbl.btn()
+            self.bettor = self.tbl.next(self.closer)
 
     def betting(self):
-
-        while len(self.players) > 1:
-            p = self.players[self.bettor]
-            #  o = None
+        playing = True
+        while playing:
+            p = self.tbl.seats[self.bettor]
             cost = self.betsize * self.level - (self.stacks[p.name] - p.chips)
             options = self.get_options(cost)
 
@@ -252,46 +246,32 @@ class Round():
                 o = p.makeplay(options)
                 self.process_option(o)
 
-            # This is complex and UGLY, we'll fix in the future
-            if o[0] == 'FOLD' and self.bettor == self.closer:
-                # Player folded just before the last player
-                pass
-            elif o[0] == 'FOLD' and self.bettor < len(self.players):
-                # Don't further the position in the list,
-                # the player was deleted from the player list.
-                pass
-            elif o[0] == 'FOLD' and self.bettor == len(self.players):
-                # Last player was deleted from the player list.
-                # next player should be 0
-                self.bettor = 0
+            if self.tbl.valid_bettors() == 1:
+                print('Only one player left!')
+                winner = self.tbl.seats[self.tbl.next(self.bettor, hascards=True)]
+                return [winner]
+
             elif self.bettor == self.closer:
-                break
+                # Reached the last bettor, betting is closed.
+                playing = False
             else:
-                self.bettor = self.nextbettor()
+                # Set next bettor
+                self.bettor = self.tbl.next(self.bettor, hascards=True)
+
         else:
-            print('Only one player left!')
+            return None
 
     def process_option(self, option):
-        #  print('The option passed was: {}'.format(option))
-        #  print('Costs ${} and raises the betlevel by {}'.format(option[1], option[2]))
-
-        p = self.players[self.bettor]
+        p = self.tbl.seats[self.bettor]
 
         if option[0] == 'FOLD':
             # Fold the players hand
-            foldedcards = self.players[self.bettor].fold()
+            foldedcards = p.fold()
             self.muck.extend(foldedcards)
-            # Remove the player from the active list
-            self.players.remove(p)
-
-            # This is necessary to offset the item removal in the list
-            # It's ugly I know...
-            if self.bettor < self.closer:
-                self.closer -= 1
 
         elif option[2] > 0:
             # It's a raise, so we'll need to reset last better.
-            self.closer = self.lastbettor()
+            self.closer = self.tbl.prev(self.bettor, hascards=True)
             self.pot += p.bet(option[1])
             self.level += option[2]
         else:
@@ -352,12 +332,6 @@ class Round():
             OPTIONS['c'] = ('CALL', cost, 0)
 
         return OPTIONS
-
-    def nextbettor(self):
-        return (self.bettor + 1) % len(self.players)
-
-    def lastbettor(self):
-        return (self.bettor - 1) % len(self.players)
 
 
 def calc_odds(bet, pot):

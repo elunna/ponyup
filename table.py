@@ -94,6 +94,14 @@ class Table():
 
         return [p for p in players if p is not None]
 
+    def valid_bettors(self):
+        count = 0
+        for s in self:
+            if s is not None:
+                if self.has_cards(s) and s.chips > 0:
+                    count += 1
+        return count
+
     def __iter__(self):
         self.counter = 0
         self.players = [p for p in self.seats if p is not None]
@@ -177,13 +185,14 @@ class Table():
         seats = list(range(len(self)))
         seats = seats[sb:] + seats[0:sb]
 
-        return [self.seats[s] for s in seats if self.has_cards(s)]
+        return [self.seats[s] for s in seats \
+            if self.has_cards(self.seats[s])]
 
-    def has_cards(self, seat):
-        if self.seats[seat] is None:
+    def has_cards(self, s):
+        if s is None:
             return False
         else:
-            return len(self.seats[seat]._hand) == 5
+            return len(s._hand) == 5
 
 
 def setup_table(num, hero=None):
