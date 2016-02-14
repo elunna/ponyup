@@ -10,17 +10,20 @@ import random
 
 
 class Deck():
-    def __init__(self, cards=None):
+    def __init__(self, cards=None, hidden=True):
         if cards is None:
-            self.cards = create_deck()
+            self.cards = [card.Card(r, s.lower()[0]) for s in SUITS for r in RANKS]
         else:
             self.cards = cards
+
+        if hidden is False:
+            for c in self.cards:
+                c.hidden = False
 
     def shuffle(self):
         random.shuffle(self.cards)
 
     def sort(self):
-        #  self.cards.sort()
         self.cards.sort(key=lambda x: x.val())
 
     def deal(self):
@@ -35,8 +38,6 @@ class Deck():
         for i, c in enumerate(self.cards):
             if i % 13 == 0 and i != 0:
                 _str += '\n'
-                print()
-            #  print('{} '.format(str(c)), end='')
             _str += '{} '.format(str(c))
         return _str
 
@@ -44,33 +45,30 @@ class Deck():
         return len(self.cards)
 
 
-def create_deck():
-    # Create and return a full deck of cards Using Card objects
-    # Use only the first letter of the suits
-    deck = [card.Card(r, s.lower()[0]) for s in SUITS for r in RANKS]
-    return deck
-
-
 if __name__ == '__main__':
-    print('New Deck')
-    d1 = Deck()
-    print(d1)
-    print('')
+    print('New hidden Deck')
+    hiddendeck = Deck()
+    print(hiddendeck)
+
+    print('New non-hidden Deck')
+    showcards = Deck(hidden=False)
+    print(showcards)
+
     print('Shuffling the deck')
-    d1.shuffle()
-    print(d1)
+    showcards.shuffle()
+    print(showcards)
 
     print('')
     print('dealing out 10 cards and creating a new deck')
 
-    cards = [d1.deal() for c in range(10)]
-    d2 = Deck(cards)
-    print(d2)
+    cards = [showcards.deal() for c in range(10)]
+    anotherdeck = Deck(cards)
+    print(anotherdeck)
 
-    d1 = Deck()
-    d1.shuffle()
+    showcards = Deck(hidden=False)
+    showcards.shuffle()
     print('')
     print('Sorting the deck')
-    d1.sort()
+    showcards.sort()
 
-    print(d1)
+    print(showcards)
