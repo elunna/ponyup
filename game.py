@@ -166,26 +166,23 @@ class Round():
         * Should we return just the Player?
         """
 
+        handlist = []
         # Un-hide all cards involved in a showdown.
-        for p in self.players:
+        for p in self.tbl.card_holders():
             p.showhand()
+            print('{:15} shows: {}'.format(str(p), p._hand))
 
-        for i, p in enumerate(self.players):
-            print('{:15} shows: {}'.format(
-                str(p), p._hand))
+            # Creating a list of value/player values')
+            handlist.append((p._hand.value, p))
 
-        #  print('creating a list of value/player values')
-        handlist = [(p._hand.value, p) for p in self.players]
+        # Create a list of winners based on the best hand value found
         bestvalue = max(handlist)
-
         winners = [h[1] for h in handlist if h[0] == bestvalue[0]]
 
         print('-'*40)
         print('')
         if len(winners) == 1:
-            #  print('The winner is: {}'.format(winners[0][1]))
             print('{} wins with a {} - {}'.format(
-                #  winners[0][1], winners[0][1]._hand.handrank, winners[0][1]._hand.description))
                 winners[0], winners[0]._hand.handrank, winners[0]._hand.description))
         elif len(winners) > 1:
             print('We have a TIE!')
