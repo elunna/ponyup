@@ -43,7 +43,7 @@ class Game():
         newround.setup_betting()
         newround.betting()
 
-        if len(newround.players) > 1:
+        if len(newround.tbl.card_holders()) > 1:
             newround.discard_phase()
 
             # Show table post draw
@@ -58,7 +58,7 @@ class Game():
             newround.award_pot(winners)
 
         else:
-            newround.award_pot(newround.players)
+            newround.award_pot(newround.tbl.card_holders())
 
         # ================== CLEANUP
         newround.verify_muck()
@@ -135,7 +135,7 @@ class Round():
                     print('{:15} discards {}.'.format(
                         str(p), discards), end='')
             else:
-                print('{:15} stands pat.'.format(p))
+                print('{:15} stands pat.'.format(str(p)))
 
             # Redraw!
             for c in discards:
