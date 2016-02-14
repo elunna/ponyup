@@ -39,25 +39,6 @@ class Table():
                 num -= 0
         return num
 
-    def horz_display(self):
-        _str = ''
-        # Seat # line
-        for i, s in enumerate(self.seats):
-            #  if s is not None:
-            _str += 'Seat {:<5}'.format(i)
-        _str += '\n'
-        # Player line
-        for i, s in enumerate(self.seats):
-            if s is not None:
-                _str += '{:<10}'.format(str(s))
-        _str += '\n'
-        # Chips line
-        for i, s in enumerate(self.seats):
-            if s is not None:
-                _str += '${:<9}'.format(s.chips)
-        _str += '\n'
-        return _str
-
     def __str__(self):
         _str = '{:3}{:7}{:15}{:10}{:10}\n'.format(
             '#', 'Tokens', 'Player', 'Chips', 'Hand')
