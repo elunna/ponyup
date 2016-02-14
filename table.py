@@ -32,12 +32,8 @@ class Table():
             self.seats.append(None)
 
     def __len__(self):
-        # Return the number of players occupying seats
-        num = len(self.seats)
-        for s in self.seats:
-            if s is None:
-                num -= 0
-        return num
+        # Return the total # of seats
+        return len(self.seats)
 
     def __str__(self):
         _str = '{:3}{:7}{:15}{:10}{:10}\n'.format(
