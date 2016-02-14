@@ -152,7 +152,7 @@ class Round():
 
     def verify_muck(self):
         # Clear hands
-        for p in self.players:
+        for p in self.tbl:
             self.muck.extend(p.fold())
         # Add the remainder of the deck
         self.muck.extend(self.d.cards)
