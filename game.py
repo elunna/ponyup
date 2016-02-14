@@ -10,7 +10,7 @@ import blinds
 
 
 class Game():
-    def __init__(self, gametype, stakes, tablesize, hero=None):
+    def __init__(self, gametype, stakes, tablesize=6, hero=None):
         self.blinds = blinds.limit[stakes]
         self.rounds = 1
         self._table = table.setup_table(tablesize, hero)
@@ -375,22 +375,23 @@ def calc_odds(bet, pot):
 
 def test_winner(*hands):
     print('Test player ties')
-    t = table.setup_table(len(hands))
-    g = game.Game('2/4', t)
-    t.randomize_button()
+    g = game.Game('FIVE CARD DRAW', '2/4', 2)
 
     newround = Round(g)
-    #  hc1 = [('A', 'h'), ('K', 's'), ('Q', 's'), ('J', 'd'), ('9', 'h')]
-    #  hc2 = [('A', 's'), ('K', 'h'), ('Q', 'h'), ('J', 'h'), ('9', 'c')]
-    for i in range(len(hands)):
 
-        for c in hands[i]:
-            newround.players[i].add(card.Card(c[0], c[1]))
+    h1 = [card.Card(c[0], c[1]) for c in hands[0]]
+    h2 = [card.Card(c[0], c[1]) for c in hands[1]]
+
+    newround.tbl.seats[0]._hand.cards = h1
+    newround.tbl.seats[0]._hand.update()
+    newround.tbl.seats[1]._hand.cards = h2
+    newround.tbl.seats[1]._hand.update()
 
     # Print test info
     print(g)
-    print(t)
-    for p in newround.players:
+    print(g._table)
+
+    for p in newround.tbl:
         print('Player 0: {}'.format(p._hand.value))
 
     winners = newround.get_winner()
@@ -404,6 +405,7 @@ if __name__ == "__main__":
     hc1 = [('A', 'h'), ('K', 's'), ('Q', 's'), ('J', 'd'), ('9', 'h')]
     hc2 = [('A', 's'), ('K', 'h'), ('Q', 'h'), ('J', 'h'), ('9', 'c')]
     test_winner(hc1, hc2)
+
     print('*'*80)
     hc1 = [('A', 'h'), ('A', 's'), ('K', 's'), ('Q', 'd'), ('J', 'h')]
     hc2 = [('A', 'c'), ('A', 'd'), ('K', 'h'), ('Q', 'h'), ('J', 'c')]
