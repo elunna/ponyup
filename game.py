@@ -154,13 +154,10 @@ class Round():
         # Clear hands
         for p in self.players:
             self.muck.extend(p.fold())
-        #  print('muck size = {}'.format(len(self.muck)))
-        #  print('adding the remainder of the deck')
         # Add the remainder of the deck
         self.muck.extend(self.d.cards)
-        #  print('muck size = {}'.format(len(self.muck)))
         if len(self.muck) != self.DECKSIZE:
-            raise ValueError('Deck became corrupted! Muck doesn\'t equal starting deck!')
+            raise ValueError('Deck is corrupted! Muck doesn\'t equal starting deck!')
             exit()
 
     def get_winner(self):
