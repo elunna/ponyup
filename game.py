@@ -95,9 +95,10 @@ class Round():
         self.closer = None
 
         #  Remember starting stacks of all playerso
-        self.stacks = {}
+        self.startstack = {}
+        self.betstack = {}
         for p in self.tbl:
-            self.stacks[p.name] = p.chips
+            self.startstack[p.name] = p.chips
 
     def __str__(self):
         #  _str = 'Street {}\t'.format(self.street)
@@ -184,6 +185,7 @@ class Round():
 
     def setup_betting(self):
         # Set betsize, level, currentbettor and lastbettor
+
         # Preflop: Headsup
         if self.street == 0:
             # Preflop the first bettor is right after the BB
@@ -199,16 +201,16 @@ class Round():
             self.closer = self.tbl.prev(self.tbl.get_sb(), hascards=True)
             self.bettor = self.tbl.next(self.tbl.btn(), hascards=True)
 
-            # Remember starting stack size.
-            for p in self.tbl:
-                self.stacks[p.name] = p.chips
+        # Remember starting stack size.
+        for p in self.tbl:
+            self.betstack[p.name] = p.chips
 
     def betting(self):
         playing = True
 
         while playing:
             p = self.tbl.seats[self.bettor]
-            invested = self.stacks[p.name] - p.chips
+            invested = self.betstack[p.name] - p.chips
             cost = self.betsize * self.level - invested
             options = self.get_options(cost)
 
