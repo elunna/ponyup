@@ -212,7 +212,9 @@ class Round():
             cost = self.betsize * self.level - invested
             options = self.get_options(cost)
 
-            if p.playertype == 'HUMAN':
+            if p.chips == 0:
+                print('{} is all in.'.format(p))
+            elif p.playertype == 'HUMAN':
                 print(self)
                 o = self.menu(options)
                 self.process_option(o)

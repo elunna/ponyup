@@ -98,7 +98,7 @@ class Table():
         count = 0
         for s in self:
             if s is not None:
-                if self.has_cards(s) and s.chips > 0:
+                if self.has_cards(s):
                     count += 1
         return count
 
@@ -115,8 +115,7 @@ class Table():
         return p
 
     def next(self, from_seat, hascards=False):
-        # Return the next valid
-        # Seat must be NON-null and have chips
+        # Return the next valid player, a non-null seat
         # Optional argument to specify if they should also have cards
         length = len(self)
 
@@ -124,7 +123,7 @@ class Table():
             currentseat = (from_seat + i) % length
             p = self.seats[currentseat]
 
-            if p is not None and p.chips > 0:
+            if p is not None:
                 if hascards is True and len(p._hand) == 5:
                     return currentseat
                 elif hascards is False:
