@@ -18,6 +18,52 @@ def is_integer(num):
         return False
 
 
+def discard_phase(table, deck):
+    """
+    Goes through a table and offers all players with cards the option to discard.
+    Returns a list of all the discards (ie:"muck" cards)
+    """
+    print('\nDiscard phase...')
+    # Make sure the button goes last!
+    holdingcards = table.get_cardholders()
+    muckpile = []
+
+    for p in holdingcards:
+
+        ishuman = p.playertype == 'HUMAN'
+        # Discard!
+        if ishuman:
+            discards = human_discard(p._hand)
+        else:
+            discards = auto_discard(p._hand)
+
+        if discards:
+            # Easier to put this here...
+            if ishuman:
+                print('{:15} discards {}, draws: '.format(
+                    str(p), discards), end='')
+            else:
+                print('{:15} discards {}.'.format(
+                    str(p), discards), end='')
+        else:
+            print('{:15} stands pat.'.format(str(p)))
+
+        # Redraw!
+        for c in discards:
+            muckpile.append(p.discard(c))
+
+            draw = deck.deal()
+            if ishuman:
+                draw.hidden = False
+                print('{} '.format(draw), end='')
+
+            p.add(draw)
+        print('')
+    print('')
+
+    return muckpile
+
+
 def human_discard(hand):
     print('*'*40)
     print(' '*35 + '0  1  2  3  4')

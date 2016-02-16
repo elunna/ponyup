@@ -42,7 +42,8 @@ class Game():
         victor = newround.betting()
 
         if victor is None:
-            newround.discards()
+            #  newround.discard_phase()
+            newround.muck.extend(draw5.discard_phase(self._table, newround.d))
 
             # Show table post draw
             print(self._table)
@@ -113,44 +114,6 @@ class Round():
         for i in range(5):
             for p in self.tbl:
                 p.add(self.d.deal())
-
-    def discards(self):
-        print('\nDiscard phase...')
-        # Make sure the button goes last!
-        holdingcards = self.tbl.get_cardholders()
-
-        for p in holdingcards:
-
-            ishuman = p.playertype == 'HUMAN'
-            # Discard!
-            if ishuman:
-                discards = draw5.human_discard(p._hand)
-            else:
-                discards = draw5.auto_discard(p._hand)
-
-            if discards:
-                # Easier to put this here...
-                if ishuman:
-                    print('{:15} discards {}, draws: '.format(
-                        str(p), discards), end='')
-                else:
-                    print('{:15} discards {}.'.format(
-                        str(p), discards), end='')
-            else:
-                print('{:15} stands pat.'.format(str(p)))
-
-            # Redraw!
-            for c in discards:
-                self.muck.append(p.discard(c))
-
-                draw = self.d.deal()
-                if ishuman:
-                    draw.hidden = False
-                    print('{} '.format(draw), end='')
-
-                p.add(draw)
-            print('')
-        print('')
 
     def check_muck(self):
         # Clear hands
