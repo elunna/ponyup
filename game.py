@@ -45,16 +45,20 @@ class Game():
             newround.discards()
 
             # Show table post draw
-            #  print(self._table)
+            print(self._table)
 
             # Post-draw betting round
+            newround.setup_betting()
+            victor = newround.betting()
 
-            # Check for winners/showdown
-            winners = newround.showdown()
+            if victor is None:
+                # Check for winners/showdown
+                winners = newround.showdown()
 
-            # Award pot
-            newround.award_pot(winners)
-
+                # Award pot
+                newround.award_pot(winners)
+            else:
+                newround.award_pot(victor)
         else:
             newround.award_pot(victor)
 
@@ -219,22 +223,30 @@ class Round():
         # Set betsize, level, currentbettor and lastbettor
         # Preflop: Headsup
         if self.street == 0:
+            # Preflop the first bettor is right after the BB
             self.level = 1
             self.betsize = self._game.blinds[1]
             self.closer = self.tbl.get_bb()
             self.bettor = self.tbl.next(self.closer)
 
         elif self.street > 0:
+            # postflop the first bettor is right after the button
             self.level = 0
             self.betsize = self._game.blinds[1] * 2
-            self.closer = self.tbl.btn()
-            self.bettor = self.tbl.next(self.closer)
+            self.closer = self.tbl.prev(self.tbl.get_sb(), hascards=True)
+            self.bettor = self.tbl.next(self.tbl.btn(), hascards=True)
+
+            # Remember starting stack size.
+            for p in self.tbl:
+                self.stacks[p.name] = p.chips
 
     def betting(self):
         playing = True
+
         while playing:
             p = self.tbl.seats[self.bettor]
-            cost = self.betsize * self.level - (self.stacks[p.name] - p.chips)
+            invested = self.stacks[p.name] - p.chips
+            cost = self.betsize * self.level - invested
             options = self.get_options(cost)
 
             if p.playertype == 'HUMAN':
@@ -243,12 +255,13 @@ class Round():
                 self.process_option(o)
 
             elif p.playertype == 'CPU':
-                o = p.makeplay(options)
+                #  print('{}\'s cost: ${}'.format(p, cost))
+                o = p.makeplay(options, self.street)
                 self.process_option(o)
 
             if self.tbl.valid_bettors() == 1:
                 print('Only one player left!')
-                winner = self.tbl.seats[self.tbl.next(self.bettor, hascards=True)]
+                winner = self.tbl.seats[self.tbl.next(self.bettor, True)]
                 return [winner]
 
             elif self.bettor == self.closer:
@@ -259,6 +272,7 @@ class Round():
                 self.bettor = self.tbl.next(self.bettor, hascards=True)
 
         else:
+            self.street += 1
             return None
 
     def process_option(self, option):
