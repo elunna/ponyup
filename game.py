@@ -142,11 +142,9 @@ class Round():
             # Creating a list of value/player values')
             handlist.append((p._hand.value, p))
 
-            # Look for allins and create sidepots
-            if p.chips == 0:
-                self.startstack[p.name]
+        self.process_allins()
 
-        while self.pot > 0:
+        if len(self.sidepots) == 0:
             # Create a list of winners based on the best hand value found
             bestvalue = max(handlist)
             winners = [h[1] for h in handlist if h[0] == bestvalue[0]]
@@ -155,6 +153,23 @@ class Round():
             print('')
 
             self.award_pot(winners)
+        else:
+            # Process the sidepots
+            leftovers = self.pot
+
+            while leftovers > 0:
+                pass
+            #  self.process_sidepots()
+
+    def process_allins(self):
+        #  print('process_allins()')
+        for p in self.tbl.get_cardholders():
+            # Look for allins and create sidepots
+            if p.chips == 0:
+                allin = self.startstack[p.name]
+
+                #  print('found allin for {}'.format(allin))
+                self.make_sidepot(allin)
 
     def make_sidepot(self, stacksize):
         """
@@ -167,10 +182,11 @@ class Round():
         are eligible for. This system will make it easier to calculate the winnings at the end.
         """
         if stacksize in self.sidepots:
+            #  print('stacksize already in sidepots!')
             # There is already a sidepot for this stacksize
             return
 
-        print('sidepot being created:')
+        #  print('sidepot being created:')
         mainpot = 0
 
         # Go through the table of players
@@ -400,34 +416,40 @@ def test_stacks():
 
     g = game.Game('FIVE CARD DRAW', '50/100', 6, 'LUNNA')
     g._table.seats[0].chips = 100
+    g._table.seats[1].chips = 150
     #  g._table.seats[1].chips = 100
     print(g)
     print(g._table)
 
-    print('testing make_sidepot')
-
     r = Round(g)
+    r.deal_hands()
     print(r)
 
     print('figuring out the lowest stack')
-    poorest = g._table.seats[0]
+    poor = g._table.seats[0]
     for p in r.tbl:
-        if p.chips < poorest.chips:
-            poorest = p
-    print('The poorest player is {} with {} chips'.format(poorest, poorest.chips))
+        if p.chips < poor.chips:
+            poor = p
+    print('The poorest player is {} with {} chips'.format(poor, poor.chips))
 
     #  bet = poorest.chips
     bet = 200
     print('everybody bets {}!'.format(bet))
     for p in r.tbl:
         r.pot += p.bet(bet)
+
     print(r)
 
-    allin = r.startstack[poorest.name]
-    r.make_sidepot(allin)
+    print(g._table)
 
-    for x in r.sidepots:
-        print('Stacksize {} can win: ${}'.format(x, r.sidepots[x]))
+    print('testing process_allin')
+    r.process_allins()
+    print('testing make_sidepot')
+    #  allin = r.startstack[poorest.name]
+    #  r.make_sidepot(allin)
+    print(r.sidepots)
+    for s in r.sidepots:
+        print('Stacksize {} can win: ${}'.format(s, r.sidepots[s]))
 
 if __name__ == "__main__":
     # Perorm unit tests
