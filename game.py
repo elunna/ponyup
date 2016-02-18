@@ -78,6 +78,7 @@ class Round():
         self._game = game
         self.street = 0
         self.pot = 0
+        self.sidepots = {}
         self.betcap = 4
         self.betsize = 0
         self.level = 0
@@ -141,28 +142,70 @@ class Round():
             # Creating a list of value/player values')
             handlist.append((p._hand.value, p))
 
-        # Create a list of winners based on the best hand value found
-        bestvalue = max(handlist)
-        winners = [h[1] for h in handlist if h[0] == bestvalue[0]]
+            # Look for allins and create sidepots
+            if p.chips == 0:
+                self.startstack[p.name]
 
-        print('-'*40)
-        print('')
-        if len(winners) == 1:
-            print('{} wins with a {} - {}'.format(
-                winners[0], winners[0]._hand.handrank, winners[0]._hand.description))
-        elif len(winners) > 1:
-            print('We have a TIE!')
-            print('The winners are:', end='')
-            for w in winners:
-                print('{}, '.format(w), end='')
+        while self.pot > 0:
+            # Create a list of winners based on the best hand value found
+            bestvalue = max(handlist)
+            winners = [h[1] for h in handlist if h[0] == bestvalue[0]]
 
-        return winners
+            print('-'*40)
+            print('')
+
+            self.award_pot(winners)
+
+    def make_sidepot(self, stacksize):
+        """
+        How this function works:
+        When the showdown is calculating the winners, it detects allin players
+        and will send them here to create a sidepot.
+
+        "Sidepot is a bit of a misnomer since it is actually how much the given stack size
+        can win. The first side pot created will actually be the "main pot" that all players
+        are eligible for. This system will make it easier to calculate the winnings at the end.
+        """
+        if stacksize in self.sidepots:
+            # There is already a sidepot for this stacksize
+            return
+
+        print('sidepot being created:')
+        mainpot = 0
+
+        # Go through the table of players
+        for p in self.tbl:
+            # For each player, get their total invested amount over the round
+            invested = self.startstack[p.name] - p.chips
+
+            # If stacksize is less than invested, they can only win the stacksize.
+            if stacksize <= invested:
+                # mainpot: add the allin stacksize
+                mainpot += stacksize
+            elif stacksize > invested:
+                # if the allin stacksize is more than the invested,
+                # they can win all the invested amount
+                mainpot += invested
+
+        #  sidepot = self.pot - mainpot
+        #  self.pot = self.pot - sidepot
+        self.sidepots[stacksize] = mainpot
 
     def award_pot(self, winners):
-        if len(winners) == 1:
-            p = winners[0]
-            print('{} wins {} chips.'.format(p.name, self.pot))
-            p.win(self.pot)
+        # If there are multiple winners, they must split the pot
+        # If there is a remainder amount, we give it to the next left of the BTN.
+        # (ie: Usually the SB)
+        if len(winners) > 1:
+            share = int(self.pot / len(winners))
+            remainder = self.pot % len(winners)
+
+        for w in winners:
+            w.win(share)
+            print('{} wins {} chips'.format(w, share))
+
+        if remainder > 0:
+            r_winner = self.tbl.seats[self.tbl.next(self.tbl.btn)]
+            print('{} wins {} remainder chips'.format(r_winner, remainder))
 
     def post_antes(self):
         # All players bet the ante amount and it's added to the pot
@@ -351,6 +394,40 @@ def test_winner(*hands):
     print('')
     print('Winners list:')
     print(winners)
+
+
+def test_stacks():
+
+    g = game.Game('FIVE CARD DRAW', '50/100', 6, 'LUNNA')
+    g._table.seats[0].chips = 100
+    #  g._table.seats[1].chips = 100
+    print(g)
+    print(g._table)
+
+    print('testing make_sidepot')
+
+    r = Round(g)
+    print(r)
+
+    print('figuring out the lowest stack')
+    poorest = g._table.seats[0]
+    for p in r.tbl:
+        if p.chips < poorest.chips:
+            poorest = p
+    print('The poorest player is {} with {} chips'.format(poorest, poorest.chips))
+
+    #  bet = poorest.chips
+    bet = 200
+    print('everybody bets {}!'.format(bet))
+    for p in r.tbl:
+        r.pot += p.bet(bet)
+    print(r)
+
+    allin = r.startstack[poorest.name]
+    r.make_sidepot(allin)
+
+    for x in r.sidepots:
+        print('Stacksize {} can win: ${}'.format(x, r.sidepots[x]))
 
 if __name__ == "__main__":
     # Perorm unit tests
