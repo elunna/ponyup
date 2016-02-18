@@ -145,6 +145,7 @@ class Round():
         self.process_allins()
 
         if len(self.sidepots) == 0:
+            # No sidepots!
             # Create a list of winners based on the best hand value found
             bestvalue = max(handlist)
             winners = [h[1] for h in handlist if h[0] == bestvalue[0]]
@@ -152,14 +153,57 @@ class Round():
             print('-'*40)
             print('')
 
-            self.award_pot(winners)
-        else:
-            # Process the sidepots
-            leftovers = self.pot
+            self.award_pot(winners, self.pot)
 
-            while leftovers > 0:
-                pass
-            #  self.process_sidepots()
+        else:
+            self.process_sidepots(handlist)
+
+    def process_sidepots(self, handlist):
+        # Organize the sidepots into an ascending sorted list.
+        stacks_n_pots = [(p, self.sidepots[p]) for p in self.sidepots]
+        stacks_n_pots = sorted(stacks_n_pots)
+
+        leftovers = self.pot
+
+        # Go through and process the main pot first,
+        # then the 1st sidepot, 2nd sidepot, etc.
+        for i, pot in enumerate(sorted(stacks_n_pots)):
+            potshare = 0
+            # Calculate the pot
+            if i == 0:
+                potshare = pot[1]
+                leftovers -= pot[1]
+            else:
+                lastpot = stacks_n_pots[i - 1][1]
+                potshare = pot[1] - lastpot
+                leftovers -= potshare
+
+            self.segregate_eligible(handlist, potshare, pot[0])
+
+        if leftovers > 0:
+            # We'll pass potlist[1] + 1 so that all the elibigle players are
+            # just above the largest allin.
+            above_allin = max(stacks_n_pots[1]) + 1
+            self.segregate_eligible(handlist, leftovers, above_allin)
+
+        #  print('self.pot = {} leftovers = {}'.format(self.pot, leftovers))
+        #  raise ValueError('Pot was not distributed correctly!')
+
+    def segregate_eligible(self, handlist, potshare, minimumstack):
+        eligible_players = [p for p in handlist
+                            if self.startstack[p[1].name] >= minimumstack]
+
+        print('Eligible players for the ${} pot'.format(potshare))
+        print('\t', end='')
+        for e in eligible_players:
+            print('{} '.format(e[1]), end='')
+        print('')
+
+        bestvalue = max(eligible_players)
+        winners = [h[1] for h in eligible_players if h[0] == bestvalue[0]]
+        #  print('\tWinners: {}'.format(winners))
+
+        self.award_pot(winners, potshare)
 
     def process_allins(self):
         #  print('process_allins()')
@@ -181,8 +225,8 @@ class Round():
         can win. The first side pot created will actually be the "main pot" that all players
         are eligible for. This system will make it easier to calculate the winnings at the end.
         """
+        print('')
         if stacksize in self.sidepots:
-            #  print('stacksize already in sidepots!')
             # There is already a sidepot for this stacksize
             return
 
@@ -203,25 +247,26 @@ class Round():
                 # they can win all the invested amount
                 mainpot += invested
 
-        #  sidepot = self.pot - mainpot
-        #  self.pot = self.pot - sidepot
         self.sidepots[stacksize] = mainpot
 
-    def award_pot(self, winners):
+    def award_pot(self, winners, amt):
         # If there are multiple winners, they must split the pot
         # If there is a remainder amount, we give it to the next left of the BTN.
         # (ie: Usually the SB)
         if len(winners) > 1:
-            share = int(self.pot / len(winners))
-            remainder = self.pot % len(winners)
-
+            share = int(amt / len(winners))
+            remainder = amt % len(winners)
+        else:
+            share = amt
+            remainder = 0
         for w in winners:
+
             w.win(share)
-            print('{} wins {} chips'.format(w, share))
+            print('\t{} wins {} chips'.format(w, share))
 
         if remainder > 0:
             r_winner = self.tbl.seats[self.tbl.next(self.tbl.btn)]
-            print('{} wins {} remainder chips'.format(r_winner, remainder))
+            print('\t{} wins {} remainder chips'.format(r_winner, remainder))
 
     def post_antes(self):
         # All players bet the ante amount and it's added to the pot
@@ -450,6 +495,14 @@ def test_stacks():
     print(r.sidepots)
     for s in r.sidepots:
         print('Stacksize {} can win: ${}'.format(s, r.sidepots[s]))
+
+    print('')
+    print('the lowest allin = {}'.format(min(r.sidepots)))
+    print('')
+    print('the highest allin = {}'.format(max(r.sidepots)))
+    print('')
+    print('Attempting a showdown')
+    r.showdown()
 
 if __name__ == "__main__":
     # Perorm unit tests
