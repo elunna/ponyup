@@ -54,14 +54,14 @@ class Game():
 
             if victor is None:
                 # Check for winners/showdown
-                winners = newround.showdown()
+                newround.showdown()
 
                 # Award pot
-                newround.award_pot(winners)
+                #  newround.award_pot(winners)
             else:
-                newround.award_pot(victor)
+                newround.award_pot(victor, newround.pot)
         else:
-            newround.award_pot(victor)
+            newround.award_pot(victor, newround.pot)
 
         # ================== CLEANUP
         newround.check_muck()
