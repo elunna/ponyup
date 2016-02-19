@@ -103,7 +103,7 @@ class Round():
 
     def __str__(self):
         #  _str = 'Street {}\t'.format(self.street)
-        _str = 'Pot: ${:}\n'.format(self.pot).rjust(50)
+        _str = 'Pot: ${:}'.format(self.pot).rjust(50)
         return _str
 
     def cheat_check(self):
@@ -262,7 +262,8 @@ class Round():
         for w in winners:
 
             w.win(share)
-            print('\t{} wins {} chips'.format(w, share))
+            print('\t{} wins {} chips with a {}, {}'.format(
+                w, share, w._hand.handrank, w._hand.description))
 
         if remainder > 0:
             r_winner = self.tbl.seats[self.tbl.next(self.tbl.btn)]
@@ -458,7 +459,6 @@ def test_winner(*hands):
 
 
 def test_stacks():
-
     g = game.Game('FIVE CARD DRAW', '50/100', 6, 'LUNNA')
     g._table.seats[0].chips = 100
     g._table.seats[1].chips = 150
@@ -467,17 +467,10 @@ def test_stacks():
     print(g._table)
 
     r = Round(g)
+    #  print('dealing hands...')
     r.deal_hands()
     print(r)
 
-    print('figuring out the lowest stack')
-    poor = g._table.seats[0]
-    for p in r.tbl:
-        if p.chips < poor.chips:
-            poor = p
-    print('The poorest player is {} with {} chips'.format(poor, poor.chips))
-
-    #  bet = poorest.chips
     bet = 200
     print('everybody bets {}!'.format(bet))
     for p in r.tbl:
@@ -485,23 +478,20 @@ def test_stacks():
 
     print(r)
 
-    print(g._table)
+    #  print(g._table)
 
-    print('testing process_allin')
     r.process_allins()
-    print('testing make_sidepot')
+    #  print('testing make_sidepot')
     #  allin = r.startstack[poorest.name]
     #  r.make_sidepot(allin)
-    print(r.sidepots)
-    for s in r.sidepots:
-        print('Stacksize {} can win: ${}'.format(s, r.sidepots[s]))
+    #  print(r.sidepots)
+    #  for s in r.sidepots:
+        #  print('Stacksize {} can win: ${}'.format(s, r.sidepots[s]))
 
-    print('')
+    #  print('')
     print('the lowest allin = {}'.format(min(r.sidepots)))
-    print('')
     print('the highest allin = {}'.format(max(r.sidepots)))
     print('')
-    print('Attempting a showdown')
     r.showdown()
 
 if __name__ == "__main__":

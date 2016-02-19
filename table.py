@@ -57,7 +57,8 @@ class Table():
                 # Display hand if available
                 if s._hand is not None:
                     _str += str(s._hand)
-                _str += '\n'
+                else:
+                    _str += '\n'
 
         return _str
 
@@ -184,8 +185,7 @@ class Table():
         seats = list(range(len(self)))
         seats = seats[sb:] + seats[0:sb]
 
-        return [self.seats[s] for s in seats \
-            if self.has_cards(self.seats[s])]
+        return [self.seats[s] for s in seats if self.has_cards(self.seats[s])]
 
     def has_cards(self, s):
         if s is None:
