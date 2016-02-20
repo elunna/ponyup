@@ -4,6 +4,12 @@ import blinds
 import table
 
 
+def print_logo():
+    print('*'*80)
+    with open('logo.txt') as f:
+        print(f.read())
+
+
 def pick_limit():
     print('Please enter what limit you want to play:(default 2/4)')
 
