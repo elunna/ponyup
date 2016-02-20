@@ -8,7 +8,7 @@ import card
 import os
 import game
 import blinds
-import gameround
+import rnd
 
 
 def is_integer(num):
@@ -181,7 +181,7 @@ def auto_discard(hand):
 class Draw5Game(game.Game):
     def play(self):
         """ Defines the structure of a hand played in the game."""
-        newround = gameround.Round(self)
+        newround = rnd.Round(self)
         newround.cheat_check()
 
         # todo: Postblinds
