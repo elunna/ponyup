@@ -97,8 +97,8 @@ class Round():
         self.closer = None
 
         #  Remember starting stacks of all playerso
-        self.startstack = {}
         self.betstack = {}
+        self.startstack = {}
         for p in self.tbl:
             self.startstack[p.name] = p.chips
 
@@ -299,6 +299,7 @@ class Round():
             self.betsize = self._game.blinds[1]
             self.closer = self.tbl.get_bb()
             self.bettor = self.tbl.next(self.closer)
+            self.betstack = self.startstack
 
         elif self.street > 0:
             # postflop the first bettor is right after the button
@@ -307,9 +308,9 @@ class Round():
             self.closer = self.tbl.prev(self.tbl.get_sb(), hascards=True)
             self.bettor = self.tbl.next(self.tbl.btn(), hascards=True)
 
-        # Remember starting stack size.
-        for p in self.tbl:
-            self.betstack[p.name] = p.chips
+            # Remember starting stack size.
+            for p in self.tbl:
+                self.betstack[p.name] = p.chips
 
     def betting(self):
         playing = True
