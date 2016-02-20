@@ -11,12 +11,14 @@ def get_combos(source, n):
     return itertools.combinations(source, n)
 
 
-def count_all_handtypes(handlist):
+def count_all_handtypes():
     print('#'*80)
     print('')
     print('Counting the hand types in all 5 card combos')
-
+    print('Might take a few moments...')
     type_count = {}
+
+    combosof5 = list(get_combos(d.cards, 5))
 
     for c in combosof5:
         #  hands.append(hand.Hand(c))
@@ -118,37 +120,40 @@ def n_choose_k(n, k):
     return int(numproduct / denproduct)
 
 
+def view_combo_counts():
+    d = deck.Deck()
+    print('Generating all combos for a standard 52-card deck:')
+    combosof1 = list(get_combos(d.cards, 1))
+    print('Total combos of 1 card: {}'.format(len(combosof1)))
+
+    combosof2 = list(get_combos(d.cards, 2))
+    # Verified there should be 1326 2 card combos
+    print('Total combos of 2 cards: {}'.format(len(combosof2)))
+
+    combosof3 = list(get_combos(d.cards, 3))
+    # Verified there should be 22100 2 card combos
+    print('Total combos of 3 cards: {}'.format(len(combosof3)))
+
+    combosof4 = list(get_combos(d.cards, 4))
+    # Not verified yet.
+    print('Total combos of 4 cards: {}'.format(len(combosof4)))
+
+    combosof5 = list(get_combos(d.cards, 5))
+    # Verified there should be 25989602 card combos
+    print('Total combos of 5 cards: {}'.format(len(combosof5)))
+
+
 if __name__ == "__main__":
     print('#'*80)
     print('')
     print('Combo tests')
 
     d = deck.Deck()
-
-    combosof1 = list(get_combos(d.cards, 1))
-    print('Combos of 1 total: {}'.format(len(combosof1)))
-
-    combosof2 = list(get_combos(d.cards, 2))
-    # Verified there should be 1326 2 card combos
-    print('Combos of 2 total: {}'.format(len(combosof2)))
-
-    combosof3 = list(get_combos(d.cards, 3))
-    # Verified there should be 22100 2 card combos
-    print('Combos of 3 total: {}'.format(len(combosof3)))
-
-    combosof4 = list(get_combos(d.cards, 4))
-    # Not verified yet.
-    print('Combos of 4 total: {}'.format(len(combosof4)))
-
-    combosof5 = list(get_combos(d.cards, 5))
-    # Verified there should be 25989602 card combos
-    print('Combos of 5 total: {}'.format(len(combosof5)))
-
     # Warning, takes a while!
     # 01/25/16: Verified that the counts are all exactly correct.
     print('*'*80)
     print('Counting all 5 card hands in a deck')
-    count_all_handtypes(combosof5)
+    count_all_handtypes()
 
     print('*'*80)
     print('Enumerating unique 5-card hands by value')
