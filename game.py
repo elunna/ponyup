@@ -8,7 +8,15 @@ import blinds
 
 
 class Game():
+    """
+    The Game object manages the general structure of a poker game. It sets up the
+    essentials: game type, the table, and stakes.
+    The play() method defines the structure of how a single hand in the poker game is
+    played.
+    """
+
     def __init__(self, gametype, stakes, tablesize=6, hero=None):
+        """ Initialize the poker Game. """
         #  self.blinds = blinds.limit[stakes]
         self.blinds = stakes
         self.rounds = 1
@@ -16,6 +24,7 @@ class Game():
         self._table.randomize_button()
 
     def __str__(self):
+        """ Represents the game as the round # and the stakes level."""
         _str = 'Round: {:<5} '.format(self.rounds)
         _str += 'Stakes: ${}/${}'.format(
             self.blinds[1], self.blinds[1] * 2).rjust(36)
@@ -23,6 +32,7 @@ class Game():
         return _str
 
     def play(self):
+        """ Defines the structure of a hand played in the game."""
         newround = Round(self)
         newround.cheat_check()
 
@@ -58,7 +68,6 @@ class Game():
                 newround.showdown()
 
                 # Award pot
-                #  newround.award_pot(winners)
             else:
                 newround.award_pot(victor, newround.pot)
         else:
@@ -92,7 +101,6 @@ class Round():
             self.d.shuffle()
 
         # Create a list of the players from the table, and place the button at index 0
-        #  self.players = game._table.get_players()
         self.bettor = None
         self.closer = None
 
@@ -103,7 +111,6 @@ class Round():
             self.startstack[p.name] = p.chips
 
     def __str__(self):
-        #  _str = 'Street {}\t'.format(self.street)
         _str = 'Pot: ${:}'.format(self.pot).rjust(50)
         return _str
 
@@ -187,8 +194,6 @@ class Round():
             above_allin = max(stacks_n_pots[1]) + 1
             self.segregate_eligible(handlist, leftovers, above_allin)
 
-        #  print('self.pot = {} leftovers = {}'.format(self.pot, leftovers))
-        #  raise ValueError('Pot was not distributed correctly!')
 
     def segregate_eligible(self, handlist, potshare, minimumstack):
         eligible_players = [p for p in handlist
@@ -202,18 +207,15 @@ class Round():
 
         bestvalue = max(eligible_players)
         winners = [h[1] for h in eligible_players if h[0] == bestvalue[0]]
-        #  print('\tWinners: {}'.format(winners))
 
         self.award_pot(winners, potshare)
 
     def process_allins(self):
-        #  print('process_allins()')
         for p in self.tbl.get_cardholders():
             # Look for allins and create sidepots
             if p.chips == 0:
                 allin = self.startstack[p.name]
 
-                #  print('found allin for {}'.format(allin))
                 self.make_sidepot(allin)
 
     def make_sidepot(self, stacksize):
@@ -329,7 +331,6 @@ class Round():
                 self.process_option(o)
 
             elif p.playertype == 'CPU':
-                #  print('{}\'s cost: ${}'.format(p, cost))
                 o = p.makeplay(options, self.street)
                 self.process_option(o)
 
@@ -425,7 +426,6 @@ class Round():
 def calc_odds(bet, pot):
     print('first draft')
     print('Bet = {}, pot = {}'.format(bet, pot))
-    #  diff = pot - bet
     print('bet is {}% of the pot'.format(bet/pot * 100))
 
     odds = pot / bet
@@ -465,12 +465,10 @@ def test_stacks():
     g = game.Game('FIVE CARD DRAW', myblinds, 6, 'LUNNA')
     g._table.seats[0].chips = 100
     g._table.seats[1].chips = 150
-    #  g._table.seats[1].chips = 100
     print(g)
     print(g._table)
 
     r = Round(g)
-    #  print('dealing hands...')
     r.deal_hands()
     print(r)
 
@@ -481,17 +479,7 @@ def test_stacks():
 
     print(r)
 
-    #  print(g._table)
-
     r.process_allins()
-    #  print('testing make_sidepot')
-    #  allin = r.startstack[poorest.name]
-    #  r.make_sidepot(allin)
-    #  print(r.sidepots)
-    #  for s in r.sidepots:
-        #  print('Stacksize {} can win: ${}'.format(s, r.sidepots[s]))
-
-    #  print('')
     print('the lowest allin = {}'.format(min(r.sidepots)))
     print('the highest allin = {}'.format(max(r.sidepots)))
     print('')
