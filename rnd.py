@@ -91,13 +91,15 @@ class Round():
         if len(self.sidepots) == 0:
             # No sidepots!
             # Create a list of winners based on the best hand value found
-            bestvalue = max(handlist)
-            winners = [h[1] for h in handlist if h[0] == bestvalue[0]]
 
-            print('-'*40)
-            print('')
+            self.segregate_eligible(handlist, self.pot, 0)
+            #  bestvalue = max(handlist)
+            #  winners = [h[1] for h in handlist if h[0] == bestvalue[0]]
 
-            self.award_pot(winners, self.pot)
+            #  print('-'*40)
+            #  print('')
+
+            #  self.award_pot(winners, self.pot)
 
         else:
             self.process_sidepots(handlist)
@@ -143,17 +145,20 @@ class Round():
         eligible_players = [p for p in handlist
                             if self.startstack[p[1].name] >= minimumstack]
 
-        print('Eligible players for the ${} pot'.format(potshare))
-        print('\t', end='')
+        print('Awarding ${} pot'.format(potshare))
+        #  print('\t', end='')
 
         bestvalue = 0
         for e in eligible_players:
             if e[0] > bestvalue:
                 bestvalue = e[0]
-            print('{} '.format(e[1]), end='')
-        print('')
+            #  print('{} '.format(e[1]), end='')
+        #  print('')
 
         winners = [h[1] for h in eligible_players if h[0] == bestvalue]
+        for w in winners:
+            print('\t{} shows {}, {}'.format(
+                w, w._hand.handrank, w._hand.description))
 
         self.award_pot(winners, potshare)
 
@@ -215,15 +220,15 @@ class Round():
         else:
             share = amt
             remainder = 0
-        for w in winners:
 
+        for w in winners:
+            print('\t{} wins {} chips'.format(w, share))
             w.win(share)
-            print('\t{} wins {} chips with a {}, {}'.format(
-                w, share, w._hand.handrank, w._hand.description))
 
         if remainder > 0:
             r_winner = self.tbl.seats[self.tbl.next(self.tbl.btn)]
             print('\t{} wins {} remainder chips'.format(r_winner, remainder))
+            r_winner.win(remainder)
 
     def post_antes(self):
         """ All players bet the ante amount and it's added to the pot"""
@@ -430,7 +435,7 @@ def test_stacks():
     myblinds = blinds.limit['50/100']
     g = game.Game('FIVE CARD DRAW', myblinds, 6, 'LUNNA')
     g._table.seats[0].chips = 100
-    #  g._table.seats[1].chips = 150
+    g._table.seats[1].chips = 150
     print(g)
     print(g._table)
 
