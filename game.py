@@ -9,7 +9,8 @@ import blinds
 
 class Game():
     def __init__(self, gametype, stakes, tablesize=6, hero=None):
-        self.blinds = blinds.limit[stakes]
+        #  self.blinds = blinds.limit[stakes]
+        self.blinds = stakes
         self.rounds = 1
         self._table = table.setup_table(tablesize, hero)
         self._table.randomize_button()
@@ -459,7 +460,8 @@ def test_winner(*hands):
 
 
 def test_stacks():
-    g = game.Game('FIVE CARD DRAW', '50/100', 6, 'LUNNA')
+    myblinds = blinds.limit['50/100']
+    g = game.Game('FIVE CARD DRAW', myblinds, 6, 'LUNNA')
     g._table.seats[0].chips = 100
     g._table.seats[1].chips = 150
     #  g._table.seats[1].chips = 100
