@@ -62,7 +62,7 @@ class Round():
         for p in self.tbl:
             if p.chips == 0:
                 i = self.tbl.player_index(p)
-                self.tbl.remove_player1(i)
+                self.tbl.remove_player(i)
                 #  self.tbl.remove_player2(p)
 
     def showdown(self):

@@ -1,6 +1,4 @@
 import table
-import draw5
-import gameround
 
 
 class Game():
@@ -28,55 +26,4 @@ class Game():
         return _str
 
     def play(self):
-        """ Defines the structure of a hand played in the game."""
-        newround = gameround.Round(self)
-        newround.cheat_check()
-
-        # todo: Postblinds
-        newround.post_blinds()
-
-        # A simple 1-bet
-        #  newround.ante_up()
-
-        # Five card draw - deal 5 cards to each player
-        newround.deal_hands(5)
-
-        # Show table pre draw
-        print(newround)
-        print(self._table)
-
-        # Pre-draw betting round
-        newround.setup_betting()
-        victor = newround.betting()
-
-        if victor is None:
-            #  newround.discard_phase()
-            newround.muck.extend(draw5.discard_phase(self._table, newround.d))
-
-            # Show table post draw
-            print(self._table)
-
-            # Post-draw betting round
-            newround.setup_betting()
-            victor = newround.betting()
-
-            if victor is None:
-                # Check for winners/showdown
-                newround.showdown()
-
-                # Award pot
-            else:
-                newround.award_pot(victor, newround.pot)
-        else:
-            newround.award_pot(victor, newround.pot)
-
-        # ================== CLEANUP
-        newround.check_muck()
-        # Remove broke players
-        newround.cleanup()
-
-        # Move the table button
-        self._table.move_button()
-
-        # Advance round counter
-        self.rounds += 1
+        print('Stub play function')
