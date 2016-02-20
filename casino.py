@@ -44,7 +44,7 @@ def menu():
     print('Playername: {}'.format(NAME))
     print('Game:       {}'.format(GAME))
     print('Table Size: {}'.format(TABLE))
-    print('Stakes:     ${}/{}'.format(STAKES[0], STAKES[0]))
+    print('Stakes:     ${}/${}'.format(STAKES[0], STAKES[1]))
     print('')
     for o in options:
         print(options[o][0])
