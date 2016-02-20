@@ -334,7 +334,8 @@ class Round():
         else:
             self.pot += p.bet(option[1])
 
-        print('\r{} {}s'.format(p, option[0].lower()))
+        print('  ' * self.level, end='')
+        print('{} {}s'.format(p, option[0].lower()))
 
     def menu(self, options=None):
         """
