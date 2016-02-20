@@ -42,8 +42,8 @@ class Round():
             if len(p._hand) > 0:
                 raise ValueError('Player has cards when they should not!')
 
-    def deal_hands(self):
-        for i in range(5):
+    def deal_hands(self, qty):
+        for i in range(qty):
             for p in self.tbl:
                 p.add(self.d.deal())
 
@@ -391,7 +391,7 @@ def test_stacks():
     print(g._table)
 
     r = Round(g)
-    r.deal_hands()
+    r.deal_hands(5)
     print(r)
 
     bet = 200

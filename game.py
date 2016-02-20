@@ -38,7 +38,8 @@ class Game():
         # A simple 1-bet
         #  newround.ante_up()
 
-        newround.deal_hands()
+        # Five card draw - deal 5 cards to each player
+        newround.deal_hands(5)
 
         # Show table pre draw
         print(newround)
