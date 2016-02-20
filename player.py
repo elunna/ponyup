@@ -4,7 +4,7 @@ import strategy
 
 
 class Player():
-    def __init__(self, name, _type=None, chips=1000):
+    def __init__(self, name, _type=None, chips=500):
         if isValidUsername(name):
             self.name = name
         else:
