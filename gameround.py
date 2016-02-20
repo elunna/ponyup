@@ -57,6 +57,12 @@ class Round():
             raise ValueError('Deck is corrupted! Muck doesn\'t equal starting deck!')
             exit()
 
+    def cleanup(self):
+        """ Remove players with no chips from the table. """
+        for p in self.tbl:
+            if p.chips == 0:
+                self.tbl.remove_player(p)
+
     def showdown(self):
         """
         Takes in a list of Players and determines who has the best hand
@@ -90,8 +96,13 @@ class Round():
 
     def process_sidepots(self, handlist):
         # Organize the sidepots into an ascending sorted list.
-        stacks_n_pots = [(p, self.sidepots[p]) for p in self.sidepots]
-        stacks_n_pots = sorted(stacks_n_pots)
+        stacks_n_pots = sorted(
+            [(p, self.sidepots[p]) for p in self.sidepots])
+        #  stacks_n_pots = sorted(stacks_n_pots)
+
+        # Test print the stacks_n_pots
+        for x in stacks_n_pots:
+            print(x)
 
         leftovers = self.pot
 
@@ -113,9 +124,9 @@ class Round():
         if leftovers > 0:
             # We'll pass potlist[1] + 1 so that all the elibigle players are
             # just above the largest allin.
-            above_allin = max(stacks_n_pots[1]) + 1
+            above_allin = max(stacks_n_pots)[0] + 1
+            #  above_allin = max(stacks_n_pots[1]) + 1
             self.segregate_eligible(handlist, leftovers, above_allin)
-
 
     def segregate_eligible(self, handlist, potshare, minimumstack):
         eligible_players = [p for p in handlist
@@ -123,12 +134,16 @@ class Round():
 
         print('Eligible players for the ${} pot'.format(potshare))
         print('\t', end='')
+
+        bestvalue = 0
         for e in eligible_players:
+            if e[0] > bestvalue:
+                bestvalue = e[0]
             print('{} '.format(e[1]), end='')
         print('')
 
-        bestvalue = max(eligible_players)
-        winners = [h[1] for h in eligible_players if h[0] == bestvalue[0]]
+
+        winners = [h[1] for h in eligible_players if h[0] == bestvalue]
 
         self.award_pot(winners, potshare)
 
@@ -386,7 +401,7 @@ def test_stacks():
     myblinds = blinds.limit['50/100']
     g = game.Game('FIVE CARD DRAW', myblinds, 6, 'LUNNA')
     g._table.seats[0].chips = 100
-    g._table.seats[1].chips = 150
+    #  g._table.seats[1].chips = 150
     print(g)
     print(g._table)
 
@@ -406,6 +421,8 @@ def test_stacks():
     print('the highest allin = {}'.format(max(r.sidepots)))
     print('')
     r.showdown()
+    print(r)
+    print(g._table)
 
 if __name__ == "__main__":
     # Perorm unit tests
