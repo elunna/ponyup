@@ -57,9 +57,7 @@ class Table():
                 # Display hand if available
                 if s._hand is not None:
                     _str += str(s._hand)
-                else:
-                    _str += '\n'
-            _str += '\n'
+                _str += '\n'
 
         return _str
 
