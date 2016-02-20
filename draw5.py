@@ -67,22 +67,23 @@ def discard_phase(table, deck):
 
 def human_discard(hand):
     print('*'*40)
-    print(' '*35 + '0  1  2  3  4')
+    print(' '*35 + '1  2  3  4  5')
     print(' '*35, end='')
     for c in hand.cards:
         print('{:3}'.format(str(c)), end='')
     print('')
     print('Enter the cards you want to discard:')
-    print('Example: "0" discards card 0, "01" discards cards 0 and 1, etc.')
+    print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
     print('')
     choice = input(':> ')
     # Split up the #s, and reverse them so we can remove them without the list
     # collapsing and disrupting the numbering.
+    validnumbers = ['1', '2', '3', '4', '5']
     choice = sorted(list(choice), reverse=True)
     discards = []
     for c in choice:
-        if is_integer(c):
-            discards.append(hand.cards[int(c)])
+        if is_integer(c) and c in validnumbers:
+            discards.append(hand.cards[int(c) - 1])
         else:
             pass
     return discards
