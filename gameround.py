@@ -61,7 +61,9 @@ class Round():
         """ Remove players with no chips from the table. """
         for p in self.tbl:
             if p.chips == 0:
-                self.tbl.remove_player(p)
+                i = self.tbl.player_index(p)
+                self.tbl.remove_player1(i)
+                #  self.tbl.remove_player2(p)
 
     def showdown(self):
         """
@@ -141,7 +143,6 @@ class Round():
                 bestvalue = e[0]
             print('{} '.format(e[1]), end='')
         print('')
-
 
         winners = [h[1] for h in eligible_players if h[0] == bestvalue]
 
@@ -421,8 +422,10 @@ def test_stacks():
     print('the highest allin = {}'.format(max(r.sidepots)))
     print('')
     r.showdown()
+    r.cleanup()
     print(r)
-    print(g._table)
+    #  print(g._table)
+    print(r.tbl)
 
 if __name__ == "__main__":
     # Perorm unit tests

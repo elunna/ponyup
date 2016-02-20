@@ -77,11 +77,19 @@ class Table():
         else:
             print('Seat {} is occupied.'.format(s))
 
-    def remove_player(self, s):
-        if self.seats[s] is not None:
-            self.seats[s] = None
+    def player_index(self, p):
+        for i, s in enumerate(self.seats):
+            if s == p:
+                return i
+
+    def remove_player(self, index):
+        p = self.seats[index]
+        if p is not None:
+            print('Player {} has no chips, kicking them out!'.format(p))
+            self.seats[index] = None
+
         else:
-            print('Seat {} is already empty.'.format(s))
+            print('Seat {} is already empty.'.format(index))
 
     def get_players(self):
         # Returns a list of all the active players at the table

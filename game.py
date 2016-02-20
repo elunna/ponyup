@@ -72,6 +72,8 @@ class Game():
 
         # ================== CLEANUP
         newround.check_muck()
+        # Remove broke players
+        newround.cleanup()
 
         # Move the table button
         self._table.move_button()
