@@ -59,6 +59,7 @@ class Table():
                     _str += str(s._hand)
                 else:
                     _str += '\n'
+            _str += '\n'
 
         return _str
 
