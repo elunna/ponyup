@@ -264,7 +264,8 @@ class Round():
             self.betsize = self._game.blinds[1]
             self.closer = self.tbl.get_bb()
             self.bettor = self.tbl.next(self.closer)
-            self.betstack = self.startstack
+            self.betstack = self.startstack.copy()
+            #  for k, v in self.startstack.
 
         elif self.street > 0:
             # postflop the first bettor is right after the button
