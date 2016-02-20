@@ -7,6 +7,7 @@ import blinds
 
 class Round():
     def __init__(self, game):
+        """ Initialize the next round of Poker."""
         self._game = game
         self.street = 0
         self.pot = 0
@@ -33,26 +34,33 @@ class Round():
             self.startstack[p.name] = p.chips
 
     def __str__(self):
+        """ Show the current size of the pot."""
         _str = 'Pot: ${:}'.format(self.pot).rjust(50)
         return _str
 
     def cheat_check(self):
-        #  Check that no players have lingering cards
+        """ Check that no players have lingering cards from the previous round."""
         for p in self.tbl:
             if len(p._hand) > 0:
                 raise ValueError('Player has cards when they should not!')
 
     def deal_hands(self, qty):
+        """ Deal the specified quantity of cards to each player."""
         for i in range(qty):
             for p in self.tbl:
                 p.add(self.d.deal())
 
-    def check_muck(self):
+    def muck_and_verify(self):
+        """
+        Fold all player hands and verify that the count of the muck matches the original
+        deck size
+        """
         # Clear hands
         for p in self.tbl:
             self.muck.extend(p.fold())
         # Add the remainder of the deck
         self.muck.extend(self.d.cards)
+        # Verify
         if len(self.muck) != self.DECKSIZE:
             raise ValueError('Deck is corrupted! Muck doesn\'t equal starting deck!')
             exit()
@@ -63,12 +71,10 @@ class Round():
             if p.chips == 0:
                 i = self.tbl.player_index(p)
                 self.tbl.remove_player(i)
-                #  self.tbl.remove_player2(p)
 
     def showdown(self):
         """
-        Takes in a list of Players and determines who has the best hand
-        * Should we return just the Player?
+        Compare all the hands of players holding cards and determine the winner(s).
         """
 
         handlist = []
@@ -97,7 +103,7 @@ class Round():
             self.process_sidepots(handlist)
 
     def process_sidepots(self, handlist):
-        # Organize the sidepots into an ascending sorted list.
+        """ Organize the sidepots into an ascending sorted list."""
         stacks_n_pots = sorted(
             [(p, self.sidepots[p]) for p in self.sidepots])
         #  stacks_n_pots = sorted(stacks_n_pots)
@@ -131,6 +137,9 @@ class Round():
             self.segregate_eligible(handlist, leftovers, above_allin)
 
     def segregate_eligible(self, handlist, potshare, minimumstack):
+        """
+        Determine what players are eligible to win pots and sidepots.
+        """
         eligible_players = [p for p in handlist
                             if self.startstack[p[1].name] >= minimumstack]
 
@@ -149,6 +158,9 @@ class Round():
         self.award_pot(winners, potshare)
 
     def process_allins(self):
+        """
+        Determine which players are all-in in order to create sidepots.
+        """
         for p in self.tbl.get_cardholders():
             # Look for allins and create sidepots
             if p.chips == 0:
@@ -191,9 +203,12 @@ class Round():
         self.sidepots[stacksize] = mainpot
 
     def award_pot(self, winners, amt):
-        # If there are multiple winners, they must split the pot
-        # If there is a remainder amount, we give it to the next left of the BTN.
-        # (ie: Usually the SB)
+        """
+        Adds the specified pot amount to the players chips.
+        If there are multiple winners, they must split the pot
+        If there is a remainder amount, we give it to the next left of the BTN.
+        (ie: Usually the SB)
+        """
         if len(winners) > 1:
             share = int(amt / len(winners))
             remainder = amt % len(winners)
@@ -211,11 +226,16 @@ class Round():
             print('\t{} wins {} remainder chips'.format(r_winner, remainder))
 
     def post_antes(self):
-        # All players bet the ante amount and it's added to the pot
+        """ All players bet the ante amount and it's added to the pot"""
+
         for p in self.tbl:
             self.pot += p.bet(self._game.blinds[2])
 
     def post_blinds(self):
+        """
+        Determines the correct small blind and big blind positions and
+        contributes the corresponding amounts to the pot.
+        """
         # Preflop: Headsup
         if len(self.tbl) < 2:
             raise ValueError('Not enough players to play!')
@@ -230,7 +250,7 @@ class Round():
         print('{} posts ${}'.format(bb, self._game.blinds[1]))
 
     def setup_betting(self):
-        # Set betsize, level, currentbettor and lastbettor
+        """ Set betsize, level, currentbettor and lastbettor."""
 
         # Preflop: Headsup
         if self.street == 0:
@@ -253,6 +273,9 @@ class Round():
                 self.betstack[p.name] = p.chips
 
     def betting(self):
+        """
+        Performs a round of betting between all the players that have cards and chips.
+        """
         playing = True
 
         while playing:
@@ -289,6 +312,7 @@ class Round():
             return None
 
     def process_option(self, option):
+        """ Performs the option picked by a player. """
         p = self.tbl.seats[self.bettor]
 
         if option[0] == 'FOLD':
@@ -307,6 +331,9 @@ class Round():
         print('\r{} {}s'.format(p, option[0].lower()))
 
     def menu(self, options=None):
+        """
+        Display a list of betting options for the current player.
+        """
         # Sort by chip cost
         optlist = [(options[o][1], o, options[o][0][1:]) for o in options]
 
@@ -326,7 +353,7 @@ class Round():
                 print('Invalid choice, try again.')
 
     def get_options(self, cost):
-        # Shows the options available to the current bettor
+        """ Shows the options available to the current bettor."""
         completing = (self.betsize - cost) == self._game.blinds[0]
 
         OPTIONS = {}
@@ -362,6 +389,7 @@ class Round():
 
 
 def calc_odds(bet, pot):
+    """ Calculate the odds offered to a player given a bet amount and a pot amount."""
     print('first draft')
     print('Bet = {}, pot = {}'.format(bet, pot))
     print('bet is {}% of the pot'.format(bet/pot * 100))
