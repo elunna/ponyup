@@ -7,6 +7,7 @@ import hand
 import card
 import os
 import game
+import blinds
 
 
 def is_integer(num):
@@ -179,7 +180,8 @@ def main():
     os.system('clear')
     print('FIVE CARD DRAW!')
     #  print('Initializing new game...\n')
-    g = game.Game('FIVE CARD DRAW', '50/100', 6, 'LUNNA')
+    STAKES = blinds.limit['50/100']
+    g = game.Game('FIVE CARD DRAW', STAKES, 6, 'LUNNA')
 
     playing = True
 
