@@ -40,7 +40,7 @@ class Stud5Game(game.Game):
         # ================== CLEANUP
         newround.muck_all_cards()
         # Remove broke players
-        newround.cleanup()
+        newround.remove_broke_players()
 
         # Advance round counter
         self.rounds += 1

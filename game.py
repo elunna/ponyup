@@ -102,41 +102,34 @@ class Round():
             raise ValueError('Deck is corrupted! Muck doesn\'t equal starting deck!')
             exit()
 
-    def cleanup(self):
+    def remove_broke_players(self):
         """ Remove players with no chips from the table. """
         for p in self.tbl:
             if p.chips == 0:
                 i = self.tbl.player_index(p)
                 self.tbl.remove_player(i)
 
+    def get_valueplayer_list(self):
+        # Creating a list of value/player values')
+        handlist = []
+        for p in self.tbl.get_cardholders():
+            handlist.append((p._hand.value, p))
+        return handlist
+
     def showdown(self):
         """
         Compare all the hands of players holding cards and determine the winner(s).
         """
-
-        handlist = []
-        # Un-hide all cards involved in a showdown.
         for p in self.tbl.get_cardholders():
             p.showhand()
             print('{:15} shows: {}'.format(str(p), p._hand))
 
-            # Creating a list of value/player values')
-            handlist.append((p._hand.value, p))
-
+        handlist = self.get_valueplayer_list()
         self.process_allins()
 
         if len(self.sidepots) == 0:
-            # No sidepots!
-            # Create a list of winners based on the best hand value found
-
+            # No sidepots, so the minimum for elibility is 0.
             self.segregate_eligible(handlist, self.pot, 0)
-            #  bestvalue = max(handlist)
-            #  winners = [h[1] for h in handlist if h[0] == bestvalue[0]]
-
-            #  print('-'*40)
-            #  print('')
-
-            #  self.award_pot(winners, self.pot)
 
         else:
             self.process_sidepots(handlist)
@@ -497,7 +490,7 @@ def test_stacks():
     print('the highest allin = {}'.format(max(r.sidepots)))
     print('')
     r.showdown()
-    r.cleanup()
+    r.remove_broke_players()
     print(r)
     #  print(g._table)
     print(r.tbl)
