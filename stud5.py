@@ -23,9 +23,9 @@ class Stud5Game(game.Game):
                 # Five card stud - deal 2 cards to each player
                 # 1 up and 1 down
                 newround.deal_cards(1)
-                newround.deal_cards(1, facedown=False)
+                newround.deal_cards(1, faceup=True)
             else:
-                newround.deal_cards(1, facedown=False)
+                newround.deal_cards(1, faceup=True)
 
             newround.setup_betting()
             victor = newround.betting()

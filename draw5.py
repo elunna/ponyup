@@ -190,7 +190,7 @@ class Draw5Game(game.Game):
         #  newround.ante_up()
 
         # Five card draw - deal 5 cards to each player
-        newround.deal_hands(5)
+        newround.deal_cards(5)
 
         # Show table pre draw
         print(newround)

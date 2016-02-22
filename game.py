@@ -45,6 +45,7 @@ class Round():
         self.betsize = 0
         self.level = 0
         self.tbl = game._table
+        self.PLAYING = True
 
         self.muck = []
         self.d = deck.Deck()
@@ -71,13 +72,17 @@ class Round():
         """ Check that no players have lingering cards from the previous round."""
         for p in self.tbl:
             if len(p._hand) > 0:
+                self.PLAYING = False
                 raise ValueError('Player has cards when they should not!')
 
-    def deal_hands(self, qty):
+    def deal_cards(self, qty, faceup=False):
         """ Deal the specified quantity of cards to each player."""
         for i in range(qty):
             for p in self.tbl:
-                p.add(self.d.deal())
+                c = self.d.deal()
+                if faceup is True:
+                    c.hidden = False
+                p.add(c)
 
     def muck_and_verify(self):
         """
@@ -132,6 +137,8 @@ class Round():
 
         else:
             self.process_sidepots(handlist)
+
+        self.PLAYING = False
 
     def process_sidepots(self, handlist):
         """ Organize the sidepots into an ascending sorted list."""
@@ -333,6 +340,7 @@ class Round():
             if self.tbl.valid_bettors() == 1:
                 print('Only one player left!')
                 winner = self.tbl.seats[self.tbl.next(self.bettor, True)]
+                self.PLAYING = False
                 return [winner]
 
             elif self.bettor == self.closer:
@@ -471,7 +479,7 @@ def test_stacks():
     print(g._table)
 
     r = Round(g)
-    r.deal_hands(5)
+    r.deal_cards(5)
     print(r)
 
     bet = 200
