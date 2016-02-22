@@ -129,7 +129,7 @@ class Round():
 
         if len(self.sidepots) == 0:
             # No sidepots, so the minimum for elibility is 0.
-            self.segregate_eligible(handlist, self.pot, 0)
+            self.determine_eligibility(handlist, self.pot, 0)
 
         else:
             self.process_sidepots(handlist)
@@ -140,59 +140,51 @@ class Round():
         """ Organize the sidepots into an ascending sorted list."""
         stacks_n_pots = sorted(
             [(p, self.sidepots[p]) for p in self.sidepots])
-        #  stacks_n_pots = sorted(stacks_n_pots)
-
-        # Test print the stacks_n_pots
-        for x in stacks_n_pots:
-            print(x)
 
         leftovers = self.pot
 
         # Go through and process the main pot first,
         # then the 1st sidepot, 2nd sidepot, etc.
         for i, pot in enumerate(sorted(stacks_n_pots)):
-            potshare = 0
+            share = 0
             # Calculate the pot
             if i == 0:
-                potshare = pot[1]
+                share = pot[1]
                 leftovers -= pot[1]
             else:
                 lastpot = stacks_n_pots[i - 1][1]
-                potshare = pot[1] - lastpot
-                leftovers -= potshare
+                share = pot[1] - lastpot
+                leftovers -= share
 
-            self.segregate_eligible(handlist, potshare, pot[0])
+            self.determine_eligibility(handlist, share, pot[0])
 
         if leftovers > 0:
-            # We'll pass potlist[1] + 1 so that all the elibigle players are
+            # We'll pass stacks_n_pots)[0] + 1 so that all the elibigle players are
             # just above the largest allin.
             above_allin = max(stacks_n_pots)[0] + 1
-            #  above_allin = max(stacks_n_pots[1]) + 1
-            self.segregate_eligible(handlist, leftovers, above_allin)
+            self.determine_eligibility(handlist, leftovers, above_allin)
 
-    def segregate_eligible(self, handlist, potshare, minimumstack):
+    def determine_eligibility(self, handlist, pot, stack):
         """
         Determine what players are eligible to win pots and sidepots.
         """
-        eligible_players = [p for p in handlist
-                            if self.startstack[p[1].name] >= minimumstack]
+        eligible = [p for p in handlist if self.startstack[p[1].name] >= stack]
 
-        print('Awarding ${} pot'.format(potshare))
-        #  print('\t', end='')
+        print('Awarding ${} pot'.format(pot))
 
         bestvalue = 0
-        for e in eligible_players:
+        # Determine the best handvalue the eligible players have.
+        for e in eligible:
             if e[0] > bestvalue:
                 bestvalue = e[0]
-            #  print('{} '.format(e[1]), end='')
-        #  print('')
 
-        winners = [h[1] for h in eligible_players if h[0] == bestvalue]
+        winners = [h[1] for h in eligible if h[0] == bestvalue]
+
         for w in winners:
             print('\t{} shows {}, {}'.format(
                 w, w._hand.handrank, w._hand.description))
 
-        self.award_pot(winners, potshare)
+        self.award_pot(winners, pot)
 
     def process_allins(self):
         """
