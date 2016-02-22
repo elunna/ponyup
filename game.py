@@ -84,7 +84,7 @@ class Round():
                     c.hidden = False
                 p.add(c)
 
-    def muck_and_verify(self):
+    def muck_all_cards(self):
         """
         Fold all player hands and verify that the count of the muck matches the original
         deck size
@@ -94,6 +94,9 @@ class Round():
             self.muck.extend(p.fold())
         # Add the remainder of the deck
         self.muck.extend(self.d.cards)
+        self.verify_muck()
+
+    def verify_muck(self):
         # Verify
         if len(self.muck) != self.DECKSIZE:
             raise ValueError('Deck is corrupted! Muck doesn\'t equal starting deck!')

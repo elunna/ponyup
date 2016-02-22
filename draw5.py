@@ -222,7 +222,7 @@ class Draw5Game(game.Game):
             newround.award_pot(victor, newround.pot)
 
         # ================== CLEANUP
-        newround.muck_and_verify()
+        newround.muck_all_cards()
         # Remove broke players
         newround.cleanup()
 

@@ -38,7 +38,7 @@ class Stud5Game(game.Game):
             newround.showdown()
 
         # ================== CLEANUP
-        newround.muck_and_verify()
+        newround.muck_all_cards()
         # Remove broke players
         newround.cleanup()
 
