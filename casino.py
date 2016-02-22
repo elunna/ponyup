@@ -5,7 +5,8 @@ import blinds
 import table
 import os
 import sys
-import game
+#  import game
+import draw5
 import combos
 
 GAME = 'FIVE CARD DRAW'
@@ -103,7 +104,7 @@ def play_poker():
     print('Alright, let\'s play some poker!')
 
     print('Initializing new game...\n')
-    g = game.Game('FIVE CARD DRAW', STAKES, TABLE, NAME)
+    g = draw5.Draw5Game('FIVE CARD DRAW', STAKES, TABLE, NAME)
 
     playing = True
 
