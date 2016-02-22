@@ -207,12 +207,11 @@ class Round():
         can win. The first side pot created will actually be the "main pot" that all players
         are eligible for. This system will make it easier to calculate the winnings at the end.
         """
-        print('')
         if stacksize in self.sidepots:
             # There is already a sidepot for this stacksize
             return
 
-        #  print('sidepot being created:')
+        print('')
         mainpot = 0
 
         # Go through the table of players
@@ -269,13 +268,15 @@ class Round():
         if len(self.tbl) < 2:
             raise ValueError('Not enough players to play!')
             exit()
+        # Get the SB and BB positions from the table
         sb = self.tbl.seats[self.tbl.get_sb()]
         bb = self.tbl.seats[self.tbl.get_bb()]
 
+        # Bet the SB and BB amounts and add to the pot
         self.pot += sb.bet(self._game.blinds[0])
-        self.pot += bb.bet(self._game.blinds[1])
-
         print('{} posts ${}'.format(sb, self._game.blinds[0]))
+
+        self.pot += bb.bet(self._game.blinds[1])
         print('{} posts ${}'.format(bb, self._game.blinds[1]))
 
     def setup_betting(self):
@@ -288,8 +289,8 @@ class Round():
             self.betsize = self._game.blinds[1]
             self.closer = self.tbl.get_bb()
             self.bettor = self.tbl.next(self.closer)
+            # Copy the starting stack for the first round (because blinds were posted)
             self.betstack = self.startstack.copy()
-            #  for k, v in self.startstack.
 
         elif self.street > 0:
             # postflop the first bettor is right after the button
@@ -329,6 +330,7 @@ class Round():
                 print('Only one player left!')
                 winner = self.tbl.seats[self.tbl.next(self.bettor, True)]
                 self.PLAYING = False
+                # Return the single winner as a list so award_pot can use it.
                 return [winner]
 
             elif self.bettor == self.closer:
@@ -339,6 +341,7 @@ class Round():
                 self.bettor = self.tbl.next(self.bettor, hascards=True)
 
         else:
+            # The betting round is over, and there are multiple players still remaining.
             self.street += 1
             return None
 
