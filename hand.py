@@ -32,12 +32,8 @@ class Hand():
         return len(self.cards)
 
     def update(self):
-        # Sorting should make it easier to read!
-        self.cards = sorted(self.cards)
         self.value = evaluator.get_value(self.cards)
         self.handrank = evaluator.get_type(self.value)
-        #  self.value = evaluator.get_value(self.cards)
-        #  self.handrank = evaluator.get_type(self.value)
         if len(self) == 5:
             self.description = evaluator.get_description(self.value, self.cards)
 
