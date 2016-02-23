@@ -55,35 +55,3 @@ class Card:
 
     def __lt__(self, other):
         return VALUES[self.rank] < VALUES[other.rank]
-
-
-if __name__ == "__main__":
-    print('Card module tests')
-    print('Test card construction')
-    c1 = Card('A', 's')
-    print(c1)
-    c2 = Card('2', 's')
-    print(c2)
-
-    print('Uppercase suit')
-    c3 = Card('3', 'S')
-    print(c3)
-
-    # Invalid rank
-    try:
-        c3 = Card('0', 'd')
-    except ValueError as v:
-        print(v.args)
-
-    # Invalid suit
-    try:
-        c5 = Card('5', 'z')
-    except ValueError as v:
-        print(v.args)
-
-    print('')
-    print('Test equality operators')
-    print('{} > {}: {}'.format(c1, c2, c1 > c2))
-    print('{} < {}: {}'.format(c1, c2, c1 < c2))
-    print('{} = {}: {}'.format(c1, c1, c1 == c1))
-    print('{} = {}: {}'.format(c1, c2, c1 == c2))
