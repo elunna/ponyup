@@ -16,8 +16,13 @@ class Stud5Game(game.Game):
 
         # Show table pre draw
         print(newround)
+        newround.deal_cards(1)
+        newround.deal_cards(1, faceup=True)
         print(self._table)
-
+        #  bringin = super(Stud5Game, self).determine_bringin()
+        bringin = newround.determine_bringin('STUD5')
+        print('Bringin is {}'.format(bringin))
+        """
         for street in range(4):
             if street == 0:
                 # Five card stud - deal 2 cards to each player
@@ -36,7 +41,7 @@ class Stud5Game(game.Game):
         else:
             # Check for winners/showdown
             newround.showdown()
-
+        """
         # ================== CLEANUP
         newround.muck_all_cards()
         # Remove broke players
