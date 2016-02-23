@@ -8,15 +8,11 @@ import random
 
 
 class Deck():
-    def __init__(self, cards=None, hidden=True):
+    def __init__(self, cards=None):
         if cards is None:
             self.cards = standard_deck()
         else:
             self.cards = cards
-
-        if hidden is False:
-            for c in self.cards:
-                c.hidden = False
 
     def shuffle(self):
         random.shuffle(self.cards)
@@ -44,7 +40,8 @@ class Deck():
 
 
 def standard_deck():
-    return [card.Card(r, s.lower()[0]) for s in card.SUITS for r in card.RANKS]
+    return [card.Card(r, s[0])
+            for s in card.SUITS for r in card.RANKS]
 
 if __name__ == '__main__':
     print('New hidden Deck')
