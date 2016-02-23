@@ -4,21 +4,18 @@ import strategy
 
 
 class Player():
-    def __init__(self, name, _type=None, chips=500):
+    def __init__(self, name, _type="CPU", chips=500):
         if isValidUsername(name):
             self.name = name
         else:
             raise ValueError('Invalid username "{}" for object!'.format(name))
 
-        if _type is None:
-            self.playertype = 'CPU'
-        elif _type != 'HUMAN' and _type != 'CPU':
+        if _type != 'HUMAN' and _type != 'CPU':
             raise ValueError('Invalid player type passed!')
         else:
             self.playertype = _type
 
-        if self.playertype == 'CPU':
-            self.strategy = strategy.get_normal()
+        self.strategy = None
 
         self.chips = chips
         self._hand = hand.Hand()

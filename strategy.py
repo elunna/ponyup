@@ -95,7 +95,7 @@ def get_aggrofish():
     return Strategy(pre, post)
 
 
-def get_normal():
+def get_reg_draw5():
     pre = [PAIR_66, PAIR_JJ]
     post = [PAIR_AA, TWOPAIR_JJ]
     return Strategy(pre, post)
