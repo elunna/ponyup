@@ -106,7 +106,7 @@ def sort_ranks(cards):
     for r in ranks:
         L.append((ranks[r], r))
 
-    return sorted(L, key=lambda x: (-x[0], -card.VALUES[x[1]]))
+    return sorted(L, key=lambda x: (-x[0], -card.RANKS[x[1]]))
 
 
 def sort_suits(cards):
@@ -124,14 +124,14 @@ def score(cards):
     # Hand should be ordered by highest value first, lowest last
     score = 0
     for i, c in enumerate(cards):
-        score += card.VALUES[c[1]] * MULTIPLIERS[i]
+        score += card.RANKS[c[1]] * MULTIPLIERS[i]
     return score
 
 
 def get_value(cards):
     # Calculate the type of hand and return a string descripting the hand and an integer
     # that correspond to its value
-    cards = sorted(cards, key=lambda x: card.VALUES[x.rank])
+    cards = sorted(cards, key=lambda x: card.RANKS[x.rank])
     sorted_values = sort_ranks(cards)
 
     if len(sorted_values) == 5:
@@ -142,7 +142,7 @@ def get_value(cards):
             if cards[0].rank == '2':
                 return HANDTYPES['STRAIGHT FLUSH']
             return HANDTYPES['STRAIGHT FLUSH'] \
-                + card.VALUES[sorted_values[4][1]] * MULTIPLIERS[0]
+                + card.RANKS[sorted_values[4][1]] * MULTIPLIERS[0]
         elif is_flush(cards):
             return HANDTYPES['FLUSH'] + score(sorted_values)
         elif is_low_straight(cards):

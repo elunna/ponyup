@@ -134,10 +134,10 @@ def auto_discard(hand):
             keep = copy[1:5]
 
         # Draw to high cards
-        elif card.VALUES[h[2][1]] > 9:
+        elif card.RANKS[h[2][1]] > 9:
             highcards = h[0][1] + h[1][1] + h[2][1]
             discard = ev.pop_ranks(hand.cards, highcards)
-        elif card.VALUES[h[1][1]] > 9:
+        elif card.RANKS[h[1][1]] > 9:
             highcards = h[0][1] + h[1][1]
             discard = ev.pop_ranks(hand.cards, highcards)
 

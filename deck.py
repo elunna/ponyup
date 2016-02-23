@@ -3,8 +3,6 @@
 Creates a Deck of cards.
 '''
 from __future__ import print_function
-from card import SUITS
-from card import RANKS
 import card
 import random
 
@@ -12,7 +10,7 @@ import random
 class Deck():
     def __init__(self, cards=None, hidden=True):
         if cards is None:
-            self.cards = [card.Card(r, s.lower()[0]) for s in SUITS for r in RANKS]
+            self.cards = standard_deck()
         else:
             self.cards = cards
 
@@ -44,6 +42,9 @@ class Deck():
     def __len__(self):
         return len(self.cards)
 
+
+def standard_deck():
+    return [card.Card(r, s.lower()[0]) for s in card.SUITS for r in card.RANKS]
 
 if __name__ == '__main__':
     print('New hidden Deck')

@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
 # Use tuples instead of lists
-RANKS = ('2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A')
 SUITS = ('c', 'd', 'h', 's')
 
-VALUES = {
+RANKS = {
     '2': 2,
     '3': 3,
     '4': 4,
@@ -30,13 +29,10 @@ class Card:
 
         self.rank = rank
         self.suit = suit.lower()
-
-        # Hide cards by default?
-        # Probably works better that way since they originate from decks first.
-        self.hidden = True
+        self.hidden = True  # Hide cards by default
 
     def val(self):
-        return VALUES[self.rank]
+        return RANKS[self.rank]
 
     def __str__(self):
         if self.hidden:
@@ -51,7 +47,7 @@ class Card:
         return self.rank == other.rank and self.suit == other.suit
 
     def __gt__(self, other):
-        return VALUES[self.rank] > VALUES[other.rank]
+        return RANKS[self.rank] > RANKS[other.rank]
 
     def __lt__(self, other):
-        return VALUES[self.rank] < VALUES[other.rank]
+        return RANKS[self.rank] < RANKS[other.rank]
