@@ -103,6 +103,13 @@ class TestCards(unittest.TestCase):
         result = low < high
         self.assertEqual(expected, result)
 
+    def testLessthan_SameRanks_returnsFalse(self):
+        c1 = card.Card('K', 's')
+        c2 = card.Card('K', 'c')
+        expected = False
+        result = c2 < c1
+        self.assertEqual(expected, result)
+
     def testGreaterthan_HighToLow_returnsFalse(self):
         high = card.Card('A', 's')
         low = card.Card('K', 's')
@@ -117,13 +124,65 @@ class TestCards(unittest.TestCase):
         result = low > high
         self.assertEqual(expected, result)
 
-    def testEquals_EqualCards_returnsTrue(self):
-        c1 = card.Card('A', 's')
-        c2 = card.Card('A', 'c')
-        expected = 0
-        result = c1 ==c2
+    def testGreaterthan_SameRanks_returnsFalse(self):
+        c1 = card.Card('K', 's')
+        c2 = card.Card('K', 'c')
+        expected = False
+        result = c2 > c1
         self.assertEqual(expected, result)
 
+    def testEquals_SameCard_returnsTrue(self):
+        """ __equals__ tests that the two cards have exactly the same suit and rank."""
+        c1 = card.Card('A', 's')
+        c2 = card.Card('A', 's')
+        expected = True
+        result = c1 == c2
+        self.assertEqual(expected, result)
+
+    def testEquals_DiffSuits_returnsFalse(self):
+        c1 = card.Card('A', 's')
+        c2 = card.Card('A', 'c')
+        expected = False
+        result = c1 == c2
+        self.assertEqual(expected, result)
+
+    def testinit_invalidsuit_raiseEx(self):
+        self.assertRaises(ValueError, card.Card, 'A', 'a')
+        # failUnlessRaises is deprecated!
+        # self.failUnlessRaises(ValueError, card.Card, 'A', 'a')
+
+    def testinit_invalidrank_raiseEx(self):
+        self.assertRaises(ValueError, card.Card, 'Y', 's')
+        # failUnlessRaises is deprecated!
+        # self.failUnlessRaises(ValueError, card.Card, 'Y', 's')
+
+    def testinit_invalidboth_raiseEx(self):
+        self.assertRaises(ValueError, card.Card, 's', 'A')
+
+    def testinit_uppercaseSuit_suitIsLowercase(self):
+        c = card.Card('A', 'S')
+        expected = 's'
+        result = c.suit
+        self.assertEqual(expected, result)
+
+    def testinit_default_hiddenIsTrue(self):
+        c = card.Card('A', 's')
+        expected = True
+        result = c.hidden
+        self.assertEqual(expected, result)
+
+    def teststr_hiddenCard_returnsXx(self):
+        c = card.Card('A', 's')
+        expected = 'Xx'
+        result = str(c)
+        self.assertEqual(expected, result)
+
+    def teststr_FaceupAs_returnsAs(self):
+        c = card.Card('A', 's')
+        c.hidden = False
+        expected = 'As'
+        result = str(c)
+        self.assertEqual(expected, result)
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main('-v')
