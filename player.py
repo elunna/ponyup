@@ -64,6 +64,14 @@ class Player():
     def makeplay(self, options, street):
         return self.strategy.makeplay(options, self._hand.value, street)
 
+    def get_upcards(self):
+        #return a list of all the non-hidden cards the player has.
+        upcards = []
+        for c in self._hand.cards:
+            if c.hidden == False:
+                upcards.append(c)
+        return upcards
+
 
 def isValidUsername(username):
     re1 = re.compile(r"[<>/{}[\]~`^'\\]")
