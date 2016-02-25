@@ -47,6 +47,15 @@ class Deck1Joker(Deck):
         joker = card.Card('Z', 's')
         self.cards.append(joker)
 
+class Deck2Joker(Deck):
+    def __init__(self):
+        self.cards = standard_deck()
+        joker1 = card.Card('Z', 's')
+        joker2 = card.Card('Z', 'c')
+        self.cards.append(joker1)
+        self.cards.append(joker2)
+
+
 
 def standard_deck():
     # Leave out Jokers
