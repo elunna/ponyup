@@ -44,6 +44,19 @@ class TestDeck(unittest.TestCase):
         result = len(d)
         self.assertEqual(expected, result)
 
+    def testinit_Deck1Joker_size53(self):
+        d = deck.Deck1Joker()
+        expected = 53
+        result = len(d)
+        self.assertEqual(expected, result)
+
+    def testinit_Deck1Joker_containsJoker(self):
+        d = deck.Deck1Joker()
+        c = card.Card('Z', 's')
+        expected = True
+        result = d.contains(c)
+        self.assertEqual(expected, result)
+
 
 if __name__ == "__main__":
     unittest.main()

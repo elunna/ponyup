@@ -27,6 +27,9 @@ class Deck():
         if card in self.cards:
             self.cards.remove(card)
 
+    def contains(self, card):
+        return card in self.cards
+
     def __str__(self):
         _str = ''
         for i, c in enumerate(self.cards):
@@ -38,10 +41,18 @@ class Deck():
     def __len__(self):
         return len(self.cards)
 
+class Deck1Joker(Deck):
+    def __init__(self):
+        self.cards = standard_deck()
+        joker = card.Card('Z', 's')
+        self.cards.append(joker)
+
 
 def standard_deck():
+    # Leave out Jokers
     return [card.Card(r, s[0])
-            for s in card.SUITS for r in card.RANKS]
+            for s in card.SUITS for r in card.RANKS if r != 'Z']
+
 
 if __name__ == '__main__':
     print('New hidden Deck')

@@ -3,13 +3,11 @@ import card
 
 
 class TestCards(unittest.TestCase):
-    """
-    def val_JOKER_returns15(self):
-        c = card.Card('X', 's')
+    def testval_JOKER_Z_returns15(self):
+        c = card.Card('Z', 's')
         expected = 15
         result = c.val()
         self.assertEqual(expected, result)
-    """
 
     def testval_A_returns14(self):
         c = card.Card('A', 's')
