@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from __future__ import print_function
-#  import gametools
 import sys
 import time
 import random
@@ -11,9 +10,9 @@ import deck
 # If a player runs out of cards they lose.
 # If a player draws a last card for war that is an exception.
 
-#  players = gametools.deal_players(2, 26)
 players = [[], []]
-d = deck.Deck()
+d = deck.Deck2Joker()
+
 while len(d) > 0:
     players[0].append(d.deal())
     players[1].append(d.deal())
