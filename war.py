@@ -23,7 +23,13 @@ def get_players():
     return players
 
 
-def getwin(players):
+def get_gamestate(players):
+    # Returns a number that indicates the state of the game:
+    # 0 = Tie
+    # 1 = Player 1 won
+    # 2 = Player 2 won
+    # -1 = Still playing
+
     if len(players[0]) == 0 and len(players[1]) == 0:
         print('Tie!')
         return 0
@@ -40,28 +46,41 @@ def getwin(players):
         return -1
 
 
-def playround(players, warlevel):
-    if getwin(players) > 0:
-        sys.exit()
-
+def show_topcards(players):
     players[0][0].hidden = False
     players[1][0].hidden = False
     print('{}    vs    {}'.format(players[0][0], players[1][0]))
     players[0][0].hidden = True
     players[1][0].hidden = True
 
+
+def get_winner(players):
     if players[0][0].val() > players[1][0].val():
-        print('Player 1 takes the round!')
-        # Add the compared cards to player 1's stack
-        players[0].append(players[0].pop(0))
-        players[0].append(players[1].pop(0))
         return 1
     elif players[0][0].val() < players[1][0].val():
-        # Add the compared cards to player 2's stack
-        print('Player 2 takes the round!')
-        players[1].append(players[0].pop(0))
-        players[1].append(players[1].pop(0))
         return 2
+    else:
+        return 0
+
+
+def award_cards(players, winner):
+    # Add the compared cards to player 1's stack
+    print('Player {} takes the round!'.format(winner + 1))
+    players[winner - 1].append(players[0].pop(0))
+    players[winner - 1].append(players[1].pop(0))
+
+
+def playround(players, warlevel):
+    if get_gamestate(players) > 0:
+        sys.exit()
+
+    show_topcards(players)
+
+    winner = get_winner(players)
+
+    if winner > 0:
+        award_cards(players, winner)
+        return winner
     else:
         # Go into the 'war' mode.
         # Use a counter to count what level of war we're at
@@ -79,7 +98,7 @@ def war(players, warlevel):
 
     spoils = []
     for i in range(4):
-        if getwin(players) > 0:
+        if get_gamestate(players) > 0:
             sys.exit()
 
         spoils.append(players[0].pop(0))
