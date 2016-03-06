@@ -63,11 +63,22 @@ def get_winner(players):
         return 0
 
 
-def award_cards(players, winner):
-    # Add the compared cards to player 1's stack
-    print('Player {} takes the round!'.format(winner))
-    players[winner - 1].append(players[0].pop(0))
-    players[winner - 1].append(players[1].pop(0))
+def award_cards(plyr, spoils):
+    # Add the compared cards to specified player's stack
+    plyr.extend(spoils)
+    #  players[winner - 1].append(players[0].pop(0))
+    #  players[winner - 1].append(players[1].pop(0))
+
+
+def get_spoils(players, qty):
+    spoils = []
+    for i in range(qty):
+        if get_gamestate(players) > 0:
+            sys.exit()
+
+        spoils.append(players[0].pop(0))
+        spoils.append(players[1].pop(0))
+    return spoils
 
 
 def playround(players, warlevel):
@@ -77,35 +88,26 @@ def playround(players, warlevel):
     show_topcards(players)
     winner = get_winner(players)
 
+    spoils = get_spoils(players, 1)
     if winner > 0:
-        award_cards(players, winner)
+        print('Player {} takes the round!'.format(winner))
+        award_cards(players[winner - 1], spoils)
         return winner
     else:
         # Go into the 'war' mode.
         # Use a counter to count what level of war we're at
         warlevel += 1
-        result = war(players, warlevel)
+        result = war(players, warlevel, spoils)
         return result
 
 
-def get_spoils(players, cards):
-    spoils = []
-    for i in range(cards):
-        if get_gamestate(players) > 0:
-            sys.exit()
-
-        spoils.append(players[0].pop(0))
-        spoils.append(players[1].pop(0))
-    return spoils
-
-
-def war(players, warlevel):
+def war(players, warlevel, spoils):
     # Check player stacks first
     print('WAR!!! LEVEL {}'.format(warlevel))
 
     # Pause button
     #  input()
-    spoils = get_spoils(players, 4)
+    spoils.extend(get_spoils(players, 3))
     list_cards(spoils)
     result = playround(players, warlevel)
 
