@@ -11,6 +11,22 @@ import deck
 # If a player draws a last card for war that is an exception.
 
 
+def display_cards(cards):
+    for c in cards:
+        c.hidden = False
+        print('{} '.format(str(c)), end='')
+        c.hidden = True
+    print('')
+
+
+def show_topcards(players):
+    players[0][0].hidden = False
+    players[1][0].hidden = False
+    print('{}    vs    {}'.format(players[0][0], players[1][0]))
+    players[0][0].hidden = True
+    players[1][0].hidden = True
+
+
 def get_players():
     # Creates 2 players and deals a deck evenly between them.
     players = [[], []]
@@ -44,14 +60,6 @@ def get_gamestate(players):
         #  return 1  # Player 1 wins
     else:
         return -1
-
-
-def show_topcards(players):
-    players[0][0].hidden = False
-    players[1][0].hidden = False
-    print('{}    vs    {}'.format(players[0][0], players[1][0]))
-    players[0][0].hidden = True
-    players[1][0].hidden = True
 
 
 def get_winner(players):
@@ -108,17 +116,12 @@ def war(players, warlevel, spoils):
     # Pause button
     #  input()
     spoils.extend(get_spoils(players, 3))
-    list_cards(spoils)
-    result = playround(players, warlevel)
+    display_cards(spoils)
+    winner = playround(players, warlevel)
 
-    if result == 1:
-        print('Player 1 wins the war #{}!'.format(warlevel))
-        players[0].extend(spoils)
-        return 1
-    elif result == 2:
-        print('Player 2 wins the war #{}!'.format(warlevel))
-        players[1].extend(spoils)
-        return 2
+    print('Player {} wins war #{}!'.format(winner, warlevel))
+    award_cards(players[winner - 1], spoils)
+    return winner
 
 
 def gameloop(players):
@@ -139,14 +142,6 @@ def gameloop(players):
         #  input()
 
         playround(players, warlevel=0)
-
-
-def list_cards(hand):
-    for c in hand:
-        c.hidden = False
-        print('{} '.format(str(c)), end='')
-        c.hidden = True
-    print('')
 
 
 if __name__ == '__main__':
