@@ -65,7 +65,7 @@ def get_winner(players):
 
 def award_cards(players, winner):
     # Add the compared cards to player 1's stack
-    print('Player {} takes the round!'.format(winner + 1))
+    print('Player {} takes the round!'.format(winner))
     players[winner - 1].append(players[0].pop(0))
     players[winner - 1].append(players[1].pop(0))
 
@@ -75,7 +75,6 @@ def playround(players, warlevel):
         sys.exit()
 
     show_topcards(players)
-
     winner = get_winner(players)
 
     if winner > 0:
@@ -89,21 +88,24 @@ def playround(players, warlevel):
         return result
 
 
+def get_spoils(players, cards):
+    spoils = []
+    for i in range(cards):
+        if get_gamestate(players) > 0:
+            sys.exit()
+
+        spoils.append(players[0].pop(0))
+        spoils.append(players[1].pop(0))
+    return spoils
+
+
 def war(players, warlevel):
     # Check player stacks first
     print('WAR!!! LEVEL {}'.format(warlevel))
 
     # Pause button
     #  input()
-
-    spoils = []
-    for i in range(4):
-        if get_gamestate(players) > 0:
-            sys.exit()
-
-        spoils.append(players[0].pop(0))
-        spoils.append(players[1].pop(0))
-
+    spoils = get_spoils(players, 4)
     list_cards(spoils)
     result = playround(players, warlevel)
 
@@ -139,7 +141,9 @@ def gameloop(players):
 
 def list_cards(hand):
     for c in hand:
+        c.hidden = False
         print('{} '.format(str(c)), end='')
+        c.hidden = True
     print('')
 
 
