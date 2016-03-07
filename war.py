@@ -83,8 +83,6 @@ def get_winner(players):
 def award_cards(plyr, spoils):
     # Add the compared cards to specified player's stack
     plyr.extend(spoils)
-    #  players[winner - 1].append(players[0].pop(0))
-    #  players[winner - 1].append(players[1].pop(0))
 
 
 def get_spoils(players, qty):
