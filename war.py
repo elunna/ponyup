@@ -118,14 +118,17 @@ def playround(players, warlevel):
         return result
 
 
-def war(players, warlevel, spoils):
-    # Check player stacks first
-    expoints = 2 * (warlevel + 1)
-    print('{}{}'.format(WAR[warlevel], '!' * expoints))
+def get_wartext(level):
+    expoints = 2 * (level + 1)
+    return '{}{}'.format(WAR[level], '!' * expoints)
 
+
+def war(players, level, spoils):
+    print(get_wartext(level))
     # Pause button
     #  input()
 
+    # Check player stacks first
     # If a player doesn't have 4 cards for a standard war,
     # we'll take just enough so they can play war and the determining 2 cards.
     if len(players[0]) < 4:
@@ -138,9 +141,9 @@ def war(players, warlevel, spoils):
     else:
         spoils.extend(get_spoils(players, 3))
     display_cards(spoils)
-    winner = playround(players, warlevel)
+    winner = playround(players, level)
 
-    print('Player {} wins war #{}!'.format(winner, warlevel))
+    print('Player {} wins war #{}!'.format(winner, level))
     award_cards(players[winner - 1], spoils)
     return winner
 
