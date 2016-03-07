@@ -10,6 +10,15 @@ import deck
 # If a player runs out of cards they lose.
 # If a player draws a last card for war that is an exception.
 
+WAR = {
+    1: 'WAR',
+    2: 'DOUBLE WAR',
+    3: 'TRIPLE WAR',
+    4: 'QUADRUPLE WAR',
+    5: 'QUINTUPLE WAR',
+    6: 'SEXTUPLE WAR'
+}
+
 
 def display_cards(cards):
     for c in cards:
@@ -111,7 +120,8 @@ def playround(players, warlevel):
 
 def war(players, warlevel, spoils):
     # Check player stacks first
-    print('WAR!!! LEVEL {}'.format(warlevel))
+    expoints = 2 * (warlevel + 1)
+    print('{}{}'.format(WAR[warlevel], '!' * expoints))
 
     # Pause button
     #  input()
