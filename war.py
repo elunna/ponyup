@@ -115,7 +115,18 @@ def war(players, warlevel, spoils):
 
     # Pause button
     #  input()
-    spoils.extend(get_spoils(players, 3))
+
+    # If a player doesn't have 4 cards for a standard war,
+    # we'll take just enough so they can play war and the determining 2 cards.
+    if len(players[0]) < 4:
+        reducedsize = len(players[0]) - 1
+        spoils.extend(get_spoils(players, reducedsize))
+
+    elif len(players[1]) < 4:
+        reducedsize = len(players[1]) - 1
+        spoils.extend(get_spoils(players, reducedsize))
+    else:
+        spoils.extend(get_spoils(players, 3))
     display_cards(spoils)
     winner = playround(players, warlevel)
 
