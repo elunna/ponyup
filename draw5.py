@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from __future__ import print_function
-import handtests
+import pokerhands
 import evaluator as ev
 import hand
 import card
@@ -259,7 +259,7 @@ def test():
     print('*'*80)
     print('Testing discard function')
     print('')
-    r = handtests.dealhand(5)
+    r = pokerhands.dealhand(5)
     print('Random 5 cards: {}'.format(r))
     h = hand.Hand(r)
     print('Value: {:<15} Rank: {:<15}'.format(h.value, h.handrank))
