@@ -3,7 +3,7 @@
 import deck
 import hand
 import combos
-import handtests
+import pokerhands
 import draw5
 
 TRIALS = 10000
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     print('Test the winrates of different discard combos.')
     print('Run {} trials for each unique hand.'.format(TRIALS))
     print('*'*80)
-    h1 = handtests.deal_OESD()
+    h1 = pokerhands.deal_OESD()
     test(h1)
     #  h2 = handtests.deal_GSSD()
     #  test(h2)
