@@ -20,15 +20,14 @@ HANDTYPES = {
     'TWO PAIR':         30000000000,
     'PAIR':             20000000000,
     'HIGH CARD':        0,
-    #  'STRAIGHT-FLUSH DRAW': 0,
-    #  'FLUSH DRAW':       0,
-    #  'STRAIGHT DRAW':    0,
     'INVALID': -1
 }
 
 
 def get_type(value):
-    # Determine the hand given the numerical value
+    """
+    # Determine the type of hand given the numerical value
+    """
     if value < 0:
         raise ValueError('get_type() cannot accept negative numbers!')
     else:
@@ -42,6 +41,11 @@ def get_type(value):
 
 
 def get_description(value, cards):
+    """
+    Returns a fitting text description of the passed pokerhand.
+
+    Note: May want to refactor to only take a list of cards.
+    """
     ranks = sort_ranks(cards)
     ctype = get_type(value)
 
@@ -49,39 +53,36 @@ def get_description(value, cards):
         if value % 10000000000 == 0:
             return '5 High'
         else:
-            #  return '{} High'.format(int((value % 1000000000) / 100000000))
             return '{} High'.format(ranks[0][1])
-
     elif ctype in ['QUADS', 'TRIPS', 'PAIR']:
         return '{}\'s'.format(ranks[0][1])
-
     elif ctype == 'FULL HOUSE':
         return '{}\'s full of {}\'s'.format(
             ranks[0][1], ranks[1][1])
-
     elif ctype == 'TWO PAIR':
         return '{}\'s and {}\'s'.format(
             ranks[0][1], ranks[1][1])
-
-    #  elif ctype in ['FLUSH', 'HIGH CARD']:
     else:
         return '{} High'.format(ranks[0][1])
 
 
 def is_validhand(cards):
-    # Is it a valid poker hand?
+    """
+    Returns True if the cardlist is 5 unique cards."
+    """
     if len(cards) > 5:
         return False
     elif len(cards) < 5:
         return False
     elif not is_set(cards):
-        # Are all the cards unique (and valid)?
         return False
     return True
 
 
 def is_set(itemlist):
-    # Test if a hand contains any duplicate entries
+    """
+    Return False if a list contains any duplicate entries and True if they are all unique.
+    """
     items = itemlist[:]
     while items:
         i = items.pop()
@@ -92,7 +93,11 @@ def is_set(itemlist):
 
 
 def sort_ranks(cards):
-    # Build a dictionary of quantity:rank pairs
+    """
+    Returns a list of quantity/rank pairs by first making a dictionary
+    and then converting it to a list and sorting it by rank.
+    Note: Potentially could make into a list comp
+    """
     ranks = {}
     for c in cards:
         if c.rank in ranks:
@@ -100,8 +105,6 @@ def sort_ranks(cards):
         else:
             ranks[c.rank] = 1
 
-    # Build a list using value/key pairs
-    # Potentially could make into a list comp
     L = []
     for r in ranks:
         L.append((ranks[r], r))
@@ -110,7 +113,9 @@ def sort_ranks(cards):
 
 
 def sort_suits(cards):
-    # Build a dictionary of quantity:suit counts
+    """
+    # Returns a dictionary of quantity/suit pair counts.
+    """
     suits = {}
     for c in cards:
         if c.suit in suits:
@@ -121,7 +126,10 @@ def sort_suits(cards):
 
 
 def score(cards):
-    # Hand should be ordered by highest value first, lowest last
+    """
+    Calculates and returns the score of a sorted list of 5 cards.
+    Precondition:  Hand should be ordered by highest value first, lowest last
+    """
     score = 0
     for i, c in enumerate(cards):
         score += card.RANKS[c[1]] * MULTIPLIERS[i]
@@ -129,26 +137,30 @@ def score(cards):
 
 
 def get_value(cards):
-    # Calculate the type of hand and return a string descripting the hand and an integer
-    # that correspond to its value
+    """
+    Calculate the type of hand and return its integer value.
+    """
     cards = sorted(cards, key=lambda x: card.RANKS[x.rank])
     sorted_values = sort_ranks(cards)
 
     if len(sorted_values) == 5:
-        # Hand cannot contain any pair-type hands
-        if is_royal_flush(cards):
-            return HANDTYPES['ROYAL FLUSH']
-        elif is_straight_flush(cards):
-            if cards[0].rank == '2':
-                return HANDTYPES['STRAIGHT FLUSH']
-            return HANDTYPES['STRAIGHT FLUSH'] \
-                + card.RANKS[sorted_values[4][1]] * MULTIPLIERS[0]
-        elif is_flush(cards):
-            return HANDTYPES['FLUSH'] + score(sorted_values)
-        elif is_low_straight(cards):
-            return HANDTYPES['STRAIGHT']
+        # Non pair-type hands
+        if is_flush(cards):
+            if is_straight(cards):
+                if cards[0].rank == 'T':
+                    return HANDTYPES['ROYAL FLUSH']
+                elif cards[0].rank == '2':
+                    return HANDTYPES['STRAIGHT FLUSH']
+                else:
+                    return HANDTYPES['STRAIGHT FLUSH'] \
+                        + card.RANKS[sorted_values[4][1]] * MULTIPLIERS[0]
+            else:
+                return HANDTYPES['FLUSH'] + score(sorted_values)
         elif is_straight(cards):
-            return HANDTYPES['STRAIGHT'] + score(sorted_values)
+            if cards[0].rank == '2':
+                return HANDTYPES['STRAIGHT']
+            else:
+                return HANDTYPES['STRAIGHT'] + score(sorted_values)
         else:
             return HANDTYPES['HIGH CARD'] + score(sorted_values)
 
@@ -167,32 +179,11 @@ def get_value(cards):
     return HANDTYPES['INVALID']
 
 
-def is_royal_flush(cards):
-    if is_straight_flush(cards) and cards[0].rank == 'T':
-        return True
-    else:
-        return False
-
-
-def is_straight_flush(cards):
-    if is_straight(cards) and is_flush(cards):
-        return True
-    elif is_low_straight(cards) and is_flush(cards):
-        return True
-    else:
-        return False
-
-
-def is_flush(cards):
-    if len(cards) > 5:
-        ValueError('Hand is too large to measure!')
-
-    suitdict = sort_suits(cards)
-    maxsuit = max(suitdict.keys(), key=(lambda k: suitdict[k]))
-    return suitdict[maxsuit] == 5
-
-
 def get_longest_suit(cards):
+    """
+    Looks at all the cards in a list and finds which suit occurs with the greatest
+    frequency. Returns the suit and number of occurences.
+    """
     suitdict = sort_suits(cards)
     maxsuit = max(suitdict.keys(), key=(lambda k: suitdict[k]))
 
@@ -201,6 +192,9 @@ def get_longest_suit(cards):
 
 
 def get_gap(card1, card2):
+    """
+    Looks at 2 cards and finds how far apart their ranks are.
+    """
     # Paired cards have no gap
     if card1.rank == card2.rank:
         return -1
@@ -211,8 +205,11 @@ def get_gap(card1, card2):
 
 
 def get_allgaps(cards):
-    # Determine if all the cards are consecutive ranks
-    # (should work regardless of order)
+    """
+    Takes a list of cards and determines how many gaps are between all the ranks (when
+    they occur in sorted order.
+    # Should work regardless of order
+    """
 
     ordered = sorted(cards)
     gaps = 0
@@ -227,23 +224,11 @@ def get_allgaps(cards):
     return gaps
 
 
-def is_straight(cards):
-    if len(cards) != 5:
-        return False
-    else:
-        return get_allgaps(cards) == 0
-
-
-def is_low_straight(cards):
-    # Ace is low
-    return cards[0].rank == '2' \
-        and cards[1].rank == '3' \
-        and cards[2].rank == '4' \
-        and cards[3].rank == '5' \
-        and cards[4].rank == 'A'
-
-
 def find_best_hand(cards):
+    """
+    Takes a list of cards and determines the best available 5 card hand and returns that
+    hand as a Hand.
+    """
     if len(cards) < 5:
         return None
     hands = [hand.Hand(c) for c in itertools.combinations(cards, 5)]
@@ -257,7 +242,10 @@ def find_best_hand(cards):
 
 
 def pop_ranks(cards, ranks):
-    # Remove ALL BUT the rank given.
+    """
+    Takes a list of cards and removes ALL BUT the rank(s) given.
+    There can be more than one rank passed.
+    """
     discard = []
     for c in cards:
         if c.rank not in ranks:
@@ -266,9 +254,42 @@ def pop_ranks(cards, ranks):
 
 
 def pop_suits(cards, suit):
-    # Remove ALL BUT the suit given.
+    """
+    Takes a list of cards and removes ALL BUT the suit given.
+    There can only be one suit passed.
+    """
     discard = []
     for c in cards:
         if c.suit != suit:
             discard.append(c)
     return discard
+
+
+def is_flush(cards):
+    """
+    Returns True if the hand is a flush, False otherwise.
+    """
+
+    if len(cards) > 5:
+        ValueError('Hand is too large to measure!')
+
+    suitdict = sort_suits(cards)
+    maxsuit = max(suitdict.keys(), key=(lambda k: suitdict[k]))
+    return suitdict[maxsuit] == 5
+
+
+def is_straight(cards):
+    """
+    Returns True if the hand is a straight, False otherwise.
+    """
+    if len(cards) != 5:
+        return False
+
+    elif cards[0].rank == '2' \
+            and cards[1].rank == '3' \
+            and cards[2].rank == '4' \
+            and cards[3].rank == '5' \
+            and cards[4].rank == 'A':
+        return True
+    else:
+        return get_allgaps(cards) == 0
