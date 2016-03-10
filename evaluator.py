@@ -71,24 +71,21 @@ def get_description(value, cards):
 def is_validhand(cards):
     # Is it a valid poker hand?
     if len(cards) > 5:
-        print('INVALID HAND: More than 5 cards!')
         return False
     elif len(cards) < 5:
-        print('INVALID HAND: Less than 5 cards!')
         return False
     elif not is_set(cards):
         # Are all the cards unique (and valid)?
-        print('INVALID HAND: Contains duplicate cards!')
         return False
     return True
 
 
-def is_set(cards):
+def is_set(itemlist):
     # Test if a hand contains any duplicate entries
-    _cards = cards[:]
-    while _cards:
-        tempcard = _cards.pop()
-        if tempcard in _cards:
+    items = itemlist[:]
+    while items:
+        i = items.pop()
+        if i in items:
             return False
     else:
         return True
