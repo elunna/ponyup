@@ -5,6 +5,10 @@ import pokerhands
 
 class TestPokerHands(unittest.TestCase):
     # Test Values
+
+    ##################################################
+    # ROYAL FLUSHES
+    ##################################################
     def test_getvalue_royalflush_returns100000000000(self):
         h = pokerhands.royalflush()
         expected = 100000000000
@@ -18,32 +22,59 @@ class TestPokerHands(unittest.TestCase):
         result = evaluator.get_type(val)
         self.assertEqual(expected, result)
 
-    def test_getvalue_straightflush_A_returns90900000000(self):
+    def test_get_description_royalflush_returnsAHigh(self):
+        h = pokerhands.royalflush()
+        val = evaluator.get_value(h)
+        expected = 'A High'
+        result = evaluator.get_description(val, h)
+        self.assertEqual(expected, result)
+
+    ##################################################
+    # STRAIGHT FLUSHES
+    ##################################################
+    def test_getvalue_straightflushhigh_returns90900000000(self):
         h = pokerhands.straightflush_high()
         expected = 90900000000
         result = evaluator.get_value(h)
         self.assertEqual(expected, result)
 
-    def test_gettype_straightflushA_returnsSTRAIGHTFLUSH(self):
+    def test_gettype_straightflushhigh_returnsSTRAIGHTFLUSH(self):
         h = pokerhands.straightflush_high()
         val = evaluator.get_value(h)
         expected = 'STRAIGHT FLUSH'
         result = evaluator.get_type(val)
         self.assertEqual(expected, result)
 
-    def test_getvalue_lowstraightflush_returns90000000000(self):
+    def test_get_description_straightflushhigh_returnKHigh(self):
+        h = pokerhands.straightflush_high()
+        val = evaluator.get_value(h)
+        expected = 'K High'
+        result = evaluator.get_description(val, h)
+        self.assertEqual(expected, result)
+
+    def test_getvalue_straightflushlow_returns90000000000(self):
         h = pokerhands.straightflush_low()
         expected = 90000000000
         result = evaluator.get_value(h)
         self.assertEqual(expected, result)
 
-    def test_gettype_lowstraightflush_returnsSTRAIGHTFLUSH(self):
+    def test_gettype_straightflushlow_returnsSTRAIGHTFLUSH(self):
         h = pokerhands.straightflush_low()
         val = evaluator.get_value(h)
         expected = 'STRAIGHT FLUSH'
         result = evaluator.get_type(val)
         self.assertEqual(expected, result)
 
+    def test_get_description_straightflushlow_return5High(self):
+        h = pokerhands.straightflush_low()
+        val = evaluator.get_value(h)
+        expected = '5 High'
+        result = evaluator.get_description(val, h)
+        self.assertEqual(expected, result)
+
+    ##################################################
+    # FOUR OF A KINDS, ('QUADS')
+    ##################################################
     def test_getvalue_quadshigh_returns81413000000(self):
         h = pokerhands.quads_high()
         expected = 81413000000
@@ -55,6 +86,13 @@ class TestPokerHands(unittest.TestCase):
         val = evaluator.get_value(h)
         expected = 'QUADS'
         result = evaluator.get_type(val)
+        self.assertEqual(expected, result)
+
+    def test_get_description_quadshigh_returnsAs(self):
+        h = pokerhands.quads_high()
+        val = evaluator.get_value(h)
+        expected = 'A\'s'
+        result = evaluator.get_description(val, h)
         self.assertEqual(expected, result)
 
     def test_getvalue_quadslow_returns80203000000(self):
@@ -70,6 +108,16 @@ class TestPokerHands(unittest.TestCase):
         result = evaluator.get_type(val)
         self.assertEqual(expected, result)
 
+    def test_get_description_quadslow_returns2s(self):
+        h = pokerhands.quads_low()
+        val = evaluator.get_value(h)
+        expected = '2\'s'
+        result = evaluator.get_description(val, h)
+        self.assertEqual(expected, result)
+
+    ##################################################
+    # FULL HOUSES ('BOATS')
+    ##################################################
     def test_getvalue_boathigh_returns71413000000(self):
         h = pokerhands.boat_high()
         expected = 71413000000
@@ -81,6 +129,13 @@ class TestPokerHands(unittest.TestCase):
         val = evaluator.get_value(h)
         expected = 'FULL HOUSE'
         result = evaluator.get_type(val)
+        self.assertEqual(expected, result)
+
+    def test_get_description_boathigh_returnsAsfullofKs(self):
+        h = pokerhands.boat_high()
+        val = evaluator.get_value(h)
+        expected = 'A\'s full of K\'s'
+        result = evaluator.get_description(val, h)
         self.assertEqual(expected, result)
 
     def test_getvalue_boatlow_returns70203000000(self):
@@ -96,6 +151,16 @@ class TestPokerHands(unittest.TestCase):
         result = evaluator.get_type(val)
         self.assertEqual(expected, result)
 
+    def test_get_description_boatlow_returns2sfullof3s(self):
+        h = pokerhands.boat_low()
+        val = evaluator.get_value(h)
+        expected = '2\'s full of 3\'s'
+        result = evaluator.get_description(val, h)
+        self.assertEqual(expected, result)
+
+    ##################################################
+    # FLUSHES
+    ##################################################
     def test_getvalue_flushhigh_returns61413121109(self):
         h = pokerhands.flush_high()
         expected = 61413121109
@@ -109,6 +174,36 @@ class TestPokerHands(unittest.TestCase):
         result = evaluator.get_type(val)
         self.assertEqual(expected, result)
 
+    def test_get_description_flushhigh_returnsAhigh(self):
+        h = pokerhands.flush_high()
+        val = evaluator.get_value(h)
+        expected = 'A High'
+        result = evaluator.get_description(val, h)
+        self.assertEqual(expected, result)
+
+    def test_getvalue_flushlow_returns60705040302(self):
+        h = pokerhands.flush_low()
+        expected = 60705040302
+        result = evaluator.get_value(h)
+        self.assertEqual(expected, result)
+
+    def test_gettype_flushlow_returns(self):
+        h = pokerhands.flush_low()
+        val = evaluator.get_value(h)
+        expected = 'FLUSH'
+        result = evaluator.get_type(val)
+        self.assertEqual(expected, result)
+
+    def test_get_description_flushlow_returns7high(self):
+        h = pokerhands.flush_low()
+        val = evaluator.get_value(h)
+        expected = '7 High'
+        result = evaluator.get_description(val, h)
+        self.assertEqual(expected, result)
+
+    ##################################################
+    # STRAIGHTS
+    ##################################################
     def test_getvalue_straighthigh_returns51413121110(self):
         h = pokerhands.straight_high()
         expected = 51413121110
@@ -120,6 +215,13 @@ class TestPokerHands(unittest.TestCase):
         val = evaluator.get_value(h)
         expected = 'STRAIGHT'
         result = evaluator.get_type(val)
+        self.assertEqual(expected, result)
+
+    def test_get_description_straighthigh_returnAHigh(self):
+        h = pokerhands.straight_high()
+        val = evaluator.get_value(h)
+        expected = 'A High'
+        result = evaluator.get_description(val, h)
         self.assertEqual(expected, result)
 
     def test_getvalue_straightmid_returns51110090807(self):
@@ -135,6 +237,13 @@ class TestPokerHands(unittest.TestCase):
         result = evaluator.get_type(val)
         self.assertEqual(expected, result)
 
+    def test_get_description_straightmid_returnJHigh(self):
+        h = pokerhands.straight_mid()
+        val = evaluator.get_value(h)
+        expected = 'J High'
+        result = evaluator.get_description(val, h)
+        self.assertEqual(expected, result)
+
     def test_getvalue_straightlow_returns50000000000(self):
         h = pokerhands.straight_low()
         expected = 50000000000
@@ -148,6 +257,16 @@ class TestPokerHands(unittest.TestCase):
         result = evaluator.get_type(val)
         self.assertEqual(expected, result)
 
+    def test_get_description_straightlow_return5High(self):
+        h = pokerhands.straight_low()
+        val = evaluator.get_value(h)
+        expected = '5 High'
+        result = evaluator.get_description(val, h)
+        self.assertEqual(expected, result)
+
+    ##################################################
+    # THREE OF A KIND ('SET', 'TRIPS'
+    ##################################################
     def test_getvalue_sethigh_returns41413120000(self):
         h = pokerhands.set_high()
         expected = 41413120000
@@ -159,6 +278,13 @@ class TestPokerHands(unittest.TestCase):
         val = evaluator.get_value(h)
         expected = 'TRIPS'
         result = evaluator.get_type(val)
+        self.assertEqual(expected, result)
+
+    def test_get_description_sethigh_returnsAs(self):
+        h = pokerhands.set_high()
+        val = evaluator.get_value(h)
+        expected = 'A\'s'
+        result = evaluator.get_description(val, h)
         self.assertEqual(expected, result)
 
     def test_getvalue_setlow_returns40204030000(self):
@@ -174,6 +300,16 @@ class TestPokerHands(unittest.TestCase):
         result = evaluator.get_type(val)
         self.assertEqual(expected, result)
 
+    def test_get_description_setlow_returns2s(self):
+        h = pokerhands.set_low()
+        val = evaluator.get_value(h)
+        expected = '2\'s'
+        result = evaluator.get_description(val, h)
+        self.assertEqual(expected, result)
+
+    ##################################################
+    # TWO PAIRS
+    ##################################################
     def test_getvalue_twopairhigh_returns31413120000(self):
         h = pokerhands.twopair_high()
         expected = 31413120000
@@ -185,6 +321,13 @@ class TestPokerHands(unittest.TestCase):
         val = evaluator.get_value(h)
         expected = 'TWO PAIR'
         result = evaluator.get_type(val)
+        self.assertEqual(expected, result)
+
+    def test_get_description_twopairhigh_returnsAsAndKs(self):
+        h = pokerhands.twopair_high()
+        val = evaluator.get_value(h)
+        expected = 'A\'s and K\'s'
+        result = evaluator.get_description(val, h)
         self.assertEqual(expected, result)
 
     def test_getvalue_twopairlow_returns30302040000(self):
@@ -200,6 +343,16 @@ class TestPokerHands(unittest.TestCase):
         result = evaluator.get_type(val)
         self.assertEqual(expected, result)
 
+    def test_get_description_twopairlow_returns3sAnd2s(self):
+        h = pokerhands.twopair_low()
+        val = evaluator.get_value(h)
+        expected = '3\'s and 2\'s'
+        result = evaluator.get_description(val, h)
+        self.assertEqual(expected, result)
+
+    ##################################################
+    # PAIRS
+    ##################################################
     def test_getvalue_pairhigh_returns21413121100(self):
         h = pokerhands.pair_high()
         expected = 21413121100
@@ -213,6 +366,13 @@ class TestPokerHands(unittest.TestCase):
         result = evaluator.get_type(val)
         self.assertEqual(expected, result)
 
+    def test_get_description_pairhigh_returnsAs(self):
+        h = pokerhands.pair_high()
+        val = evaluator.get_value(h)
+        expected = 'A\'s'
+        result = evaluator.get_description(val, h)
+        self.assertEqual(expected, result)
+
     def test_getvalue_pairlow_returns20205040300(self):
         h = pokerhands.pair_low()
         expected = 20205040300
@@ -224,6 +384,13 @@ class TestPokerHands(unittest.TestCase):
         val = evaluator.get_value(h)
         expected = 'PAIR'
         result = evaluator.get_type(val)
+        self.assertEqual(expected, result)
+
+    def test_get_description_pairlow_returns2s(self):
+        h = pokerhands.pair_low()
+        val = evaluator.get_value(h)
+        expected = '2\'s'
+        result = evaluator.get_description(val, h)
         self.assertEqual(expected, result)
 
     # Draws
