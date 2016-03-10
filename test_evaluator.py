@@ -28,6 +28,16 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.is_validhand(h)
         self.assertEqual(expected, result)
 
+    def test_gettype_negativevalue_raiseEx(self):
+        self.assertRaises(ValueError, evaluator.get_type, -1)
+
+    def test_gettype_1000000000000_raiseEx(self):
+        self.assertRaises(ValueError, evaluator.get_type, 1000000000000)
+
+
+
+    #  def test_get_description_(self):
+
     #  def test_findbesthand_7cardstraightflush_returnsROYALFLUSH(self):
         # besthand = ev.find_best_hand(group)
 

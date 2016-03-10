@@ -29,13 +29,16 @@ HANDTYPES = {
 
 def get_type(value):
     # Determine the hand given the numerical value
-    roundedval = round(value, -10)
+    if value < 0:
+        raise ValueError('get_type() cannot accept negative numbers!')
+    else:
+        roundedval = round(value, -10)
 
     for v in HANDTYPES:
         if HANDTYPES[v] == roundedval:
             return v
     else:
-        return 'Type error: Cannot find type!'
+        raise ValueError('Type error: Cannot find type!')
 
 
 def get_description(value, cards):
