@@ -136,47 +136,54 @@ def score(cards):
     return score
 
 
+def process_nonpairhands(cards, sortedranks):
+    # Non pair-type hands
+    if is_flush(cards):
+        if is_straight(cards):
+            if cards[0].rank == 'T':
+                return HANDTYPES['ROYAL FLUSH']
+            elif cards[0].rank == '2':
+                return HANDTYPES['STRAIGHT FLUSH']
+            else:
+                return HANDTYPES['STRAIGHT FLUSH'] \
+                    + card.RANKS[sortedranks[4][1]] * MULTIPLIERS[0]
+        else:
+            return HANDTYPES['FLUSH'] + score(sortedranks)
+    elif is_straight(cards):
+        if cards[0].rank == '2':
+            return HANDTYPES['STRAIGHT']
+        else:
+            return HANDTYPES['STRAIGHT'] + score(sortedranks)
+    else:
+        return HANDTYPES['HIGH CARD'] + score(sortedranks)
+
+
+def process_pairhands(sortedranks):
+    if sortedranks[0][0] == 4:
+        return HANDTYPES['QUADS'] + score(sortedranks)
+    elif sortedranks[0][0] == 3 and sortedranks[1][0] == 2:
+        return HANDTYPES['FULL HOUSE'] + score(sortedranks)
+    elif sortedranks[0][0] == 3 and sortedranks[1][0] == 1:
+        return HANDTYPES['TRIPS'] + score(sortedranks)
+    elif sortedranks[0][0] == 2 and sortedranks[1][0] == 2:
+        return HANDTYPES['TWO PAIR'] + score(sortedranks)
+    elif sortedranks[0][0] == 2 and sortedranks[1][0] == 1:
+        return HANDTYPES['PAIR'] + score(sortedranks)
+
+
 def get_value(cards):
     """
     Calculate the type of hand and return its integer value.
     """
     cards = sorted(cards, key=lambda x: card.RANKS[x.rank])
-    sorted_values = sort_ranks(cards)
+    sortedranks = sort_ranks(cards)
 
-    if len(sorted_values) == 5:
-        # Non pair-type hands
-        if is_flush(cards):
-            if is_straight(cards):
-                if cards[0].rank == 'T':
-                    return HANDTYPES['ROYAL FLUSH']
-                elif cards[0].rank == '2':
-                    return HANDTYPES['STRAIGHT FLUSH']
-                else:
-                    return HANDTYPES['STRAIGHT FLUSH'] \
-                        + card.RANKS[sorted_values[4][1]] * MULTIPLIERS[0]
-            else:
-                return HANDTYPES['FLUSH'] + score(sorted_values)
-        elif is_straight(cards):
-            if cards[0].rank == '2':
-                return HANDTYPES['STRAIGHT']
-            else:
-                return HANDTYPES['STRAIGHT'] + score(sorted_values)
-        else:
-            return HANDTYPES['HIGH CARD'] + score(sorted_values)
-
-    elif len(sorted_values) > 1:
-        if sorted_values[0][0] == 4:
-            return HANDTYPES['QUADS'] + score(sorted_values)
-        elif sorted_values[0][0] == 3 and sorted_values[1][0] == 2:
-            return HANDTYPES['FULL HOUSE'] + score(sorted_values)
-        elif sorted_values[0][0] == 3 and sorted_values[1][0] == 1:
-            return HANDTYPES['TRIPS'] + score(sorted_values)
-        elif sorted_values[0][0] == 2 and sorted_values[1][0] == 2:
-            return HANDTYPES['TWO PAIR'] + score(sorted_values)
-        elif sorted_values[0][0] == 2 and sorted_values[1][0] == 1:
-            return HANDTYPES['PAIR'] + score(sorted_values)
-
-    return HANDTYPES['INVALID']
+    if len(sortedranks) == 5:
+        return process_nonpairhands(cards, sortedranks)
+    elif len(sortedranks) > 1:
+        return process_pairhands(sortedranks)
+    else:
+        return HANDTYPES['INVALID']
 
 
 def get_longest_suit(cards):
