@@ -1,3 +1,4 @@
+import card
 import unittest
 import evaluator
 import pokerhands
@@ -40,7 +41,31 @@ class TestEvaluator(unittest.TestCase):
     def test_gettype_1000000000000_raiseEx(self):
         self.assertRaises(ValueError, evaluator.get_type, 1000000000000)
 
+    def test_is_set_royalflush_returnsTrue(self):
+        h = pokerhands.royalflush()
+        expected = True
+        result = evaluator.is_set(h)
+        self.assertEqual(expected, result)
 
+    def test_is_set_handwithdupes_returnsFalse(self):
+        h = pokerhands.deal_duplicates()
+        expected = False
+        result = evaluator.is_set(h)
+        self.assertEqual(expected, result)
+
+    def test_is_set_1card_returnsTrue(self):
+        c = card.Card('A', 'S')
+        h = [c]
+        expected = True
+        result = evaluator.is_set(h)
+        self.assertEqual(expected, result)
+
+    def test_is_set_2As_returnsFalse(self):
+        c = card.Card('A', 'S')
+        h = [c, c]
+        expected = False
+        result = evaluator.is_set(h)
+        self.assertEqual(expected, result)
 
     #  def test_get_description_(self):
 
