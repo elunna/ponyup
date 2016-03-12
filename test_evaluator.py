@@ -54,22 +54,177 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_is_set_1card_returnsTrue(self):
-        c = card.Card('A', 'S')
+        c = card.Card('A', 's')
         h = [c]
         expected = True
         result = evaluator.is_set(h)
         self.assertEqual(expected, result)
 
     def test_is_set_2As_returnsFalse(self):
-        c = card.Card('A', 'S')
+        c = card.Card('A', 's')
         h = [c, c]
         expected = False
         result = evaluator.is_set(h)
         self.assertEqual(expected, result)
 
-    #  def test_get_description_(self):
+    def test_dominantsuit_1card_returnssuit(self):
+        cards = [card.Card('A', 's')]
+        expected = 's'
+        result = evaluator.dominant_suit(cards)
+        self.assertEqual(expected, result)
+
+    def test_dominantsuit_2diffranks_returnshigherrank(self):
+        cards = []
+        cards.append(card.Card('A', 's'))
+        cards.append(card.Card('K', 'c'))
+        expected = 's'
+        result = evaluator.dominant_suit(cards)
+        self.assertEqual(expected, result)
+
+    def test_dominantsuit_3diffranks_returnshigherrank(self):
+        cards = []
+        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('A', 's'))
+        cards.append(card.Card('Q', 'h'))
+        expected = 's'
+        result = evaluator.dominant_suit(cards)
+        self.assertEqual(expected, result)
+
+    def test_dominantsuit_4diffranks_returnshigherrank(self):
+        cards = []
+        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('A', 's'))
+        cards.append(card.Card('J', 'd'))
+        cards.append(card.Card('Q', 'h'))
+        expected = 's'
+        result = evaluator.dominant_suit(cards)
+        self.assertEqual(expected, result)
+
+    def test_dominantsuit_3cards2suitedSpades_returnsSpades(self):
+        cards = []
+        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('A', 's'))
+        cards.append(card.Card('Q', 's'))
+        expected = 's'
+        result = evaluator.dominant_suit(cards)
+        self.assertEqual(expected, result)
+
+    """
+    def test_dominantsuit_2sameranks_returns(self):
+        cards = []
+        cards.append(card.Card('A', 's'))
+        cards.append(card.Card('K', 'c'))
+        expected = 's'
+        result = evaluator.dominant_suit(cards)
+        self.assertEqual(expected, result)
+    """
+
+    def test_countsuit_nospade_returns0(self):
+        cards = []
+        cards.append(card.Card('K', 'c'))
+        expected = 0
+        result = evaluator.count_suit(cards, 's')
+        self.assertEqual(expected, result)
+
+    def test_countsuit_1spade_returns1(self):
+        cards = []
+        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('A', 's'))
+        expected = 1
+        result = evaluator.count_suit(cards, 's')
+        self.assertEqual(expected, result)
+
+    def test_rank_dict_0Ace_counts0(self):
+        cards = []
+        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('2', 's'))
+        expected = 0
+        rankdict = evaluator.rank_dict(cards)
+        # 0 is the default in case there are no Aces
+        result = rankdict.get('A', 0)
+        self.assertEqual(expected, result)
+
+    def test_rank_dict_1Ace_counts1(self):
+        cards = []
+        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('A', 's'))
+        expected = 1
+        rankdict = evaluator.rank_dict(cards)
+        result = rankdict.get('A')
+        self.assertEqual(expected, result)
+
+    def test_rank_dict_2Aces_counts2(self):
+        cards = []
+        cards.append(card.Card('A', 'h'))
+        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('A', 's'))
+        expected = 2
+        rankdict = evaluator.rank_dict(cards)
+        result = rankdict.get('A')
+        self.assertEqual(expected, result)
+
+    #  def test_sortedranks_tolist
+
+    def test_suitdict_0Spades_counts0(self):
+        cards = []
+        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('2', 'h'))
+        expected = 0
+        suitdict = evaluator.suit_dict(cards)
+        # 0 is the default in case there are no Aces
+        result = suitdict.get('s', 0)
+        self.assertEqual(expected, result)
+
+    def test_suitdict_1Spade_counts1(self):
+        cards = []
+        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('A', 's'))
+        expected = 1
+        suitdict = evaluator.suit_dict(cards)
+        result = suitdict.get('s')
+        self.assertEqual(expected, result)
+
+    def test_suitedcarddict_0Spades_listlenEquals0(self):
+        cards = []
+        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('2', 'h'))
+        expected = 0
+        suitdict = evaluator.suitedcard_dict(cards)
+        # Empty list is the default in case there are no Aces
+        result = len(suitdict.get('s', []))
+        self.assertEqual(expected, result)
+
+    def test_suitedcarddict_1Spade_listlenEquals1(self):
+        cards = []
+        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('A', 's'))
+        expected = 1
+        suitdict = evaluator.suitedcard_dict(cards)
+        # Empty list is the default in case there are no Aces
+        result = len(suitdict.get('s', []))
+        self.assertEqual(expected, result)
+
+    def test_score_unsortedlist_1Ace_returns14(self):
+        cards = [card.Card('A', 's')]
+        expected = 14
+        result = evaluator.score_unsortedlist(cards)
+        self.assertEqual(expected, result)
+
+    #  suit_dict
+
+    #  score
+
+    # get_value
+    # get_gap
+    # get_allgaps
+    # find_best_hand
+    # pop_ranks
+    # pop_suits
+
+    # is_flush
+    # is_straight
 
     #  def test_findbesthand_7cardstraightflush_returnsROYALFLUSH(self):
-        # besthand = ev.find_best_hand(group)
+    # besthand = ev.find_best_hand(group)
 
-        # Test description?
+    # Test description?

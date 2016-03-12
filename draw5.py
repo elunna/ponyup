@@ -97,7 +97,7 @@ def auto_discard(hand):
     DIS_RANKS = ['PAIR', 'TRIPS', 'QUADS']
     discard = []
 
-    h = ev.sort_ranks(hand.cards)
+    h = ev.rank_dict(hand.cards)
 
     if hand.handrank in PAT_HANDS:
         pass
@@ -116,7 +116,7 @@ def auto_discard(hand):
         copy = sorted(hand.cards[:])
 
         # Test for flush draw
-        maxsuit, qty = ev.get_longest_suit(copy)
+        maxsuit, qty = ev.dominant_suit(copy)
 
         if qty == 4:
             discard = ev.pop_suits(copy, maxsuit)

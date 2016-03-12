@@ -46,7 +46,7 @@ def get_description(value, cards):
 
     Note: May want to refactor to only take a list of cards.
     """
-    ranks = sort_ranks(cards)
+    ranks = rank_dict(cards)
     ctype = get_type(value)
 
     if ctype in ['STRAIGHT', 'STRAIGHT FLUSH']:
@@ -92,11 +92,10 @@ def is_set(itemlist):
         return True
 
 
-def sort_ranks(cards):
+def rank_dict(cards):
     """
-    Returns a list of quantity/rank pairs by first making a dictionary
-    and then converting it to a list and sorting it by rank.
-    Note: Potentially could make into a list comp
+    # Returns a dictionary of quantity/rank pair counts.
+
     """
     ranks = {}
     for c in cards:
@@ -105,14 +104,23 @@ def sort_ranks(cards):
         else:
             ranks[c.rank] = 1
 
+    return ranks
+
+
+def rankdict_tolist(rankdict):
+    """
+    Returns a list of quantity/rank pairs by first making a dictionary
+    and then converting it to a list and sorting it by rank.
+    Note: Potentially could make into a list comp
+    """
     L = []
-    for r in ranks:
-        L.append((ranks[r], r))
+    for r in rankdict:
+        L.append((rankdict[r], r))
 
     return sorted(L, key=lambda x: (-x[0], -card.RANKS[x[1]]))
 
 
-def sort_suits(cards):
+def suit_dict(cards):
     """
     # Returns a dictionary of quantity/suit pair counts.
     """
@@ -125,6 +133,21 @@ def sort_suits(cards):
     return suits
 
 
+def suitedcard_dict(cards):
+    """
+    Returns a dictionary of suits and card lists. Useful for dividing a list of cards
+    into all the separate suits.
+    """
+    suits = {}
+    for c in cards:
+        if c.suit in suits:
+            suits[c.suit].append(c)
+        else:
+            suits[c.suit] = []
+            suits[c.suit].append(c)
+    return suits
+
+
 def score(cards):
     """
     Calculates and returns the score of a sorted list of 5 cards.
@@ -133,6 +156,21 @@ def score(cards):
     score = 0
     for i, c in enumerate(cards):
         score += card.RANKS[c[1]] * MULTIPLIERS[i]
+    return score
+
+
+def score_unsortedlist(cards):
+    """
+    Calculates and returns the score of a sorted list of 5 cards.
+    Precondition:  Hand should be ordered by highest value first, lowest last
+    """
+    score = 0
+    for i, c in enumerate(sorted(cards)):
+        if i > 0:
+            multiplier = 10 ** (i * 2)
+        else:
+            multiplier = 1
+        score += card.RANKS[c.rank] * multiplier
     return score
 
 
@@ -176,7 +214,7 @@ def get_value(cards):
     Calculate the type of hand and return its integer value.
     """
     cards = sorted(cards, key=lambda x: card.RANKS[x.rank])
-    sortedranks = sort_ranks(cards)
+    sortedranks = rank_dict(cards)
 
     if len(sortedranks) == 5:
         return process_nonpairhands(cards, sortedranks)
@@ -186,16 +224,49 @@ def get_value(cards):
         return HANDTYPES['INVALID']
 
 
-def get_longest_suit(cards):
+def dominant_suit(cards):
     """
     Looks at all the cards in a list and finds which suit occurs with the greatest
-    frequency. Returns the suit and number of occurences.
+    frequency. If there are an equal # of suits between cards, count the higher ranked cards.
+    If a tie is further needed to be broken because the suited cards are the same rank,
+    break the tie by using the traditional ranking of suits.
     """
-    suitdict = sort_suits(cards)
-    maxsuit = max(suitdict.keys(), key=(lambda k: suitdict[k]))
 
-    # Return both the most common suit and the number of occurrences.
-    return maxsuit, suitdict[maxsuit]
+    # First create a dictionary to count the suits
+    suitdict = suitedcard_dict(cards)
+
+    domcount = 0
+
+    # Find the count of the most dominant suit in the list.
+    for s in suitdict:
+        cardsofsuit = len(suitdict[s])
+        if cardsofsuit > domcount:
+            domcount = cardsofsuit
+
+    # Count how many ties there are.
+    tied = [s for s in suitdict if len(suitdict[s]) == domcount]
+
+    if len(tied) == 1:
+        return tied.pop()
+    else:
+        # We have to find the more dominant suit by comparing ranks
+        highscore = 0
+        highsuit = None
+
+        for s in tied:
+            score = score_unsortedlist(suitdict[s])
+            if score > highscore:
+                highscore = score
+                highsuit = s
+        return highsuit
+
+
+def count_suit(cards, suit):
+    count = 0
+    for c in cards:
+        if c.suit == suit:
+            count += 1
+    return count
 
 
 def get_gap(card1, card2):
@@ -280,7 +351,7 @@ def is_flush(cards):
     if len(cards) > 5:
         ValueError('Hand is too large to measure!')
 
-    suitdict = sort_suits(cards)
+    suitdict = suit_dict(cards)
     maxsuit = max(suitdict.keys(), key=(lambda k: suitdict[k]))
     return suitdict[maxsuit] == 5
 
