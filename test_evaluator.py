@@ -109,15 +109,15 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.dominant_suit(cards)
         self.assertEqual(expected, result)
 
-    """
-    def test_dominantsuit_2sameranks_returns(self):
+    def test_dominantsuit_HigherSpades_returnsSpades(self):
         cards = []
+        cards.append(card.Card('A', 'c'))
+        cards.append(card.Card('K', 's'))
         cards.append(card.Card('A', 's'))
-        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('Q', 'c'))
         expected = 's'
         result = evaluator.dominant_suit(cards)
         self.assertEqual(expected, result)
-    """
 
     def test_countsuit_nospade_returns0(self):
         cards = []
