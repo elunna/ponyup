@@ -46,7 +46,7 @@ def get_description(value, cards):
 
     Note: May want to refactor to only take a list of cards.
     """
-    ranks = rank_dict(cards)
+    ranks = rankdict_tolist(rank_dict(cards))
     ctype = get_type(value)
 
     if ctype in ['STRAIGHT', 'STRAIGHT FLUSH']:
@@ -215,6 +215,7 @@ def get_value(cards):
     """
     cards = sorted(cards, key=lambda x: card.RANKS[x.rank])
     sortedranks = rank_dict(cards)
+    sortedranks = rankdict_tolist(sortedranks)
 
     if len(sortedranks) == 5:
         return process_nonpairhands(cards, sortedranks)
