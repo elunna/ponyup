@@ -204,13 +204,23 @@ class TestEvaluator(unittest.TestCase):
         result = len(suitdict.get('s', []))
         self.assertEqual(expected, result)
 
-    def test_score_unsortedlist_1Ace_returns14(self):
+    def test_score_unsortedlist_A_returns14(self):
         cards = [card.Card('A', 's')]
         expected = 14
         result = evaluator.score_unsortedlist(cards)
         self.assertEqual(expected, result)
 
-    #  suit_dict
+    def test_score_unsortedlist_AK_returns1413(self):
+        cards = [card.Card('A', 's'), card.Card('K', 's')]
+        expected = 1413
+        result = evaluator.score_unsortedlist(cards)
+        self.assertEqual(expected, result)
+
+    def test_score_unsortedlist_AKQ_returns141312(self):
+        cards = [card.Card('A', 's'), card.Card('K', 's'), card.Card('Q', 's')]
+        expected = 141312
+        result = evaluator.score_unsortedlist(cards)
+        self.assertEqual(expected, result)
 
     #  score
 
