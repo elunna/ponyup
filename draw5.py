@@ -97,7 +97,7 @@ def auto_discard(hand):
     DIS_RANKS = ['PAIR', 'TRIPS', 'QUADS']
     discard = []
 
-    h = ev.rankdict_tolist(ev.rank_dict(hand.cards))
+    h = ev.rank_list(hand.cards)
 
     if hand.handrank in PAT_HANDS:
         pass

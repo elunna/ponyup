@@ -134,7 +134,7 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.count_suit(cards, 's')
         self.assertEqual(expected, result)
 
-    def test_rank_dict_0Ace_counts0(self):
+    def test_rankdict_0Ace_counts0(self):
         cards = []
         cards.append(card.Card('K', 'c'))
         cards.append(card.Card('2', 's'))
@@ -144,7 +144,7 @@ class TestEvaluator(unittest.TestCase):
         result = rankdict.get('A', 0)
         self.assertEqual(expected, result)
 
-    def test_rank_dict_1Ace_counts1(self):
+    def test_rankdict_1Ace_counts1(self):
         cards = []
         cards.append(card.Card('K', 'c'))
         cards.append(card.Card('A', 's'))
@@ -153,7 +153,7 @@ class TestEvaluator(unittest.TestCase):
         result = rankdict.get('A')
         self.assertEqual(expected, result)
 
-    def test_rank_dict_2Aces_counts2(self):
+    def test_rankdict_2Aces_counts2(self):
         cards = []
         cards.append(card.Card('A', 'h'))
         cards.append(card.Card('K', 'c'))
@@ -162,8 +162,6 @@ class TestEvaluator(unittest.TestCase):
         rankdict = evaluator.rank_dict(cards)
         result = rankdict.get('A')
         self.assertEqual(expected, result)
-
-    #  def test_sortedranks_tolist
 
     def test_suitdict_0Spades_counts0(self):
         cards = []
@@ -204,27 +202,31 @@ class TestEvaluator(unittest.TestCase):
         result = len(suitdict.get('s', []))
         self.assertEqual(expected, result)
 
-    def test_score_unsortedlist_A_returns14(self):
+    def test_scoreunsortedlist_A_returns14(self):
         cards = [card.Card('A', 's')]
         expected = 14
-        result = evaluator.score_unsortedlist(cards)
+        result = evaluator.score_cardlist(cards)
         self.assertEqual(expected, result)
 
-    def test_score_unsortedlist_AK_returns1413(self):
+    def test_scoreunsortedlist_AK_returns1413(self):
         cards = [card.Card('A', 's'), card.Card('K', 's')]
         expected = 1413
-        result = evaluator.score_unsortedlist(cards)
+        result = evaluator.score_cardlist(cards)
         self.assertEqual(expected, result)
 
-    def test_score_unsortedlist_AKQ_returns141312(self):
+    def test_scorecardlist_AKQ_returns141312(self):
         cards = [card.Card('A', 's'), card.Card('K', 's'), card.Card('Q', 's')]
         expected = 141312
-        result = evaluator.score_unsortedlist(cards)
+        result = evaluator.score_cardlist(cards)
         self.assertEqual(expected, result)
 
-    #  score
+    def test_scoreranklist_A_return14(self):
+        cards = [card.Card('A', 's')]
+        expected = 14 * evaluator.MULTIPLIERS[0]
+        rd = evaluator.rank_list(cards)
+        result = evaluator.score_ranklist(rd)
+        self.assertEqual(expected, result)
 
-    # get_value
     # get_gap
     # get_allgaps
     # find_best_hand
@@ -237,4 +239,4 @@ class TestEvaluator(unittest.TestCase):
     #  def test_findbesthand_7cardstraightflush_returnsROYALFLUSH(self):
     # besthand = ev.find_best_hand(group)
 
-    # Test description?
+    # get_value

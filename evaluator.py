@@ -46,7 +46,7 @@ def get_description(value, cards):
 
     Note: May want to refactor to only take a list of cards.
     """
-    ranks = rankdict_tolist(rank_dict(cards))
+    ranks = rank_list(cards)
     ctype = get_type(value)
 
     if ctype in ['STRAIGHT', 'STRAIGHT FLUSH']:
@@ -93,29 +93,22 @@ def is_set(itemlist):
 
 
 def rank_dict(cards):
-    """
-    # Returns a dictionary of quantity/rank pair counts.
-
-    """
     ranks = {}
     for c in cards:
         if c.rank in ranks:
             ranks[c.rank] += 1
         else:
             ranks[c.rank] = 1
-
     return ranks
 
 
-def rankdict_tolist(rankdict):
+def rank_list(cards):
     """
     Returns a list of quantity/rank pairs by first making a dictionary
     and then converting it to a list and sorting it by rank.
-    Note: Potentially could make into a list comp
     """
-    L = []
-    for r in rankdict:
-        L.append((rankdict[r], r))
+    ranks = rank_dict(cards)
+    L = [(ranks[r], r) for r in ranks]
 
     return sorted(L, key=lambda x: (-x[0], -card.RANKS[x[1]]))
 
@@ -148,18 +141,18 @@ def suitedcard_dict(cards):
     return suits
 
 
-def score(cards):
+def score_ranklist(rankdict):
     """
     Calculates and returns the score of a sorted list of 5 cards.
     Precondition:  Hand should be ordered by highest value first, lowest last
     """
     score = 0
-    for i, c in enumerate(cards):
+    for i, c in enumerate(rankdict):
         score += card.RANKS[c[1]] * MULTIPLIERS[i]
     return score
 
 
-def score_unsortedlist(cards):
+def score_cardlist(cards):
     """
     Calculates and returns the score of a sorted list of 5 cards.
     Precondition:  Hand should be ordered by highest value first, lowest last
@@ -186,27 +179,27 @@ def process_nonpairhands(cards, sortedranks):
                 return HANDTYPES['STRAIGHT FLUSH'] \
                     + card.RANKS[sortedranks[4][1]] * MULTIPLIERS[0]
         else:
-            return HANDTYPES['FLUSH'] + score(sortedranks)
+            return HANDTYPES['FLUSH'] + score_ranklist(sortedranks)
     elif is_straight(cards):
         if cards[0].rank == '2':
             return HANDTYPES['STRAIGHT']
         else:
-            return HANDTYPES['STRAIGHT'] + score(sortedranks)
+            return HANDTYPES['STRAIGHT'] + score_ranklist(sortedranks)
     else:
-        return HANDTYPES['HIGH CARD'] + score(sortedranks)
+        return HANDTYPES['HIGH CARD'] + score_ranklist(sortedranks)
 
 
 def process_pairhands(sortedranks):
     if sortedranks[0][0] == 4:
-        return HANDTYPES['QUADS'] + score(sortedranks)
+        return HANDTYPES['QUADS'] + score_ranklist(sortedranks)
     elif sortedranks[0][0] == 3 and sortedranks[1][0] == 2:
-        return HANDTYPES['FULL HOUSE'] + score(sortedranks)
+        return HANDTYPES['FULL HOUSE'] + score_ranklist(sortedranks)
     elif sortedranks[0][0] == 3 and sortedranks[1][0] == 1:
-        return HANDTYPES['TRIPS'] + score(sortedranks)
+        return HANDTYPES['TRIPS'] + score_ranklist(sortedranks)
     elif sortedranks[0][0] == 2 and sortedranks[1][0] == 2:
-        return HANDTYPES['TWO PAIR'] + score(sortedranks)
+        return HANDTYPES['TWO PAIR'] + score_ranklist(sortedranks)
     elif sortedranks[0][0] == 2 and sortedranks[1][0] == 1:
-        return HANDTYPES['PAIR'] + score(sortedranks)
+        return HANDTYPES['PAIR'] + score_ranklist(sortedranks)
 
 
 def get_value(cards):
@@ -214,8 +207,7 @@ def get_value(cards):
     Calculate the type of hand and return its integer value.
     """
     cards = sorted(cards, key=lambda x: card.RANKS[x.rank])
-    sortedranks = rank_dict(cards)
-    sortedranks = rankdict_tolist(sortedranks)
+    sortedranks = rank_list(cards)
 
     if len(sortedranks) == 5:
         return process_nonpairhands(cards, sortedranks)
@@ -255,7 +247,7 @@ def dominant_suit(cards):
         highsuit = None
 
         for s in tied:
-            score = score_unsortedlist(suitdict[s])
+            score = score_cardlist(suitdict[s])
             if score > highscore:
                 highscore = score
                 highsuit = s
