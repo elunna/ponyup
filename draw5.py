@@ -3,6 +3,7 @@
 from __future__ import print_function
 import pokerhands
 import evaluator as ev
+import cardlist
 import hand
 import card
 import os
@@ -97,19 +98,19 @@ def auto_discard(hand):
     DIS_RANKS = ['PAIR', 'TRIPS', 'QUADS']
     discard = []
 
-    h = ev.rank_list(hand.cards)
+    h = cardlist.rank_list(hand.cards)
 
     if hand.handrank in PAT_HANDS:
         pass
     elif hand.handrank in DIS_RANKS:
         #  standard discard
         highcards = h[0][1]
-        discard = ev.pop_ranks(hand.cards, highcards)
+        discard = cardlist.pop_ranks(hand.cards, highcards)
     elif hand.handrank == 'TWO PAIR':
         # Keep the twp pair, discard 1.
         highcards = h[0][1] + h[1][1]
 
-        discard = ev.pop_ranks(hand.cards, highcards)
+        discard = cardlist.pop_ranks(hand.cards, highcards)
 
     elif hand.handrank == 'HIGH CARD':
         # Draws
