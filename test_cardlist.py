@@ -237,6 +237,38 @@ class TestCardList(unittest.TestCase):
     """
     Tests for get_allgaps(cards)
     """
+    def test_getallgaps_1card_returns0(self):
+        cards = []
+        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('A', 's'))
+        expected = 0
+        result = cardlist.get_allgaps(cards)
+        self.assertEqual(expected, result)
+
+    def test_getallgaps_2connected_returns0(self):
+        cards = []
+        cards.append(card.Card('K', 'c'))
+        cards.append(card.Card('A', 's'))
+        expected = 0
+        result = cardlist.get_allgaps(cards)
+        self.assertEqual(expected, result)
+
+    def test_getallgaps_2cards1gap_returns1(self):
+        cards = []
+        cards.append(card.Card('Q', 'c'))
+        cards.append(card.Card('A', 's'))
+        expected = 1
+        result = cardlist.get_allgaps(cards)
+        self.assertEqual(expected, result)
+
+    def test_getallgaps_3cards1gap_returns1(self):
+        cards = []
+        cards.append(card.Card('T', 'c'))
+        cards.append(card.Card('J', 's'))
+        cards.append(card.Card('K', 's'))
+        expected = 1
+        result = cardlist.get_allgaps(cards)
+        self.assertEqual(expected, result)
 
     """
     Tests for pop_ranks(cards, ranks)
