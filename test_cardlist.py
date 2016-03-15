@@ -80,19 +80,49 @@ class TestCardList(unittest.TestCase):
     Tests for rank_list(cards)
     """
     def test_ranklist_1Ace_lenEquals1(self):
-        pass
+        cards = []
+        cards.append(card.Card('A', 's'))
+        expected = 1
+        ranklist = cardlist.rank_list(cards)
+        result = len(ranklist)
+        self.assertEqual(expected, result)
 
     def test_ranklist_1Ace_1AceCounted(self):
-        pass
+        cards = []
+        cards.append(card.Card('A', 's'))
+        ranklist = cardlist.rank_list(cards)
+        expected_qty = ranklist[0][0]
+        expected_rank = ranklist[0][1]
+        self.assertTrue(
+            expected_qty == 1, expected_rank == 'A')
 
     def test_ranklist_2Aces_lenEquals1(self):
-        pass
+        cards = []
+        cards.append(card.Card('A', 's'))
+        cards.append(card.Card('A', 'h'))
+        expected = 1
+        ranklist = cardlist.rank_list(cards)
+        result = len(ranklist)
+        self.assertEqual(expected, result)
 
     def test_ranklist_2Aces_2AcesCounted(self):
-        pass
+        cards = []
+        cards.append(card.Card('A', 's'))
+        cards.append(card.Card('A', 'h'))
+        ranklist = cardlist.rank_list(cards)
+        expected_qty = ranklist[0][0]
+        expected_rank = ranklist[0][1]
+        self.assertTrue(
+            expected_qty == 2, expected_rank == 'A')
 
-    def test_ranklist_AK_lenEquals2Contains1Ace1King(self):
-        pass
+    def test_ranklist_AK_lenEquals2(self):
+        cards = []
+        cards.append(card.Card('A', 's'))
+        cards.append(card.Card('K', 'h'))
+        expected = 2
+        ranklist = cardlist.rank_list(cards)
+        result = len(ranklist)
+        self.assertEqual(expected, result)
 
     """
     Tests for suit_dict(cards)
