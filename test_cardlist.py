@@ -169,6 +169,40 @@ class TestCardList(unittest.TestCase):
     """
     Tests for get_gap(card1, card2)
     """
+    def test_getgap_23_returns0(self):
+        c1 = card.Card('2', 's')
+        c2 = card.Card('3', 's')
+        expected = 0
+        result = cardlist.get_gap(c1, c2)
+        self.assertEqual(expected, result)
+
+    def test_getgap_32_returns0(self):
+        c1 = card.Card('2', 's')
+        c2 = card.Card('3', 's')
+        expected = 0
+        result = cardlist.get_gap(c2, c1)
+        self.assertEqual(expected, result)
+
+    def test_getgap_24_returns1(self):
+        c1 = card.Card('2', 's')
+        c2 = card.Card('4', 's')
+        expected = 1
+        result = cardlist.get_gap(c2, c1)
+        self.assertEqual(expected, result)
+
+    def test_getgap_2A_returns11(self):
+        c1 = card.Card('2', 's')
+        c2 = card.Card('A', 's')
+        expected = 11
+        result = cardlist.get_gap(c1, c2)
+        self.assertEqual(expected, result)
+
+    def test_getgap_22_returnsNeg1(self):
+        c1 = card.Card('2', 's')
+        c2 = card.Card('2', 'c')
+        expected = -1
+        result = cardlist.get_gap(c1, c2)
+        self.assertEqual(expected, result)
 
     """
     Tests for get_allgaps(cards)
