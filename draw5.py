@@ -105,12 +105,12 @@ def auto_discard(hand):
     elif hand.handrank in DIS_RANKS:
         #  standard discard
         highcards = h[0][1]
-        discard = cardlist.pop_ranks(hand.cards, highcards)
+        discard = cardlist.strip_ranks(hand.cards, highcards)
     elif hand.handrank == 'TWO PAIR':
         # Keep the twp pair, discard 1.
         highcards = h[0][1] + h[1][1]
 
-        discard = cardlist.pop_ranks(hand.cards, highcards)
+        discard = cardlist.strip_ranks(hand.cards, highcards)
 
     elif hand.handrank == 'HIGH CARD':
         # Draws

@@ -271,9 +271,28 @@ class TestCardList(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for pop_ranks(cards, ranks)
+    Tests for strip_ranks(cards, ranks)
     """
+    def test_stripranks_stripAces_containsNoAces(self):
+        cards = []
+        ace = card.Card('A', 's')
+        king = card.Card('K', 'c')
+        cards.append(ace)
+        cards.append(king)
+        expected = False
+        result = ace in cardlist.strip_ranks(cards, ['A'])
+        self.assertEqual(expected, result)
+
+    def test_stripranks_stripAcesAndKings_containsNothing(self):
+        cards = []
+        ace = card.Card('A', 's')
+        king = card.Card('K', 'c')
+        cards.append(ace)
+        cards.append(king)
+        expected = []
+        result = cardlist.strip_ranks(cards, ['A', 'K'])
+        self.assertEqual(expected, result)
 
     """
-    Tests for pop_suits(cards, suit)
+    Tests for strip_suits(cards, suit)
     """

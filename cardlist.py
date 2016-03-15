@@ -104,7 +104,7 @@ def get_allgaps(cards):
     return gaps
 
 
-def pop_ranks(cards, ranks):
+def strip_ranks(cards, ranks):
     """
     Takes a list of cards and removes ALL BUT the rank(s) given.
     There can be more than one rank passed.
@@ -116,13 +116,13 @@ def pop_ranks(cards, ranks):
     return discard
 
 
-def pop_suits(cards, suit):
+def strip_suits(cards, suits):
     """
     Takes a list of cards and removes ALL BUT the suit given.
     There can only be one suit passed.
     """
     discard = []
     for c in cards:
-        if c.suit != suit:
+        if c.suit != suits:
             discard.append(c)
     return discard
