@@ -74,17 +74,15 @@ def dominant_suit(cards):
         return highsuit
 
 
-def is_flush(cards):
+def is_suited(cards):
     """
-    Returns True if the hand is a flush, False otherwise.
+    Returns True if all the cards in the list match the same suit.
     """
-
-    if len(cards) > 5:
-        ValueError('Hand is too large to measure!')
-
-    suitdict = cardlist.suit_dict(cards)
-    maxsuit = max(suitdict.keys(), key=(lambda k: suitdict[k]))
-    return suitdict[maxsuit] == 5
+    suit = cards[0].suit
+    for c in cards:
+        if c.suit != suit:
+            return False
+    return True
 
 
 def is_straight(cards):
@@ -189,7 +187,7 @@ def get_description(value, cards):
 
 def process_nonpairhands(cards, sortedranks):
     # Non pair-type hands
-    if is_flush(cards):
+    if is_suited(cards):
         if is_straight(cards):
             if cards[0].rank == 'T':
                 return HANDTYPES['ROYAL FLUSH']

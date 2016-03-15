@@ -95,8 +95,30 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for is_flush(cards)
+    Tests for is_suited(cards)
     """
+    def test_issuited_1card_returnsTrue(self):
+        cards = []
+        cards.append(card.Card('A', 's'))
+        expected = True
+        result = evaluator.is_suited(cards)
+        self.assertEqual(expected, result)
+
+    def test_issuited_2suitedcards_returnsTrue(self):
+        cards = []
+        cards.append(card.Card('A', 's'))
+        cards.append(card.Card('2', 's'))
+        expected = True
+        result = evaluator.is_suited(cards)
+        self.assertEqual(expected, result)
+
+    def test_issuited_2unsuitedcard_returnsFalse(self):
+        cards = []
+        cards.append(card.Card('A', 's'))
+        cards.append(card.Card('A', 'd'))
+        expected = False
+        result = evaluator.is_suited(cards)
+        self.assertEqual(expected, result)
 
     """
     Tests for is_straight(cards)
