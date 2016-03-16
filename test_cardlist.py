@@ -296,3 +296,26 @@ class TestCardList(unittest.TestCase):
     """
     Tests for strip_suits(cards, suit)
     """
+    def test_stripsuits_stripSpades_containsNoSpades(self):
+        cards = []
+        ace = card.Card('A', 's')
+        king = card.Card('K', 'c')
+        cards.append(ace)
+        cards.append(king)
+        cards = cardlist.strip_suits(cards, 's')
+        expected = 0
+        result = cardlist.count_suit(cards, 's')
+        self.assertEqual(expected, result)
+
+    def test_stripsuits_stripMultipleSuits_allSuitsWereStripped(self):
+        cards = []
+        ace = card.Card('A', 's')
+        king = card.Card('K', 'c')
+        queen = card.Card('Q', 'd')
+        cards.append(ace)
+        cards.append(king)
+        cards.append(queen)
+        cards = cardlist.strip_suits(cards, ['s', 'c'])
+        expected = 0
+        result = cardlist.count_suit(cards, 's') + cardlist.count_suit(cards, 'c')
+        self.assertEqual(expected, result)

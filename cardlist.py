@@ -123,6 +123,6 @@ def strip_suits(cards, suits):
     """
     discard = []
     for c in cards:
-        if c.suit != suits:
+        if c.suit not in suits:
             discard.append(c)
     return discard
