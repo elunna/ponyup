@@ -39,6 +39,17 @@ class TestDeck(unittest.TestCase):
         result = d.cards[0].rank
         self.assertEqual(expected, result)
 
+    def test_sort_3cards_deuceisfirst(self):
+        cards = []
+        cards.append(card.Card('A', 's'))
+        cards.append(card.Card('7', 's'))
+        cards.append(card.Card('2', 's'))
+        d = deck.Deck(cards)
+        d.sort()
+        expected = '2'
+        result = d.cards[0].rank
+        self.assertEqual(expected, result)
+
     """
     Tests for deal()
     """
@@ -47,6 +58,13 @@ class TestDeck(unittest.TestCase):
         d.deal()
         expected = 51
         result = len(d)
+        self.assertEqual(expected, result)
+
+    def test_deal_sorteddeck_dealsAs(self):
+        d = deck.Deck()
+        d.sort()
+        expected = card.Card('A', 's')
+        result = d.deal()
         self.assertEqual(expected, result)
 
     """
@@ -60,9 +78,29 @@ class TestDeck(unittest.TestCase):
         result = len(d)
         self.assertEqual(expected, result)
 
+    def test_remove_cardnotindeck_returnsNone(self):
+        d = deck.Deck()
+        c = card.Card('Z', 's')
+        expected = None
+        result = d.remove(c)
+        self.assertEqual(expected, result)
+
     """
     Tests for contains(card)
     """
+    def test_contains_AceSpadesinStandardDeck_returnsTrue(self):
+        d = deck.Deck()
+        c = card.Card('A', 's')
+        expected = True
+        result = d.contains(c)
+        self.assertEqual(expected, result)
+
+    def test_contains_JokerinStandardDeck_returnsFalse(self):
+        d = deck.Deck()
+        c = card.Card('Z', 's')
+        expected = False
+        result = d.contains(c)
+        self.assertEqual(expected, result)
 
     """
     Tests for __str__

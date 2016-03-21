@@ -26,6 +26,8 @@ class Deck():
     def remove(self, card):
         if card in self.cards:
             self.cards.remove(card)
+        else:
+            return None
 
     def contains(self, card):
         return card in self.cards
@@ -41,11 +43,13 @@ class Deck():
     def __len__(self):
         return len(self.cards)
 
+
 class Deck1Joker(Deck):
     def __init__(self):
         self.cards = standard_deck()
         joker = card.Card('Z', 's')
         self.cards.append(joker)
+
 
 class Deck2Joker(Deck):
     def __init__(self):
@@ -54,7 +58,6 @@ class Deck2Joker(Deck):
         joker2 = card.Card('Z', 'c')
         self.cards.append(joker1)
         self.cards.append(joker2)
-
 
 
 def standard_deck():
