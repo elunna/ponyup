@@ -1,4 +1,11 @@
 import random
+import re
+"""
+Rules for player names:
+    Must be 3 to 12 characters long.
+    Can contain special characters.
+    Cannot contain any non-ASCII characters or characters that do unusual things.
+"""
 
 names = ['Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'Mortensen',
          'Antonius', 'Harman', 'Ungar', 'Dwan', 'Greenstein', 'Chan', 'Moss', 'Ivey', 'Brunson',
@@ -29,3 +36,20 @@ def generate_random_namelist(num, full=True):
         else:
             nameset.append(None)
     return nameset
+
+
+def isValidName(name):
+    if len(name) < 3 or len(name) > 12:
+        return False
+    else:
+        return True
+
+
+def contains_surrounding_chars(username):
+    re1 = re.compile(r"[<>/{}[\]~`^'\\]")
+    if re1.search(username):
+        #  print ("RE1: Invalid char detected.")
+        return False
+    else:
+        #  print ("RE1: No invalid char detected.")
+        return True
