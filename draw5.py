@@ -59,7 +59,7 @@ def discard_phase(table, deck):
                 draw.hidden = False
                 print('{} '.format(draw), end='')
 
-            p.add(draw)
+            p.add_card(draw)
         print('')
     print('')
 
@@ -117,7 +117,8 @@ def auto_discard(hand):
         copy = sorted(hand.cards[:])
 
         # Test for flush draw
-        maxsuit, qty = ev.dominant_suit(copy)
+        maxsuit = ev.dominant_suit(copy)
+        qty = ev.count_suit(copy)
 
         if qty == 4:
             discard = ev.pop_suits(copy, maxsuit)

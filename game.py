@@ -5,6 +5,8 @@ import card
 import blinds
 import table
 
+STARTINGCHIPS = 1000
+
 
 class Game():
     """
@@ -20,6 +22,9 @@ class Game():
         self.blinds = stakes
         self.rounds = 1
         self._table = table.setup_table(tablesize, hero)
+        for p in self._table:
+            p.chips = STARTINGCHIPS
+
         self._table.randomize_button()
 
     def __str__(self):
@@ -82,7 +87,7 @@ class Round():
                 c = self.d.deal()
                 if faceup is True:
                     c.hidden = False
-                p.add(c)
+                p.add_card(c)
 
     def muck_all_cards(self):
         """
@@ -246,12 +251,12 @@ class Round():
 
         for w in winners:
             print('\t{} wins {} chips'.format(w, share))
-            w.win(share)
+            w.add_chips(share)
 
         if remainder > 0:
             r_winner = self.tbl.seats[self.tbl.next(self.tbl.btn)]
             print('\t{} wins {} remainder chips'.format(r_winner, remainder))
-            r_winner.win(remainder)
+            r_winner.add_chips(remainder)
 
     def post_antes(self):
         """ All players bet the ante amount and it's added to the pot"""
