@@ -122,6 +122,12 @@ class TestDeck(unittest.TestCase):
         result = d.contains(joker)
         self.assertEqual(expected, result)
 
+    def test_init_Deck2Joker_size54(self):
+        d = deck.Deck2Joker()
+        expected = 54
+        result = len(d)
+        self.assertEqual(expected, result)
+
     def test_init_Deck2Joker_containsZsZc(self):
         d = deck.Deck2Joker()
         joker1 = card.Card('Z', 's')
