@@ -1,23 +1,23 @@
 import re
 import hand
+import names
 import strategy
 
 
 class Player():
-    def __init__(self, name, _type="CPU", chips=500):
-        if isValidUsername(name):
+    def __init__(self, name, playertype="CPU"):
+        if names.isValidName(name):
             self.name = name
         else:
             raise ValueError('Invalid username "{}" for object!'.format(name))
 
-        if _type != 'HUMAN' and _type != 'CPU':
+        if playertype != 'HUMAN' and playertype != 'CPU':
             raise ValueError('Invalid player type passed!')
         else:
-            self.playertype = _type
+            self.playertype = playertype
 
         self.strategy = None
-
-        self.chips = chips
+        self.chips = 0
         self._hand = hand.Hand()
 
     def __str__(self):
@@ -26,17 +26,17 @@ class Player():
     def __repr__(self):
         return str(self)
 
-    def bet(self, bet):
-        if bet > self.chips:
+    def bet(self, amt):
+        if amt > self.chips:
             # Put the player all-in
-            bet = self.chips
+            amt = self.chips
             self.chips = 0
-            return bet
+            return amt
         else:
-            self.chips -= bet
-            return bet
+            self.chips -= amt
+            return amt
 
-    def win(self, amt):
+    def add_chips(self, amt):
         self.chips += amt
 
     def showhand(self):
@@ -48,7 +48,7 @@ class Player():
         return copy
 
     # hand management
-    def add(self, card):
+    def add_card(self, card):
         # Make sure we can see the card! (if we're human...)
         if self.playertype == 'HUMAN':
             card.hidden = False
@@ -71,78 +71,3 @@ class Player():
             if c.hidden == False:
                 upcards.append(c)
         return upcards
-
-
-def isValidUsername(username):
-    re1 = re.compile(r"[<>/{}[\]~`^'\\]")
-    if re1.search(username):
-        #  print ("RE1: Invalid char detected.")
-        return False
-    else:
-        #  print ("RE1: No invalid char detected.")
-        return True
-
-
-def test_newplayer(name):
-    try:
-        p = Player(name)
-        print(p)
-        print('')
-    except ValueError as e:
-        print(e)
-
-
-if __name__ == "__main__":
-    test_newplayer('Erik')
-    test_newplayer('Erik!')
-    test_newplayer('Erik@')
-    test_newplayer('Erik#')
-    test_newplayer('Erik$')
-    test_newplayer('Erik%')
-    test_newplayer('Erik^')
-    test_newplayer('Erik&')
-    test_newplayer('Erik*')
-    test_newplayer('Erik(')
-    test_newplayer('Erik)')
-    test_newplayer('Erik[')
-    test_newplayer('Erik]')
-    test_newplayer('Erik{')
-    test_newplayer('Erik}')
-    test_newplayer('Erik;')
-    test_newplayer('Erik:')
-    test_newplayer('Erik\'')
-    test_newplayer('Erik-')
-    test_newplayer('Erik_')
-    test_newplayer('Erik=')
-    test_newplayer('Erik+')
-    test_newplayer('Erik|')
-    test_newplayer('Erik\\')
-    test_newplayer('Erik/')
-    test_newplayer('Erik?')
-    test_newplayer('Erik.')
-    test_newplayer('Erik,')
-    test_newplayer('Erik<')
-    test_newplayer('Erik>')
-
-    print('#'*80)
-    p = Player('lunatunez')
-    print(p)
-    print('lunatunez stack = {}'.format(p.chips))
-    print('betting {}'.format(p.bet(100)))
-
-    print('lunatunez stack = {}'.format(p.chips))
-    print('Won {}'.format(p.win(500)))
-
-    print('lunatunez stack = {}'.format(p.chips))
-    print('betting {}'.format(p.win(100)))
-
-    print('lunatunez stack = {}'.format(p.chips))
-
-    print('betting {}'.format(p.bet(1000)))
-
-    print('lunatunez stack = {}'.format(p.chips))
-    print('')
-    print('Attempting to bet 1000')
-    print('betting {}'.format(p.bet(1000)))
-
-    print('lunatunez stack = {}'.format(p.chips))
