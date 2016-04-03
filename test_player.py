@@ -1,5 +1,7 @@
+import card
 import unittest
 import player
+import pokerhands
 
 
 class TestPlayer(unittest.TestCase):
@@ -108,20 +110,78 @@ class TestPlayer(unittest.TestCase):
     Tests for add_chips(amt)
     """
     # Adding 1 chip results in their stack being 1. Starting with 1.
+    def test_addchips_newplayer_add1chip_has1chip(self):
+        p = player.Player('Erik')
+        p.add_chips(1)
+        expected = 1
+        result = p.chips
+        self.assertEqual(expected, result)
+
     # Adding 0 chips results in no chips added.
+    def test_addchips_newplayer_add0chips_has0chip(self):
+        p = player.Player('Erik')
+        p.add_chips(0)
+        expected = 0
+        result = p.chips
+        self.assertEqual(expected, result)
 
     """
     Tests for showhand()
     """
     # A single hidden card is now not hidden.
+    def test_showhand_has1card_cardisup(self):
+        p = player.Player('Erik')
+        c = card.Card('A', 'S')
+        p.add_card(c)
+        p.showhand()
+        expected = False
+        result = p._hand.cards[0].hidden
+        self.assertEqual(expected, result)
+
     # A five card hand is not not hidden
+    def test_showhand_has5cards_allareup(self):
+        p = player.Player('Erik')
+        for c in pokerhands.royalflush():
+            p.add_card(c)
+        p.showhand()
+        expected = True
+        allup = True
+        for c in p._hand.cards:
+            if c.hidden is True:
+                allup = False
+                break
+        self.assertEqual(expected, allup)
 
     """
     Tests for fold()
     """
     # Folding 1 card. Player has no cards
+    def test_fold_1card_handisempty(self):
+        p = player.Player('Erik')
+        c = card.Card('A', 'S')
+        p.add_card(c)
+        p.fold()
+        expected = 0
+        result = len(p._hand)
+        self.assertEqual(expected, result)
+
     # Folding 1 card. Returns 1 card.
+    def test_fold_1card_return1card(self):
+        p = player.Player('Erik')
+        c = card.Card('A', 'S')
+        p.add_card(c)
+        h = p.fold()
+        expected = 1
+        result = len(h)
+        self.assertEqual(expected, result)
+
     # Folding 0 cards, Returns empty list.
+    def test_fold_0cards_returnEmptyList(self):
+        p = player.Player('Erik')
+        h = p.fold()
+        expected = 0
+        result = len(h)
+        self.assertEqual(expected, result)
 
     """
     Tests for add_card(card)
