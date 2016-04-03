@@ -38,7 +38,7 @@ def test(cards):
         c.hidden = False
 
     print('Cards: {}'.format(cards))
-    discard_combos = combos.get_combos_all_sizes(cards)
+    discard_combos = combos.get_allcombos(cards)
     print('Combos VS RANDOM HANDS!')
     print('{} Trials'.format(TRIALS))
 

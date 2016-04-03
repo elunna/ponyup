@@ -2,7 +2,7 @@
 
 from __future__ import print_function
 import deck
-import hand
+#  import hand
 import evaluator
 import itertools
 
@@ -41,39 +41,42 @@ def get_combolist(cards, n):
     return list(itertools.combinations(cards, n))
 
 
-def tally_handtypes(handlist):
+def get_allcombos(cards):
+    combos = []
+    maxsize = len(cards) + 1
+    for i in range(1, maxsize):
+        for c in list(get_combolist(cards, i)):
+            combos.append(c)
+    return combos
+
+
+def typecount_dict(handlist):
     """
     Takes in a list of hands and counts all the occurences of each type of hand and tallies
     it up in a dictionary. Returns the dictionary.
     """
     type_count = {}
 
-    for c in combosof5:
-        #  hands.append(hand.Hand(c))
-        h = hand.Hand(c)
-        rank = h.handrank
-        if rank not in type_count:
-            type_count[rank] = 1
+    for c in handlist:
+        v = evaluator.get_value(c)
+        t = evaluator.get_type(v)
+        #  h = hand.Hand(c)
+        #  rank = h.handrank
+        if t not in type_count:
+            type_count[t] = 1
         else:
-            type_count[rank] += 1
+            type_count[t] += 1
 
     return type_count
 
 
-def display_handtypes(type_count):
-    print('Results:')
-    for t in type_count:
-        print('{}: {}'.format(t, type_count[t]))
-
-
-def get_unique_5cardhands():
+def get_unique_5cardhands(combolist):
     # Filter out all the hands that have the same value so we can see how many unique values
     # there are.
-    d = deck.Deck()
     hands = {}
 
     # Run through all combinations of 5 card hands
-    for c in get_combolist(d.cards, 5):
+    for c in combolist:
         #  h = hand.Hand(c)
         v = evaluator.get_value(c)
         #  hands[h.value] = h
@@ -100,31 +103,33 @@ def print_unique_5cardhands(handlist):
             h[0], h[1], evaluator.print_cardlist(h[2])))
 
 
-def get_combos_all_sizes(cards):
-    combos = []
-    maxsize = len(cards) + 1
-    for i in range(1, maxsize):
-        for c in list(get_combolist(cards, i)):
-            combos.append(c)
-    return combos
+def count_all_handtypes(combolist):
+    print('')
+    print('Counting all the hand types in the list of {} hands.'.format(len(combosof5)))
+    type_count = typecount_dict(combosof5)
+
+    print('Results:')
+    for t in type_count:
+        print('{}: {}'.format(t, type_count[t]))
 
 
-
-if __name__ == "__main__":
-    print('Combo tests')
-
-    d = deck.Deck()
-    print('Counting all 5 card hands in a deck')
-
-    combosof5 = list(get_combolist(d.cards, 5))
-    tally_handtypes(combosof5)
-
-    print('*'*80)
+def enumerate_unique_5cardhands(combolist):
     print('Enumerating unique 5-card hands by value')
-    unique_hands = get_unique_5cardhands()
+    unique_hands = get_unique_5cardhands(combolist)
     sortedhands = sort_handslist(unique_hands)
     print_unique_5cardhands(sortedhands)
 
-    print('*'*80)
-    print('Display all holdem starting hands.')
-    display_holdem_startinghands()
+
+if __name__ == "__main__":
+    d = deck.Deck()
+
+    print('Counting all 5 card hands in a deck')
+    combosof5 = get_combolist(d.cards, 5)
+    print('Combos counted.')
+    print('There are {} combos of 5 in a standard deck.'.format(len(combosof5)))
+
+    # Reuse the combolist
+
+    count_all_handtypes(combosof5)
+
+    enumerate_unique_5cardhands(combosof5)
