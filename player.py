@@ -61,9 +61,6 @@ class Player():
         else:
             return self._hand.discard(card)
 
-    def makeplay(self, options, street):
-        return self.strategy.makeplay(options, self._hand.value, street)
-
     def get_upcards(self):
         #return a list of all the non-hidden cards the player has.
         upcards = []
@@ -71,3 +68,6 @@ class Player():
             if c.hidden == False:
                 upcards.append(c)
         return upcards
+
+    def makeplay(self, options, street):
+        return self.strategy.makeplay(options, self._hand.value, street)

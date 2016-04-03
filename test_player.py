@@ -131,7 +131,7 @@ class TestPlayer(unittest.TestCase):
     # A single hidden card is now not hidden.
     def test_showhand_has1card_cardisup(self):
         p = player.Player('Erik')
-        c = card.Card('A', 'S')
+        c = card.Card('A', 's')
         p.add_card(c)
         p.showhand()
         expected = False
@@ -158,7 +158,7 @@ class TestPlayer(unittest.TestCase):
     # Folding 1 card. Player has no cards
     def test_fold_1card_handisempty(self):
         p = player.Player('Erik')
-        c = card.Card('A', 'S')
+        c = card.Card('A', 's')
         p.add_card(c)
         p.fold()
         expected = 0
@@ -168,7 +168,7 @@ class TestPlayer(unittest.TestCase):
     # Folding 1 card. Returns 1 card.
     def test_fold_1card_return1card(self):
         p = player.Player('Erik')
-        c = card.Card('A', 'S')
+        c = card.Card('A', 's')
         p.add_card(c)
         h = p.fold()
         expected = 1
@@ -187,22 +187,79 @@ class TestPlayer(unittest.TestCase):
     Tests for add_card(card)
     """
     # Add 1 card to empty hand. Size = 1
+    def test_addcard_1card_sizeequals1(self):
+        p = player.Player('Erik')
+        c = card.Card('A', 's')
+        p.add_card(c)
+        expected = 1
+        result = len(p._hand)
+        self.assertEqual(expected, result)
 
     """
     Tests for discard(card)
     """
-    # Discard 1 from empty hand - throw exception.
-    # Discard 1 from 1 card hand - returns the card
-    # Discard 1 from 1 card hand - hand is empty
+    # Discard a card not in player's hand- throw exception.
+    def test_discard_cardnotinhand_raiseEx(self):
+        p = player.Player('Erik')
+        c1 = card.Card('A', 's')
+        c2 = card.Card('K', 's')
+        p.add_card(c1)
+        self.assertRaises(ValueError, p.discard, c2)
 
-    """
-    Tests for makeplay(options, street)
-    """
-    # Where to start with this?
+    # Discard 1 from 1 card hand - returns the card
+    def test_discard_1cardhand_returnsCard(self):
+        p = player.Player('Erik')
+        c = card.Card('A', 's')
+        p.add_card(c)
+        result = p.discard(c)
+        self.assertEqual(c, result)
+
+    # Discard 1 from 1 card hand - hand is empty
+    def test_discard_1cardhand_sizeequals0(self):
+        p = player.Player('Erik')
+        c = card.Card('A', 's')
+        p.add_card(c)
+        p.discard(c)
+        expected = 0
+        result = len(p._hand)
+        self.assertEqual(expected, result)
 
     """
     Tests for get_upcards()
     """
     # 1 card hand that is hidden - return empty list
+    def test_getupcards_1downcard_returnsEmptyList(self):
+        p = player.Player('Erik')
+        c = card.Card('A', 's')
+        p.add_card(c)
+        expected = []
+        result = p.get_upcards()
+        self.assertEqual(expected, result)
+
     # 1 card hand that is up - return card
+    def test_getupcards_1upcard_returnsUpCard(self):
+        p = player.Player('Erik')
+        c = card.Card('A', 's')
+        c.hidden = False
+        p.add_card(c)
+        expected = [c]
+        result = p.get_upcards()
+        self.assertEqual(expected, result)
+
     # 2 card hand - 1 up, 1 down - returns the up card
+    def test_getupcards_1up1down_returns1up(self):
+        p = player.Player('Erik')
+        c1 = card.Card('A', 's')
+        c2 = card.Card('K', 's')
+        c1.hidden = False
+        p.add_card(c1)
+        p.add_card(c2)
+
+        expected = 1
+        result = len(p.get_upcards())
+        self.assertEqual(expected, result)
+
+    """
+    Tests for makeplay(options, street)
+    """
+    # Where to start with this?
