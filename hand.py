@@ -31,6 +31,10 @@ class Hand():
     def __len__(self):
         return len(self.cards)
 
+    def unhide(self):
+        for c in self.cards:
+            c.hidden = False
+
     def update(self):
         if len(self) == 5:
             self.value = evaluator.get_value(self.cards)
@@ -40,7 +44,3 @@ class Hand():
             self.value = -1
             self.handrank = 'INVALID'
             self.description = 'Less than 5 cards'
-
-    def unhide(self):
-        for c in self.cards:
-            c.hidden = False
