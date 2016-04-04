@@ -1,6 +1,8 @@
 import unittest
 import card
+import evaluator
 import hand
+import pokerhands
 
 
 class TestHand(unittest.TestCase):
@@ -43,11 +45,31 @@ class TestHand(unittest.TestCase):
         result = str(h)
         self.assertEqual(expected, result)
 
-    # 1 card passed, displays the card
-    def test_str_1cardpassed_returnsAs(self):
+    # 1 card passed, displays the hidden card as "Xx"
+    def test_str_1card_hidden_returnsAs(self):
         c = card.Card('A', 's')
         h = hand.Hand([c])
+        expected = 'Xx'
+        result = str(h)
+        self.assertEqual(expected, result)
+
+    # 1 card passed, displays the hidden card as "Xx"
+    def test_str_1card_unhidden_returnsAs(self):
+        c = card.Card('A', 's')
+        h = hand.Hand([c])
+        h.unhide()
         expected = 'As'
+        result = str(h)
+        self.assertEqual(expected, result)
+
+    # 1 card passed, displays the hidden card as "Xx"
+    def test_str_2cards_unhidden_returnsAs_Ks(self):
+        cards = []
+        cards.append(card.Card('A', 's'))
+        cards.append(card.Card('K', 's'))
+        h = hand.Hand(cards)
+        h.unhide()
+        expected = 'As Ks'
         result = str(h)
         self.assertEqual(expected, result)
 
@@ -131,4 +153,60 @@ class TestHand(unittest.TestCase):
     """
     Tests for update()
     """
-    # How to test this?
+    # 1 card is -1 value
+
+    def test_update_1card_valueEqualsneg1(self):
+        c = card.Card('A', 's')
+        h = hand.Hand()
+        # Bypass add method so we can trigger update manually
+        h.cards = [c]
+        h.update()
+        expected = -1
+        result = h.value
+        self.assertEqual(expected, result)
+
+    # 1 card is INVALID handrank
+    def test_update_1card_handrankEqualsINVALID(self):
+        c = card.Card('A', 's')
+        h = hand.Hand()
+        # Bypass add method so we can trigger update manually
+        h.cards = [c]
+        h.update()
+        expected = 'INVALID'
+        result = h.handrank
+        self.assertEqual(expected, result)
+
+    # 1 card is INVALID description
+    def test_update_1card_ValueEqualsINVALID(self):
+        c = card.Card('A', 's')
+        h = hand.Hand()
+        # Bypass add method so we can trigger update manually
+        h.cards = [c]
+        h.update()
+        expected = 'INVALID'
+        result = h.description
+        self.assertEqual(expected, result)
+
+    def test_update_royalflush_correctValue(self):
+        h = hand.Hand()
+        h.cards = pokerhands.royalflush()
+        h.update()
+        expected = evaluator.HANDTYPES['ROYAL FLUSH']
+        result = h.value
+        self.assertEqual(expected, result)
+
+    def test_update_royalflush_correctHandrank(self):
+        h = hand.Hand()
+        h.cards = pokerhands.royalflush()
+        h.update()
+        expected = 'ROYAL FLUSH'
+        result = h.handrank
+        self.assertEqual(expected, result)
+
+    def test_update_royalflush_correctDescription(self):
+        h = hand.Hand()
+        h.cards = pokerhands.royalflush()
+        h.update()
+        expected = 'A High'
+        result = h.description
+        self.assertEqual(expected, result)

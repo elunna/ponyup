@@ -14,8 +14,10 @@ class Hand():
 
     def __str__(self):
         handstr = ''
-        for c in self.cards:
-            handstr += str(c) + ' '
+        for i, c in enumerate(self.cards):
+            handstr += str(c)
+            if i != len(self.cards) - 1:
+                handstr += ' '
         return handstr
 
     def add(self, card):
@@ -43,4 +45,4 @@ class Hand():
         else:
             self.value = -1
             self.handrank = 'INVALID'
-            self.description = 'Less than 5 cards'
+            self.description = 'INVALID'
