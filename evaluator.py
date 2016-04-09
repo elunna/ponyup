@@ -152,7 +152,7 @@ def get_value(cards):
 
     if len(sortedranks) == 5:
         return process_nonpairhands(cards, sortedranks)
-    elif len(sortedranks) > 1:
+    elif len(sortedranks) >= 1:
         return process_pairhands(sortedranks)
     else:
         return HANDTYPES['INVALID']
@@ -206,17 +206,21 @@ def process_nonpairhands(cards, sortedranks):
         return HANDTYPES['HIGH CARD'] + score_ranklist(sortedranks)
 
 
-def process_pairhands(sortedranks):
-    if sortedranks[0][0] == 4:
-        return HANDTYPES['QUADS'] + score_ranklist(sortedranks)
-    elif sortedranks[0][0] == 3 and sortedranks[1][0] == 2:
-        return HANDTYPES['FULL HOUSE'] + score_ranklist(sortedranks)
-    elif sortedranks[0][0] == 3 and sortedranks[1][0] == 1:
-        return HANDTYPES['TRIPS'] + score_ranklist(sortedranks)
-    elif sortedranks[0][0] == 2 and sortedranks[1][0] == 2:
-        return HANDTYPES['TWO PAIR'] + score_ranklist(sortedranks)
-    elif sortedranks[0][0] == 2 and sortedranks[1][0] == 1:
-        return HANDTYPES['PAIR'] + score_ranklist(sortedranks)
+def process_pairhands(ranks):
+    if len(ranks) > 1:
+        if ranks[0][0] == 3 and ranks[1][0] == 2:
+            return HANDTYPES['FULL HOUSE'] + score_ranklist(ranks)
+        elif ranks[0][0] == 2 and ranks[1][0] == 2:
+            return HANDTYPES['TWO PAIR'] + score_ranklist(ranks)
+
+    if ranks[0][0] == 1:
+        return HANDTYPES['HIGH CARD'] + score_ranklist(ranks)
+    elif ranks[0][0] == 2:
+        return HANDTYPES['PAIR'] + score_ranklist(ranks)
+    elif ranks[0][0] == 3:
+        return HANDTYPES['TRIPS'] + score_ranklist(ranks)
+    elif ranks[0][0] == 4:
+        return HANDTYPES['QUADS'] + score_ranklist(ranks)
 
 
 def find_best_hand(cards):

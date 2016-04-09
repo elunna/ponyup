@@ -194,6 +194,45 @@ class TestEvaluator(unittest.TestCase):
     """
     Tests for get_value(cards)
     """
+    # Test the value of 1 Ace
+    def test_get_value_A_returns1400000000(self):
+        cards = [card.Card('A', 's')]
+        expected = 1400000000
+        result = evaluator.get_value(cards)
+        self.assertEqual(expected, result)
+
+    # Test the value of 2 Aces
+    def test_get_value_AA_returns21400000000(self):
+        cards = [
+            card.Card('A', 's'),
+            card.Card('A', 'h'),
+        ]
+        expected = 21400000000
+        result = evaluator.get_value(cards)
+        self.assertEqual(expected, result)
+
+    # Test the value of 3 Aces
+    def test_get_value_AAA_returns41400000000(self):
+        cards = [
+            card.Card('A', 's'),
+            card.Card('A', 'h'),
+            card.Card('A', 'c'),
+        ]
+        expected = 41400000000
+        result = evaluator.get_value(cards)
+        self.assertEqual(expected, result)
+
+    # Test the value of 4 Aces
+    def test_get_value_AAAA_returns81400000000(self):
+        cards = [
+            card.Card('A', 's'),
+            card.Card('A', 'h'),
+            card.Card('A', 'c'),
+            card.Card('A', 'd'),
+        ]
+        expected = 81400000000
+        result = evaluator.get_value(cards)
+        self.assertEqual(expected, result)
 
     """
     Tests for get_description(value, cards)
