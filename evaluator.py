@@ -89,17 +89,16 @@ def is_straight(cards):
     """
     Returns True if the hand is a straight, False otherwise.
     """
-    if len(cards) != 5:
+    if not is_validhand(cards):
         return False
-
-    elif cards[0].rank == '2' \
-            and cards[1].rank == '3' \
-            and cards[2].rank == '4' \
-            and cards[3].rank == '5' \
-            and cards[4].rank == 'A':
+    elif cardlist.get_allgaps(cards) == 0:
         return True
-    else:
-        return cardlist.get_allgaps(cards) == 0
+    cards = sorted(cards)
+    return cards[0].rank == '2' \
+        and cards[1].rank == '3' \
+        and cards[2].rank == '4' \
+        and cards[3].rank == '5' \
+        and cards[4].rank == 'A'
 
 
 def score_ranklist(ranklist):

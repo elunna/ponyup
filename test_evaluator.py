@@ -123,6 +123,33 @@ class TestEvaluator(unittest.TestCase):
     """
     Tests for is_straight(cards)
     """
+    # Test a low straight hand
+    def test_isstraight_lowstraight_returnsTrue(self):
+        hand = pokerhands.straight_low()
+        expected = True
+        result = evaluator.is_straight(hand)
+        self.assertEqual(expected, result)
+
+    # Test a mid straight hand
+    def test_isstraight_midstraight_returnsTrue(self):
+        hand = pokerhands.straight_mid()
+        expected = True
+        result = evaluator.is_straight(hand)
+        self.assertEqual(expected, result)
+
+    # Test a high straight hand
+    def test_isstraight_highstraight_returnsTrue(self):
+        hand = pokerhands.straight_high()
+        expected = True
+        result = evaluator.is_straight(hand)
+        self.assertEqual(expected, result)
+
+    # Test a non-straight hand
+    def test_isstraight_nonstraight_returnsFalse(self):
+        hand = pokerhands.wheeldraw()
+        expected = False
+        result = evaluator.is_straight(hand)
+        self.assertEqual(expected, result)
 
     """
     Tests for score_ranklist(ranklist)
