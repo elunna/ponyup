@@ -243,12 +243,101 @@ class TestEvaluator(unittest.TestCase):
     """
 
     """
-    Tests for def process_pairhands(sortedranks):
+    Tests for process_pairhands(sortedranks):
     """
 
     """
     Tests for find_best_hand(cards)
     """
 
-    #  def test_findbesthand_7cardstraightflush_returnsROYALFLUSH(self):
+    def test_findbesthand_pair_returnsPAIR(self):
+        cards = [
+            card.Card('2', 'c'),
+            card.Card('3', 'c'),
+            card.Card('5', 's'),
+            card.Card('7', 's'),
+            card.Card('K', 'c'),
+            card.Card('A', 'c'),
+            card.Card('A', 's'),
+        ]
+        besthand = evaluator.find_best_hand(cards)
+        expected = 'PAIR'
+        result = besthand.handrank
+        self.assertEqual(expected, result)
+
+    def test_findbesthand_fullhouse_returnsFULLHOUSE(self):
+        cards = [
+            card.Card('7', 'c'),
+            card.Card('7', 's'),
+            card.Card('K', 's'),
+            card.Card('K', 'c'),
+            card.Card('A', 'h'),
+            card.Card('A', 'c'),
+            card.Card('A', 's'),
+        ]
+        besthand = evaluator.find_best_hand(cards)
+        result = besthand.handrank
+        expected = 'FULL HOUSE'
+        self.assertEqual(expected, result)
+
+    def test_findbesthand_straightflush_returnsSTRAIGHTFLUSH(self):
+        cards = [
+            card.Card('4', 's'),
+            card.Card('5', 's'),
+            card.Card('6', 's'),
+            card.Card('7', 's'),
+            card.Card('8', 's'),
+            card.Card('K', 's'),
+            card.Card('A', 's'),
+        ]
+        besthand = evaluator.find_best_hand(cards)
+        result = besthand.handrank
+        expected = 'STRAIGHT FLUSH'
+        self.assertEqual(expected, result)
+
+    def test_findbesthand_quads_returnsQUADS(self):
+        cards = [
+            card.Card('K', 'c'),
+            card.Card('K', 'd'),
+            card.Card('K', 's'),
+            card.Card('A', 'c'),
+            card.Card('K', 'd'),
+            card.Card('A', 'h'),
+            card.Card('A', 's'),
+        ]
+        besthand = evaluator.find_best_hand(cards)
+        result = besthand.handrank
+        expected = 'QUADS'
+        self.assertEqual(expected, result)
+
+    def test_findbesthand_straight_returnsSTRAIGHT(self):
+        cards = [
+            card.Card('A', 'c'),
+            card.Card('A', 's'),
+            card.Card('2', 'c'),
+            card.Card('3', 's'),
+            card.Card('4', 'h'),
+            card.Card('5', 's'),
+            card.Card('5', 'h'),
+        ]
+        besthand = evaluator.find_best_hand(cards)
+        result = besthand.handrank
+        expected = 'STRAIGHT'
+        self.assertEqual(expected, result)
+
+    def test_findbesthand_flush_returnsFLUSH(self):
+        cards = [
+            card.Card('8', 's'),
+            card.Card('9', 's'),
+            card.Card('T', 'c'),
+            card.Card('J', 's'),
+            card.Card('Q', 's'),
+            card.Card('K', 's'),
+            card.Card('A', 'c'),
+        ]
+        besthand = evaluator.find_best_hand(cards)
+        result = besthand.handrank
+        expected = 'FLUSH'
+        self.assertEqual(expected, result)
+
     # besthand = ev.find_best_hand(group)
