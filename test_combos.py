@@ -130,6 +130,8 @@ class TestCombos(unittest.TestCase):
     Tests for typecount_dict(handlist)
     """
     # Since this dict is VERY LARGE, We will call all the tests from this constructor method.
+    # DISABLED TEMPARILY FOR FASTER TESTING - THIS TAKES ~30 seconds.
+    """
     def test_typecountdict_fulldeck(self):
         d = deck.Deck()
         combosof5 = combos.get_combolist(d.cards, 5)
@@ -141,7 +143,7 @@ class TestCombos(unittest.TestCase):
         self.typecountdict_fulldeck_40straightflush(type_count)
         self.typecountdict_fulldeck_624quads(type_count)
         self.typecountdict_fulldeck_3744fullhouse(type_count)
-
+    """
     def typecountdict_fulldeck_10keys(self, type_count):
         expected = 10
         result = len(type_count.keys())
