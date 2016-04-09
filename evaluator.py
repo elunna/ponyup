@@ -132,7 +132,7 @@ def get_type(value):
     # Determine the type of hand given the numerical value
     """
     if value < 0:
-        raise ValueError('get_type() cannot accept negative numbers!')
+        return 'INVALID'
     else:
         roundedval = round(value, -10)
 
@@ -167,7 +167,9 @@ def get_description(value, cards):
     ranks = cardlist.rank_list(cards)
     ctype = get_type(value)
 
-    if ctype in ['STRAIGHT', 'STRAIGHT FLUSH']:
+    if len(cards) == 0:
+        return 'No cards!'
+    elif ctype in ['STRAIGHT', 'STRAIGHT FLUSH']:
         if value % 10000000000 == 0:
             return '5 High'
         else:

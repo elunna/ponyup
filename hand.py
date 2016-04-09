@@ -38,11 +38,6 @@ class Hand():
             c.hidden = False
 
     def update(self):
-        if len(self) == 5:
-            self.value = evaluator.get_value(self.cards)
-            self.handrank = evaluator.get_type(self.value)
-            self.description = evaluator.get_description(self.value, self.cards)
-        else:
-            self.value = -1
-            self.handrank = 'INVALID'
-            self.description = 'INVALID'
+        self.value = evaluator.get_value(self.cards)
+        self.handrank = evaluator.get_type(self.value)
+        self.description = evaluator.get_description(self.value, self.cards)

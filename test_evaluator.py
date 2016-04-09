@@ -185,8 +185,13 @@ class TestEvaluator(unittest.TestCase):
     """
     Tests for get_type(cards)
     """
-    def test_gettype_negativevalue_raiseEx(self):
-        self.assertRaises(ValueError, evaluator.get_type, -1)
+    #  def test_gettype_negativevalue_raiseEx(self):
+        #  self.assertRaises(ValueError, evaluator.get_type, -1)
+
+    def test_gettype_negativevalue_returnsINVALID(self):
+        expected = 'INVALID'
+        result = evaluator.get_type(-1)
+        self.assertEqual(expected, result)
 
     def test_gettype_1000000000000_raiseEx(self):
         self.assertRaises(ValueError, evaluator.get_type, 1000000000000)

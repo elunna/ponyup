@@ -155,35 +155,35 @@ class TestHand(unittest.TestCase):
     """
     # 1 card is -1 value
 
-    def test_update_1card_valueEqualsneg1(self):
+    def test_update_1card_valueEquals1400000000(self):
         c = card.Card('A', 's')
         h = hand.Hand()
         # Bypass add method so we can trigger update manually
         h.cards = [c]
         h.update()
-        expected = -1
+        expected = 1400000000
         result = h.value
         self.assertEqual(expected, result)
 
     # 1 card is INVALID handrank
-    def test_update_1card_handrankEqualsINVALID(self):
+    def test_update_1card_handrankEqualsHIGHCARD(self):
         c = card.Card('A', 's')
         h = hand.Hand()
         # Bypass add method so we can trigger update manually
         h.cards = [c]
         h.update()
-        expected = 'INVALID'
+        expected = 'HIGH CARD'
         result = h.handrank
         self.assertEqual(expected, result)
 
-    # 1 card is INVALID description
-    def test_update_1card_ValueEqualsINVALID(self):
+    # 1 card is Ace High description
+    def test_update_1card_DescriptionIsAHigh(self):
         c = card.Card('A', 's')
         h = hand.Hand()
         # Bypass add method so we can trigger update manually
         h.cards = [c]
         h.update()
-        expected = 'INVALID'
+        expected = 'A High'
         result = h.description
         self.assertEqual(expected, result)
 
