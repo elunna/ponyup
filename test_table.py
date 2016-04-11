@@ -51,6 +51,19 @@ class TestTable(unittest.TestCase):
     Tests for __str__()
     """
     # Test that table displays correctly?
+    def test_str_newtable_correctDisplay(self):
+        expected = ''
+        expected += '#  Tokens Player         Chips     Hand      \n'
+        expected += '--------------------------------------------------\n'
+        expected += '0         bob0           $1000     \n'
+        expected += '1         bob1           $1000     \n'
+        expected += '2         bob2           $1000     \n'
+        expected += '3         bob3           $1000     \n'
+        expected += '4         bob4           $1000     \n'
+        expected += '5         bob5           $1000     \n'
+
+        result = str(self.t)
+        self.assertEqual(expected, result)
 
     """
     Tests for __iter__() # needed?
