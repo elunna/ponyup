@@ -12,8 +12,7 @@ VALID_SIZES = [2, 6, 9, 10]
 class Table():
     def __init__(self, size):
         if size not in VALID_SIZES:
-            print('Not a valid table size!')
-            exit()  # Crash hard.
+            raise ValueError('Not a valid table size!')
 
         self.TOKENS = {
             'D': -1,
@@ -61,6 +60,18 @@ class Table():
                 _str += '\n'
 
         return _str
+
+    def __iter__(self):
+        self.counter = 0
+        self.players = [p for p in self.seats if p is not None]
+        return self
+
+    def __next__(self):
+        if self.counter > len(self.players) - 1:
+            raise StopIteration
+        p = self.players[self.counter]
+        self.counter += 1
+        return p
 
     def btn(self):
         return self.TOKENS['D']
@@ -110,18 +121,6 @@ class Table():
                 if self.has_cards(s):
                     count += 1
         return count
-
-    def __iter__(self):
-        self.counter = 0
-        self.players = [p for p in self.seats if p is not None]
-        return self
-
-    def __next__(self):
-        if self.counter > len(self.players) - 1:
-            raise StopIteration
-        p = self.players[self.counter]
-        self.counter += 1
-        return p
 
     def next(self, from_seat, hascards=False):
         # Return the next valid player, a non-null seat
@@ -219,44 +218,3 @@ def setup_table(num, hero=None, gametype="DRAW5"):
         else:
             nameset.pop()
     return t
-
-
-def test_table(testnum):
-    #  t = Table(testnum)
-    t = setup_table(testnum)
-    t.randomize_button()
-    print('-'*70)
-    print('Made a table of {} seats. actual seats: {}'.format(testnum, len(t)))
-    print('button position is {}'.format(t.btn()))
-    print(t)
-    if t.btn() > len(t):
-        print('Button position is out of the table bounds!!!')
-
-    # Test next
-    btn_plus1 = t.next(t.btn())
-    btn_plus2 = t.next(btn_plus1)
-    print('next() from BTN is {}'.format(t.next(btn_plus1)))
-    print('next() from BTN+1 is {}'.format(t.next(btn_plus2)))
-
-    pl = t.get_players()
-    print('get_playerlist: {} players'.format(len(pl)))
-    print(pl)
-    print('')
-
-    print('Testing move_button(* = button)')
-    for i in range(5):
-        for i, s in enumerate(t.seats):
-            print('{}'.format(s), end='')
-            if t.btn() == i:
-                print('*', end='')
-            print(' ', end='')
-        print('')
-        t.move_button()
-    print('')
-
-
-if __name__ == "__main__":
-    # Tests
-
-    for t in VALID_SIZES:
-        test_table(t)
