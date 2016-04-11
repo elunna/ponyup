@@ -1,5 +1,6 @@
 # blindstructures = [ante, sb, bb]
 
+# todo: index the normal limits by level.
 limit = {
     '2/4':      (1, 2, .5),
     '3/6':      (1, 3, 1),
@@ -12,6 +13,8 @@ limit = {
     '30/60':    (15, 30, 10),
     '50/100':   (25, 50, 10),
 }
+
+# This dict is indexed by level.
 
 WSOP = {
     '1':    (50, 100, 0),
