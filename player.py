@@ -1,7 +1,7 @@
-import re
 import hand
 import names
-import strategy
+# import strategy
+# import re
 
 
 class Player():
@@ -25,6 +25,9 @@ class Player():
 
     def __repr__(self):
         return str(self)
+
+    #  def __eq__(self, other):
+        #  return self.name == other.name
 
     def bet(self, amt):
         if amt > self.chips:
@@ -62,10 +65,10 @@ class Player():
             return self._hand.discard(card)
 
     def get_upcards(self):
-        #return a list of all the non-hidden cards the player has.
+        # return a list of all the non-hidden cards the player has.
         upcards = []
         for c in self._hand.cards:
-            if c.hidden == False:
+            if c.hidden is False:
                 upcards.append(c)
         return upcards
 

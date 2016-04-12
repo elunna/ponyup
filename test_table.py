@@ -172,6 +172,16 @@ class TestTable(unittest.TestCase):
         t.add_player(0, p1)
         self.assertRaises(ValueError, t.add_player, 0, p2)
 
+    # Adding a duplicate player to the table, should raise exception.
+    def test_addplayer_duplicateplayer_raiseException(self):
+        t = table.Table(6)
+        p1 = player.Player('bob0', 'CPU')
+        p2 = player.Player('bob1', 'CPU')
+        p3 = player.Player('bob1', 'CPU')
+        t.add_player(0, p1)
+        t.add_player(1, p2)
+        self.assertRaises(ValueError, t.add_player, 3, p3)
+
     """
     Tests for indexof
     """

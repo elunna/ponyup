@@ -84,6 +84,10 @@ class Table():
 
     def add_player(self, s, p):
         """ Adds a player p to the table at seat s"""
+        for seat in self:
+            if p.name == seat.name:
+                raise ValueError('Player {} is already at the table!'.format(p))
+
         if self.seats[s] is None:
             self.seats[s] = p
         else:
