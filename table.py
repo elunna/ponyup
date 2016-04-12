@@ -87,12 +87,18 @@ class Table():
         if self.seats[s] is None:
             self.seats[s] = p
         else:
-            print('Seat {} is occupied.'.format(s))
+            raise ValueError('Seat {} is occupied.'.format(s))
 
-    def player_index(self, p):
+    def get_index(self, plyr):
+        #  return self.seats.index(plyr)
         for i, s in enumerate(self.seats):
-            if s == p:
+            if s == plyr:
                 return i
+        else:
+            return -1
+
+    def __contains__(self, plyr):
+        return plyr in self.seats
 
     def remove_player(self, index):
         p = self.seats[index]

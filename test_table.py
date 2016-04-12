@@ -155,9 +155,44 @@ class TestTable(unittest.TestCase):
         result = len(t.get_players())
         self.assertEqual(expected, result)
 
+    # Adding 1 player to an empty table, contains the added player
+    def test_addplayer_toEmptyTable_containsPlayer(self):
+        t = table.Table(6)
+        p = player.Player('bob0', 'CPU')
+        t.add_player(0, p)
+        expected = 1
+        result = p in t
+        self.assertEqual(expected, result)
+
+    # Adding 1 player to an occupied spot,
+    def test_addplayer_tooccupiedspot_raiseException(self):
+        t = table.Table(6)
+        p1 = player.Player('bob0', 'CPU')
+        p2 = player.Player('bob1', 'CPU')
+        t.add_player(0, p1)
+        self.assertRaises(ValueError, t.add_player, 0, p2)
+
     """
-    Tests for player_index()
+    Tests for indexof
     """
+    # Add a player to seat 0, indexof returns 0
+    def test_indexof_playerinseat0_returns0(self):
+        t = table.Table(6)
+        p = player.Player('bob0', 'CPU')
+        t.add_player(0, p)
+        expected = 0
+        result = t.get_index(p)
+        self.assertEqual(expected, result)
+
+    # indexof a player not in the table, returns -1
+    def test_indexof_nonpresentplayer_returnsNeg1(self):
+        t = table.Table(6)
+        p = player.Player('bob0', 'CPU')
+        p2 = player.Player('bob1', 'CPU')
+        t.add_player(0, p)
+        expected = -1
+        result = t.get_index(p2)
+        self.assertEqual(expected, result)
 
     """
     Tests for remove_player()

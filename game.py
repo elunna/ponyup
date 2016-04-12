@@ -111,7 +111,7 @@ class Round():
         """ Remove players with no chips from the table. """
         for p in self.tbl:
             if p.chips == 0:
-                i = self.tbl.player_index(p)
+                i = self.tbl.get_index(p)
                 self.tbl.remove_player(i)
 
     def get_valueplayer_list(self):
