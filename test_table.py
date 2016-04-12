@@ -147,6 +147,13 @@ class TestTable(unittest.TestCase):
     """
     Tests for add_player()
     """
+    # Adding 1 player to an empty table, size should be 1.
+    def test_addplayer_toEmptyTable_1player(self):
+        t = table.Table(6)
+        t.add_player(0, player.Player('bob0', 'CPU'))
+        expected = 1
+        result = len(t.get_players())
+        self.assertEqual(expected, result)
 
     """
     Tests for player_index()
