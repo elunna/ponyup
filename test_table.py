@@ -4,7 +4,6 @@ import player
 
 
 class TestTable(unittest.TestCase):
-
     """
     Setup a table filled with 6 players for testing.
     """
@@ -66,26 +65,84 @@ class TestTable(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for __iter__() # needed?
+    Tests for __iter__(), __next__() # needed?
     """
-    # Test that the table iterates through all the players
+    # Test that the table iterates through few players in order, full table
+    def test_next_setUpTable_getsseat0(self):
+        expected = 'bob0'
+        iterator = self.t.__iter__()
+        result = str(iterator.__next__())
+        self.assertEqual(expected, result)
+
     # Test that it goes to the next player.
+    def test_next2_setUpTable_getsseat1(self):
+        expected = 'bob1'
+        iterator = self.t.__iter__()
+        iterator.__next__()
+        result = str(iterator.__next__())
+        self.assertEqual(expected, result)
+
+    # Iter should skip over an empty seat
+    def test_next_removedseat0_getsseat1(self):
+        self.t.remove_player(0)
+        expected = 'bob1'
+        iterator = self.t.__iter__()
+        result = str(iterator.__next__())
+        self.assertEqual(expected, result)
 
     """
-    Tests for __next__() # needed?
+    Tests for btn(), move_button()
     """
+    # A new table should have the button set to -1
+    def test_btn_setUpTable_returnsNeg1(self):
+        expected = -1
+        result = self.t.btn()
+        self.assertEqual(expected, result)
 
-    """
-    Tests for btn()
-    """
+    # New table, moving button once should go from -1 to 0.
+    def test_movebutton_setUpTable_returns0(self):
+        expected = 0
+        self.t.move_button()
+        result = self.t.btn()
+        self.assertEqual(expected, result)
 
-    """
-    Tests for get_sb()
-    """
+    # New table(without seat 0), moving button once should go from -1 to 1
+    def test_movebutton_seat0removed_returns1(self):
+        expected = 1
+        self.t.remove_player(0)
+        self.t.move_button()
+        result = self.t.btn()
+        self.assertEqual(expected, result)
 
-    """
-    Tests for get_bb()
-    """
+    # New table: Button at 0, sb should be at 1
+    def test_movebutton_setUpTable_SBat1(self):
+        expected = 1
+        self.t.move_button()
+        result = self.t.get_sb()
+        self.assertEqual(expected, result)
+
+    # New table(seat 1 removed): Button at 0, sb should be at 2
+    def test_movebutton_seat1removed_SBat2(self):
+        expected = 2
+        self.t.remove_player(1)
+        self.t.move_button()
+        result = self.t.get_sb()
+        self.assertEqual(expected, result)
+
+    # New table: Button at 0, bb should be at 2
+    def test_movebutton_setUpTable_BBat2(self):
+        expected = 2
+        self.t.move_button()
+        result = self.t.get_bb()
+        self.assertEqual(expected, result)
+
+    # New table(seat 2 removed): Button at 0, bb should be at 3
+    def test_movebutton_seat2removed_BBat3(self):
+        expected = 3
+        self.t.remove_player(2)
+        self.t.move_button()
+        result = self.t.get_bb()
+        self.assertEqual(expected, result)
 
     """
     Tests for add_player()
@@ -113,10 +170,6 @@ class TestTable(unittest.TestCase):
 
     """
     Tests for prev(from_seat, hascards=False)
-    """
-
-    """
-    Tests for move_button()
     """
 
     """
