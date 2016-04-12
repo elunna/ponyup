@@ -197,6 +197,20 @@ class TestTable(unittest.TestCase):
     """
     Tests for remove_player()
     """
+    # Remove player 0, table doesn't contain the player at seat 0.
+    def test_removeplayer_removeseat0_doesntcontainseat0(self):
+        p = player.Player('bob0', 'CPU')
+        self.t.remove_player(0)
+        expected = False
+        result = p in self.t
+        self.assertEqual(expected, result)
+
+    # Remove player 0, seat 0 is None
+    def test_removeplayer_removeseat0_seat0isNone(self):
+        self.t.remove_player(0)
+        expected = True
+        result = self.t.seats[0] is None
+        self.assertEqual(expected, result)
 
     """
     Tests for get_players()
