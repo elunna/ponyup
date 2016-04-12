@@ -225,10 +225,34 @@ class TestTable(unittest.TestCase):
     """
     Tests for get_players()
     """
+    # From the setUp table, gets an array size 6.
+    def test_getplayers_6players_returnslistsize6(self):
+        expected = 6
+        result = len(self.t.get_players())
+        self.assertEqual(expected, result)
+
+    # From a table of 1, gets an array of size 1.
+    def test_getplayers_1player_returnslistsize1(self):
+        t = table.Table(6)
+        p1 = player.Player('bob0', 'CPU')
+        t.add_player(0, p1)
+        expected = 1
+        result = len(t.get_players())
+        self.assertEqual(expected, result)
+
+    # From a table of one, gets the player at the table.
+    def test_getplayers_1player_listcontainsplayer(self):
+        t = table.Table(6)
+        p1 = player.Player('bob0', 'CPU')
+        t.add_player(0, p1)
+        expected = True
+        result = p1 in t
+        self.assertEqual(expected, result)
 
     """
     Tests for valid_bettors()
     """
+    # From the setUp table with 2 players holding cards, gets an array size 2
 
     """
     Tests for next(from_seat, hascards=False)
