@@ -1,4 +1,5 @@
 import unittest
+import card
 import table
 import player
 
@@ -252,7 +253,19 @@ class TestTable(unittest.TestCase):
     """
     Tests for valid_bettors()
     """
-    # From the setUp table with 2 players holding cards, gets an array size 2
+    # 0 players holding cards, gets an array size 0
+    def test_validbettors_0withcards_returns0(self):
+        expected = 0
+        result = self.t.valid_bettors()
+        self.assertEqual(expected, result)
+
+    # 1 players holding cards, gets an array size 1
+    def test_validbettors_1withcards_returns1(self):
+        expected = 1
+        c = card.Card('A', 's')
+        self.t.seats[0].add_card(c)
+        result = self.t.valid_bettors()
+        self.assertEqual(expected, result)
 
     """
     Tests for next(from_seat, hascards=False)

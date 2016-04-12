@@ -204,7 +204,7 @@ class Table():
         if s is None:
             return False
         else:
-            return len(s._hand) == 5
+            return len(s._hand) > 0
 
 
 def setup_table(num, hero=None, gametype="DRAW5"):
