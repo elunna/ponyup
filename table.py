@@ -128,52 +128,31 @@ class Table():
                     count += 1
         return count
 
-    def next(self, from_seat, hascards=False):
-        # Return the next valid player, a non-null seat
-        # Optional argument to specify if they should also have cards
+    def next(self, from_seat, step=1):
+        if from_seat < -1 or from_seat >= len(self):
+            raise ValueError('from_seat is out of bounds!')
+
         length = len(self)
 
         for i in range(1, length + 1):
-            currentseat = (from_seat + i) % length
+            currentseat = (from_seat + (i * step)) % length
             p = self.seats[currentseat]
-
             if p is not None:
-                if hascards is True and len(p._hand) == 5:
-                    return currentseat
-                elif hascards is False:
-                    return currentseat
-        else:
-            return -1
-
-    def prev(self, from_seat, hascards=False):
-        # Return the next valid
-        # Seat must be NON-null and have chips
-        # Optional argument to specify if they should also have cards
-        length = len(self)
-
-        for i in range(1, length + 1):
-            currentseat = (from_seat - i) % length
-            p = self.seats[currentseat]
-
-            if p is not None and p.chips > 0:
-                if hascards is True and len(p._hand) == 5:
-                    return currentseat
-                elif hascards is False:
-                    return currentseat
+                return currentseat
         else:
             return -1
 
     def move_button(self):
         # Move the button to the next valid player/seat
         # Also set the blinds appropriately!
-        self.TOKENS['D'] = self.next(self.btn(), hascards=False)
+        self.TOKENS['D'] = self.next(self.btn())
 
         if len(self) == 2:
             self.TOKENS['SB'] = self.btn()
             self.TOKENS['BB'] = self.next(self.btn())
         elif len(self) > 2:
             self.TOKENS['SB'] = self.next(self.btn())
-            self.TOKENS['BB'] = self.next(self.TOKENS['SB'], hascards=False)
+            self.TOKENS['BB'] = self.next(self.TOKENS['SB'])
         else:
             raise ValueError('Not enough players at the table!')
 

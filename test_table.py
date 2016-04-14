@@ -268,12 +268,63 @@ class TestTable(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for next(from_seat, hascards=False)
+    Tests for next(from_seat)
     """
+    # New setUp table, user supplies from_seat out of list index range. Should raise exception.
+    def test_next_outofboundsseat100_raiseException(self):
+        seat = 100
+        self.assertRaises(ValueError, self.t.next, seat)
 
-    """
-    Tests for prev(from_seat, hascards=False)
-    """
+    # Less than -1 is an error. -1 is the starting point for the button and other tokens.
+    def test_next_outofboundsseatneg2_raiseException(self):
+        seat = -2
+        self.assertRaises(ValueError, self.t.next, seat)
+
+    # New setUp table, from_seat 0, returns 1
+    def test_next_setUptable_returnSeat0(self):
+        seat = 0
+        expected = 1
+        result = self.t.next(seat)
+        self.assertEqual(expected, result)
+
+    # Empty seat between 0 and 2, returns 1
+    def test_next_from0_seat1empty_return2(self):
+        seat = 0
+        self.t.remove_player(1)
+        expected = 2
+        result = self.t.next(seat)
+        self.assertEqual(expected, result)
+
+    # setUp table, negative step, from_seat 0, returns 5
+    def test_next_negativestep_from0_returnSeat5(self):
+        seat = 0
+        expected = 5
+        result = self.t.next(seat, -1)
+        self.assertEqual(expected, result)
+
+    # Empty seat between 4 and 0, returns 4
+    def test_next_negativestep_seat5empty_from0_returnSeat5(self):
+        seat = 0
+        self.t.remove_player(5)
+        expected = 4
+        result = self.t.next(seat, -1)
+        self.assertEqual(expected, result)
+
+    # No players, return -1
+    def test_next_noplayers_returnsNeg1(self):
+        t = table.Table(6)
+        seat = 0
+        expected = -1
+        result = t.next(seat)
+        self.assertEqual(expected, result)
+
+    # No players, negative step, return -1
+    def test_next_negativestep_noplayers_returnsNeg1(self):
+        t = table.Table(6)
+        seat = 0
+        expected = -1
+        result = t.next(seat, -1)
+        self.assertEqual(expected, result)
 
     """
     Tests for get_playerdict()
