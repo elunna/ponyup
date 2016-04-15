@@ -314,19 +314,87 @@ class TestTable(unittest.TestCase):
     def test_next_noplayers_returnsNeg1(self):
         t = table.Table(6)
         seat = 0
-        #  expected = -1
-        #  result = t.next(seat)
-        #  self.assertEqual(expected, result)
         self.assertRaises(Exception, t.next, seat)
 
     # No players, negative step, return -1
     def test_next_negativestep_noplayers_returnsNeg1(self):
         t = table.Table(6)
         seat = 0
-        #  expected = -1
-        #  result = t.next(seat, -1)
-        #  self.assertEqual(expected, result)
         self.assertRaises(Exception, t.next, seat)
+
+    """
+    Tests for next_player_w_cards(from_seat, step=1)
+    """
+    # 6 seat table, seat 0 has cards - from 0, returns 0
+    def test_nextplayerwcards_from0_seat0hascards_return0(self):
+        t = table.Table(6)
+        c = card.Card('A', 's')
+        self.t.seats[0].add_card(c)
+        seat = 0
+        self.assertRaises(Exception, t.next_player_w_cards, seat)
+
+    # 6 seat table, seat 0 has cards - from 1, returns 0
+    def test_nextplayerwcards_from1_seat0hascards_return0(self):
+        c = card.Card('A', 's')
+        self.t.seats[0].add_card(c)
+        expected = 0
+        result = self.t.next_player_w_cards(1)
+        self.assertEqual(expected, result)
+
+    # 6 seat table, no cards - raise exception
+    def test_nextplayerwcards_nocards_return0(self):
+        from_seat = 0
+        self.assertRaises(Exception, self.t.next_player_w_cards, from_seat)
+
+    # Full table - all w cards. btn at 0. From 0 returns 1.
+    def test_nextplayerwcards_fulltable_from0_return1(self):
+        # Button should be at -1 for self.t
+        self.t.move_button()
+        # Button should be at 0 after move.
+
+        # Give everyone cards
+        c = card.Card('A', 's')
+        for seat in self.t:
+            seat.add_card(c)
+        from_seat = 0
+        expected = 1
+        result = self.t.next_player_w_cards(from_seat)
+        self.assertEqual(expected, result)
+
+    # Full table - seat 3 has cards. btn at 0. From 0 returns 3.
+    def test_nextplayerwcards_seat3hascards_from0_return3(self):
+        self.t.move_button()
+        c = card.Card('A', 's')
+        self.t.seats[3].add_card(c)
+        from_seat = 0
+        expected = 3
+        result = self.t.next_player_w_cards(from_seat)
+        self.assertEqual(expected, result)
+
+    # Full table - all w cards. btn at 0. From 0 returns 5. Negative step
+    def test_nextplayerwcards_fulltable_negstep_from0_return5(self):
+        # Button should be at -1 for self.t
+        self.t.move_button()
+        # Button should be at 0 after move.
+
+        # Give everyone cards
+        c = card.Card('A', 's')
+        for seat in self.t:
+            seat.add_card(c)
+        from_seat = 0
+        expected = 5
+        result = self.t.next_player_w_cards(from_seat, -1)
+        self.assertEqual(expected, result)
+
+    # Full table - seat 3 has cards. btn at 0. negative step. From 0 returns 4.
+    def test_nextplayerwcards_seat4hascards_negstep_from0_return4(self):
+        self.t.move_button()
+        c = card.Card('A', 's')
+        self.t.seats[4].add_card(c)
+        from_seat = 0
+        expected = 4
+        result = self.t.next_player_w_cards(from_seat, -1)
+        self.assertEqual(expected, result)
 
     """
     Tests for get_playerdict()

@@ -122,10 +122,9 @@ class Table():
 
     def valid_bettors(self):
         count = 0
-        for s in self:
-            if s is not None:
-                if self.has_cards(s):
-                    count += 1
+        for i in range(len(self)):
+            if self.has_cards(i):
+                count += 1
         return count
 
     def next(self, from_seat, step=1):
@@ -140,15 +139,18 @@ class Table():
             if p is not None:
                 return currentseat
         else:
-            raise Exception('Error finding bettor with cards')
+            raise Exception('Error finding player!')
 
     # Find next valid player with cards to be the closer
     def next_player_w_cards(self, from_seat, step=1):
-        cardholder = from_seat
+        seat = from_seat
         for i in range(len(self)):
-            cardholder = self.next(cardholder, step)
-            if self.has_cards(self.seats[cardholder]):
-                break
+            seat = self.next(seat, step)
+
+            if self.has_cards(seat) and seat != from_seat:
+                return seat
+        else:
+            raise Exception('Error finding player with cards!')
 
     def move_button(self):
         # Move the button to the next valid player/seat
@@ -188,10 +190,7 @@ class Table():
         return [self.seats[s] for s in seats if self.has_cards(self.seats[s])]
 
     def has_cards(self, s):
-        if s is None:
-            return False
-        else:
-            return len(s._hand) > 0
+        return len(self.seats[s]._hand) > 0
 
 
 def setup_table(num, hero=None, gametype="DRAW5"):
