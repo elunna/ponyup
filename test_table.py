@@ -399,6 +399,26 @@ class TestTable(unittest.TestCase):
     """
     Tests for get_playerdict()
     """
+    # No players at table returns empty dict
+    def test_getplayerdict_noplayer_returnsDictsize0(self):
+        t = table.Table(6)
+        expected = 0
+        result = len(t.get_playerdict())
+        self.assertEqual(expected, result)
+
+    # 1 player at table, returns dict size 1
+    def test_getplayerdict_1player_returnsDictsize1(self):
+        t = table.Table(6)
+        t.add_player(0, player.Player('bob0', 'CPU'))
+        expected = 1
+        result = len(t.get_playerdict())
+        self.assertEqual(expected, result)
+
+    # 6 players returns dict size 6
+    def test_getplayerdict_6players_returnsDictsize6(self):
+        expected = 6
+        result = len(self.t.get_playerdict())
+        self.assertEqual(expected, result)
 
     """
     Tests for randomize_button()
