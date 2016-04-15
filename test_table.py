@@ -1,5 +1,6 @@
 import unittest
 import card
+import deck
 import table
 import player
 
@@ -473,9 +474,8 @@ class TestTable(unittest.TestCase):
         # Make sure the sb is at 0.
         self.assertEqual(t.get_sb(), 0)
 
-        c, c2 = card.Card('A', 's'), card.Card('A', 'd')
-        t.seats[0].add_card(c)
-        t.seats[1].add_card(c2)
+        deal_cards(t)
+
         expected = t.seats[0]
         result = t.get_cardholders()[0]
         self.assertEqual(expected, result)
@@ -491,16 +491,36 @@ class TestTable(unittest.TestCase):
         self.assertEqual(t.btn(), 1)
         # Make sure the sb is at 1.
         self.assertEqual(t.get_sb(), 1)
+        deal_cards(t)
 
-        c, c2 = card.Card('A', 's'), card.Card('A', 'd')
-        t.seats[0].add_card(c)
-        t.seats[1].add_card(c2)
         expected = t.seats[1]
         result = t.get_cardholders()[0]
         self.assertEqual(expected, result)
 
     # 6 players with cards, Button at 0. Returns list with seat 1 first.
+    def test_getcardholders_6havecards_btn0_seat1first(self):
+        self.t.move_button()
+        # Make sure the btn is at 0
+        self.assertEqual(self.t.btn(), 0)
+
+        deal_cards(self.t)
+
+        expected = self.t.seats[1]
+        result = self.t.get_cardholders()[0]
+        self.assertEqual(expected, result)
+
     # 6 players with cards, Button at 5. Returns list with seat 0 first.
+    def test_getcardholders_6havecards_btn5_seat0first(self):
+        self.t.TOKENS['BTN'] = 4
+        self.t.move_button()
+        # Make sure the btn is at 0
+        self.assertEqual(self.t.btn(), 0)
+
+        deal_cards(self.t)
+        expected = self.t.seats[1]
+        result = self.t.get_cardholders()[0]
+        self.assertEqual(expected, result)
+
     # 6 players with cards, Button at 0. Returns list that's size 6.
     """
     Tests for has_cards(s)
@@ -521,3 +541,9 @@ def make_table(seats):
         p.add_chips(1000)
 
     return t
+
+
+def deal_cards(tbl):
+    d = deck.Deck()
+    for seat in tbl:
+        seat.add_card(d.deal())
