@@ -302,7 +302,7 @@ class TestTable(unittest.TestCase):
         result = self.t.next(seat, -1)
         self.assertEqual(expected, result)
 
-    # Empty seat between 4 and 0, returns 4
+    # Empty seat between 4 and 0, returns 5
     def test_next_negativestep_seat5empty_from0_returnSeat5(self):
         seat = 0
         self.t.remove_player(5)
