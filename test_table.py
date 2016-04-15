@@ -9,16 +9,7 @@ class TestTable(unittest.TestCase):
     Setup a table filled with 6 players for testing.
     """
     def setUp(self):
-        self.t = table.Table(6)
-        self.t.add_player(0, player.Player('bob0', 'CPU'))
-        self.t.add_player(1, player.Player('bob1', 'CPU'))
-        self.t.add_player(2, player.Player('bob2', 'CPU'))
-        self.t.add_player(3, player.Player('bob3', 'CPU'))
-        self.t.add_player(4, player.Player('bob4', 'CPU'))
-        self.t.add_player(5, player.Player('bob5', 'CPU'))
-
-        for p in self.t:
-            p.add_chips(1000)
+        self.t = make_table(6)
 
     """
     Tests for __init__ and table construction
@@ -424,6 +415,31 @@ class TestTable(unittest.TestCase):
     Tests for randomize_button()
     """
 
+    # Randomize button on table size 2, button is in range 0-1
+    def test_randomizebutton_2seats_inrange0to1(self):
+        seats = 2
+        t = make_table(seats)
+        t.randomize_button()
+        result = t.btn() >= 0 and t.btn() < seats
+        self.assertTrue(result)
+
+    # Randomize button on table size 6, button is in range 0-5
+
+    def test_randomizebutton_6seats_inrange0to5(self):
+        seats = 6
+        t = make_table(seats)
+        t.randomize_button()
+        result = t.btn() >= 0 and t.btn() < seats
+        self.assertTrue(result)
+
+    # Randomize button on table size 6, button is in range 0-8
+    def test_randomizebutton_9seats_inrange0to8(self):
+        seats = 9
+        t = make_table(seats)
+        t.randomize_button()
+        result = t.btn() >= 0 and t.btn() < seats
+        self.assertTrue(result)
+
     """
     Tests for get_cardholders()
     """
@@ -435,3 +451,15 @@ class TestTable(unittest.TestCase):
 #########################
 
 # Test setup_table(num, hero=None, gametype="DRAW5")
+
+
+def make_table(seats):
+    # Populate a Table of the specified # of seats with players.
+    t = table.Table(seats)
+    for i in range(seats):
+        t.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
+
+    for p in t:
+        p.add_chips(1000)
+
+    return t
