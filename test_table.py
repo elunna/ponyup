@@ -314,17 +314,19 @@ class TestTable(unittest.TestCase):
     def test_next_noplayers_returnsNeg1(self):
         t = table.Table(6)
         seat = 0
-        expected = -1
-        result = t.next(seat)
-        self.assertEqual(expected, result)
+        #  expected = -1
+        #  result = t.next(seat)
+        #  self.assertEqual(expected, result)
+        self.assertRaises(Exception, t.next, seat)
 
     # No players, negative step, return -1
     def test_next_negativestep_noplayers_returnsNeg1(self):
         t = table.Table(6)
         seat = 0
-        expected = -1
-        result = t.next(seat, -1)
-        self.assertEqual(expected, result)
+        #  expected = -1
+        #  result = t.next(seat, -1)
+        #  self.assertEqual(expected, result)
+        self.assertRaises(Exception, t.next, seat)
 
     """
     Tests for get_playerdict()

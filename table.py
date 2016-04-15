@@ -140,7 +140,15 @@ class Table():
             if p is not None:
                 return currentseat
         else:
-            return -1
+            raise Exception('Error finding bettor with cards')
+
+    # Find next valid player with cards to be the closer
+    def next_player_w_cards(self, from_seat, step=1):
+        cardholder = from_seat
+        for i in range(len(self)):
+            cardholder = self.next(cardholder, step)
+            if self.has_cards(self.seats[cardholder]):
+                break
 
     def move_button(self):
         # Move the button to the next valid player/seat
