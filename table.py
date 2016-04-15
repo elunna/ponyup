@@ -187,7 +187,7 @@ class Table():
         seats = list(range(len(self)))
         seats = seats[sb:] + seats[0:sb]
 
-        return [self.seats[s] for s in seats if self.has_cards(self.seats[s])]
+        return [self.seats[s] for s in seats if self.has_cards(s)]
 
     def has_cards(self, s):
         return len(self.seats[s]._hand) > 0
