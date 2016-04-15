@@ -183,10 +183,15 @@ class Table():
         self.move_button()
 
     def get_cardholders(self):
+        """
+        Returns a list of players with cards, ordered by small blind first.
+        """
+        if self.get_sb() < 0:
+            raise Exception('Trying to get cardholders before blinds were set!')
         sb = self.get_sb()
+
         seats = list(range(len(self)))
         seats = seats[sb:] + seats[0:sb]
-
         return [self.seats[s] for s in seats if self.has_cards(s)]
 
     def has_cards(self, s):
