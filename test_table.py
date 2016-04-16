@@ -522,7 +522,6 @@ class TestTable(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # 6 players with cards, Button at 0. Returns list that's size 6.
-    # 6 players with cards, Button at 5. Returns list with seat 0 first.
     def test_getcardholders_6havecards_lengthis6(self):
         self.t.move_button()
         deal_cards(self.t)
@@ -547,9 +546,8 @@ class TestTable(unittest.TestCase):
         result = self.t.has_cards(0)
         self.assertEqual(expected, result)
 
-#########################
-
-# Test setup_table(num, hero=None, gametype="DRAW5")
+##################################################
+# Helper Functions
 
 
 def make_table(seats):
