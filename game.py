@@ -285,7 +285,9 @@ class Round():
         print('{} posts ${}'.format(bb, self._game.blinds[1]))
 
     def setup_betting(self):
-        """ Set betsize, level, currentbettor and lastbettor."""
+        """
+        Set betsize, level, currentbettor and lastbettor.
+        """
 
         # Preflop: Headsup
         if self.street == 0:
@@ -301,8 +303,9 @@ class Round():
             # postflop the first bettor is right after the button
             self.level = 0
             self.betsize = self._game.blinds[1] * 2
-            self.closer = self.tbl.prev(self.tbl.get_sb(), hascards=True)
-            self.bettor = self.tbl.next(self.tbl.btn(), hascards=True)
+
+            self.closer = self.tbl.next_player_w_cards(self.tbl.get_sb(), -1)
+            self.bettor = self.tbl.next_player_w_cards(self.tbl.btn())
 
             # Remember starting stack size.
             for p in self.tbl:
@@ -333,7 +336,8 @@ class Round():
 
             if self.tbl.valid_bettors() == 1:
                 print('Only one player left!')
-                winner = self.tbl.seats[self.tbl.next(self.bettor, True)]
+                #  winner = self.tbl.seats[self.tbl.next(self.bettor, True)]
+                winner = self.tbl.seats[self.tbl.next_player_w_cards(self.bettor)]
                 self.PLAYING = False
                 # Return the single winner as a list so award_pot can use it.
                 return [winner]
@@ -343,7 +347,8 @@ class Round():
                 playing = False
             else:
                 # Set next bettor
-                self.bettor = self.tbl.next(self.bettor, hascards=True)
+                #  self.bettor = self.tbl.next(self.bettor, hascards=True)
+                self.bettor = self.tbl.next_player_w_cards(self.bettor)
 
         else:
             # The betting round is over, and there are multiple players still remaining.
@@ -361,7 +366,8 @@ class Round():
 
         elif option[2] > 0:
             # It's a raise, so we'll need to reset last better.
-            self.closer = self.tbl.prev(self.bettor, hascards=True)
+            #  self.closer = self.tbl.prev(self.bettor, hascards=True)
+            self.closer = self.tbl.next_player_w_cards(self.bettor, -1)
             self.pot += p.bet(option[1])
             self.level += option[2]
         else:
