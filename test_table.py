@@ -533,6 +533,19 @@ class TestTable(unittest.TestCase):
     """
     Tests for has_cards(s)
     """
+    # Seat 0 has cards, should return True
+    def test_hascards_playerhascards_returnsTrue(self):
+        c = card.Card('A', 's')
+        self.t.seats[0].add_card(c)
+        expected = True
+        result = self.t.has_cards(0)
+        self.assertEqual(expected, result)
+
+    # Seat 0 doesn't have cards, should return False
+    def test_hascards_playerhasnocards_returnsFalse(self):
+        expected = False
+        result = self.t.has_cards(0)
+        self.assertEqual(expected, result)
 
 #########################
 
