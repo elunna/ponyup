@@ -69,19 +69,19 @@ class Round():
         for p in self.tbl:
             self.muck.extend(p.fold())
         # Add the remainder of the deck
-        self.muck.extend(self.d.cards)
-        self.verify_muck()
+        while len(self.d) > 0:
+            self.muck.append(self.d.deal())
 
     def verify_muck(self):
         DECKSIZE = 52
         if len(self.muck) != DECKSIZE:
-            raise ValueError('Muck size doesn\'t equal starting decksize!')
+            #  raise ValueError('Muck size doesn\'t equal starting decksize!')
             return False
         elif len(self.d) != 0:
-            raise ValueError('Deck still has cards!')
+            #  raise ValueError('Deck still has cards!')
             return False
         elif len(self.tbl.get_cardholders()) > 0:
-            raise ValueError('One or more players still have cards!')
+            #  raise ValueError('One or more players still have cards!')
             return False
         else:
             return True
