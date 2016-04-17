@@ -80,9 +80,44 @@ class TestGameRound(unittest.TestCase):
     Tests for muck_all_cards()
     """
     # 6 players, deal 1 - no cardholders after running
+    def test_muckallcards_cardsmucked_nocardholders(self):
+        self.r.deal_cards(1)
+        self.r.muck_all_cards()
+        expected = 0
+        result = len(self.r.tbl.get_cardholders())
+        self.assertEqual(expected, result)
+
+    # 6 players, deal 1 - verify_muck is True after running
+    def test_muckallcards_cardsmucked_verifymuckreturnsTrue(self):
+        self.r.deal_cards(1)
+        self.r.muck_all_cards()
+        expected = True
+        result = self.r.verify_muck()
+        self.assertEqual(expected, result)
+
     # 6 players, deal 1 - decksize == 0 after running
+    def test_muckallcards_cardsmucked_decksize0(self):
+        self.r.deal_cards(1)
+        self.r.muck_all_cards()
+        expected = 0
+        result = len(self.r.d)
+        self.assertEqual(expected, result)
+
     # 6 players, deal 1 - muck size == 52 after running
+    def test_muckallcards_cardsmucked_mucksize52(self):
+        self.r.deal_cards(1)
+        self.r.muck_all_cards()
+        expected = 52
+        result = len(self.r.muck)
+        self.assertEqual(expected, result)
+
     # 6 players, deal 1 - do_players_have_cards == False after running
+    def test_muckallcards_cardsmucked_playersdonothavecards(self):
+        self.r.deal_cards(1)
+        self.r.muck_all_cards()
+        expected = False
+        result = self.r.do_players_have_cards()
+        self.assertEqual(expected, result)
 
     """
     Tests for verify_muck()
