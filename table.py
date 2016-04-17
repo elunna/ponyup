@@ -185,7 +185,10 @@ class Table():
         return [self.seats[s] for s in seats if self.has_cards(s)]
 
     def has_cards(self, s):
-        return len(self.seats[s]._hand) > 0
+        if self.seats[s] is not None:
+            return len(self.seats[s]._hand) > 0
+        else:
+            return False
 
 
 def setup_table(num, hero=None, gametype="DRAW5"):
