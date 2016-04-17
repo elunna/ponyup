@@ -40,7 +40,6 @@ def get_gamestate(players):
     # -1 = Still playing
 
     if len(players[0]) == 0 and len(players[1]) == 0:
-        print('Tie!')
         return 0
     elif len(players[0]) == 0:
         return 2
