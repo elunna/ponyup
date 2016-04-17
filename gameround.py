@@ -18,7 +18,6 @@ class Round():
         self.betsize = 0
         self.level = 0
         self.tbl = game._table
-        self.PLAYING = True
 
         self.muck = []
         self.d = deck.Deck()
