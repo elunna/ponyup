@@ -20,22 +20,6 @@ WAR = {
 }
 
 
-def display_cards(cards):
-    for c in cards:
-        c.hidden = False
-        print('{} '.format(str(c)), end='')
-        c.hidden = True
-    print('')
-
-
-def show_topcards(players):
-    players[0][0].hidden = False
-    players[1][0].hidden = False
-    print('{}    vs    {}'.format(players[0][0], players[1][0]))
-    players[0][0].hidden = True
-    players[1][0].hidden = True
-
-
 def get_players():
     # Creates 2 players and deals a deck evenly between them.
     players = [[], []]
@@ -72,12 +56,40 @@ def get_gamestate(players):
 
 
 def get_winner(players):
+    """
+    Determines the winner by looking at the top card of each players pile.
+    Returns 1 if player 1 has a higher card.
+    Returns 2 if player 2 has a higher card.
+    Returns 0 if they tie.
+    """
     if players[0][0].val() > players[1][0].val():
         return 1
     elif players[0][0].val() < players[1][0].val():
         return 2
     else:
         return 0
+
+
+def display_cards(cardlist):
+    """ Returns a string representing the cards in the list."""
+    for c in cardlist:
+        c.hidden = False
+        print('{} '.format(str(c)), end='')
+        c.hidden = True
+    print('')
+
+
+def show_topcards(players):
+    """
+    Returns a string showing the top card of each players pile vs the other.
+    """
+    #  players[0][0].hidden = False
+    #  players[1][0].hidden = False
+    #  print('{} vs {}'.format(players[0][0], players[1][0]))
+    #  players[0][0].hidden = True
+    #  players[1][0].hidden = True
+    return '{}{} vs {}{}'.format(
+        players[0][0].rank, players[0][0].suit, players[1][0].rank, players[1][0].suit)
 
 
 def award_cards(plyr, spoils):
@@ -100,7 +112,7 @@ def playround(players, warlevel):
     if get_gamestate(players) > 0:
         sys.exit()
 
-    show_topcards(players)
+    print(show_topcards(players))
     winner = get_winner(players)
 
     spoils = get_spoils(players, 1)

@@ -4,39 +4,48 @@ import card
 
 
 class TestWar(unittest.TestCase):
-    def testgetGameState_tie_returns0(self):
+    """
+    Tests for get_players():
+    """
+    def test_getplayers_bothareequalsize(self):
+        p = war.get_players()
+        expected = True
+        result = len(p[0]) == len(p[1])
+        self.assertEqual(expected, result)
+
+    """
+    Tests for get_gamestate(players)
+    """
+    def test_get_gamestate_tie_returns0(self):
         p = [[], []]
         expected = 0
         result = war.get_gamestate(p)
         self.assertEqual(expected, result)
 
-    def testgetGameState_player2nocards_returns1(self):
+    def test_get_gamestate_player2nocards_returns1(self):
         p = war.get_players()
         p[1] = []
         expected = 1
         result = war.get_gamestate(p)
         self.assertEqual(expected, result)
 
-    def testgetGameState_player1nocards_returns2(self):
+    def test_get_gamestate_player1nocards_returns2(self):
         p = war.get_players()
         p[0] = []
         expected = 2
         result = war.get_gamestate(p)
         self.assertEqual(expected, result)
 
-    def testgetGameState_bothhavecards_returnsNeg1(self):
+    def test_get_gamestate_bothhavecards_returnsneg1(self):
         p = war.get_players()
         expected = -1
         result = war.get_gamestate(p)
         self.assertEqual(expected, result)
 
-    def test_getPlayers_sizesAreEqual(self):
-        p = war.get_players()
-        expected = True
-        result = len(p[0]) == len(p[1])
-        self.assertEqual(expected, result)
-
-    def testGetWinner_player1win_return1(self):
+    """
+    Tests for get_winner(players)
+    """
+    def test_GetWinner_player1win_return1(self):
         hi = card.Card('A', 's')
         lo = card.Card('2', 's')
         p = [[hi], [lo]]
@@ -44,7 +53,7 @@ class TestWar(unittest.TestCase):
         result = war.get_winner(p)
         self.assertEqual(expected, result)
 
-    def testGetWinner_player2win_return2(self):
+    def test_GetWinner_player2win_return2(self):
         hi = card.Card('A', 's')
         lo = card.Card('2', 's')
         p = [[lo], [hi]]
@@ -52,7 +61,7 @@ class TestWar(unittest.TestCase):
         result = war.get_winner(p)
         self.assertEqual(expected, result)
 
-    def testGetWinner_tie_return0(self):
+    def test_GetWinner_tie_return0(self):
         c1 = card.Card('A', 's')
         c2 = card.Card('A', 'c')
         p = [[c1], [c2]]
@@ -60,10 +69,45 @@ class TestWar(unittest.TestCase):
         result = war.get_winner(p)
         self.assertEqual(expected, result)
 
-    #  def testAwardSpoils_As_player1containsAs(self):
-    #  def testGetSpoils_0qty_returnEmptyList(self):
-    #  def testGetSpoils_playerHasLessThanQty_raiseException(self):
-    #  def testDisplayCards_As_showAs(self):
+    """
+    Tests for display_cards(cardlist)
+    """
+    # Try displaying an empty list, returns empty string.
+    # Passing As card, returns 'As'
+    # Passing As, Ks, returns 'As Ks'
+
+    """
+    Tests for show_topcards(players)
+    # No players have cards. Exception?
+    # As vs Ks, returns 'As vs Ks'
+    """
+
+    """
+    Tests for award_cards(plyr, spoils)
+    """
+    # Award a pile of 1 card - players pile increases by 1.
+    # Award a pile of 1 card - players pile contains the card.
+
+    """
+    Tests for get_spoils(players, qty)
+    """
+
+    """
+    Tests for playround(players, warlevel)
+    """
+
+    """
+    Tests for def get_wartext(level)
+    """
+
+    """
+    Tests for war(players, level, spoils)
+    """
+
+    """
+    Tests for gameloop(players)
+    """
+
 
 if __name__ == "__main__":
     unittest.main()
