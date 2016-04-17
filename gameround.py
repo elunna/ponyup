@@ -9,7 +9,10 @@ STARTINGCHIPS = 1000
 
 class Round():
     def __init__(self, game):
-        """ Initialize the next round of Poker."""
+        """
+        Initialize the next round of Poker.
+
+        """
         self._game = game
         self.street = 0
         self.pot = 0
@@ -21,7 +24,7 @@ class Round():
 
         self.muck = []
         self.d = deck.Deck()
-        self.DECKSIZE = len(self.d)
+        #  self.DECKSIZE = len(self.d)
         for i in range(3):
             self.d.shuffle()
 
@@ -37,15 +40,16 @@ class Round():
 
     def __str__(self):
         """ Show the current size of the pot."""
-        _str = 'Pot: ${:}'.format(self.pot).rjust(50)
+        _str = 'Pot: ${:}'.format(self.pot)
         return _str
 
-    def cheat_check(self):
+    def do_players_have_cards(self):
         """ Check that no players have lingering cards from the previous round."""
-        for p in self.tbl:
-            if len(p._hand) > 0:
-                self.PLAYING = False
-                raise ValueError('Player has cards when they should not!')
+        has_cards = self.tbl.get_cardholders()
+        if len(has_cards) > 0:
+            return True
+        else:
+            return False
 
     def deal_cards(self, qty, faceup=False):
         """ Deal the specified quantity of cards to each player."""
@@ -69,10 +73,18 @@ class Round():
         self.verify_muck()
 
     def verify_muck(self):
-        # Verify
-        if len(self.muck) != self.DECKSIZE:
-            raise ValueError('Deck is corrupted! Muck doesn\'t equal starting deck!')
-            exit()
+        DECKSIZE = 52
+        if len(self.muck) != DECKSIZE:
+            raise ValueError('Muck size doesn\'t equal starting decksize!')
+            return False
+        elif len(self.d) != 0:
+            raise ValueError('Deck still has cards!')
+            return False
+        elif len(self.tbl.get_cardholders()) > 0:
+            raise ValueError('One or more players still have cards!')
+            return False
+        else:
+            return True
 
     def remove_broke_players(self):
         """ Remove players with no chips from the table. """
