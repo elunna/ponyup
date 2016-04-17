@@ -119,7 +119,7 @@ def auto_discard(hand):
 
         # Test for flush draw
         maxsuit = ev.dominant_suit(copy)
-        qty = ev.count_suit(copy)
+        qty = cardlist.count_suit(copy)
 
         if qty == 4:
             discard = ev.pop_suits(copy, maxsuit)
