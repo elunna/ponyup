@@ -14,17 +14,7 @@ class Table():
         if size not in VALID_SIZES:
             raise ValueError('Not a valid table size!')
 
-        self.TOKENS = {
-            'D': -1,
-            'SB': -1,
-            'BB': -1,
-            'STRADDLE': -1,
-            'KILL': -1,
-            'LEGUP': -1,
-            'POST': None,
-            'MISSED BLINDS': None,
-            'SITTING OUT': None
-        }
+        self.TOKENS = {'D': -1, 'SB': -1, 'BB': -1}
 
         self.seats = []
         for i in range(size):
