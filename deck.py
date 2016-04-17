@@ -64,32 +64,3 @@ def standard_deck():
     # Leave out Jokers
     return [card.Card(r, s[0])
             for s in card.SUITS for r in card.RANKS if r != 'Z']
-
-
-if __name__ == '__main__':
-    print('New hidden Deck')
-    hiddendeck = Deck()
-    print(hiddendeck)
-
-    print('New non-hidden Deck')
-    showcards = Deck(hidden=False)
-    print(showcards)
-
-    print('Shuffling the deck')
-    showcards.shuffle()
-    print(showcards)
-
-    print('')
-    print('dealing out 10 cards and creating a new deck')
-
-    cards = [showcards.deal() for c in range(10)]
-    anotherdeck = Deck(cards)
-    print(anotherdeck)
-
-    showcards = Deck(hidden=False)
-    showcards.shuffle()
-    print('')
-    print('Sorting the deck')
-    showcards.sort()
-
-    print(showcards)
