@@ -25,7 +25,7 @@ class Game():
         for p in self._table:
             p.chips = STARTINGCHIPS
 
-        self._table.randomize_button()
+        #  self._table.randomize_button()
 
     def __str__(self):
         """ Represents the game as the round # and the stakes level."""
