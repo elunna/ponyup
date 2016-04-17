@@ -183,6 +183,7 @@ def auto_discard(hand):
 class Draw5Game(game.Game):
     def play(self):
         """ Defines the structure of a hand played in the game."""
+        self._table.randomize_button()
         newround = gameround.Round(self)
         newround.do_players_have_cards()
 
