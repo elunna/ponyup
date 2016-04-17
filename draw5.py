@@ -8,6 +8,7 @@ import hand
 import card
 import os
 import game
+import gameround
 import blinds
 
 
@@ -182,7 +183,7 @@ def auto_discard(hand):
 class Draw5Game(game.Game):
     def play(self):
         """ Defines the structure of a hand played in the game."""
-        newround = game.Round(self)
+        newround = gameround.Round(self)
         newround.cheat_check()
 
         # todo: Postblinds
