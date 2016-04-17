@@ -42,15 +42,10 @@ def get_gamestate(players):
     if len(players[0]) == 0 and len(players[1]) == 0:
         print('Tie!')
         return 0
-        #  return 0  # Tie
     elif len(players[0]) == 0:
-        print('Player 2 wins!')
         return 2
-        #  return 2  # Player 2 wins
     elif len(players[1]) == 0:
-        print('Player 1 wins!')
         return 1
-        #  return 1  # Player 1 wins
     else:
         return -1
 
@@ -100,8 +95,8 @@ def award_cards(plyr, spoils):
 def get_spoils(players, qty):
     spoils = []
     for i in range(qty):
-        if get_gamestate(players) > 0:
-            sys.exit()
+        if get_gamestate(players) >= 0:
+            gameover(players)
 
         spoils.append(players[0].pop(0))
         spoils.append(players[1].pop(0))
@@ -109,8 +104,8 @@ def get_spoils(players, qty):
 
 
 def playround(players, warlevel):
-    if get_gamestate(players) > 0:
-        sys.exit()
+    if get_gamestate(players) >= 0:
+        gameover(players)
 
     print(show_topcards(players))
     winner = get_winner(players)
@@ -156,6 +151,18 @@ def war(players, level, spoils):
     print('Player {} wins war #{}!'.format(winner, level))
     award_cards(players[winner - 1], spoils)
     return winner
+
+
+def gameover(players):
+    state = get_gamestate(players)
+    print('Game over! ', end='')
+    if state == 0:
+        print('TIE GAME!')
+    elif state == 1:
+        print('Player 1 wins!')
+    if state == 2:
+        print('Player 2 wins!')
+    sys.exit()
 
 
 def gameloop(players):
