@@ -98,6 +98,7 @@ class Table():
         p = self.seats[index]
         if p is not None:
             self.seats[index] = None
+        return p
 
     def get_players(self):
         # Returns a list of all the active players at the table

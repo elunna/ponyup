@@ -88,10 +88,12 @@ class Round():
 
     def remove_broke_players(self):
         """ Remove players with no chips from the table. """
+        players = []
         for p in self.tbl:
             if p.chips == 0:
                 i = self.tbl.get_index(p)
-                self.tbl.remove_player(i)
+                players.append(self.tbl.remove_player(i))
+        return players
 
     def get_valueplayer_list(self):
         # Creating a list of value/player values')
