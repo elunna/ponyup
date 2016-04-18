@@ -191,6 +191,24 @@ class Table():
         else:
             return False
 
+    def remove_broke(self):
+        """ Remove players with no chips from the table. """
+        players = []
+        for p in self:
+            if p.chips == 0:
+                i = self.get_index(p)
+                players.append(self.remove_player(i))
+        return players
+
+    def get_valuelist(self):
+        """
+        Find all the players with cards and return a list of hand values and player objects.
+        """
+        handlist = []
+        for p in self.get_cardholders():
+            handlist.append((p._hand.value, p))
+        return handlist
+
 
 def setup_table(num, hero=None, gametype="DRAW5"):
     # The hero variable lets someone pass in a Human player name

@@ -150,35 +150,6 @@ class TestGameRound(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for remove_broke_players()
-    """
-    # 6 players, all with chips, returns empty list
-    def test_removebrokeplayers_6playerswithchips_returnemptylist(self):
-        expected = []
-        result = self.r.remove_broke_players()
-        self.assertEqual(expected, result)
-
-    # 1 broke player, returns the player in a list
-    def test_removebrokeplayers_1brokeplayer_returnsplayer(self):
-        p = self.r.tbl.seats[0]
-        p.chips = 0
-        expected = [p]
-        result = self.r.remove_broke_players()
-        self.assertEqual(expected, result)
-
-    # 6 players, all broke, table is empty.
-    def test_removebrokeplayers_allbroke_returnsallplayers(self):
-        for p in self.r.tbl:
-            p.chips = 0
-        expected = self.r.tbl.seats[:]
-        result = self.r.remove_broke_players()
-        self.assertEqual(expected, result)
-
-    """
-    Tests for get_valueplayer_list()
-    """
-
-    """
     Tests for showdown()
     """
 

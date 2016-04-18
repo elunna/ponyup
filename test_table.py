@@ -546,6 +546,58 @@ class TestTable(unittest.TestCase):
         result = self.t.has_cards(0)
         self.assertEqual(expected, result)
 
+    """
+    Tests for remove_broke_players()
+    """
+    # 6 players, all with chips, returns empty list
+    def test_removebrokeplayers_6playerswithchips_returnemptylist(self):
+        expected = []
+        result = self.t.remove_broke()
+        self.assertEqual(expected, result)
+
+    # 1 broke player, returns the player in a list
+    def test_removebrokeplayers_1brokeplayer_returnsplayer(self):
+        p = self.t.seats[0]
+        p.chips = 0
+        expected = [p]
+        result = self.t.remove_broke()
+        self.assertEqual(expected, result)
+
+    # 6 players, all broke, table is empty.
+    def test_removebrokeplayers_allbroke_returnsallplayers(self):
+        for p in self.t:
+            p.chips = 0
+        expected = self.t.seats[:]
+        result = self.t.remove_broke()
+        self.assertEqual(expected, result)
+
+    """
+    Tests for get_valuelist()
+    """
+    # No players have cards, returns empty list
+    def test_getvaluelist_nocards_emptylist(self):
+        self.t.move_button()
+        expected = []
+        result = self.t.get_valuelist()
+        self.assertEqual(expected, result)
+
+    # 1 player with cards, list is 1 long.
+    def test_getvaluelist_1hascards_listis1long(self):
+        self.t.move_button()
+        c = card.Card('A', 's')
+        self.t.seats[0].add_card(c)
+        expected = 1
+        result = len(self.t.get_valuelist())
+        self.assertEqual(expected, result)
+
+    # 6 players with cards, list is 6 long.
+    def test_getvaluelist_6havecards_listis6long(self):
+        self.t.move_button()
+        deal_cards(self.t)
+        expected = 6
+        result = len(self.t.get_valuelist())
+        self.assertEqual(expected, result)
+
 ##################################################
 # Helper Functions
 

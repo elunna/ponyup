@@ -228,7 +228,7 @@ class Draw5Game(game.Game):
         # ================== CLEANUP
         newround.muck_all_cards()
         # Remove broke players
-        newround.remove_broke_players()
+        newround.tbl.remove_broke()
 
         # Move the table button
         self._table.move_button()
