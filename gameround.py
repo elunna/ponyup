@@ -43,14 +43,6 @@ class Round():
         _str = 'Pot: ${:}'.format(self.pot)
         return _str
 
-    def do_players_have_cards(self):
-        """ Check that no players have lingering cards from the previous round."""
-        has_cards = self.tbl.get_cardholders()
-        if len(has_cards) > 0:
-            return True
-        else:
-            return False
-
     def deal_cards(self, qty, faceup=False):
         """ Deal the specified quantity of cards to each player."""
         for i in range(qty):

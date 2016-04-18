@@ -184,7 +184,9 @@ class Draw5Game(game.Game):
     def play(self):
         """ Defines the structure of a hand played in the game."""
         newround = gameround.Round(self)
-        newround.do_players_have_cards()
+
+        if len(self.tbl.get_cardholders()) > 0:
+            raise Exception('One or more players have cards before the deal!')
 
         # todo: Postblinds
         newround.post_blinds()

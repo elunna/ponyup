@@ -31,22 +31,6 @@ class TestGameRound(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for do_players_have_cards():
-    """
-    # Players have no cards, returns False
-    def test_doplayershavecards_nocards_returnsFalse(self):
-        expected = False
-        result = self.r.do_players_have_cards()
-        self.assertEqual(expected, result)
-
-    # 1 player has cards, returns True
-    def test_doplayershavecards_allhavecards_returnsTrue(self):
-        self.r.deal_cards(1)
-        expected = True
-        result = self.r.do_players_have_cards()
-        self.assertEqual(expected, result)
-
-    """
     Tests for deal_cards(qty, faceup=False)
     """
     # 6 players, deal 1 - should be 6 cardholders
@@ -80,6 +64,7 @@ class TestGameRound(unittest.TestCase):
     """
     Tests for muck_all_cards()
     """
+
     # 6 players, deal 1 - no cardholders after running
     def test_muckallcards_cardsmucked_nocardholders(self):
         self.r.deal_cards(1)
@@ -110,14 +95,6 @@ class TestGameRound(unittest.TestCase):
         self.r.muck_all_cards()
         expected = 52
         result = len(self.r.muck)
-        self.assertEqual(expected, result)
-
-    # 6 players, deal 1 - do_players_have_cards == False after running
-    def test_muckallcards_cardsmucked_playersdonothavecards(self):
-        self.r.deal_cards(1)
-        self.r.muck_all_cards()
-        expected = False
-        result = self.r.do_players_have_cards()
         self.assertEqual(expected, result)
 
     """
