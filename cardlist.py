@@ -106,7 +106,7 @@ def get_allgaps(cards):
 
 def strip_ranks(cards, ranks):
     """
-    Takes a list of cards and removes ALL BUT the rank(s) given.
+    Takes a list of cards, removes the rank(s) given, and returns a list of the leftovers.
     There can be more than one rank passed.
     """
     discard = []
@@ -118,7 +118,7 @@ def strip_ranks(cards, ranks):
 
 def strip_suits(cards, suits):
     """
-    Takes a list of cards and removes ALL BUT the suit given.
+    Takes a list of cards, removes the suit given, and returns a list of the leftovers.
     There can only be one suit passed.
     """
     discard = []

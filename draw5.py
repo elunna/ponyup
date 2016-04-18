@@ -118,59 +118,59 @@ def auto_discard(hand):
         copy = sorted(hand.cards[:])
 
         # Test for flush draw
-        maxsuit = ev.dominant_suit(copy)
-        qty = cardlist.count_suit(copy)
+        suit = ev.dominant_suit(copy)
+        qty = cardlist.count_suit(copy, suit)
 
         if qty == 4:
-            discard = ev.pop_suits(copy, maxsuit)
+            discard = cardlist.strip_suits(copy, suit)
 
         # Test for open-ended straight draw(s)
-        elif ev.get_allgaps(copy[0:4]) == 0:
+        elif cardlist.get_allgaps(copy[0:4]) == 0:
             keep = copy[0:4]
-        elif ev.get_allgaps(copy[1:5]) == 0:
+        elif cardlist.get_allgaps(copy[1:5]) == 0:
             keep = copy[1:5]
 
         # Test for gutshot straight draw(s)
-        elif ev.get_allgaps(copy[0:4]) == 1:
+        elif cardlist.get_allgaps(copy[0:4]) == 1:
             keep = copy[0:4]
-        elif ev.get_allgaps(copy[1:5]) == 1:
+        elif cardlist.get_allgaps(copy[1:5]) == 1:
             keep = copy[1:5]
 
         # Draw to high cards
         elif card.RANKS[h[2][1]] > 9:
             highcards = h[0][1] + h[1][1] + h[2][1]
-            discard = ev.pop_ranks(hand.cards, highcards)
+            discard = cardlist.strip_ranks(hand.cards, highcards)
         elif card.RANKS[h[1][1]] > 9:
             highcards = h[0][1] + h[1][1]
-            discard = ev.pop_ranks(hand.cards, highcards)
+            discard = cardlist.strip_ranks(hand.cards, highcards)
 
         elif qty == 3:
             # Backdoor flush draw
-            discard = ev.pop_suits(copy, maxsuit)
+            discard = cardlist.strip_suits(copy, suit)
 
         # Draw to an Ace almost as a last resort
         elif h[1][1] == 'A':
-            discard = ev.pop_ranks(hand.cards, 'A')
+            discard = cardlist.strip_ranks(hand.cards, 'A')
 
         # Backdoor straight draws are pretty desparate
-        elif ev.get_allgaps(copy[0:3]) == 0:
+        elif cardlist.get_allgaps(copy[0:3]) == 0:
             keep = copy[0:3]
-        elif ev.get_allgaps(copy[1:4]) == 0:
+        elif cardlist.get_allgaps(copy[1:4]) == 0:
             keep = copy[1:4]
-        elif ev.get_allgaps(copy[2:5]) == 0:
+        elif cardlist.get_allgaps(copy[2:5]) == 0:
             keep = copy[2:5]
 
         # 1-gap Backdoor straight draws are truly desparate!
-        elif ev.get_allgaps(copy[0:3]) == 1:
+        elif cardlist.get_allgaps(copy[0:3]) == 1:
             keep = copy[0:3]
-        elif ev.get_allgaps(copy[1:4]) == 1:
+        elif cardlist.get_allgaps(copy[1:4]) == 1:
             keep = copy[1:4]
-        elif ev.get_allgaps(copy[2:5]) == 1:
+        elif cardlist.get_allgaps(copy[2:5]) == 1:
             keep = copy[2:5]
         else:
             # Last ditch - just draw to the best 2???
             highcards = h[0][1] + h[1][1]
-            discard = ev.pop_ranks(hand.cards, highcards)
+            discard = cardlist.strip_ranks(hand.cards, highcards)
 
         if len(discard) == 0:
             for c in hand.cards:
