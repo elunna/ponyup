@@ -1,8 +1,4 @@
 from __future__ import print_function
-import deck
-import game
-import card
-import blinds
 import table
 
 STARTINGCHIPS = 1000
@@ -22,6 +18,7 @@ class Game():
         self.blinds = stakes
         self.rounds = 1
         self._table = table.setup_table(tablesize, hero)
+        self._table.randomize_button()
         for p in self._table:
             p.chips = STARTINGCHIPS
 
