@@ -107,6 +107,18 @@ class TestTable(unittest.TestCase):
         result = self.t.btn()
         self.assertEqual(expected, result)
 
+    def test_movebutton_fulltableof6(self):
+        tablesize = len(self.t)
+        # Note: I wanted to use a generator to make the test cases here, but didn't work yet.
+        for i in range(tablesize):
+            self.check_btn(i)
+
+    def check_btn(self, b):
+        self.t.move_button()
+        expected = b
+        result = self.t.btn()
+        self.assertEqual(expected, result)
+
     # New table: Button at 0, sb should be at 1
     def test_movebutton_setUpTable_SBat1(self):
         expected = 1
