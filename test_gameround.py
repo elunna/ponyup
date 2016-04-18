@@ -127,7 +127,35 @@ class TestGameRound(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for showdown()
+    Tests for post_antes()
+    """
+    # 6 players ante 10. Pot == 60.
+    def test_postantes_6players_potequals60(self):
+        self.r.post_antes()
+        expected = 60
+        result = self.r.pot
+        self.assertEqual(expected, result)
+
+    # Initial stacks are 1000. After ante are 990.
+    def test_postantes_6players_stacksequal990(self):
+        self.r.post_antes()
+        expected = 990
+        for p in self.r.tbl:
+            result = p.chips
+            self.assertEqual(expected, result)
+
+    """
+    Tests for post_blinds()
+    """
+    # 2 players. BTN == 0. SB == 0 and BB == 1.
+    # 2 players. BTN == 1. SB == 1 and BB == 0.
+    # 3 players. BTN == 0. SB == 1 and BB == 2.
+    # 3 players. BTN == 1. SB == 2 and BB == 0.
+    # 6 players. BTN == 0. SB == 1 and BB == 2.
+    # 6 players. BTN == 5. SB == 0 and BB == 3.
+
+    """
+    Tests for setup_betting()
     """
 
     """
@@ -151,18 +179,6 @@ class TestGameRound(unittest.TestCase):
     """
 
     """
-    Tests for post_antes()
-    """
-
-    """
-    Tests for post_blinds()
-    """
-
-    """
-    Tests for setup_betting()
-    """
-
-    """
     Tests for betting()
     """
 
@@ -180,6 +196,10 @@ class TestGameRound(unittest.TestCase):
 
     """
     Tests for determine_bringin(gametype)
+    """
+
+    """
+    Tests for showdown()
     """
 
 ################################################################

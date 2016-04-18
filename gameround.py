@@ -78,25 +78,58 @@ class Round():
         else:
             return True
 
-    def showdown(self):
+    def post_antes(self):
+        """ All players bet the ante amount and it's added to the pot"""
+
+        for p in self.tbl:
+            self.pot += p.bet(self._game.blinds[2])
+
+    def post_blinds(self):
         """
-        Compare all the hands of players holding cards and determine the winner(s).
+        Determines the correct small blind and big blind positions and
+        contributes the corresponding amounts to the pot.
         """
-        for p in self.tbl.get_cardholders():
-            p.showhand()
-            print('{:15} shows: {}'.format(str(p), p._hand))
+        # Preflop: Headsup
+        if len(self.tbl) < 2:
+            raise ValueError('Not enough players to play!')
+            exit()
+        # Get the SB and BB positions from the table
+        sb = self.tbl.seats[self.tbl.get_sb()]
+        bb = self.tbl.seats[self.tbl.get_bb()]
 
-        handlist = self.tbl.get_valuelist()
-        self.process_allins()
+        # Bet the SB and BB amounts and add to the pot
+        self.pot += sb.bet(self._game.blinds[0])
+        print('{} posts ${}'.format(sb, self._game.blinds[0]))
 
-        if len(self.sidepots) == 0:
-            # No sidepots, so the minimum for elibility is 0.
-            self.determine_eligibility(handlist, self.pot, 0)
+        self.pot += bb.bet(self._game.blinds[1])
+        print('{} posts ${}'.format(bb, self._game.blinds[1]))
 
-        else:
-            self.process_sidepots(handlist)
+    def setup_betting(self):
+        """
+        Set betsize, level, currentbettor and lastbettor.
+        """
 
-        self.PLAYING = False
+        # Preflop: Headsup
+        if self.street == 0:
+            # Preflop the first bettor is right after the BB
+            self.level = 1
+            self.betsize = self._game.blinds[1]
+            self.closer = self.tbl.get_bb()
+            self.bettor = self.tbl.next(self.closer)
+            # Copy the starting stack for the first round (because blinds were posted)
+            self.betstack = self.startstack.copy()
+
+        elif self.street > 0:
+            # postflop the first bettor is right after the button
+            self.level = 0
+            self.betsize = self._game.blinds[1] * 2
+
+            self.closer = self.tbl.next_player_w_cards(self.tbl.get_sb(), -1)
+            self.bettor = self.tbl.next_player_w_cards(self.tbl.btn())
+
+            # Remember starting stack size.
+            for p in self.tbl:
+                self.betstack[p.name] = p.chips
 
     def process_sidepots(self, handlist):
         """ Organize the sidepots into an ascending sorted list."""
@@ -214,59 +247,6 @@ class Round():
             r_winner = self.tbl.seats[self.tbl.next(self.tbl.btn)]
             print('\t{} wins {} remainder chips'.format(r_winner, remainder))
             r_winner.add_chips(remainder)
-
-    def post_antes(self):
-        """ All players bet the ante amount and it's added to the pot"""
-
-        for p in self.tbl:
-            self.pot += p.bet(self._game.blinds[2])
-
-    def post_blinds(self):
-        """
-        Determines the correct small blind and big blind positions and
-        contributes the corresponding amounts to the pot.
-        """
-        # Preflop: Headsup
-        if len(self.tbl) < 2:
-            raise ValueError('Not enough players to play!')
-            exit()
-        # Get the SB and BB positions from the table
-        sb = self.tbl.seats[self.tbl.get_sb()]
-        bb = self.tbl.seats[self.tbl.get_bb()]
-
-        # Bet the SB and BB amounts and add to the pot
-        self.pot += sb.bet(self._game.blinds[0])
-        print('{} posts ${}'.format(sb, self._game.blinds[0]))
-
-        self.pot += bb.bet(self._game.blinds[1])
-        print('{} posts ${}'.format(bb, self._game.blinds[1]))
-
-    def setup_betting(self):
-        """
-        Set betsize, level, currentbettor and lastbettor.
-        """
-
-        # Preflop: Headsup
-        if self.street == 0:
-            # Preflop the first bettor is right after the BB
-            self.level = 1
-            self.betsize = self._game.blinds[1]
-            self.closer = self.tbl.get_bb()
-            self.bettor = self.tbl.next(self.closer)
-            # Copy the starting stack for the first round (because blinds were posted)
-            self.betstack = self.startstack.copy()
-
-        elif self.street > 0:
-            # postflop the first bettor is right after the button
-            self.level = 0
-            self.betsize = self._game.blinds[1] * 2
-
-            self.closer = self.tbl.next_player_w_cards(self.tbl.get_sb(), -1)
-            self.bettor = self.tbl.next_player_w_cards(self.tbl.btn())
-
-            # Remember starting stack size.
-            for p in self.tbl:
-                self.betstack[p.name] = p.chips
 
     def betting(self):
         """
@@ -410,6 +390,26 @@ class Round():
                 if suitvalues[c.suit] < suitvalues[lowcard.suit]:
                     lowcard, player = c, p
         return player
+
+    def showdown(self):
+        """
+        Compare all the hands of players holding cards and determine the winner(s).
+        """
+        for p in self.tbl.get_cardholders():
+            p.showhand()
+            print('{:15} shows: {}'.format(str(p), p._hand))
+
+        handlist = self.tbl.get_valuelist()
+        self.process_allins()
+
+        if len(self.sidepots) == 0:
+            # No sidepots, so the minimum for elibility is 0.
+            self.determine_eligibility(handlist, self.pot, 0)
+
+        else:
+            self.process_sidepots(handlist)
+
+        self.PLAYING = False
 
 
 def calc_odds(bet, pot):
