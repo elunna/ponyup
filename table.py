@@ -119,14 +119,14 @@ class Table():
         return count
 
     def next(self, from_seat, step=1):
+        length = len(self)
         if from_seat < -1 or from_seat >= len(self):
             raise ValueError('from_seat is out of bounds!')
-
-        length = len(self)
 
         for i in range(1, length + 1):
             currentseat = (from_seat + (i * step)) % length
             p = self.seats[currentseat]
+
             if p is not None:
                 return currentseat
         else:
@@ -153,7 +153,7 @@ class Table():
             self.TOKENS['BB'] = self.next(self.btn())
         elif len(self) > 2:
             self.TOKENS['SB'] = self.next(self.btn())
-            self.TOKENS['BB'] = self.next(self.TOKENS['SB'])
+            self.TOKENS['BB'] = self.next(self.get_sb())
         else:
             raise ValueError('Not enough players at the table!')
 

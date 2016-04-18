@@ -136,16 +136,20 @@ class TestTable(unittest.TestCase):
 
     # New table: Button at 0, bb should be at 2
     def test_movebutton_setUpTable_BBat2(self):
-        expected = 2
         self.t.move_button()
+        # Confirm btn is at 0
+        self.assertEqual(self.t.btn(), 0, "button ain't right")
+        expected = 2
         result = self.t.get_bb()
         self.assertEqual(expected, result)
 
     # New table(seat 2 removed): Button at 0, bb should be at 3
     def test_movebutton_seat2removed_BBat3(self):
-        expected = 3
         self.t.remove_player(2)
         self.t.move_button()
+        # Confirm btn is at 0
+        self.assertEqual(self.t.btn(), 0, "button ain't right")
+        expected = 3
         result = self.t.get_bb()
         self.assertEqual(expected, result)
 
@@ -325,6 +329,45 @@ class TestTable(unittest.TestCase):
         t = table.Table(6)
         seat = 0
         self.assertRaises(Exception, t.next, seat)
+
+######################################################
+# Thorough test of next()
+
+    # Next, 6 players, from 0, returns 1
+    def test_next_from0_returns1(self):
+        expected = 1
+        result = self.t.next(0)
+        self.assertEqual(expected, result)
+
+    # Next, 6 players, from 1, returns 2
+    def test_next_from1_returns2(self):
+        expected = 2
+        result = self.t.next(1)
+        self.assertEqual(expected, result)
+
+    # Next, 6 players, from 2, returns 3
+    def test_next_from2_returns3(self):
+        expected = 3
+        result = self.t.next(2)
+        self.assertEqual(expected, result)
+
+    # Next, 6 players, from 3, returns 4
+    def test_next_from3_returns4(self):
+        expected = 4
+        result = self.t.next(3)
+        self.assertEqual(expected, result)
+
+    # Next, 6 players, from 4, returns 5
+    def test_next_from4_returns5(self):
+        expected = 5
+        result = self.t.next(4)
+        self.assertEqual(expected, result)
+
+    # Next, 6 players, from 5, returns 0
+    def test_next_from5_returns0(self):
+        expected = 0
+        result = self.t.next(5)
+        self.assertEqual(expected, result)
 
     """
     Tests for next_player_w_cards(from_seat, step=1)
