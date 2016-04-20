@@ -102,14 +102,7 @@ class Table():
 
     def get_players(self):
         # Returns a list of all the active players at the table
-        # If the button hasn't been set yet...
-        if self.btn() < 0:
-            self.randomize_button()
-
-        # Sort players so the BTN is indexed at 0.
-        players = self.seats[self.btn():] + self.seats[0:self.btn()]
-
-        return [p for p in players if p is not None]
+        return [p for p in self.seats if p is not None]
 
     def valid_bettors(self):
         count = 0
@@ -148,10 +141,10 @@ class Table():
         # Also set the blinds appropriately!
         self.TOKENS['D'] = self.next(self.btn())
 
-        if len(self) == 2:
+        if len(self.get_players()) == 2:
             self.TOKENS['SB'] = self.btn()
             self.TOKENS['BB'] = self.next(self.btn())
-        elif len(self) > 2:
+        elif len(self.get_players()) > 2:
             self.TOKENS['SB'] = self.next(self.btn())
             self.TOKENS['BB'] = self.next(self.get_sb())
         else:
