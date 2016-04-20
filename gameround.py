@@ -11,7 +11,6 @@ class Round():
     def __init__(self, game):
         """
         Initialize the next round of Poker.
-
         """
         self._game = game
         self.street = 0
@@ -89,8 +88,11 @@ class Round():
         Determines the correct small blind and big blind positions and
         contributes the corresponding amounts to the pot.
         """
+        if self.tbl.btn() == -1:
+            raise Exception('Button has not been set yet!')
+
         # Preflop: Headsup
-        if len(self.tbl) < 2:
+        if len(self.tbl.get_players()) < 2:
             raise ValueError('Not enough players to play!')
             exit()
         # Get the SB and BB positions from the table

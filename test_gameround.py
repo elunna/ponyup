@@ -14,7 +14,8 @@ class TestGameRound(unittest.TestCase):
         STAKES = blinds.limit['50/100']
         g = draw5.Draw5Game('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
         g._table = test_table.make_table(6)
-        g._table.randomize_button()
+        #  g._table.randomize_button()
+        #  g._table.move_button()
         self.r = gameround.Round(g)
 
     """
@@ -35,6 +36,7 @@ class TestGameRound(unittest.TestCase):
     """
     # 6 players, deal 1 - should be 6 cardholders
     def test_dealcards_deal1to6players_6cardholders(self):
+        self.r.tbl.move_button()
         self.r.deal_cards(1)
         expected = 6
         result = len(self.r.tbl.get_cardholders())
@@ -67,6 +69,7 @@ class TestGameRound(unittest.TestCase):
 
     # 6 players, deal 1 - no cardholders after running
     def test_muckallcards_cardsmucked_nocardholders(self):
+        self.r.tbl.move_button()
         self.r.deal_cards(1)
         self.r.muck_all_cards()
         expected = 0
@@ -75,6 +78,7 @@ class TestGameRound(unittest.TestCase):
 
     # 6 players, deal 1 - verify_muck is True after running
     def test_muckallcards_cardsmucked_verifymuckreturnsTrue(self):
+        self.r.tbl.move_button()
         self.r.deal_cards(1)
         self.r.muck_all_cards()
         expected = True
@@ -111,6 +115,7 @@ class TestGameRound(unittest.TestCase):
 
     # All cards mucked, but 1 player w cards, returns False
     def test_verifymuck_1playerwithcards_returnsFalse(self):
+        self.r.tbl.move_button()
         self.r.muck_all_cards()
         c = card.Card('A', 's')
         self.r.tbl.seats[0].add_card(c)
@@ -147,12 +152,41 @@ class TestGameRound(unittest.TestCase):
     """
     Tests for post_blinds()
     """
-    # 2 players. BTN == 0. SB == 0 and BB == 1.
-    # 2 players. BTN == 1. SB == 1 and BB == 0.
-    # 3 players. BTN == 0. SB == 1 and BB == 2.
-    # 3 players. BTN == 1. SB == 2 and BB == 0.
-    # 6 players. BTN == 0. SB == 1 and BB == 2.
-    # 6 players. BTN == 5. SB == 0 and BB == 3.
+    # If the button(and blinds haven't been set, raise an exception.)
+    def test_postblinds_btnnotset_raiseException(self):
+        self.assertEqual(self.r.tbl.btn(), -1, 'Button should be -1!')
+        self.assertRaises(Exception, self.r.post_blinds)
+
+    # 2 players(spaced out). Pot = 75, SB stack == 975, BB stack == 950
+    def test_postblinds_2players_pot75(self):
+        for i in [1, 2, 4, 5]:
+            self.r.tbl.remove_player(i)
+        self.r.tbl.move_button()  # verify the button is 0
+        self.assertEqual(self.r.tbl.btn(), 0)
+        self.r.post_blinds()
+        self.assertEqual(self.r.tbl.seats[0].chips, 975)
+        self.assertEqual(self.r.tbl.seats[3].chips, 950)
+        self.assertEqual(self.r.pot, 75)
+
+    # 3 players(spaced out). Pot = 75, SB stack == 975, BB stack == 950
+    def test_postblinds_3players_pot75(self):
+        for i in [1, 3, 5]:
+            self.r.tbl.remove_player(i)
+        self.r.tbl.move_button()  # verify the button is 0
+        self.assertEqual(self.r.tbl.btn(), 0)
+        self.r.post_blinds()
+        self.assertEqual(self.r.tbl.seats[2].chips, 975)
+        self.assertEqual(self.r.tbl.seats[4].chips, 950)
+        self.assertEqual(self.r.pot, 75)
+
+    # 6 players(spaced out). Pot = 75, SB stack == 975, BB stack == 950
+    def test_postblinds_6players_pot75(self):
+        self.r.tbl.move_button()  # verify the button is 0
+        self.assertEqual(self.r.tbl.btn(), 0)
+        self.r.post_blinds()
+        self.assertEqual(self.r.tbl.seats[1].chips, 975)
+        self.assertEqual(self.r.tbl.seats[2].chips, 950)
+        self.assertEqual(self.r.pot, 75)
 
     """
     Tests for setup_betting()
