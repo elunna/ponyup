@@ -188,6 +188,13 @@ class TestGameRound(unittest.TestCase):
         self.assertEqual(self.r.tbl.seats[2].chips, 950)
         self.assertEqual(self.r.pot, 75)
 
+    # 6 players(spaced out). Pot = 75, SB stack == 975, BB stack == 950
+    def test_postblinds_6players_returnsString(self):
+        self.r.tbl.move_button()  # verify the button is 0
+        expected = 'bob1 posts $25\nbob2 posts $50\n'
+        result = self.r.post_blinds()
+        self.assertEqual(expected, result)
+
     """
     Tests for setup_betting()
     """

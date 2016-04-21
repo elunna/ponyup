@@ -85,26 +85,26 @@ class Round():
 
     def post_blinds(self):
         """
-        Determines the correct small blind and big blind positions and
-        contributes the corresponding amounts to the pot.
+        Gets the small and big blind positions from the table and makes each player bet the
+        appropriate mount to the pot. Returns a string describing what the blinds posted.
         """
+
         if self.tbl.btn() == -1:
             raise Exception('Button has not been set yet!')
 
-        # Preflop: Headsup
         if len(self.tbl.get_players()) < 2:
             raise ValueError('Not enough players to play!')
             exit()
-        # Get the SB and BB positions from the table
         sb = self.tbl.seats[self.tbl.get_sb()]
         bb = self.tbl.seats[self.tbl.get_bb()]
 
         # Bet the SB and BB amounts and add to the pot
         self.pot += sb.bet(self._game.blinds[0])
-        print('{} posts ${}'.format(sb, self._game.blinds[0]))
-
         self.pot += bb.bet(self._game.blinds[1])
-        print('{} posts ${}'.format(bb, self._game.blinds[1]))
+        actions = ''
+        actions += '{} posts ${}\n'.format(sb, self._game.blinds[0])
+        actions += '{} posts ${}\n'.format(bb, self._game.blinds[1])
+        return actions
 
     def setup_betting(self):
         """
