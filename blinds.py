@@ -2,20 +2,23 @@
 
 
 class Blinds():
-    def __init__(self, blind_dict, level=1):
-        if level < 1 or level > len(blind_dict):
-            raise ValueError('level is out of bounds!')
-        self.blind_dict = blind_dict
+    def __init__(self, level=1):
+        self.blind_dict = limit
         self.set_level(level)
 
     def set_level(self, level):
+        if level < 1 or level > len(self.blind_dict):
+            raise ValueError('level is out of bounds!')
         self.BB = self.blind_dict.get(str(level))[0]
         self.SB = self.blind_dict.get(str(level))[1]
         self.ANTE = self.blind_dict.get(str(level))[2]
 
     def sb_to_ante_ratio(self):
         # Use only one decimal place.
-        return round(self.SB / self.ANTE, 1)
+        if self.ANTE > 0:
+            return round(self.SB / self.ANTE, 1)
+        else:
+            return 0
 
     def stakes(self):
         if self.ANTE > 0:
@@ -29,6 +32,7 @@ class Blinds():
                                                        self.blind_dict.get(i)[0],
                                                        self.blind_dict.get(i)[1],
                                                        self.blind_dict.get(i)[2]))
+
 
 # todo: index the normal limits by level.
 limit = {
