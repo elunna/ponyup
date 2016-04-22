@@ -23,9 +23,6 @@ class Round():
 
         self.muck = []
         self.d = deck.Deck()
-        #  self.DECKSIZE = len(self.d)
-        for i in range(3):
-            self.d.shuffle()
 
         # Create a list of the players from the table, and place the button at index 0
         self.bettor = None

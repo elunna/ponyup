@@ -13,6 +13,9 @@ class Deck():
             self.cards = standard_deck()
         else:
             self.cards = cards
+        # Give it a good shuffle.
+        for i in range(10):
+            self.shuffle()
 
     def shuffle(self):
         random.shuffle(self.cards)
