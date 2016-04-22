@@ -18,7 +18,10 @@ class Blinds():
         return round(self.SB / self.ANTE, 1)
 
     def stakes(self):
-        return '${}/${}'.format(self.BB, self.BB * 2)
+        if self.ANTE > 0:
+            return '${}/${}, Ante: ${}'.format(self.BB, self.BB * 2, self.ANTE)
+        else:
+            return '${}/${}'.format(self.BB, self.BB * 2)
 
     def levels(self):
         for i in range(1, len(self.blind_dict) + 1):
@@ -29,7 +32,7 @@ class Blinds():
 
 # todo: index the normal limits by level.
 limit = {
-    '1':    (2, 1, .5),
+    '1':    (2, 1, 0),
     '2':    (3, 1, 1),
     '3':    (4, 2, 1),
     '4':    (6, 3, 2),
