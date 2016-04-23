@@ -1,0 +1,32 @@
+The structure of the poker games:
+
+Tournaments(blinds go up/no rebuys)
+
+Sessions(blinds are statis/rebuys allowed)
+	Can create a new Cash session of Poker deciding:
+		Table size
+		Stakes
+		Game type
+		betting type(limit/nl)
+	
+	The Session tracks:
+		how many rounds have passed
+		how much time has passed?
+		the table
+		the blind structure
+		* potentially, handhistories
+		* Weird situations with the blinds(player leaves on sb/bb etc)
+		
+		play method: manages the structure of the select game using tools in the Round
+		
+A "Round" is a single hand of the session:
+	* Safety check that players don't have lingering cards.
+	* Posts antes and/or blinds
+	* Deals out the appropriate cards
+	* It manages the betting
+	* It calculates the winners
+	* It awards the winner(s) their respective portions of the pot.
+	
+		ie: 
+		
+

@@ -1,8 +1,8 @@
 import unittest
 import card
-import draw5
 import game
 import test_table
+import session
 
 
 class TestGame(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestGame(unittest.TestCase):
     """
     def setUp(self):
         blind_level = 10
-        g = draw5.Draw5Game('FIVE CARD DRAW', blind_level, 6, 'HUMAN')
+        g = session.Draw5Session('FIVE CARD DRAW', blind_level, 6, 'HUMAN')
         g._table = test_table.make_table(6)
         self.r = game.Round(g)
 

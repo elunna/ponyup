@@ -104,7 +104,7 @@ def play_poker():
     print('Alright, let\'s play some poker!')
 
     print('Initializing new game...\n')
-    g = draw5.Draw5Game('FIVE CARD DRAW', STAKES, TABLE, NAME)
+    g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, TABLE, NAME)
 
     playing = True
 
