@@ -9,7 +9,6 @@ import card
 import os
 import game
 import gameround
-import blinds
 
 
 def is_integer(num):
@@ -185,7 +184,7 @@ class Draw5Game(game.Game):
         """ Defines the structure of a hand played in the game."""
         newround = gameround.Round(self)
 
-        if len(self.tbl.get_cardholders()) > 0:
+        if len(self._table.get_cardholders()) > 0:
             raise Exception('One or more players have cards before the deal!')
 
         # todo: Postblinds
@@ -229,7 +228,7 @@ class Draw5Game(game.Game):
         # ================== CLEANUP
         newround.muck_all_cards()
         # Remove broke players
-        newround.tbl.remove_broke()
+        newround._table.remove_broke()
 
         # Move the table button
         self._table.move_button()
@@ -241,9 +240,7 @@ class Draw5Game(game.Game):
 def main():
     os.system('clear')
     print('FIVE CARD DRAW!')
-    #  print('Initializing new game...\n')
-    STAKES = blinds.limit['50/100']
-    g = Draw5Game('FIVE CARD DRAW', STAKES, 6, 'LUNNA')
+    g = Draw5Game('FIVE CARD DRAW', 10, 6, 'LUNNA')
 
     playing = True
 

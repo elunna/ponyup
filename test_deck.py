@@ -60,13 +60,6 @@ class TestDeck(unittest.TestCase):
         result = len(d)
         self.assertEqual(expected, result)
 
-    def test_deal_sorteddeck_dealsAs(self):
-        d = deck.Deck()
-        d.sort()
-        expected = card.Card('A', 's')
-        result = d.deal()
-        self.assertEqual(expected, result)
-
     """
     Tests for remove(card)
     """

@@ -1,8 +1,7 @@
 from __future__ import print_function
 import deck
-import game
 import card
-import blinds
+#  import blinds
 
 STARTINGCHIPS = 1000
 
@@ -19,7 +18,7 @@ class Round():
         self.betcap = 4
         self.betsize = 0
         self.level = 0
-        self.tbl = game._table
+        self._table = game._table
 
         self.muck = []
         self.d = deck.Deck()
@@ -31,18 +30,22 @@ class Round():
         #  Remember starting stacks of all playerso
         self.betstack = {}
         self.startstack = {}
-        for p in self.tbl:
+        for p in self._table:
             self.startstack[p.name] = p.chips
 
     def __str__(self):
-        """ Show the current size of the pot."""
+        """
+        Show the current size of the pot.
+        """
         _str = 'Pot: ${:}'.format(self.pot)
         return _str
 
     def deal_cards(self, qty, faceup=False):
-        """ Deal the specified quantity of cards to each player."""
+        """
+        Deal the specified quantity of cards to each player.
+        """
         for i in range(qty):
-            for p in self.tbl:
+            for p in self._table:
                 c = self.d.deal()
                 if faceup is True:
                     c.hidden = False
@@ -54,7 +57,7 @@ class Round():
         deck size
         """
         # Clear hands
-        for p in self.tbl:
+        for p in self._table:
             self.muck.extend(p.fold())
         # Add the remainder of the deck
         while len(self.d) > 0:
@@ -63,44 +66,41 @@ class Round():
     def verify_muck(self):
         DECKSIZE = 52
         if len(self.muck) != DECKSIZE:
-            #  raise ValueError('Muck size doesn\'t equal starting decksize!')
             return False
         elif len(self.d) != 0:
-            #  raise ValueError('Deck still has cards!')
             return False
-        elif len(self.tbl.get_cardholders()) > 0:
-            #  raise ValueError('One or more players still have cards!')
+        elif len(self._table.get_cardholders()) > 0:
             return False
         else:
             return True
 
     def post_antes(self):
-        """ All players bet the ante amount and it's added to the pot"""
-
-        for p in self.tbl:
-            self.pot += p.bet(self._game.blinds[2])
+        """
+        All players bet the ante amount and it's added to the pot
+        """
+        for p in self._table:
+            self.pot += p.bet(self._game.blinds.ANTE)
 
     def post_blinds(self):
         """
         Gets the small and big blind positions from the table and makes each player bet the
         appropriate mount to the pot. Returns a string describing what the blinds posted.
         """
-
-        if self.tbl.btn() == -1:
+        if self._table.btn() == -1:
             raise Exception('Button has not been set yet!')
 
-        if len(self.tbl.get_players()) < 2:
+        if len(self._table.get_players()) < 2:
             raise ValueError('Not enough players to play!')
             exit()
-        sb = self.tbl.seats[self.tbl.get_sb()]
-        bb = self.tbl.seats[self.tbl.get_bb()]
+        sb = self._table.seats[self._table.get_sb()]
+        bb = self._table.seats[self._table.get_bb()]
 
         # Bet the SB and BB amounts and add to the pot
-        self.pot += sb.bet(self._game.blinds[0])
-        self.pot += bb.bet(self._game.blinds[1])
+        self.pot += sb.bet(self._game.blinds.SB)
+        self.pot += bb.bet(self._game.blinds.BB)
         actions = ''
-        actions += '{} posts ${}\n'.format(sb, self._game.blinds[0])
-        actions += '{} posts ${}\n'.format(bb, self._game.blinds[1])
+        actions += '{} posts ${}\n'.format(sb, self._game.blinds.SB)
+        actions += '{} posts ${}\n'.format(bb, self._game.blinds.BB)
         return actions
 
     def setup_betting(self):
@@ -112,22 +112,22 @@ class Round():
         if self.street == 0:
             # Preflop the first bettor is right after the BB
             self.level = 1
-            self.betsize = self._game.blinds[1]
-            self.closer = self.tbl.get_bb()
-            self.bettor = self.tbl.next(self.closer)
+            self.betsize = self._game.blinds.BB
+            self.closer = self._table.get_bb()
+            self.bettor = self._table.next(self.closer)
             # Copy the starting stack for the first round (because blinds were posted)
             self.betstack = self.startstack.copy()
 
         elif self.street > 0:
             # postflop the first bettor is right after the button
             self.level = 0
-            self.betsize = self._game.blinds[1] * 2
+            self.betsize = self._game.blinds.BB * 2
 
-            self.closer = self.tbl.next_player_w_cards(self.tbl.get_sb(), -1)
-            self.bettor = self.tbl.next_player_w_cards(self.tbl.btn())
+            self.closer = self._table.next_player_w_cards(self._table.get_sb(), -1)
+            self.bettor = self._table.next_player_w_cards(self._table.btn())
 
             # Remember starting stack size.
-            for p in self.tbl:
+            for p in self._table:
                 self.betstack[p.name] = p.chips
 
     def process_sidepots(self, handlist):
@@ -184,7 +184,7 @@ class Round():
         """
         Determine which players are all-in in order to create sidepots.
         """
-        for p in self.tbl.get_cardholders():
+        for p in self._table.get_cardholders():
             # Look for allins and create sidepots
             if p.chips == 0:
                 allin = self.startstack[p.name]
@@ -209,7 +209,7 @@ class Round():
         mainpot = 0
 
         # Go through the table of players
-        for p in self.tbl:
+        for p in self._table:
             # For each player, get their total invested amount over the round
             invested = self.startstack[p.name] - p.chips
 
@@ -243,7 +243,7 @@ class Round():
             w.add_chips(share)
 
         if remainder > 0:
-            r_winner = self.tbl.seats[self.tbl.next(self.tbl.btn)]
+            r_winner = self._table.seats[self._table.next(self._table.btn)]
             print('\t{} wins {} remainder chips'.format(r_winner, remainder))
             r_winner.add_chips(remainder)
 
@@ -254,7 +254,7 @@ class Round():
         playing = True
 
         while playing:
-            p = self.tbl.seats[self.bettor]
+            p = self._table.seats[self.bettor]
             invested = self.betstack[p.name] - p.chips
             cost = self.betsize * self.level - invested
             options = self.get_options(cost)
@@ -270,10 +270,10 @@ class Round():
                 o = p.makeplay(options, self.street)
                 self.process_option(o)
 
-            if self.tbl.valid_bettors() == 1:
+            if self._table.valid_bettors() == 1:
                 print('Only one player left!')
                 #  winner = self.tbl.seats[self.tbl.next(self.bettor, True)]
-                winner = self.tbl.seats[self.tbl.next_player_w_cards(self.bettor)]
+                winner = self._table.seats[self._table.next_player_w_cards(self.bettor)]
                 self.PLAYING = False
                 # Return the single winner as a list so award_pot can use it.
                 return [winner]
@@ -284,7 +284,7 @@ class Round():
             else:
                 # Set next bettor
                 #  self.bettor = self.tbl.next(self.bettor, hascards=True)
-                self.bettor = self.tbl.next_player_w_cards(self.bettor)
+                self.bettor = self._table.next_player_w_cards(self.bettor)
 
         else:
             # The betting round is over, and there are multiple players still remaining.
@@ -293,7 +293,7 @@ class Round():
 
     def process_option(self, option):
         """ Performs the option picked by a player. """
-        p = self.tbl.seats[self.bettor]
+        p = self._table.seats[self.bettor]
 
         if option[0] == 'FOLD':
             # Fold the players hand
@@ -303,7 +303,7 @@ class Round():
         elif option[2] > 0:
             # It's a raise, so we'll need to reset last better.
             #  self.closer = self.tbl.prev(self.bettor, hascards=True)
-            self.closer = self.tbl.next_player_w_cards(self.bettor, -1)
+            self.closer = self._table.next_player_w_cards(self.bettor, -1)
             self.pot += p.bet(option[1])
             self.level += option[2]
         else:
@@ -336,7 +336,7 @@ class Round():
 
     def get_options(self, cost):
         """ Shows the options available to the current bettor."""
-        completing = (self.betsize - cost) == self._game.blinds[0]
+        completing = (self.betsize - cost) == self._game.blinds.SB
 
         OPTIONS = {}
 
@@ -381,7 +381,7 @@ class Round():
         # Start with the lowest as the highest possible card to beat.
         lowcard = card.Card('A', 's')
         player = None
-        for p in self.tbl:
+        for p in self._table:
             c = p._hand.cards[index]
             if c.rank < lowcard.rank:
                 lowcard, player = c, p
@@ -394,11 +394,11 @@ class Round():
         """
         Compare all the hands of players holding cards and determine the winner(s).
         """
-        for p in self.tbl.get_cardholders():
+        for p in self._table.get_cardholders():
             p.showhand()
             print('{:15} shows: {}'.format(str(p), p._hand))
 
-        handlist = self.tbl.get_valuelist()
+        handlist = self._table.get_valuelist()
         self.process_allins()
 
         if len(self.sidepots) == 0:
@@ -420,72 +420,3 @@ def calc_odds(bet, pot):
     odds = pot / bet
     print('The odds are {}-to-1'.format(odds))
     return odds
-
-
-def test_winner(*hands):
-    print('Test player ties')
-    g = game.Game('FIVE CARD DRAW', '2/4', 2)
-
-    newround = Round(g)
-
-    h1 = [card.Card(c[0], c[1]) for c in hands[0]]
-    h2 = [card.Card(c[0], c[1]) for c in hands[1]]
-
-    newround.tbl.seats[0]._hand.cards = h1
-    newround.tbl.seats[0]._hand.update()
-    newround.tbl.seats[1]._hand.cards = h2
-    newround.tbl.seats[1]._hand.update()
-
-    # Print test info
-    print(g)
-    print(g._table)
-
-    for p in newround.tbl:
-        print('Player 0: {}'.format(p._hand.value))
-
-    winners = newround.showdown()
-    print('')
-    print('Winners list:')
-    print(winners)
-
-
-def test_stacks():
-    myblinds = blinds.limit['50/100']
-    g = game.Game('FIVE CARD DRAW', myblinds, 6, 'LUNNA')
-    g._table.seats[0].chips = 100
-    g._table.seats[1].chips = 150
-    print(g)
-    print(g._table)
-
-    r = Round(g)
-    r.deal_cards(5)
-    print(r)
-
-    bet = 200
-    print('everybody bets {}!'.format(bet))
-    for p in r.tbl:
-        r.pot += p.bet(bet)
-
-    print(r)
-
-    r.process_allins()
-    print('the lowest allin = {}'.format(min(r.sidepots)))
-    print('the highest allin = {}'.format(max(r.sidepots)))
-    print('')
-    r.showdown()
-    r.tbl.remove_broke()
-    print(r)
-    #  print(g._table)
-    print(r.tbl)
-
-if __name__ == "__main__":
-    # Perorm unit tests
-
-    hc1 = [('A', 'h'), ('K', 's'), ('Q', 's'), ('J', 'd'), ('9', 'h')]
-    hc2 = [('A', 's'), ('K', 'h'), ('Q', 'h'), ('J', 'h'), ('9', 'c')]
-    test_winner(hc1, hc2)
-
-    print('*'*80)
-    hc1 = [('A', 'h'), ('A', 's'), ('K', 's'), ('Q', 'd'), ('J', 'h')]
-    hc2 = [('A', 'c'), ('A', 'd'), ('K', 'h'), ('Q', 'h'), ('J', 'c')]
-    test_winner(hc1, hc2)
