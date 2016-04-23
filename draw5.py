@@ -8,7 +8,6 @@ import hand
 import card
 import os
 import game
-import gameround
 
 
 def is_integer(num):
@@ -179,10 +178,10 @@ def auto_discard(hand):
     return discard
 
 
-class Draw5Game(game.Game):
+class Draw5Game(game.Session):
     def play(self):
         """ Defines the structure of a hand played in the game."""
-        newround = gameround.Round(self)
+        newround = game.Round(self)
 
         if len(self._table.get_cardholders()) > 0:
             raise Exception('One or more players have cards before the deal!')

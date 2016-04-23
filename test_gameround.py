@@ -1,12 +1,11 @@
 import unittest
 import card
-#  import blinds
 import draw5
-import gameround
+import game
 import test_table
 
 
-class TestGameRound(unittest.TestCase):
+class TestGame(unittest.TestCase):
     """
     Setup a table filled with 6 players for testing.
     """
@@ -14,13 +13,7 @@ class TestGameRound(unittest.TestCase):
         blind_level = 10
         g = draw5.Draw5Game('FIVE CARD DRAW', blind_level, 6, 'HUMAN')
         g._table = test_table.make_table(6)
-        #  g._table.randomize_button()
-        #  g._table.move_button()
-        self.r = gameround.Round(g)
-
-    """
-    Tests for __init__ and table construction
-    """
+        self.r = game.Round(g)
 
     """
     Tests for __str__()

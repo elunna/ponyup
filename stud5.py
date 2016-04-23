@@ -6,7 +6,7 @@ import game
 import blinds
 
 
-class Stud5Game(game.Game):
+class Stud5Game(game.Session):
     def play(self):
         """ Defines the structure of a hand played in the game."""
         newround = game.Round(self)
