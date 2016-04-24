@@ -154,20 +154,23 @@ class Round():
                 share = pot[1] - lastpot
                 leftovers -= share
 
-            self.determine_eligibility(handlist, share, pot[0])
+            winners = self.eligible_for_pot(handlist, share, pot[0])
+            print('Awarding ${} pot'.format(share))
+            self.award_pot(winners, share)
 
         if leftovers > 0:
             # We'll pass stacks_n_pots)[0] + 1 so that all the elibigle players are
             # just above the largest allin.
             above_allin = max(stacks_n_pots)[0] + 1
-            self.determine_eligibility(handlist, leftovers, above_allin)
+            winners = self.eligible_for_pot(handlist, leftovers, above_allin)
+            print('Awarding ${} pot'.format(leftovers))
+            self.award_pot(winners, leftovers)
 
-    def determine_eligibility(self, handlist, pot, stack):
+    def eligible_for_pot(self, handlist, pot, stack):
         """
         Determine what players are eligible to win pots and sidepots.
         """
         eligible = [p for p in handlist if self.startstack[p[1].name] >= stack]
-        print('Awarding ${} pot'.format(pot))
 
         bestvalue = 0
         # Determine the best handvalue the eligible players have.
@@ -181,7 +184,7 @@ class Round():
             print('\t{} shows {}, {}'.format(
                 w, w._hand.handrank, w._hand.description))
 
-        self.award_pot(winners, pot)
+        return winners
 
     def process_allins(self):
         """
@@ -404,12 +407,11 @@ class Round():
 
         if len(self.sidepots) == 0:
             # No sidepots, so the minimum for elibility is 0.
-            self.determine_eligibility(handlist, self.pot, 0)
+            winners = self.eligible_for_pot(handlist, self.pot, 0)
+            self.award_pot(winners, self.pot)
 
         else:
             self.process_sidepots(handlist)
-
-        self.PLAYING = False
 
 
 def calc_odds(bet, pot):
