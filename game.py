@@ -180,9 +180,6 @@ class Round():
 
         winners = [h[1] for h in eligible if h[0] == bestvalue]
 
-        for w in winners:
-            print('\t{} shows {}, {}'.format(
-                w, w._hand.handrank, w._hand.description))
 
         return winners
 
@@ -400,7 +397,8 @@ class Round():
         """
         for p in self._table.get_cardholders():
             p.showhand()
-            print('{:15} shows: {}'.format(str(p), p._hand))
+            print('{:15} shows: {}: {}, {}'.format(str(p), p._hand,
+                                                   p._hand.handrank, p._hand.description))
 
         handlist = self._table.get_valuelist()
         self.process_allins()
