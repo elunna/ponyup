@@ -64,6 +64,20 @@ class TestDeck(unittest.TestCase):
         d = deck.Deck([])
         self.assertRaises(Exception, d.deal)
 
+    """
+    Tests for is_empty()
+    """
+    def test_isempty_fulldeck_returnFalse(self):
+        d = deck.Deck()
+        expected = False
+        result = d.is_empty()
+        self.assertEqual(expected, result)
+
+    def test_isempty_emptydeck_returnTrue(self):
+        d = deck.Deck([])
+        expected = True
+        result = d.is_empty()
+        self.assertEqual(expected, result)
 
     """
     Tests for remove(card)

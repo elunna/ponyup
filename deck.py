@@ -38,6 +38,9 @@ class Deck():
     def contains(self, card):
         return card in self.cards
 
+    def is_empty(self):
+        return len(self.cards) == 0
+
     def __str__(self):
         _str = ''
         for i, c in enumerate(self.cards):
