@@ -60,6 +60,11 @@ class TestDeck(unittest.TestCase):
         result = len(d)
         self.assertEqual(expected, result)
 
+    def test_deal_emptydeck_raiseException(self):
+        d = deck.Deck([])
+        self.assertRaises(Exception, d.deal)
+
+
     """
     Tests for remove(card)
     """

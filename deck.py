@@ -24,7 +24,10 @@ class Deck():
         self.cards.sort(key=lambda x: x.val())
 
     def deal(self):
-        return self.cards.pop()
+        if len(self.cards) > 0:
+            return self.cards.pop()
+        else:
+            raise Exception('Deck is empty, cannot deal cards!')
 
     def remove(self, card):
         if card in self.cards:
