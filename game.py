@@ -128,10 +128,16 @@ class Round():
             for p in self._table:
                 self.betstack[p.name] = p.chips
 
+    def get_stack_to_pot_list(self):
+        """
+        Returns a list of tuples. Each tuple is a stack and pot pair. The list get sorted
+        by stacksize.
+        """
+        return sorted([(stack, self.sidepots[stack]) for stack in self.sidepots])
+
     def process_sidepots(self, handlist):
         """ Organize the sidepots into an ascending sorted list."""
-        stacks_n_pots = sorted(
-            [(p, self.sidepots[p]) for p in self.sidepots])
+        stacks_n_pots = self.get_stack_to_pot_list()
 
         leftovers = self.pot
 

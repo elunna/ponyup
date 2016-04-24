@@ -192,6 +192,8 @@ class TestGame(unittest.TestCase):
     Tests for setup_betting()
     """
 
+    # get_stack_to_pot_list(self):
+
     """
     Tests for process_sidepots(handlist)
     """
