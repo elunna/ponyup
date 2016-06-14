@@ -136,7 +136,9 @@ class Round():
         return sorted([(stack, self.sidepots[stack]) for stack in self.sidepots])
 
     def process_sidepots(self, handlist):
-        """ Organize the sidepots into an ascending sorted list."""
+        """ Calculates which players are eligible to win which portions of the pot. Returns
+        a dictionary of players and amounts. """
+        # Organize the sidepots into an ascending sorted list.
         stacks_n_pots = self.get_stack_to_pot_list()
 
         leftovers = self.pot
@@ -156,7 +158,7 @@ class Round():
 
             winners = self.eligible_for_pot(handlist, share, pot[0])
             print('Awarding ${} pot'.format(share))
-            self.award_pot(winners, share)
+            return self.split_pot(winners, share)
 
         if leftovers > 0:
             # We'll pass stacks_n_pots)[0] + 1 so that all the elibigle players are
@@ -164,7 +166,7 @@ class Round():
             above_allin = max(stacks_n_pots)[0] + 1
             winners = self.eligible_for_pot(handlist, leftovers, above_allin)
             print('Awarding ${} pot'.format(leftovers))
-            self.award_pot(winners, leftovers)
+            return self.split_pot(winners, leftovers)
 
     def eligible_for_pot(self, handlist, pot, stack):
         """
@@ -179,7 +181,6 @@ class Round():
                 bestvalue = e[0]
 
         winners = [h[1] for h in eligible if h[0] == bestvalue]
-
 
         return winners
 
@@ -227,13 +228,14 @@ class Round():
 
         self.sidepots[stacksize] = mainpot
 
-    def award_pot(self, winners, amt):
+    def split_pot(self, winners, amt):
         """
-        Adds the specified pot amount to the players chips.
-        If there are multiple winners, they must split the pot
-        If there is a remainder amount, we give it to the next left of the BTN.
-        (ie: Usually the SB)
+        Adds the specified pot amount to the players chips.  If there are multiple winners,
+        they must split the pot If there is a remainder amount, we give it to the next left of
+        the BTN.  (ie: Usually the SB)
         """
+
+        award_dict = {}
         if len(winners) > 1:
             share = int(amt / len(winners))
             remainder = amt % len(winners)
@@ -242,13 +244,16 @@ class Round():
             remainder = 0
 
         for w in winners:
-            print('\t{} wins {} chips'.format(w, share))
-            w.add_chips(share)
+            award_dict[w] = share
 
         if remainder > 0:
             r_winner = self._table.seats[self._table.next(self._table.btn)]
-            print('\t{} wins {} remainder chips'.format(r_winner, remainder))
-            r_winner.add_chips(remainder)
+            award_dict[r_winner] += remainder
+        return award_dict
+
+    def award_pot(self, player, amt):
+        print('\t{} wins {} chips'.format(player, amt))
+        player.add_chips(amt)
 
     def betting(self):
         """
@@ -394,11 +399,12 @@ class Round():
     def showdown(self):
         """
         Compare all the hands of players holding cards and determine the winner(s).
+        Return a dictionary of players and the amounts they will be awarded.
         """
         for p in self._table.get_cardholders():
             p.showhand()
-            print('{:15} shows: {}: {}, {}'.format(str(p), p._hand,
-                                                   p._hand.handrank, p._hand.description))
+            print('{:15} shows: {}: {}, {}'.format(
+                str(p), p._hand, p._hand.handrank, p._hand.description))
 
         handlist = self._table.get_valuelist()
         self.process_allins()
@@ -406,10 +412,10 @@ class Round():
         if len(self.sidepots) == 0:
             # No sidepots, so the minimum for elibility is 0.
             winners = self.eligible_for_pot(handlist, self.pot, 0)
-            self.award_pot(winners, self.pot)
+            return self.split_pot(winners, self.pot)
 
         else:
-            self.process_sidepots(handlist)
+            return self.process_sidepots(handlist)
 
 
 def calc_odds(bet, pot):

@@ -75,16 +75,23 @@ class Draw5Session(Session):
 
             if victor is None:
                 # Check for winners/showdown
-                _round.showdown()
-
-                # Award pot
+                award_dict = _round.showdown()
             else:
-                _round.award_pot(victor, _round.pot)
+                winner = _round._table.get_cardholders()
+                award_dict = _round.split_pot(winner, _round.pot)
         else:
-            _round.award_pot(victor, _round.pot)
+            winner = _round._table.get_cardholders()
+            award_dict = _round.split_pot(winner, _round.pot)
+
+        # Award pot
+        for plyr, amt in award_dict.items():
+            _round.award_pot(plyr, int(amt))
 
         # ================== CLEANUP
+        # Cleanup all cards
         _round.muck_all_cards()
+        _round.verify_muck()
+
         # Remove broke players
         _round._table.remove_broke()
 
