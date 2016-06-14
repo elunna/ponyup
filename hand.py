@@ -14,6 +14,8 @@ class Hand():
 
     def __str__(self):
         handstr = ''
+        #  for i, c in enumerate(sorted(self.cards)):
+        # Sort here?
         for i, c in enumerate(self.cards):
             handstr += str(c)
             if i != len(self.cards) - 1:
@@ -38,6 +40,7 @@ class Hand():
             c.hidden = False
 
     def update(self):
+        self.cards = sorted(self.cards)
         self.value = evaluator.get_value(self.cards)
         self.handrank = evaluator.get_type(self.value)
         self.description = evaluator.get_description(self.value, self.cards)
