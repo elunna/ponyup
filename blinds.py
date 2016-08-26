@@ -27,8 +27,5 @@ class Blinds():
             return 0
 
     def levels(self):
-        for i in range(1, len(self.blind_dict) + 1):
-            print('Level {}: ${}/${}, Ante ${}'.format(i,
-                                                       self.blind_dict.get(i)[0],
-                                                       self.blind_dict.get(i)[1],
-                                                       self.blind_dict.get(i)[2]))
+        for k in sorted(self.blind_dict.keys()):
+            print('Level {}: ${}/${}, Ante ${}'.format(k, *self.blind_dict[k]))
