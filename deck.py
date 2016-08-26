@@ -52,6 +52,10 @@ class Deck():
     def __len__(self):
         return len(self.cards)
 
+    def unhide(self):
+        for c in self.cards:
+            c.hidden = False
+
 
 class Deck1Joker(Deck):
     def __init__(self):
