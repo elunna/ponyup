@@ -5,23 +5,21 @@ import blinds
 import table
 import os
 import sys
-#  import game
-import draw5
 import combos
+import session
 
 GAME = 'FIVE CARD DRAW'
 TABLE = 6
-STAKES = blinds.limit['50/100']
+STAKES = blinds.Blinds()
 NAME = 'LUNNA'
 
 # Define menu opions
 options = {}
-options['c'] = ('View card (C)ombination counts', 'view_combos()')
-options['f'] = ('Play (F)ive card Draw', 'play_poker()')
-options['u'] = ('Run (U)nit Tests', '')
-options['n'] = ('Change (N)ame', 'pick_name()')
-options['s'] = ('Change (S)takes', 'pick_limit()')
-options['t'] = ('Change (T)able size', 'pick_name()')
+options['c'] = ('(C)ombination counts', 'view_combos()')
+options['f'] = ('(F)ive card Draw', 'play_poker()')
+options['n'] = ('(N)ame change', 'pick_name()')
+options['s'] = ('(S)takes', 'pick_limit()')
+options['t'] = ('(T)able size', 'pick_table()')
 options['m'] = ('(M)enu', 'menu()')
 options['e'] = ('(E)xit', 'exitgracefully()')
 
@@ -45,31 +43,30 @@ def menu():
     print('Playername: {}'.format(NAME))
     print('Game:       {}'.format(GAME))
     print('Table Size: {}'.format(TABLE))
-    print('Stakes:     ${}/${}'.format(STAKES[0], STAKES[1]))
+    print('Stakes:     {}'.format(STAKES))
     print('')
     for o in options:
         print(options[o][0])
 
 
 def view_combos():
-    combos.view_combo_counts()
+    for i in range(1, 8):
+        print("There are {} combos of {} cards in a standard 52 card deck.".format(
+            combos.n_choose_k(52, i), i))
 
 
 def pick_limit():
     print('Please enter what limit you want to play:(default 2/4)')
+    STAKES.levels()
 
-    struct_list = sorted(blinds.limit.keys())
-    for l in struct_list:
-        print('{}, '.format(l), end='')
-
-    choice = input(':> ')
-    if choice in blinds.limit:
-        print('You selected {}'.format(choice))
-        STAKES = blinds.limit[choice]
-    else:
-        print('Selection not available, going with default blinds: 2/4')
-        global STAKES
-        STAKES = blinds.limit['2/4']
+    while True:
+        choice = input(':> ')
+        if int(choice) in STAKES.blind_dict.keys():
+            print('You selected {}'.format(choice))
+            STAKES.set_level(int(choice))
+            break
+        else:
+            print('Selection not available, try again.')
 
 
 def pick_table():
@@ -104,7 +101,7 @@ def play_poker():
     print('Alright, let\'s play some poker!')
 
     print('Initializing new game...\n')
-    g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, TABLE, NAME)
+    g = session.Draw5Session('FIVE CARD DRAW', STAKES, TABLE, NAME)
 
     playing = True
 

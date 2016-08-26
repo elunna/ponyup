@@ -2,8 +2,11 @@ import blinds_house
 
 
 class Blinds():
-    def __init__(self, level=1):
-        self.blind_dict = blinds_house.house_limits
+    def __init__(self, structure_dict=None, level=1):
+        if structure_dict is None:
+            self.blind_dict = blinds_house.house_limits
+        else:
+            self.blind_dict = structure_dict
         self.set_level(level)
 
     def __str__(self):
