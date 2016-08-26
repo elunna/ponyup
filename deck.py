@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-'''
+"""
 Creates a Deck of cards.
-'''
+"""
 from __future__ import print_function
 import card
 import random
@@ -10,7 +10,7 @@ import random
 class Deck():
     def __init__(self, cards=None):
         if cards is None:
-            self.cards = standard_deck()
+            self.cards = make_deck()
         else:
             self.cards = cards
         # Give it a good shuffle.
@@ -59,21 +59,21 @@ class Deck():
 
 class Deck1Joker(Deck):
     def __init__(self):
-        self.cards = standard_deck()
+        self.cards = make_deck()
         joker = card.Card('Z', 's')
         self.cards.append(joker)
 
 
 class Deck2Joker(Deck):
     def __init__(self):
-        self.cards = standard_deck()
+        self.cards = make_deck()
         joker1 = card.Card('Z', 's')
         joker2 = card.Card('Z', 'c')
         self.cards.append(joker1)
         self.cards.append(joker2)
 
 
-def standard_deck():
+def make_deck():
     # Leave out Jokers
     return [card.Card(r, s[0])
             for s in card.SUITS for r in card.RANKS if r != 'Z']
