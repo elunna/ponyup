@@ -5,13 +5,7 @@ def is_set(itemlist):
     """
     Return False if a list contains any duplicate entries and True if they are all unique.
     """
-    items = itemlist[:]
-    while items:
-        i = items.pop()
-        if i in items:
-            return False
-    else:
-        return True
+    return len(set(itemlist)) == len(itemlist)
 
 
 def rank_dict(cards):
@@ -26,8 +20,8 @@ def rank_dict(cards):
 
 def rank_list(cards):
     """
-    Returns a list of quantity/rank pairs by first making a dictionary
-    and then converting it to a list and sorting it by rank.
+    Returns a list of quantity/rank pairs by making a rank dictionary,
+    converting it to a list and sorting it by rank.
     """
     ranks = rank_dict(cards)
     L = [(ranks[r], r) for r in ranks]
@@ -37,7 +31,7 @@ def rank_list(cards):
 
 def suit_dict(cards):
     """
-    # Returns a dictionary of quantity/suit pair counts.
+    Returns a dictionary of quantity/suit pair counts.
     """
     suits = {}
     for c in cards:
