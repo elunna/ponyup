@@ -66,23 +66,19 @@ def count_suit(cards, suit):
 
 
 def get_gap(card1, card2):
+    """ Return how many spaces are between the ranks of 2 cards.
+    Example: For 87, 8 - 7 = 1, but the gap is actually 0. Paired cards have no gap
     """
-    Looks at 2 cards and finds how far apart their ranks are.
-    """
-    # Paired cards have no gap
     if card1.rank == card2.rank:
         return -1
 
-    # minus the extra 1 to offset the connectness
-    # Example: For 87, 8 - 7 = 1, but the gap is actually 0
     return abs(card1.val() - card2.val()) - 1
 
 
 def get_allgaps(cards):
     """
     Takes a list of cards and determines how many gaps are between all the ranks (when
-    they occur in sorted order.
-    # Should work regardless of order
+    they occur in sorted order. Should work regardless of order
     """
 
     ordered = sorted(cards)
@@ -103,11 +99,7 @@ def strip_ranks(cards, ranks):
     Takes a list of cards, removes the rank(s) given, and returns a list of the leftovers.
     There can be more than one rank passed.
     """
-    discard = []
-    for c in cards:
-        if c.rank not in ranks:
-            discard.append(c)
-    return discard
+    return [c for c in cards if c.rank not in ranks]
 
 
 def strip_suits(cards, suits):
@@ -115,8 +107,4 @@ def strip_suits(cards, suits):
     Takes a list of cards, removes the suit given, and returns a list of the leftovers.
     There can only be one suit passed.
     """
-    discard = []
-    for c in cards:
-        if c.suit not in suits:
-            discard.append(c)
-    return discard
+    return [c for c in cards if c.suit not in suits]
