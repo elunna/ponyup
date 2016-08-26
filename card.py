@@ -3,22 +3,9 @@
 # Use tuples instead of lists
 SUITS = ('c', 'd', 'h', 's')
 
-RANKS = {
-    '2': 2,
-    '3': 3,
-    '4': 4,
-    '5': 5,
-    '6': 6,
-    '7': 7,
-    '8': 8,
-    '9': 9,
-    'T': 10,
-    'J': 11,
-    'Q': 12,
-    'K': 13,
-    'A': 14,
-    'Z': 15
-}
+# Fancy way of creating the card/value dictionary.
+FACECARDS = {'T': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14, 'Z': 15}
+RANKS = dict({str(x): x for x in range(2, 10)}, **FACECARDS)
 
 
 class Card:
