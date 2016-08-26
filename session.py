@@ -30,7 +30,7 @@ class Session():
         Represents the game as the round # and the stakes level.
         """
         _str = 'Round: {:<5} '.format(self.rounds)
-        _str += 'Stakes: {}'.format(self.blinds.stakes().rjust(36))
+        _str += 'Stakes: {}'.format(self.blinds.__str__().rjust(36))
 
         return _str
 

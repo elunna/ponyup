@@ -60,11 +60,11 @@ class TestTable(unittest.TestCase):
     """
     def test_stakes_noAnte_returnsString(self):
         expected = '$2/$4'
-        result = self.b.stakes()
+        result = self.b.__str__()
         self.assertEqual(expected, result)
 
     def test_stakes_Ante_returnsStringWithAnte(self):
         self.b.set_level(2)
         expected = '$3/$6, Ante: $1'
-        result = self.b.stakes()
+        result = self.b.__str__()
         self.assertEqual(expected, result)

@@ -6,6 +6,12 @@ class Blinds():
         self.blind_dict = blinds_house.house_limits
         self.set_level(level)
 
+    def __str__(self):
+        if self.ANTE > 0:
+            return '${}/${}, Ante: ${}'.format(self.BB, self.BB * 2, self.ANTE)
+        else:
+            return '${}/${}'.format(self.BB, self.BB * 2)
+
     def set_level(self, level):
         if level < 1 or level > len(self.blind_dict):
             raise ValueError('level is out of bounds!')
@@ -19,12 +25,6 @@ class Blinds():
             return round(self.SB / self.ANTE, 1)
         else:
             return 0
-
-    def stakes(self):
-        if self.ANTE > 0:
-            return '${}/${}, Ante: ${}'.format(self.BB, self.BB * 2, self.ANTE)
-        else:
-            return '${}/${}'.format(self.BB, self.BB * 2)
 
     def levels(self):
         for i in range(1, len(self.blind_dict) + 1):
