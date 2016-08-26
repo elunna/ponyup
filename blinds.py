@@ -9,9 +9,9 @@ class Blinds():
     def set_level(self, level):
         if level < 1 or level > len(self.blind_dict):
             raise ValueError('level is out of bounds!')
-        self.BB = self.blind_dict.get(str(level))[0]
-        self.SB = self.blind_dict.get(str(level))[1]
-        self.ANTE = self.blind_dict.get(str(level))[2]
+        self.BB = self.blind_dict.get(level)[0]
+        self.SB = self.blind_dict.get(level)[1]
+        self.ANTE = self.blind_dict.get(level)[2]
 
     def sb_to_ante_ratio(self):
         # Use only one decimal place.
