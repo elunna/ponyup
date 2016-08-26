@@ -71,18 +71,18 @@ def pick_limit():
 
 def pick_table():
     print('What size table do you want to play? (default is 2 seats)')
-
     for l in table.VALID_SIZES:
         print('{}, '.format(l), end='')
 
-    choice = input(':> ')
-    if int(choice) in table.VALID_SIZES:
-        print('You selected {}'.format(choice))
-        TABLE = choice
-    else:
-        print('Selection not available, going with default: 6 seats')
-        global TABLE
-        TABLE = 6
+    while True:
+        choice = input(':> ')
+        if int(choice) in table.VALID_SIZES:
+            print('You selected {}'.format(choice))
+            global TABLE
+            TABLE = int(choice)
+            break
+        else:
+            print('Selection not available, try again.')
 
 
 def pick_name():

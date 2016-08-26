@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import blinds
 import game
 import os
 import table
@@ -13,11 +12,11 @@ class Session():
         game type, the table, and stakes.  The play() method defines the structure of how a
         single hand in the poker game is played.
     """
-    def __init__(self, gametype, blindlevel, tablesize=6, hero=None):
+    def __init__(self, gametype, structure, tablesize=6, hero=None):
         """
         Initialize the poker Game.
         """
-        self.blinds = blinds.Blinds(blindlevel)
+        self.blinds = structure
         self.rounds = 1
         self._table = table.setup_table(tablesize, hero)
         self._table.randomize_button()
