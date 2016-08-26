@@ -39,3 +39,6 @@ class Card:
 
     def __lt__(self, other):
         return RANKS[self.rank] < RANKS[other.rank]
+
+    def __hash__(self):
+        return hash(str(self))
