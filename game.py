@@ -268,10 +268,6 @@ class Round():
             cost = self.betsize * self.level - invested
             options = self.get_options(cost)
 
-            # DEBUG SECTION
-            #  print('player = {}'.format(p))
-            print('bettor = {}, closer = {}'.format(self.bettor, self.closer))
-
             if p.chips == 0:
                 print('{} is all in.'.format(p))
             elif p.playertype == 'HUMAN':
@@ -280,14 +276,11 @@ class Round():
                 self.process_option(o)
 
             else:
-                #  print('CPU turn...')
                 o = strategy.makeplay(p, self, options)
-                #  print(o)
                 self.process_option(o)
 
             if self._table.valid_bettors() == 1:
                 print('Only one player left!')
-                #  winner = self.tbl.seats[self.tbl.next(self.bettor, True)]
                 winner = self._table.seats[self._table.next_player_w_cards(self.bettor)]
                 self.PLAYING = False
                 # Return the single winner as a list so award_pot can use it.
@@ -298,7 +291,6 @@ class Round():
                 playing = False
             else:
                 # Set next bettor
-                #  self.bettor = self.tbl.next(self.bettor, hascards=True)
                 self.bettor = self._table.next_player_w_cards(self.bettor)
 
         else:
