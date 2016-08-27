@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import os
 import game
 import setup_table
 
@@ -99,22 +98,3 @@ class Draw5Session(Session):
 
         # Advance round counter
         self.rounds += 1
-
-
-def main():
-    os.system('clear')
-    print('FIVE CARD DRAW!')
-    # def __init__(self, gametype, structure, tablesize=6, hero=None):
-    sesh = Draw5Session('FIVE CARD DRAW', 10, 6, 'LUNNA')
-
-    playing = True
-
-    while playing:
-        print(sesh)
-        sesh.play()
-        choice = input('keep playing? > ')
-        if choice.lower() == 'n' or choice == 0:
-            playing = False
-
-        os.system('clear')
-    exit()
