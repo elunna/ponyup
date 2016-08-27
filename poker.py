@@ -1,7 +1,6 @@
 from __future__ import print_function
 import card
 import deck
-import draw5
 import setup_table
 import strategy
 
@@ -460,82 +459,3 @@ def calc_odds(bet, pot):
     odds = pot / bet
     print('The odds are {}-to-1'.format(odds))
     return odds
-
-
-def is_integer(num):
-    """ Determines if the variable is an integer"""
-    try:
-        int(num)
-        return True
-    except ValueError:
-        return False
-
-
-def discard_phase(table, deck):
-    """
-    Goes through a table and offers all players with cards the option to discard.
-    Returns a list of all the discards (ie:"muck" cards)
-    """
-    print('\nDiscard phase...')
-    # Make sure the button goes last!
-    holdingcards = table.get_cardholders()
-    muckpile = []
-
-    for p in holdingcards:
-
-        ishuman = p.playertype == 'HUMAN'
-        # Discard!
-        if ishuman:
-            discards = human_discard(p._hand)
-        else:
-            discards = draw5.auto_discard(p._hand)
-
-        if discards:
-            # Easier to put this here...
-            if ishuman:
-                print('{:15} discards {}, draws: '.format(
-                    str(p), discards), end='')
-            else:
-                print('{:15} discards {}.'.format(
-                    str(p), discards), end='')
-        else:
-            print('{:15} stands pat.'.format(str(p)))
-
-        # Redraw!
-        for c in discards:
-            muckpile.append(p.discard(c))
-
-            draw = deck.deal()
-            if ishuman:
-                draw.hidden = False
-                print('{} '.format(draw), end='')
-
-            p.add_card(draw)
-        print('')
-    print('')
-
-    return muckpile
-
-
-def human_discard(hand):
-    print('*'*40)
-    print(' '*35 + '1  2  3  4  5')
-    print(' '*35, end='')
-    for c in hand.cards:
-        print('{:3}'.format(str(c)), end='')
-    print('')
-    print('Enter the cards you want to discard:')
-    print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
-    print('')
-    choice = input(':> ')
-    # Split up the #s, and reverse them so we can remove them without the list
-    # collapsing and disrupting the numbering.
-    validnumbers = ['1', '2', '3', '4', '5']
-    choice = sorted(list(choice), reverse=True)
-    discards = []
-    for c in choice:
-        if is_integer(c) and c in validnumbers:
-            discards.append(hand.cards[int(c) - 1])
-        else:
-            pass
-    return discards
