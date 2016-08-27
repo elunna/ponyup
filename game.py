@@ -603,3 +603,6 @@ def auto_discard(hand):
                     discard.append(c)
 
     return discard
+
+
+

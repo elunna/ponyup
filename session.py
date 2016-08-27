@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 import game
-import table
+import setup_table
 
 STARTINGCHIPS = 1000
 
@@ -18,7 +18,7 @@ class Session():
         """
         self.blinds = structure
         self.rounds = 1
-        self._table = table.setup_table(tablesize, hero)
+        self._table = setup_table.make(tablesize, hero)
         self._table.randomize_button()
 
         for p in self._table:
