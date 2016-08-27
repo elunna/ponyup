@@ -117,14 +117,15 @@ def exitgracefully():
 
 
 if __name__ == "__main__":
-    print_logo()
-    menu()
-
     while True:
+        os.system('clear')
+        print_logo()
+        menu()
         choice = input('> ')
         choice = choice.lower()
 
         if choice in options:
             exec(options[choice][1])
+            input('Press any key to continue...')
         else:
             print('Not a valid option!')
