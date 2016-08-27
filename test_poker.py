@@ -1,7 +1,7 @@
 import unittest
 import blinds
 import card
-import game
+import poker
 import test_table
 import session
 
@@ -14,7 +14,7 @@ class TestGame(unittest.TestCase):
         STAKES = blinds.Blinds()
         g = session.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
         g._table = test_table.make_table(6)
-        self.r = game.Round(g)
+        self.r = poker.Round(g)
 
     """
     Tests for __str__()
@@ -133,7 +133,7 @@ class TestGame(unittest.TestCase):
         STAKES = blinds.Blinds(level=2)
         g = session.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
         g._table = test_table.make_table(6)
-        self.r = game.Round(g)
+        self.r = poker.Round(g)
         self.r.post_antes()
         expected = 6
         result = self.r.pot
@@ -144,7 +144,7 @@ class TestGame(unittest.TestCase):
         STAKES = blinds.Blinds(level=2)
         g = session.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
         g._table = test_table.make_table(6)
-        self.r = game.Round(g)
+        self.r = poker.Round(g)
         self.r.post_antes()
         expected = 999
         for p in self.r._table:
