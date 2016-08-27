@@ -24,10 +24,6 @@ class TestPlayer(unittest.TestCase):
     def test_init_nametoolong_raiseException_(self):
         self.assertRaises(ValueError, player.Player, 'EEEErrrriiiikkkk')
 
-    # playertype isn't valid - raise ex
-    def test_init_invalidplayertype_raiseException_(self):
-        self.assertRaises(ValueError, player.Player, 'Erik', 'ROBOT')
-
     # new player - chips == 0
     def test_init_validname_has0chips(self):
         p = player.Player('Erik')
