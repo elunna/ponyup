@@ -55,10 +55,10 @@ def pick_limit():
     STAKES.levels()
 
     while True:
-        choice = input(':> ')
-        if int(choice) in STAKES.blind_dict.keys():
-            print('You selected {}'.format(choice))
-            STAKES.set_level(int(choice))
+        choice = int(input(':> '))
+        if choice in STAKES.blind_dict.keys():
+            STAKES.set_level(choice)
+            print('You selected {}'.format(STAKES))
             break
         else:
             print('Selection not available, try again.')
@@ -70,8 +70,8 @@ def pick_table():
         print('{}, '.format(l), end='')
 
     while True:
-        choice = input(':> ')
-        if int(choice) in table.VALID_SIZES:
+        choice = int(input(':> '))
+        if choice in table.VALID_SIZES:
             print('You selected {}'.format(choice))
             global TABLE
             TABLE = int(choice)
