@@ -1,4 +1,5 @@
 import unittest
+import blinds
 import card
 import game
 import test_table
@@ -10,8 +11,8 @@ class TestGame(unittest.TestCase):
     Setup a table filled with 6 players for testing.
     """
     def setUp(self):
-        blind_level = 10
-        g = session.Draw5Session('FIVE CARD DRAW', blind_level, 6, 'HUMAN')
+        STAKES = blinds.Blinds()
+        g = session.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
         g._table = test_table.make_table(6)
         self.r = game.Round(g)
 
@@ -127,17 +128,25 @@ class TestGame(unittest.TestCase):
     """
     Tests for post_antes()
     """
-    # 6 players ante 10. Pot == 60.
+    # 6 players ante 1. Pot == 6.
     def test_postantes_6players_potequals60(self):
+        STAKES = blinds.Blinds(level=2)
+        g = session.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
+        g._table = test_table.make_table(6)
+        self.r = game.Round(g)
         self.r.post_antes()
-        expected = 60
+        expected = 6
         result = self.r.pot
         self.assertEqual(expected, result)
 
-    # Initial stacks are 1000. After ante are 990.
-    def test_postantes_6players_stacksequal990(self):
+    # Initial stacks=1000. Ante=1. After ante are 999.
+    def test_postantes_6players_stacksequal999(self):
+        STAKES = blinds.Blinds(level=2)
+        g = session.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
+        g._table = test_table.make_table(6)
+        self.r = game.Round(g)
         self.r.post_antes()
-        expected = 990
+        expected = 999
         for p in self.r._table:
             result = p.chips
             self.assertEqual(expected, result)
@@ -150,41 +159,41 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.r._table.btn(), -1, 'Button should be -1!')
         self.assertRaises(Exception, self.r.post_blinds)
 
-    # 2 players(spaced out). Pot = 75, SB stack == 975, BB stack == 950
-    def test_postblinds_2players_pot75(self):
+    # 2 players(spaced out). SB=1, BB=2, startingstacks=1000
+    def test_postblinds_2players_pot3(self):
         for i in [1, 2, 4, 5]:
             self.r._table.remove_player(i)
         self.r._table.move_button()  # verify the button is 0
         self.assertEqual(self.r._table.btn(), 0)
         self.r.post_blinds()
-        self.assertEqual(self.r._table.seats[0].chips, 975)
-        self.assertEqual(self.r._table.seats[3].chips, 950)
-        self.assertEqual(self.r.pot, 75)
+        self.assertEqual(self.r._table.seats[0].chips, 999)
+        self.assertEqual(self.r._table.seats[3].chips, 998)
+        self.assertEqual(self.r.pot, 3)
 
-    # 3 players(spaced out). Pot = 75, SB stack == 975, BB stack == 950
-    def test_postblinds_3players_pot75(self):
+    # 3 players(spaced out). SB=1, BB=2, startingstacks=1000
+    def test_postblinds_3players_pot3(self):
         for i in [1, 3, 5]:
             self.r._table.remove_player(i)
         self.r._table.move_button()  # verify the button is 0
         self.assertEqual(self.r._table.btn(), 0)
         self.r.post_blinds()
-        self.assertEqual(self.r._table.seats[2].chips, 975)
-        self.assertEqual(self.r._table.seats[4].chips, 950)
-        self.assertEqual(self.r.pot, 75)
+        self.assertEqual(self.r._table.seats[2].chips, 999)
+        self.assertEqual(self.r._table.seats[4].chips, 998)
+        self.assertEqual(self.r.pot, 3)
 
-    # 6 players(spaced out). Pot = 75, SB stack == 975, BB stack == 950
-    def test_postblinds_6players_pot75(self):
+    # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
+    def test_postblinds_6players_pot3(self):
         self.r._table.move_button()  # verify the button is 0
         self.assertEqual(self.r._table.btn(), 0)
         self.r.post_blinds()
-        self.assertEqual(self.r._table.seats[1].chips, 975)
-        self.assertEqual(self.r._table.seats[2].chips, 950)
-        self.assertEqual(self.r.pot, 75)
+        self.assertEqual(self.r._table.seats[1].chips, 999)
+        self.assertEqual(self.r._table.seats[2].chips, 998)
+        self.assertEqual(self.r.pot, 3)
 
-    # 6 players(spaced out). Pot = 75, SB stack == 975, BB stack == 950
+    # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_6players_returnsString(self):
         self.r._table.move_button()  # verify the button is 0
-        expected = 'bob1 posts $25\nbob2 posts $50\n'
+        expected = 'bob1 posts $1\nbob2 posts $2\n'
         result = self.r.post_blinds()
         self.assertEqual(expected, result)
 

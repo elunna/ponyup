@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 from __future__ import print_function
+import deck
+import random
 import sys
 import time
-import random
-import deck
 
 # Rules:
 # If a player runs out of cards they lose.

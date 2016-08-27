@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-import game
 import os
+import game
 import table
 
 STARTINGCHIPS = 1000
@@ -104,6 +104,7 @@ class Draw5Session(Session):
 def main():
     os.system('clear')
     print('FIVE CARD DRAW!')
+    # def __init__(self, gametype, structure, tablesize=6, hero=None):
     sesh = Draw5Session('FIVE CARD DRAW', 10, 6, 'LUNNA')
 
     playing = True
@@ -117,6 +118,3 @@ def main():
 
         os.system('clear')
     exit()
-
-if __name__ == "__main__":
-    main()

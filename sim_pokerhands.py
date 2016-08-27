@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
-import deck
-#  import random
 import pickle
+import deck
 import hand
 
 TRIALS = 10000

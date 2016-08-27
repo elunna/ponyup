@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 from __future__ import print_function
-import blinds
-import table
 import os
 import sys
+import blinds
+import table
 import combos
 import session
 

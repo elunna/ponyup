@@ -2,7 +2,6 @@
 
 from __future__ import print_function
 import deck
-#  import hand
 import evaluator
 import itertools
 

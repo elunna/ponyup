@@ -4,7 +4,6 @@ import deck
 import hand
 import combos
 import pokerhands
-import draw5
 
 TRIALS = 10000
 

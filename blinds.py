@@ -18,6 +18,7 @@ class Blinds():
     def set_level(self, level):
         if level < 1 or level > len(self.blind_dict):
             raise ValueError('level is out of bounds!')
+
         self.BB, self.SB, self.ANTE = self.blind_dict.get(level)
 
     def sb_to_ante_ratio(self):

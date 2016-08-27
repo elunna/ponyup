@@ -1,7 +1,5 @@
 import hand
 import names
-# import strategy
-# import re
 
 
 class Player():

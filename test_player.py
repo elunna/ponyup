@@ -1,5 +1,5 @@
-import card
 import unittest
+import card
 import player
 import pokerhands
 

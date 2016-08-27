@@ -3,9 +3,9 @@
 
 from __future__ import print_function
 import card
+import cardlist
 import hand
 import itertools
-import cardlist
 
 MULTIPLIERS = (100000000, 1000000, 10000, 100, 1)
 
