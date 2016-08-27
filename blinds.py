@@ -30,4 +30,6 @@ class Blinds():
 
     def levels(self):
         for k in sorted(self.blind_dict.keys()):
-            print('Level {}: ${}/${}, Ante ${}'.format(k, *self.blind_dict[k]))
+            BB, SB, ante = self.blind_dict[k]
+            blinds = '${}/${}'.format(BB, BB * 2)
+            print('\tLevel {:3}: {:15} Ante ${}'.format(k, blinds, ante))
