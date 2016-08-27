@@ -42,13 +42,6 @@ class TestPlayer(unittest.TestCase):
         result = len(p._hand)
         self.assertEqual(expected, result)
 
-    # new player - strategy is None
-    def test_init_validname_strategyisNone(self):
-        p = player.Player('Erik')
-        expected = None
-        result = p.strategy
-        self.assertEqual(expected, result)
-
     def test_init__(self):
         self.assertRaises(ValueError, player.Player, 'ab')
 

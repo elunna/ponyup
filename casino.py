@@ -9,9 +9,9 @@ import combos
 import session
 
 GAME = 'FIVE CARD DRAW'
-TABLE = 6
+TABLE = 2
 STAKES = blinds.Blinds()
-NAME = 'LUNNA'
+NAME = 'Aorist'
 
 # Define menu opions
 options = {}
@@ -21,18 +21,13 @@ options['n'] = ('(N)ame change', 'pick_name()')
 options['s'] = ('(S)takes', 'pick_limit()')
 options['t'] = ('(T)able size', 'pick_table()')
 options['m'] = ('(M)enu', 'menu()')
-options['e'] = ('(E)xit', 'exitgracefully()')
+options['q'] = ('(Q)uit', 'exitgracefully()')
 
 
 def print_logo():
     with open('logo.txt') as f:
         print(f.read())
     print('='*80)
-
-
-def exitgracefully():
-    print('Bye!')
-    sys.exit()
 
 
 def menu():
@@ -106,14 +101,19 @@ def play_poker():
     playing = True
 
     while playing:
+        os.system('clear')
         print(g)
         g.play()
         choice = input('keep playing? > ')
         if choice.lower() == 'n' or choice == 0:
             playing = False
 
-        os.system('clear')
     exit()
+
+
+def exitgracefully():
+    print('Bye!')
+    sys.exit()
 
 
 if __name__ == "__main__":

@@ -1,20 +1,13 @@
 import hand
 import names
 
+TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
+
 
 class Player():
     def __init__(self, name, playertype="CPU"):
-        if names.isValidName(name):
-            self.name = name
-        else:
-            raise ValueError('Invalid username "{}" for object!'.format(name))
-
-        if playertype != 'HUMAN' and playertype != 'CPU':
-            raise ValueError('Invalid player type passed!')
-        else:
-            self.playertype = playertype
-
-        self.strategy = None
+        self.set_name(name)
+        self.playertype = playertype
         self.chips = 0
         self._hand = hand.Hand()
 
@@ -23,6 +16,12 @@ class Player():
 
     def __repr__(self):
         return str(self)
+
+    def set_name(self, name):
+        if names.isValidName(name):
+            self.name = name
+        else:
+            raise ValueError('Invalid username "{}" for object!'.format(name))
 
     #  def __eq__(self, other):
         #  return self.name == other.name
@@ -69,6 +68,3 @@ class Player():
             if c.hidden is False:
                 upcards.append(c)
         return upcards
-
-    def makeplay(self, options, street):
-        return self.strategy.makeplay(options, self._hand.value, street)

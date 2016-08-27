@@ -1,8 +1,8 @@
 from __future__ import print_function
 import random
 import player
+import player_5card
 import names
-import strategy
 
 # Table class
 # 4 types of tables, 2-handed, 6-handed, 9-handed, 10-handed
@@ -214,9 +214,8 @@ def setup_table(num, hero=None, gametype="DRAW5"):
         if i == 0 and hero is not None:
             t.add_player(0, player.Player(hero, 'HUMAN'))
         elif nameset[-1] is not None:
-            t.add_player(i, player.Player(nameset.pop(), 'CPU'))
-            if gametype == "DRAW5":
-                t.seats[i].strategy = strategy.get_reg_draw5()
+            #  t.add_player(i, player.Player(nameset.pop()))
+            t.add_player(i, player_5card.Player5Card(nameset.pop()))
         else:
             nameset.pop()
     return t

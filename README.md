@@ -8,25 +8,26 @@ Date Started: 01-01-2016
 The Todo List
 -----------------
 todo: Test the profitability of 5 card-draw hands WITH the draw.
-todo: Create hand groups for holdem
-todo: Go through codebase and Implement more pythonic idioms.
+
+
 todo: Check if the Joker exists. Is there a function to make it fill in a hand?
 pycards TODO
-Refactor auto discard
+
 Implement repr for all objects
 evaluator:
-Fix the draw evaluator
+
 evaluate discards: looks at all discard combos and rates them against random hands.
 find best draw
 best joker substitute – What card would the joker best represent?
 misc:
-Deal with deck depletion in 5card draw.
-cardlist: add count rank
+
 cardlist: best suited+connect run?
 dealer tips/rake
 Add more complexity to the Player Strategies
 Handhistory log
+
 5 card draw variant with Joker
+
 Randomize CPU player sessions, entering/leaving games.
 Random flipping of dealt cards (1/500)
 Random showing of folds (1/1000?)
@@ -38,52 +39,49 @@ Add kill game feature
 Betting structures: NL, Limit, Spread, Pot limit, Ante only
 
 deck:
-    dealing from empty deck raises exception
-    separate Deck subclasses?
-    isEmpty, contains, __add__, __sub__.
     pinochle deck
     Blackjack decks, subclass, takes an integer shoe
 
 v Menu options:
-View Help
-Change view
-View odds
-Auto sort cards
-View pot
-View Status
-Toggle sound
-View handhistory
-Set speed
+	View Help
+	Change view
+	View odds
+	Auto sort cards
+	View pot
+	View Status
+	Toggle sound
+	View handhistory
+	Set speed
 
 Basic GUI
-Title menu
-splash screen
-Show a deck
-Display cards
-Animate dealing
+	Title menu
+	splash screen
+	Show a deck
+	Display cards
+	Animate dealing
 
 Unit test EVERYTHING
-blinds.py
-card.py
-casino.py
-combos.py
-deck.py
-draw5.py
-draws_eval.py
-hand.py
-hand
-names
-player
-pokerhands
-rnd
-sim_pokerhands
-strategy
-stud5
-table
-tools
-war
-Doc comments
-Try nose on something (Deck? Hand?)
+	blinds.py
+	card.py
+	casino.py
+	combos.py
+	deck.py
+	draw5.py
+	draws_eval.py
+	hand.py
+	hand
+	names
+	player
+	pokerhands
+	rnd
+	sim_pokerhands
+	strategy
+	stud5
+	table
+	tools
+	war
+	Doc comments
+	Try nose on something (Deck? Hand?)
 
 
 

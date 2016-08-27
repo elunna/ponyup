@@ -3,6 +3,7 @@ import card
 import cardlist
 import deck
 import evaluator as ev
+import strategy
 
 
 class Round():
@@ -121,8 +122,9 @@ class Round():
             self.level = 0
             self.betsize = self._game.blinds.BB * 2
 
-            self.closer = self._table.next_player_w_cards(self._table.get_sb(), -1)
             self.bettor = self._table.next_player_w_cards(self._table.btn())
+            before_button = (self._table.btn() - 1) % len(self._table)
+            self.closer = self._table.next_player_w_cards(before_button)
 
             # Remember starting stack size.
             for p in self._table:
@@ -267,6 +269,10 @@ class Round():
             cost = self.betsize * self.level - invested
             options = self.get_options(cost)
 
+            # DEBUG SECTION
+            #  print('player = {}'.format(p))
+            print('bettor = {}, closer = {}'.format(self.bettor, self.closer))
+
             if p.chips == 0:
                 print('{} is all in.'.format(p))
             elif p.playertype == 'HUMAN':
@@ -274,8 +280,10 @@ class Round():
                 o = self.menu(options)
                 self.process_option(o)
 
-            elif p.playertype == 'CPU':
-                o = p.makeplay(options, self.street)
+            else:
+                #  print('CPU turn...')
+                o = strategy.makeplay(p, self, options)
+                #  print(o)
                 self.process_option(o)
 
             if self._table.valid_bettors() == 1:
