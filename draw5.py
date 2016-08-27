@@ -1,14 +1,13 @@
 import card
 import cardlist
 import evaluator as ev
-import session
-import game
+import poker
 
 
-class Draw5Session(session.Session):
+class Draw5Session(poker.Session):
     def play(self):
         """ Defines the structure of a hand played in the game."""
-        _round = game.Round(self)
+        _round = poker.Round(self)
 
         if len(self._table.get_cardholders()) > 0:
             raise Exception('One or more players have cards before the deal!')
@@ -31,7 +30,7 @@ class Draw5Session(session.Session):
         victor = _round.betting()
 
         if victor is None:
-            _round.muck.extend(game.discard_phase(self._table, _round.d))
+            _round.muck.extend(poker.discard_phase(self._table, _round.d))
 
             # Show table post draw
             print(self._table)
