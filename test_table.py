@@ -1,8 +1,8 @@
 import unittest
 import card
-import deck
 import table
 import player
+import setup_table
 
 
 class TestTable(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestTable(unittest.TestCase):
     Setup a table filled with 6 players for testing.
     """
     def setUp(self):
-        self.t = make_table(6)
+        self.t = setup_table.test_table(6)
 
     """
     Tests for __init__ and table construction
@@ -474,7 +474,7 @@ class TestTable(unittest.TestCase):
     # Randomize button on table size 2, button is in range 0-1
     def test_randomizebutton_2seats_inrange0to1(self):
         seats = 2
-        t = make_table(seats)
+        t = setup_table.test_table(seats)
         t.randomize_button()
         result = t.btn() >= 0 and t.btn() < seats
         self.assertTrue(result)
@@ -483,7 +483,7 @@ class TestTable(unittest.TestCase):
 
     def test_randomizebutton_6seats_inrange0to5(self):
         seats = 6
-        t = make_table(seats)
+        t = setup_table.test_table(seats)
         t.randomize_button()
         result = t.btn() >= 0 and t.btn() < seats
         self.assertTrue(result)
@@ -491,7 +491,7 @@ class TestTable(unittest.TestCase):
     # Randomize button on table size 6, button is in range 0-8
     def test_randomizebutton_9seats_inrange0to8(self):
         seats = 9
-        t = make_table(seats)
+        t = setup_table.test_table(seats)
         t.randomize_button()
         result = t.btn() >= 0 and t.btn() < seats
         self.assertTrue(result)
@@ -503,7 +503,6 @@ class TestTable(unittest.TestCase):
     def test_getcardholders_btnnotset_seat0hascards_raiseException(self):
         c = card.Card('A', 's')
         self.t.seats[0].add_card(c)
-
         self.assertRaises(Exception, self.t.get_cardholders)
 
     # 1 player with cards. Button moved to 0. Returns the player
@@ -522,15 +521,14 @@ class TestTable(unittest.TestCase):
     # Since it's heads up, the sb/btn(0) should be first in the returned list
     def test_getcardholders_btn0_seat0and1hascards_return0(self):
         seats = 2
-        t = make_table(seats)
+        t = setup_table.test_table(seats)
         t.move_button()
         # Make sure the btn is at 0
         self.assertEqual(t.btn(), 0)
         # Make sure the sb is at 0.
         self.assertEqual(t.get_sb(), 0)
 
-        deal_cards(t)
-
+        setup_table.deal_cards(t)
         expected = t.seats[0]
         result = t.get_cardholders()[0]
         self.assertEqual(expected, result)
@@ -539,14 +537,14 @@ class TestTable(unittest.TestCase):
     # Since it's heads up, the sb/btn(0) should be first in the returned list
     def test_getcardholders_btn1_seat0and1hascards_return1(self):
         seats = 2
-        t = make_table(seats)
+        t = setup_table.test_table(seats)
         t.move_button()
         t.move_button()
         # Make sure the btn is at 1
         self.assertEqual(t.btn(), 1)
         # Make sure the sb is at 1.
         self.assertEqual(t.get_sb(), 1)
-        deal_cards(t)
+        setup_table.deal_cards(t)
 
         expected = t.seats[1]
         result = t.get_cardholders()[0]
@@ -558,7 +556,7 @@ class TestTable(unittest.TestCase):
         # Make sure the btn is at 0
         self.assertEqual(self.t.btn(), 0)
 
-        deal_cards(self.t)
+        setup_table.deal_cards(self.t)
 
         expected = self.t.seats[1]
         result = self.t.get_cardholders()[0]
@@ -571,7 +569,7 @@ class TestTable(unittest.TestCase):
         # Make sure the btn is at 0
         self.assertEqual(self.t.btn(), 0)
 
-        deal_cards(self.t)
+        setup_table.deal_cards(self.t)
         expected = self.t.seats[1]
         result = self.t.get_cardholders()[0]
         self.assertEqual(expected, result)
@@ -579,7 +577,7 @@ class TestTable(unittest.TestCase):
     # 6 players with cards, Button at 0. Returns list that's size 6.
     def test_getcardholders_6havecards_lengthis6(self):
         self.t.move_button()
-        deal_cards(self.t)
+        setup_table.deal_cards(self.t)
         expected = 6
         result = len(self.t.get_cardholders())
         self.assertEqual(expected, result)
@@ -648,28 +646,7 @@ class TestTable(unittest.TestCase):
     # 6 players with cards, list is 6 long.
     def test_getvaluelist_6havecards_listis6long(self):
         self.t.move_button()
-        deal_cards(self.t)
+        setup_table.deal_cards(self.t)
         expected = 6
         result = len(self.t.get_valuelist())
         self.assertEqual(expected, result)
-
-##################################################
-# Helper Functions
-
-
-def make_table(seats):
-    # Populate a Table of the specified # of seats with players.
-    t = table.Table(seats)
-    for i in range(seats):
-        t.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
-
-    for p in t:
-        p.add_chips(1000)
-
-    return t
-
-
-def deal_cards(tbl):
-    d = deck.Deck()
-    for seat in tbl:
-        seat.add_card(d.deal())

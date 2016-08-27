@@ -1,9 +1,9 @@
 import unittest
 import blinds
+import draw5
 import card
 import poker
-import test_table
-import session
+import setup_table
 
 
 class TestGame(unittest.TestCase):
@@ -12,8 +12,8 @@ class TestGame(unittest.TestCase):
     """
     def setUp(self):
         STAKES = blinds.Blinds()
-        g = session.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
-        g._table = test_table.make_table(6)
+        g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6)
+        g._table = setup_table.test_table(6)
         self.r = poker.Round(g)
 
     """
@@ -131,8 +131,8 @@ class TestGame(unittest.TestCase):
     # 6 players ante 1. Pot == 6.
     def test_postantes_6players_potequals60(self):
         STAKES = blinds.Blinds(level=2)
-        g = session.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
-        g._table = test_table.make_table(6)
+        g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
+        g._table = setup_table.test_table(6)
         self.r = poker.Round(g)
         self.r.post_antes()
         expected = 6
@@ -142,8 +142,8 @@ class TestGame(unittest.TestCase):
     # Initial stacks=1000. Ante=1. After ante are 999.
     def test_postantes_6players_stacksequal999(self):
         STAKES = blinds.Blinds(level=2)
-        g = session.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
-        g._table = test_table.make_table(6)
+        g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
+        g._table = setup_table.test_table(6)
         self.r = poker.Round(g)
         self.r.post_antes()
         expected = 999
