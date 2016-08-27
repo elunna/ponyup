@@ -25,7 +25,6 @@ def makeplay(player, _game, options):
     handval = player._hand.value
 
     if _game.street == 0:
-
         if handval >= player.strat['pre_raise']:
             return pick_raise(options)
         elif handval >= player.strat['pre_call']:

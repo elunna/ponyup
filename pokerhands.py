@@ -7,6 +7,16 @@ from __future__ import print_function
 import deck
 import card
 
+# These are constants to help with computer AI
+HI_AQ = 1412000000
+PAIR_22 = 20000000000
+PAIR_66 = 20600000000
+PAIR_JJ = 21100000000
+PAIR_AA = 21400000000
+TWOPAIR_22 = 30000000000
+TWOPAIR_JJ = 31100000000
+TRIPS = 40000000000
+
 
 def dealhand(quantity):
     # Deal a regular 5 card hand from a new deck
