@@ -160,8 +160,7 @@ class Round():
             self.closer = self._table.next_player_w_cards(before_button)
 
             # Remember starting stack size.
-            for p in self._table:
-                self.betstack[p.name] = p.chips
+            self.betstack = stacksizes.get_stacksizes(self._table)
 
     def get_stack_to_pot_list(self):
         """
