@@ -27,17 +27,15 @@ class Session():
 
     def __str__(self):
         """ Represents the game as the round # and the stakes level. """
-        _str = 'Round: {:<5} '.format(self.rounds)
+        _str = 'Round: {:<5}\n'.format(self.rounds)
         stakes = 'Stakes: {}'.format(self.blinds)
-        _str += stakes.rjust(43)
+        _str += stakes.rjust(DISPLAYWIDTH)
 
         return _str
 
     def play(self):
         """ Defines the structure of how a single hand in the poker game is played."""
-
         print('Stub play function')
-
 
 
 class Round():
@@ -72,7 +70,7 @@ class Round():
         """ Show the current size of the pot. """
         _str = 'Pot: '
         _str += colors.color('${}'.format(self.pot), 'yellow')
-        return _str.rjust(DISPLAYWIDTH)
+        return _str.rjust(84)
 
     def deal_cards(self, qty, faceup=False):
         """
