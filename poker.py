@@ -311,11 +311,12 @@ class Round():
             elif p.playertype == 'HUMAN':
                 print(self)
                 o = betting.menu(options)
-                self.process_option(o)
-
+                #  action_string = self.process_option(o)
             else:
                 o = strategy.makeplay(p, self, options)
-                self.process_option(o)
+                #  action_string = self.process_option(o)
+            action_string = self.process_option(o)
+            print(action_string)
 
             if self._table.valid_bettors() == 1:
                 print('Only one player left!')
@@ -355,12 +356,14 @@ class Round():
         act_str += '  ' * self.level
         act_str += '{} {}s'.format(p, option[0].lower())
 
-        if option[0] == 'RAISE':
-            print(colors.color(act_str, 'red'))
-        elif option[0] == 'FOLD':
-            print(colors.color(act_str, 'purple'))
+        amt = colors.color(' $' + str(option[1]), 'yellow')
+
+        if option[0] in ['BET', 'RAISE']:
+            return colors.color(act_str, 'red') + amt
+        elif option[0] in ['FOLD', 'CHECK']:
+            return colors.color(act_str, 'purple')
         else:
-            print(colors.color(act_str, 'white'))
+            return colors.color(act_str, 'white') + amt
 
     def showdown(self):
         """
