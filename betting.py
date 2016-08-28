@@ -1,5 +1,6 @@
 from __future__ import print_function
 from collections import namedtuple
+import colors
 
 
 def calc_odds(bet, pot):
@@ -12,11 +13,14 @@ def calc_odds(bet, pot):
 
 def menu(options=None):
     """ Display a list of betting options for the current player. """
-    picks = '/'.join([v.action.title() for k, v in sorted(options.items())])
+    nice_opts = ['[' + colors.color(v.action[0], 'white', STYLE='BOLD') + ']' +
+                 v.action[1:].lower()
+                 for k, v in sorted(options.items())]
+    choices = '/'.join(nice_opts)
 
     print('')
     while True:
-        choice = input('{}? :> '.format(picks))
+        choice = input('{}? :> '.format(choices))
 
         if choice == 'q':
             exit()
