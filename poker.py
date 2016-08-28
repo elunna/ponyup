@@ -291,6 +291,9 @@ class Round():
         print('\t{} wins {}'.format(player, chips))
         player.add_chips(amt)
 
+    def invested(self, player):
+        self.betstack[player.name] - player.chips
+
     def betting_round(self):
         """
         Performs a round of betting between all the players that have cards and chips.
@@ -299,8 +302,7 @@ class Round():
 
         while playing:
             p = self._table.seats[self.bettor]
-            invested = self.betstack[p.name] - p.chips
-            cost = self.betsize * self.level - invested
+            cost = (self.betsize * self.level) - self.invested(p)
             options = betting.get_options(cost, self)
 
             if p.chips == 0:
