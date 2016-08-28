@@ -1,5 +1,6 @@
 from __future__ import print_function
 import betting
+import colors
 import deck
 import setup_table
 import strategy
@@ -349,8 +350,16 @@ class Round():
         else:
             self.pot += p.bet(option[1])
 
-        print('  ' * self.level, end='')
-        print('{} {}s'.format(p, option[0].lower()))
+        act_str = ''
+        act_str += '  ' * self.level
+        act_str += '{} {}s'.format(p, option[0].lower())
+
+        if option[0] == 'RAISE':
+            print(colors.color(act_str, 'red'))
+        elif option[0] == 'FOLD':
+            print(colors.color(act_str, 'yellow'))
+        else:
+            print(colors.color(act_str, 'white'))
 
     def showdown(self):
         """
