@@ -4,7 +4,7 @@ import random
 
 # Table class
 # 4 types of tables, 2-handed, 6-handed, 9-handed, 10-handed
-VALID_SIZES = [2, 6, 9, 10]
+VALID_SIZES = list(range(1, 10))
 
 
 class Table():
