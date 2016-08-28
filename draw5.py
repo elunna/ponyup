@@ -85,7 +85,7 @@ def auto_discard(hand):
         # Keep the two pair, discard 1.
         highcards = ranklist[0].rank + ranklist[1].rank
 
-        return cardlist.strip_ranks(cardlist.cards, highcards)
+        return cardlist.strip_ranks(hand.cards, highcards)
 
     # Process any available draws
     return draw_discards(sorted(cardlist.cards[:]), ranklist)
