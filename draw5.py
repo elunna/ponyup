@@ -28,7 +28,7 @@ class Draw5Session(poker.Session):
 
         # Pre-draw betting round
         _round.setup_betting()
-        victor = _round.betting()
+        victor = _round.betting_round()
 
         if victor is None:
             _round.muck.extend(discard_phase(self._table, _round.d))
@@ -38,7 +38,7 @@ class Draw5Session(poker.Session):
 
             # Post-draw betting round
             _round.setup_betting()
-            victor = _round.betting()
+            victor = _round.betting_round()
 
             if victor is None:
                 # Check for winners/showdown

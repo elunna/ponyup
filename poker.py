@@ -1,5 +1,5 @@
 from __future__ import print_function
-import card
+import betting
 import deck
 import setup_table
 import strategy
@@ -288,7 +288,7 @@ class Round():
         print('\t{} wins {} chips'.format(player, amt))
         player.add_chips(amt)
 
-    def betting(self):
+    def betting_round(self):
         """
         Performs a round of betting between all the players that have cards and chips.
         """
@@ -298,13 +298,13 @@ class Round():
             p = self._table.seats[self.bettor]
             invested = self.betstack[p.name] - p.chips
             cost = self.betsize * self.level - invested
-            options = self.get_options(cost)
+            options = betting.get_options(cost, self)
 
             if p.chips == 0:
                 print('{} is all in.'.format(p))
             elif p.playertype == 'HUMAN':
                 print(self)
-                o = self.menu(options)
+                o = betting.menu(options)
                 self.process_option(o)
 
             else:
@@ -349,83 +349,6 @@ class Round():
 
         print('  ' * self.level, end='')
         print('{} {}s'.format(p, option[0].lower()))
-
-    def menu(self, options=None):
-        """
-        Display a list of betting options for the current player.
-        """
-        # Sort by chip cost
-        optlist = [(options[o][1], o, options[o][0][1:]) for o in options]
-
-        for o in sorted(optlist):
-            print('({}){}--${} '.format(o[1], o[2], o[0]), end='')
-
-        print('')
-        while True:
-            choice = input(':> ')
-
-            if choice == 'q':
-                exit()
-            elif choice.lower() in options:
-                return options[choice]
-            else:
-                print('Invalid choice, try again.')
-
-    def get_options(self, cost):
-        """ Shows the options available to the current bettor."""
-        completing = (self.betsize - cost) == self._game.blinds.SB
-
-        OPTIONS = {}
-
-        if self.street == 0 and completing:
-            # Completing the small blind
-            OPTIONS['f'] = ('FOLD', 0, 0)
-            OPTIONS['c'] = ('COMPLETE', cost, 0)
-            OPTIONS['r'] = ('RAISE', cost + self.betsize, 1)
-
-        elif cost == 0 and self.level >= 1:
-            # Typical BB, Straddle, or post situation.
-            OPTIONS['c'] = ('CHECK', 0, 0)
-            OPTIONS['r'] = ('RAISE', cost + self.betsize, 1)
-
-        elif cost == 0 and self.level == 0:
-            # Noone has opened betting yet on a postblind round
-            OPTIONS['c'] = ('CHECK', 0, 0)
-            OPTIONS['b'] = ('BET', self.betsize, 1)
-
-        elif cost > 0 and self.level < self.betcap:
-            # There has been a bet/raises, but still can re-raise
-            OPTIONS['f'] = ('FOLD', 0, 0)
-            OPTIONS['c'] = ('CALL', cost, 0)
-            OPTIONS['r'] = ('RAISE', cost + self.betsize, 1)
-
-        elif cost > 0 and self.level == self.betcap:
-            # The raise cap has been met, can only call or fold.
-            OPTIONS['f'] = ('FOLD', 0, 0)
-            OPTIONS['c'] = ('CALL', cost, 0)
-
-        return OPTIONS
-
-    def determine_bringin(self, gametype):
-        # Finds which player has the lowest showing card and returns that player.
-        suitvalues = {'c': 1, 'd': 2, 'h': 3, 's': 4}
-        index = -1
-        if gametype == "STUD5":
-            index = 1
-        if gametype == "STUD7":
-            index = 2
-
-        # Start with the lowest as the highest possible card to beat.
-        lowcard = card.Card('A', 's')
-        player = None
-        for p in self._table:
-            c = p._hand.cards[index]
-            if c.rank < lowcard.rank:
-                lowcard, player = c, p
-            elif c.rank == lowcard.rank:
-                if suitvalues[c.suit] < suitvalues[lowcard.suit]:
-                    lowcard, player = c, p
-        return player
 
     def showdown(self):
         """
