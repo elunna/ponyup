@@ -159,42 +159,38 @@ def discard_phase(table, deck):
     muckpile = []
 
     for p in holdingcards:
-        ishuman = p.playertype == 'HUMAN'
-        # Discard!
-        if ishuman:
+        if p.is_human():
             discards = human_discard(p._hand)
         else:
             discards = auto_discard(p._hand)
 
         if discards:
-            # Easier to put this here...
-            if ishuman:
-                print('{:15} discards {}, draws: '.format(
-                    str(p), discards), end='')
-            else:
-                print('{:15} discards {}.'.format(
-                    str(p), discards), end='')
+            print('{} discards {}'.format(str(p), discards).rjust(70))
         else:
-            print('{:15} stands pat.'.format(str(p)))
+            print('{} stands pat.'.format(str(p)).rjust(70))
 
         # Redraw!
+        human_draw = []
         for c in discards:
             muckpile.append(p.discard(c))
-
             draw = deck.deal()
-            if ishuman:
+
+            if p.is_human:
                 draw.hidden = False
-                print('{} '.format(draw), end='')
+                human_draw.append(draw)
 
             p.add_card(draw)
-        print('')
+
+        if p.is_human():
+            print('{} draws {}'.format(str(p), human_draw).rjust(70))
+
     print('')
 
     return muckpile
 
 
 def human_discard(hand):
-    print('1  2  3  4  5'.rjust(70))
+    print('Your discard....1  2  3  4  5'.rjust(70))
     hands = ' '.join([str(c) for c in hand.cards])
     print('\t'*7 + hands)
 
