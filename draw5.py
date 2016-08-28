@@ -19,7 +19,6 @@ class Draw5Session(poker.Session):
         _round.deal_cards(DEALT)
         _round.sortcards()
 
-        print(_round)           # Display pot
         print(self._table)      # Show table pre draw
 
         # Pre-draw betting

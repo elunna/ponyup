@@ -25,17 +25,16 @@ class Table():
         _str = ''
         #  _str = '{:3}{:7}{:4}{:15}{:10}{:10}\n'.format(
             #  '#', 'Blinds', 'Btn', 'Player', 'Chips', 'Hand')
-        _str += '{:5}'.format('Seat')
-        _str += '{:7}'.format('Blinds')
-        _str += '{:7}'.format('Dealer')
-        _str += '{:20}'.format('Player')
-        _str += '{:<16}'.format('Chips')
-        _str += '{:16}'.format('Hand')
-        _str += '\n'
 
-        line = '-'*70
-        _str += line
-        _str += '\n'
+        _str = colors.color('{:5}{:7}{:7}{:20}{:<17}{:16}\n'.format(
+            'Seat', 'Blinds', 'Dealer', 'Player', 'Chips', 'Hand'), 'gray', STYLE='BOLD')
+        #  _str += '{:5}'.format('Seat')
+        #  _str += '{:7}'.format('Blinds')
+        #  _str += '{:7}'.format('Dealer')
+        #  _str += '{:20}'.format('Player')
+        #  _str += '{:<16}'.format('Chips')
+        #  _str += '{:16}'.format('Hand')
+        #  _str += '\n'
 
         for i, s in enumerate(self.seats):
             if s is None:
@@ -58,7 +57,7 @@ class Table():
 
             _str += '{:20}'.format(s.name)
 
-            _str += colors.color('${:<15}'.format(s.chips), 'yellow')
+            _str += colors.color('${:<16}'.format(s.chips), 'yellow')
 
             # Display hand if available
             if s._hand is not None:

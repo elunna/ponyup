@@ -2,11 +2,14 @@ CSI = "\x1b["
 CSI_end = "\x1b[0m"
 #  reset = CSI + "m"
 
-NORMAL = 0
-BOLD = 1
-FADE = 2
-ITALIC = 3
-UNDERLINE = 4
+
+STYLES = {
+    'NORMAL': 0,
+    'BOLD': 1,
+    'FADE': 2,
+    'ITALIC': 3,
+    'UNDERLINE': 4,
+}
 
 COLORS = {
     'RED': 31,
@@ -20,11 +23,11 @@ COLORS = {
 }
 
 
-def color(string, fg, bg='GRAY', STYLE=BOLD):
+def color(string, fg, bg='GRAY', STYLE='NORMAL'):
     if fg.upper() in COLORS:
         return '{}{};{};{}m{}{}'.format(
             CSI,
-            STYLE,
+            STYLES[STYLE],
             COLORS[fg.upper()],
             COLORS[bg.upper()],
             string,
