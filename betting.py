@@ -1,4 +1,5 @@
 from __future__ import print_function
+from collections import namedtuple
 
 
 def calc_odds(bet, pot):
@@ -10,18 +11,13 @@ def calc_odds(bet, pot):
 
 
 def menu(options=None):
-    """
-    Display a list of betting options for the current player.
-    """
-    # Sort by chip cost
-    optlist = [(options[o][1], o, options[o][0][1:]) for o in options]
+    """ Display a list of betting options for the current player. """
 
-    for o in sorted(optlist):
-        print('({}){}--${} '.format(o[1], o[2], o[0]), end='')
+    picks = '/'.join([v.action.title() for k, v in sorted(options.items())])
 
     print('')
     while True:
-        choice = input(':> ')
+        choice = input('{}? :> '.format(picks))
 
         if choice == 'q':
             exit()
@@ -35,33 +31,34 @@ def get_options(cost, env):
     """ Shows the options available to the current bettor."""
     completing = (env.betsize - cost) == env._session.blinds.SB
 
-    OPTIONS = {}
+    option_dict = {}
+    Option = namedtuple('Option', ['action', 'cost', 'level'])
 
     if env.street == 0 and completing:
         # Completing the small blind
-        OPTIONS['f'] = ('FOLD', 0, 0)
-        OPTIONS['c'] = ('COMPLETE', cost, 0)
-        OPTIONS['r'] = ('RAISE', cost + env.betsize, 1)
+        option_dict['f'] = Option('FOLD', 0, 0)
+        option_dict['c'] = Option('COMPLETE', cost, 0)
+        option_dict['r'] = Option('RAISE', cost + env.betsize, 1)
 
     elif cost == 0 and env.level >= 1:
         # Typical BB, Straddle, or post situation.
-        OPTIONS['c'] = ('CHECK', 0, 0)
-        OPTIONS['r'] = ('RAISE', cost + env.betsize, 1)
+        option_dict['c'] = Option('CHECK', 0, 0)
+        option_dict['r'] = Option('RAISE', cost + env.betsize, 1)
 
     elif cost == 0 and env.level == 0:
         # Noone has opened betting yet on a postblind round
-        OPTIONS['c'] = ('CHECK', 0, 0)
-        OPTIONS['b'] = ('BET', env.betsize, 1)
+        option_dict['c'] = Option('CHECK', 0, 0)
+        option_dict['b'] = Option('BET', env.betsize, 1)
 
     elif cost > 0 and env.level < env.betcap:
         # There has been a bet/raises, but still can re-raise
-        OPTIONS['f'] = ('FOLD', 0, 0)
-        OPTIONS['c'] = ('CALL', cost, 0)
-        OPTIONS['r'] = ('RAISE', cost + env.betsize, 1)
+        option_dict['f'] = Option('FOLD', 0, 0)
+        option_dict['c'] = Option('CALL', cost, 0)
+        option_dict['r'] = Option('RAISE', cost + env.betsize, 1)
 
     elif cost > 0 and env.level == env.betcap:
         # The raise cap has been met, can only call or fold.
-        OPTIONS['f'] = ('FOLD', 0, 0)
-        OPTIONS['c'] = ('CALL', cost, 0)
+        option_dict['f'] = Option('FOLD', 0, 0)
+        option_dict['c'] = Option('CALL', cost, 0)
 
-    return OPTIONS
+    return option_dict
