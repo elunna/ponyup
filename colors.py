@@ -1,23 +1,32 @@
 CSI = "\x1b["
 CSI_end = "\x1b[0m"
 #  reset = CSI + "m"
-STYLE = 0
+
+NORMAL = 0
+BOLD = 1
+FADE = 2
+ITALIC = 3
+UNDERLINE = 4
 
 COLORS = {
     'RED': 31,
     'GRAY': 40,
     'GREEN': 32,
     'YELLOW': 33,
+    'BLUE': 34,
+    'PURPLE': 35,
+    'LIGHTBLUE': 36,
+    'WHITE': 37,
 }
 
 
-def color(string, color):
-    if color.upper() in COLORS:
+def color(string, fg, bg='GRAY'):
+    if fg.upper() in COLORS:
         return '{}{};{};{}m{}{}'.format(
             CSI,
-            STYLE,
-            COLORS[color.upper()],
-            COLORS[color.upper()],
+            BOLD,
+            COLORS[fg.upper()],
+            COLORS[bg.upper()],
             string,
             CSI_end)
     else:
