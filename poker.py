@@ -358,7 +358,7 @@ class Round():
         if option[0] == 'RAISE':
             print(colors.color(act_str, 'red'))
         elif option[0] == 'FOLD':
-            print(colors.color(act_str, 'yellow'))
+            print(colors.color(act_str, 'purple'))
         else:
             print(colors.color(act_str, 'white'))
 
