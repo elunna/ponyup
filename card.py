@@ -26,9 +26,9 @@ class Card:
 
     def __str__(self):
         if self.hidden:
-            return colors.color('Xx', 'gray')
+            return colors.color('Xx', 'gray', STYLE='BOLD')
 
-        return colors.color(self.rank + self.suit, COLORS[self.suit])
+        return colors.color(self.rank + self.suit, COLORS[self.suit], STYLE='BOLD')
 
     def __repr__(self):
         if self.hidden:
