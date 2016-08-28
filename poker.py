@@ -9,9 +9,8 @@ STARTINGCHIPS = 1000
 
 class Session():
     """
-    The Game object manages the general structure of a poker game. It sets up the essentials:
-        game type, the table, and stakes.  The play() method defines the structure of how a
-        single hand in the poker game is played.
+    The Session object manages the general structure of a poker game. It sets up the essentials:
+        game type, the table, and stakes.
     """
     def __init__(self, gametype, structure, tablesize=6, hero=None):
         """
@@ -34,6 +33,8 @@ class Session():
         return _str
 
     def play(self):
+        """ Defines the structure of how a single hand in the poker game is played."""
+
         print('Stub play function')
 
 
@@ -53,6 +54,7 @@ class Round():
 
         self.muck = []
         self.d = deck.Deck()
+        self.DECKSIZE = len(self.d)
 
         # Create a list of the players from the table, and place the button at index 0
         self.bettor = None
@@ -95,20 +97,22 @@ class Round():
             self.muck.append(self.d.deal())
 
     def verify_muck(self):
-        DECKSIZE = 52
-        if len(self.muck) != DECKSIZE:
+        """ Verify that the integrity of the deck has not been compromised. """
+
+        # Make sure that all cards have been used up.
+        if len(self.d) != 0:
             return False
-        elif len(self.d) != 0:
+        # Check that the muck is the same size as the original starting deck.
+        elif len(self.muck) != self.DECKSIZE:
             return False
+        # Check that all players have folded.
         elif len(self._table.get_cardholders()) > 0:
             return False
         else:
             return True
 
     def post_antes(self):
-        """
-        All players bet the ante amount and it's added to the pot
-        """
+        """ All players bet the ante amount and it's added to the pot. """
         for p in self._table:
             self.pot += p.bet(self._game.blinds.ANTE)
 
