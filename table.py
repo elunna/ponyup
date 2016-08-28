@@ -1,8 +1,5 @@
 from __future__ import print_function
 import random
-import player
-import player_5card
-import names
 
 # Table class
 # 4 types of tables, 2-handed, 6-handed, 9-handed, 10-handed
@@ -201,4 +198,3 @@ class Table():
         for p in self.get_cardholders():
             handlist.append((p._hand.value, p))
         return handlist
-
