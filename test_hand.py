@@ -49,7 +49,8 @@ class TestHand(unittest.TestCase):
     def test_str_1card_hidden_returnsAs(self):
         c = card.Card('A', 's')
         h = hand.Hand([c])
-        expected = 'Xx'
+        #  expected = 'Xx'
+        expected = '\x1b[1;40;40mXx\x1b[0m'
         result = str(h)
         self.assertEqual(expected, result)
 
@@ -58,7 +59,8 @@ class TestHand(unittest.TestCase):
         c = card.Card('A', 's')
         h = hand.Hand([c])
         h.unhide()
-        expected = 'As'
+        #  expected = 'As'
+        expected = '\x1b[1;37;40mAs\x1b[0m'
         result = str(h)
         self.assertEqual(expected, result)
 
@@ -69,7 +71,8 @@ class TestHand(unittest.TestCase):
         cards.append(card.Card('K', 's'))
         h = hand.Hand(cards)
         h.unhide()
-        expected = 'As Ks'
+        #  expected = 'As Ks'
+        expected = '\x1b[1;37;40mAs\x1b[0m \x1b[1;37;40mKs\x1b[0m'
         result = str(h)
         self.assertEqual(expected, result)
 

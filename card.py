@@ -31,7 +31,10 @@ class Card:
         return colors.color(self.rank + self.suit, COLORS[self.suit])
 
     def __repr__(self):
-        return self.rank + self.suit
+        if self.hidden:
+            return 'Xx'
+        else:
+            return self.rank + self.suit
 
     def __eq__(self, other):
         return self.rank == other.rank and self.suit == other.suit

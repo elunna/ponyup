@@ -124,14 +124,16 @@ class TestCards(unittest.TestCase):
     """
     def test_str_hiddenCard_returnsXx(self):
         c = card.Card('A', 's')
-        expected = 'Xx'
+        #  expected = 'Xx'
+        expected = '\x1b[1;40;40mXx\x1b[0m'
         result = str(c)
         self.assertEqual(expected, result)
 
     def test_str_FaceupAs_returnsAs(self):
         c = card.Card('A', 's')
         c.hidden = False
-        expected = 'As'
+        #  expected = 'As'
+        expected = '\x1b[1;37;40mAs\x1b[0m'
         result = str(c)
         self.assertEqual(expected, result)
 
@@ -139,6 +141,18 @@ class TestCards(unittest.TestCase):
     Tests for __repr__()
     * Currently this just calls str so no tests are required.
     """
+    def test_repr_hiddenCard_returnsXx(self):
+        c = card.Card('A', 's')
+        expected = 'Xx'
+        result = repr(c)
+        self.assertEqual(expected, result)
+
+    def test_repr_FaceupAs_returnsAs(self):
+        c = card.Card('A', 's')
+        c.hidden = False
+        expected = 'As'
+        result = repr(c)
+        self.assertEqual(expected, result)
 
     """
     Tests for __eq__()
