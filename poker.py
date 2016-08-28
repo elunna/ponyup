@@ -213,6 +213,11 @@ class Round():
 
         return winners
 
+    def get_allin_stacks(self):
+        return [self.startingstacks[p.name]
+                for p in self.table.get_cardholders()
+                if p.is_allin()]
+
     def process_allins(self):
         """
         Determine which players are all-in in order to create sidepots.
@@ -276,7 +281,8 @@ class Round():
             award_dict[w] = share
 
         if remainder > 0:
-            r_winner = self._table.seats[self._table.next(self._table.btn)]
+            first_after_btn = self._table.next(self._table.btn)
+            r_winner = self._table.seats[first_after_btn]
             award_dict[r_winner] += remainder
         return award_dict
 
@@ -370,6 +376,7 @@ class Round():
         print(self.show_cards())
 
         handlist = self._table.get_valuelist()
+
         self.process_allins()
 
         if len(self.sidepots) == 0:
@@ -380,5 +387,3 @@ class Round():
         else:
             return self.process_sidepots(handlist)
 
-    def get_allin_stacks(self):
-        return [self.startingstacks[p] for p in self.table if p.is_allin()]

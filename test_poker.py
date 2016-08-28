@@ -58,9 +58,12 @@ class TestGame(unittest.TestCase):
             self.assertFalse(s._hand.cards[0].hidden)
 
     """
-    Tests for muck_all_cards()
+    Tests for sortcards()
     """
 
+    """
+    Tests for muck_all_cards()
+    """
     # 6 players, deal 1 - no cardholders after running
     def test_muckallcards_cardsmucked_nocardholders(self):
         self.r._table.move_button()
@@ -200,16 +203,23 @@ class TestGame(unittest.TestCase):
     """
     Tests for setup_betting()
     """
-
-    # get_stack_to_pot_list(self):
+    # 2 players. SB and BTN should be together.
+    # 2 players. BB is not BTN.
 
     """
     Tests for process_sidepots(handlist)
     """
 
     """
-    Tests for determine_eligibility(handlist, pot, stack)
+    Tests for eligible_for_pot(handlist, pot, stack)
     """
+
+    """
+    Tests for get_allin_stacks()
+    """
+    # No allins, returns empty list
+    # 1 allin, returns list with 1 stack size.
+    # 2 allins, returns list with 2 stack sizes.
 
     """
     Tests for process_allins()
@@ -220,40 +230,44 @@ class TestGame(unittest.TestCase):
     """
 
     """
-    Tests for award_pot(winners, amt)
+    Tests for split_pot(winners, amt)
     """
+    # Award 1 player 100 chips. Their stack goes up 100.
+    # Award 2 players 100 chips. Each stack goes up 50
+    # Award 2 players -100 chips. Raise exception.
 
     """
-    Tests for betting()
+    Tests for award_pot(player, amt)
     """
+    # Award 1 player 100 chips. Their stack goes up 100.
+    # Try awarding -100. Should raise an exception.
+    # Try awarding a player with no cards. Should raise an exception.
+
+    """
+    Tests for betting_round()
+    """
+    # Export the invested variable to betting.has_invested(player)
+    # Export the cost variable.
 
     """
     Tests for process_option(option)
     """
+    # CHECK - bet level is same
+    # CHECK - Players chips stay the same
+    # FOLD - player doesn't have cards
+    # FOLD - Players chips stay the same
+    # BET - bet level is raised by one
+    # BET - Players chips are diminished by the bet amount
+    # RAISE - bet level is raised by one
+    # RAISE - Players chips are diminished by the raiseamount
+    # CHECK - bet level is same
+    # COMPLETE - Players chips are diminished by the bet amount
 
     """
-    Tests for menu(options=None)
+    Tests show_cards()
     """
-
-    """
-    Tests for get_options(cost)
-    """
-
-    """
-    Tests for determine_bringin(gametype)
-    """
+    # Deal cards to 2 players, should be able to see CPU cards
 
     """
     Tests for showdown()
-    """
-
-################################################################
-# Not in the round class
-
-    """
-    Tests for calc_odds(bet, pot)
-    """
-
-    """
-    Tests for
     """
