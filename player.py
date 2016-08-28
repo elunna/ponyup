@@ -68,3 +68,6 @@ class Player():
             if c.hidden is False:
                 upcards.append(c)
         return upcards
+
+    def is_human(self):
+        return self.playertype == 'HUMAN'
