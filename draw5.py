@@ -199,20 +199,26 @@ def human_discard(hand):
     for c in hand.cards:
         print('{} '.format(str(c)), end='')
     print('')
-    print('Enter the cards you want to discard:')
-    print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
-    print('')
-    choice = input(':> ')
-    # Split up the #s, and reverse them so we can remove them without the list
-    # collapsing and disrupting the numbering.
-    validnumbers = ['1', '2', '3', '4', '5']
-    choice = sorted(list(choice), reverse=True)
-    discards = []
-    for c in choice:
-        if is_integer(c) and c in validnumbers:
-            discards.append(hand.cards[int(c) - 1])
-        else:
-            pass
+    while True:
+        helpme = ['?', 'h', 'help']
+        choice = input(':> ')
+        if choice in helpme:
+            print('')
+            print('Enter the cards you want to discard:')
+            print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
+            continue
+        # Split up the #s, and reverse them so we can remove them without the list
+        # collapsing and disrupting the numbering.
+        validnumbers = ['1', '2', '3', '4', '5']
+        choice = sorted(list(choice), reverse=True)
+        discards = []
+
+        for c in choice:
+            if is_integer(c) and c in validnumbers:
+                discards.append(hand.cards[int(c) - 1])
+            else:
+                pass
+        break
     return discards
 
 
