@@ -3,6 +3,7 @@ import betting
 import colors
 import deck
 import setup_table
+import stacksizes
 import strategy
 
 STARTINGCHIPS = 1000
@@ -62,9 +63,7 @@ class Round():
 
         #  Remember starting stacks of all playerso
         self.betstack = {}
-        self.startstack = {}
-        for p in self._table:
-            self.startstack[p.name] = p.chips
+        self.starting_stacks = stacksizes.get_stacksizes(self._table)
 
     def __str__(self):
         """ Show the current size of the pot. """
@@ -153,7 +152,7 @@ class Round():
             self.closer = self._table.TOKENS['BB']
             self.bettor = self._table.next(self.closer)
             # Copy the starting stack for the first round (because blinds were posted)
-            self.betstack = self.startstack.copy()
+            self.betstack = self.starting_stacks.copy()
 
         elif self.street > 0:
             # postflop the first bettor is right after the button
@@ -212,7 +211,7 @@ class Round():
         """
         Determine what players are eligible to win pots and sidepots.
         """
-        eligible = [p for p in handlist if self.startstack[p[1].name] >= stack]
+        eligible = [p for p in handlist if self.starting_stacks[p[1].name] >= stack]
 
         bestvalue = 0
         # Determine the best handvalue the eligible players have.
@@ -231,7 +230,7 @@ class Round():
         for p in self._table.get_cardholders():
             # Look for allins and create sidepots
             if p.chips == 0:
-                allin = self.startstack[p.name]
+                allin = self.starting_stacks[p.name]
 
                 self.make_sidepot(allin)
 
@@ -255,7 +254,7 @@ class Round():
         # Go through the table of players
         for p in self._table:
             # For each player, get their total invested amount over the round
-            invested = self.startstack[p.name] - p.chips
+            invested = self.starting_stacks[p.name] - p.chips
 
             # If stacksize is less than invested, they can only win the stacksize.
             if stacksize <= invested:

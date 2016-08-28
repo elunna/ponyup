@@ -19,3 +19,11 @@ def average(table):
 def effective(table):
     """ Return the effetive stack size at the table. (Note: It's also the smallest."""
     pass
+
+
+def get_stacksizes(table):
+    """ Returns a name/stacksize dictionary for each player at the table. """
+    stacks = {}
+    for p in table:
+        stacks[p.name] = p.chips
+    return stacks
