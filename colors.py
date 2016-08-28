@@ -20,11 +20,11 @@ COLORS = {
 }
 
 
-def color(string, fg, bg='GRAY'):
+def color(string, fg, bg='GRAY', STYLE=BOLD):
     if fg.upper() in COLORS:
         return '{}{};{};{}m{}{}'.format(
             CSI,
-            BOLD,
+            STYLE,
             COLORS[fg.upper()],
             COLORS[bg.upper()],
             string,
