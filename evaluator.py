@@ -39,10 +39,10 @@ def is_validhand(cards):
 
 def dominant_suit(cards):
     """
-    Looks at all the cards in a list and finds which suit occurs with the greatest
-    frequency. If there are an equal # of suits between cards, count the higher ranked cards.
-    If a tie is further needed to be broken because the suited cards are the same rank,
-    break the tie by using the traditional ranking of suits.
+    Finds which suit occurs with the greatest frequency in a list of Cards. If there are an
+    equal # of suits between cards, count the higher ranked cards.  If a tie is further needed
+    to be broken because the suited cards are the same rank, break the tie by using the
+    traditional ranking of suits.
     """
 
     # First create a dictionary to count the suits
@@ -233,7 +233,6 @@ def find_best_hand(cards):
     if len(cards) < 5:
         return None
     hands = [hand.Hand(c) for c in itertools.combinations(cards, 5)]
-
     besthand = hands[0]
 
     for h in hands:

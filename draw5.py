@@ -70,8 +70,6 @@ class Draw5Session(poker.Session):
 
 def auto_discard(hand):
     # hand is a Hand object
-
-    # Obviously we will stand pat on:
     PAT_HANDS = ['STRAIGHT', 'FLUSH', 'FULL HOUSE', 'STRAIGHT FLUSH', 'ROYAL FLUSH']
     DIS_RANKS = ['PAIR', 'TRIPS', 'QUADS']
     discard = []

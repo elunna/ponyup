@@ -1,3 +1,4 @@
+from collections import namedtuple
 import card
 
 
@@ -24,9 +25,13 @@ def rank_list(cards):
     converting it to a list and sorting it by rank.
     """
     ranks = rank_dict(cards)
-    L = [(ranks[r], r) for r in ranks]
+    Ranklist = namedtuple('Ranklist', ['quantity', 'rank'])
 
-    return sorted(L, key=lambda x: (-x[0], -card.RANKS[x[1]]))
+    #  L = [(ranks[r], r) for r in ranks]
+    L = [Ranklist(quantity=ranks[r], rank=r) for r in ranks]
+
+    #  return sorted(L, key=lambda x: (-x[0], -card.RANKS[x[1]]))
+    return sorted(L, key=lambda x: (-x.quantity, -card.RANKS[x.rank]))
 
 
 def suit_dict(cards):

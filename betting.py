@@ -12,7 +12,6 @@ def calc_odds(bet, pot):
 
 def menu(options=None):
     """ Display a list of betting options for the current player. """
-
     picks = '/'.join([v.action.title() for k, v in sorted(options.items())])
 
     print('')
