@@ -19,10 +19,10 @@ class TestGame(unittest.TestCase):
     """
     Tests for __str__()
     """
-    # New round - pot displayed as $0
-    def test_str_newround_returns0(self):
-        expected = 'Pot: $0'
-        result = str(self.r)
+    # New round - pot = 0
+    def test_newround_potis0(self):
+        expected = 0
+        result = self.r.pot
         self.assertEqual(expected, result)
 
     """
