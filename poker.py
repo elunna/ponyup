@@ -26,11 +26,10 @@ class Session():
             p.chips = STARTINGCHIPS
 
     def __str__(self):
-        """
-        Represents the game as the round # and the stakes level.
-        """
+        """ Represents the game as the round # and the stakes level. """
         _str = 'Round: {:<5} '.format(self.rounds)
-        _str += 'Stakes: {}'.format(self.blinds.__str__().rjust(36))
+        stakes = 'Stakes: {}'.format(self.blinds)
+        _str += stakes.rjust(37)
 
         return _str
 
