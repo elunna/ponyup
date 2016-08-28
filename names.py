@@ -15,15 +15,25 @@ names = ['Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'M
          'Laak', 'Lederer', 'Lindren', 'Matusow', 'Minieri']
 
 
-def generate_random_namelist(num, full=True):
+def random_names(num):
     nameset = []
-    if full is True:
-        sparseness = 10
-    else:
-        sparseness = 7
+
+    # Make sure all the names are unique
+    for i in range(num):
+        while True:
+            nextname = random.choice(names)
+            if nextname not in nameset:
+                nameset.append(nextname)
+                break
+    return nameset
+
+
+def names_with_gaps(num):
+    nameset = []
+    sparseness = 7
 
     for i in range(num):
-        # We'll use a 66% chance that a seat will be filled
+        # 66% chance that a seat will be filled
         # So we can test the gaps/skipping/etc.
         chance = random.randint(0, 10)
         if chance < sparseness:

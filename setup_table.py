@@ -10,7 +10,7 @@ def make(num, hero=None, gametype="DRAW5"):
     # If they don't want any human players, just let it be None.
 
     t = table.Table(num)
-    nameset = names.generate_random_namelist(num)
+    nameset = names.random_names(num)
 
     for i, s in enumerate(t.seats):
         # Always put hero in 0 seat.
