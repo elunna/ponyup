@@ -23,18 +23,8 @@ class Table():
 
     def __str__(self):
         _str = ''
-        #  _str = '{:3}{:7}{:4}{:15}{:10}{:10}\n'.format(
-            #  '#', 'Blinds', 'Btn', 'Player', 'Chips', 'Hand')
-
         _str = colors.color('{:5}{:7}{:7}{:20}{:<17}{:16}\n'.format(
             'Seat', 'Blinds', 'Dealer', 'Player', 'Chips', 'Hand'), 'gray', STYLE='BOLD')
-        #  _str += '{:5}'.format('Seat')
-        #  _str += '{:7}'.format('Blinds')
-        #  _str += '{:7}'.format('Dealer')
-        #  _str += '{:20}'.format('Player')
-        #  _str += '{:<16}'.format('Chips')
-        #  _str += '{:16}'.format('Hand')
-        #  _str += '\n'
 
         for i, s in enumerate(self.seats):
             if s is None:
@@ -206,3 +196,7 @@ class Table():
         for p in self.get_cardholders():
             handlist.append((p._hand.value, p))
         return handlist
+
+    def valuelist2(self):
+        """ Find all the players with cards and return a list of hand values. """
+        return [p._hand.value for p in self._table.get_cardholders()]
