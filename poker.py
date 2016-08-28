@@ -87,10 +87,7 @@ class Round():
             p._hand.sort()
 
     def muck_all_cards(self):
-        """
-        Fold all player hands and verify that the count of the muck matches the original
-        deck size
-        """
+        """ Muck all player hands, and muck the contents of the deck. """
         # Clear hands
         for p in self._table:
             self.muck.extend(p.fold())
@@ -100,7 +97,6 @@ class Round():
 
     def verify_muck(self):
         """ Verify that the integrity of the deck has not been compromised. """
-
         # Make sure that all cards have been used up.
         if len(self.d) != 0:
             return False
