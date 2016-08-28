@@ -72,87 +72,70 @@ def auto_discard(hand):
     # hand is a Hand object
     PAT_HANDS = ['STRAIGHT', 'FLUSH', 'FULL HOUSE', 'STRAIGHT FLUSH', 'ROYAL FLUSH']
     DIS_RANKS = ['PAIR', 'TRIPS', 'QUADS']
-    discard = []
 
-    h = cardlist.rank_list(hand.cards)
+    ranklist = cardlist.rank_list(hand.cards)
 
     if hand.handrank in PAT_HANDS:
-        pass
+        return []  # Don't discard anything
     elif hand.handrank in DIS_RANKS:
         #  standard discard
-        highcards = h[0][1]
-        discard = cardlist.strip_ranks(hand.cards, highcards)
+        highcards = ranklist[0].rank
+        return cardlist.strip_ranks(hand.cards, highcards)
     elif hand.handrank == 'TWO PAIR':
-        # Keep the twp pair, discard 1.
-        highcards = h[0][1] + h[1][1]
+        # Keep the two pair, discard 1.
+        highcards = ranklist[0].rank + ranklist[1].rank
 
-        discard = cardlist.strip_ranks(hand.cards, highcards)
+        return cardlist.strip_ranks(cardlist.cards, highcards)
 
-    elif hand.handrank == 'HIGH CARD':
-        # Draws
-        copy = sorted(hand.cards[:])
+    # Process any available draws
+    return draw_discards(sorted(cardlist.cards[:]), ranklist)
 
-        # Test for flush draw
-        suit = ev.dominant_suit(copy)
-        qty = cardlist.count_suit(copy, suit)
 
-        if qty == 4:
-            discard = cardlist.strip_suits(copy, suit)
+def draw_discards(cards, ranklist):
+    suit = ev.dominant_suit(cards)
+    suit_count = cardlist.count_suit(cards, suit)
 
-        # Test for open-ended straight draw(s)
-        elif cardlist.get_allgaps(copy[0:4]) == 0:
-            keep = copy[0:4]
-        elif cardlist.get_allgaps(copy[1:5]) == 0:
-            keep = copy[1:5]
+    if suit_count == 4:
+        return cardlist.strip_suits(cards, suit)
 
-        # Test for gutshot straight draw(s)
-        elif cardlist.get_allgaps(copy[0:4]) == 1:
-            keep = copy[0:4]
-        elif cardlist.get_allgaps(copy[1:5]) == 1:
-            keep = copy[1:5]
+    # Test for open-ended straight draw(s)
+    OESD = check_draw(cards, 4, 0)
+    if OESD is not None:
+        return extract_discards(OESD)
 
-        # Draw to high cards
-        elif card.RANKS[h[2][1]] > 9:
-            highcards = h[0][1] + h[1][1] + h[2][1]
-            discard = cardlist.strip_ranks(hand.cards, highcards)
-        elif card.RANKS[h[1][1]] > 9:
-            highcards = h[0][1] + h[1][1]
-            discard = cardlist.strip_ranks(hand.cards, highcards)
+    # Test for gutshot straight draw(s)
+    GSSD = check_draw(cards, 4, 1)
+    if GSSD is not None:
+        return extract_discards(GSSD)
 
-        elif qty == 3:
-            # Backdoor flush draw
-            discard = cardlist.strip_suits(copy, suit)
+    # Draw to high cards
+    if card.RANKS[ranklist[2].rank] > 9:
+        highcards = ''.join([ranklist[i].rank for i in range(3)])
+        return cardlist.strip_ranks(cards, highcards)
+    elif card.RANKS[ranklist[1].rank] > 9:
+        highcards = ''.join([ranklist[i].rank for i in range(2)])
+        return cardlist.strip_ranks(cards, highcards)
 
-        # Draw to an Ace almost as a last resort
-        elif h[1][1] == 'A':
-            discard = cardlist.strip_ranks(hand.cards, 'A')
+    if suit_count == 3:  # Backdoor flush draw
+        return cardlist.strip_suits(cards, suit)
 
-        # Backdoor straight draws are pretty desparate
-        elif cardlist.get_allgaps(copy[0:3]) == 0:
-            keep = copy[0:3]
-        elif cardlist.get_allgaps(copy[1:4]) == 0:
-            keep = copy[1:4]
-        elif cardlist.get_allgaps(copy[2:5]) == 0:
-            keep = copy[2:5]
+    # Draw to an Ace almost as a last resort
+    elif ranklist[1].rank == 'A':
+        return cardlist.strip_ranks(cards, 'A')
 
-        # 1-gap Backdoor straight draws are truly desparate!
-        elif cardlist.get_allgaps(copy[0:3]) == 1:
-            keep = copy[0:3]
-        elif cardlist.get_allgaps(copy[1:4]) == 1:
-            keep = copy[1:4]
-        elif cardlist.get_allgaps(copy[2:5]) == 1:
-            keep = copy[2:5]
-        else:
-            # Last ditch - just draw to the best 2???
-            highcards = h[0][1] + h[1][1]
-            discard = cardlist.strip_ranks(hand.cards, highcards)
+    # Backdoor straight draws are pretty desparate
+    BDSD = check_draw(cards, 3, 0)
+    if BDSD is not None:
+        return extract_discards(OESD)
 
-        if len(discard) == 0:
-            for c in hand.cards:
-                if c not in keep:
-                    discard.append(c)
+    # 1-gap Backdoor straight draws are truly desparate!
+    BDSD = check_draw(cards, 3, 1)
+    if BDSD is not None:
+        return extract_discards(OESD)
 
-    return discard
+    # Last ditch - just draw to the best 2???
+    highcards = ''.join([ranklist[i].rank for i in range(2)])
+    return cardlist.strip_ranks(cards, highcards)
 
 
 def discard_phase(table, deck):
@@ -232,3 +215,16 @@ def is_integer(num):
         return True
     except ValueError:
         return False
+
+
+def check_draw(cards, qty, gap):
+    # Assume cards are sorted
+    for i in range((len(cards)-qty)+1):
+        if cardlist.get_allgaps(card[i:qty+i]) == 0:
+            return card[i:qty+i]
+    else:
+        return None
+
+
+def extract_discards(cards, keep):
+    return [c for c in cards if c not in keep]
