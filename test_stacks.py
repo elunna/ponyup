@@ -1,7 +1,7 @@
 import unittest
+import stacks
 
-
-class TestStacksizes(unittest.TestCase):
+class TestStacks(unittest.TestCase):
     """
     Tests for def test_largest(table):
     """
