@@ -152,7 +152,8 @@ def discard_phase(table, deck):
     Goes through a table and offers all players with cards the option to discard.
     Returns a list of all the discards (ie:"muck" cards)
     """
-    print('\nDiscard phase...')
+
+    print('Discard phase: ' + '~'*55)
     # Make sure the button goes last!
     holdingcards = table.get_cardholders()
     muckpile = []
@@ -193,11 +194,10 @@ def discard_phase(table, deck):
 
 
 def human_discard(hand):
-    print('*'*40)
-    print(' '*35 + '1  2  3  4  5')
-    print(' '*35, end='')
-    for c in hand.cards:
-        print('{} '.format(str(c)), end='')
+    print('1  2  3  4  5'.rjust(70))
+    hands = ' '.join([str(c) for c in hand.cards])
+    print('\t'*7 + hands)
+
     print('')
     while True:
         helpme = ['?', 'h', 'help']
