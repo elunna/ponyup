@@ -21,10 +21,10 @@ class Table():
         return len(self.seats)
 
     def __str__(self):
+        line = '-'*50
         _str = '{:3}{:7}{:15}{:10}{:10}\n'.format(
             '#', 'Tokens', 'Player', 'Chips', 'Hand')
-        #  _str += '\n--------------------------------------------------\n'
-        _str += '-'*50
+        _str += line.center(70)
         _str += '\n'
 
         for i, s in enumerate(self.seats):
@@ -35,9 +35,9 @@ class Table():
                 _str += '{:<3}'.format(i)
 
                 tokens = ''
-                for t in self.TOKENS:
-                    if self.TOKENS[t] == i:
-                        tokens += '[{}]'.format(t)
+                for k in reversed(sorted(self.TOKENS.keys())):
+                    if self.TOKENS[k] == i:
+                        tokens += '[{}]'.format(k)
                 _str += '{:7}{:15}${:<9}'.format(tokens, str(s), s.chips, )
 
                 # Display hand if available
