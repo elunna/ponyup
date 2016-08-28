@@ -339,9 +339,7 @@ class Round():
         p = self._table.seats[self.bettor]
 
         if option[0] == 'FOLD':
-            # Fold the players hand
-            foldedcards = p.fold()
-            self.muck.extend(foldedcards)
+            self.muck.extend(p.fold())
 
         elif option[2] > 0:
             # It's a raise, so we'll need to reset last better.
