@@ -379,3 +379,6 @@ class Round():
 
         else:
             return self.process_sidepots(handlist)
+
+    def get_allin_stacks(self):
+        return [self.startingstacks[p] for p in self.table if p.is_allin()]

@@ -71,3 +71,6 @@ class Player():
 
     def is_human(self):
         return self.playertype == 'HUMAN'
+
+    def is_allin(self):
+        return self.chips == 0
