@@ -27,7 +27,7 @@ options['q'] = ('(Q)uit', 'exitgracefully()')
 def print_logo():
     with open('logo.txt') as f:
         print(f.read())
-    print('='*80)
+    print('='*70)
 
 
 def menu():

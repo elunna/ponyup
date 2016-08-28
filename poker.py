@@ -6,6 +6,7 @@ import setup_table
 import strategy
 
 STARTINGCHIPS = 1000
+DISPLAYWIDTH = 70
 
 
 class Session():
@@ -29,7 +30,7 @@ class Session():
         """ Represents the game as the round # and the stakes level. """
         _str = 'Round: {:<5} '.format(self.rounds)
         stakes = 'Stakes: {}'.format(self.blinds)
-        _str += stakes.rjust(37)
+        _str += stakes.rjust(43)
 
         return _str
 
@@ -71,7 +72,7 @@ class Round():
         """ Show the current size of the pot. """
         _str = 'Pot: '
         _str += colors.color('${}'.format(self.pot), 'yellow')
-        return _str
+        return _str.rjust(DISPLAYWIDTH)
 
     def deal_cards(self, qty, faceup=False):
         """
