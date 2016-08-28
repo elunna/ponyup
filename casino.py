@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 
 from __future__ import print_function
+import combos
+import blinds
+import draw5
+import player
 import os
 import sys
-import blinds
 import table
-import combos
-import draw5
 
 GAME = 'FIVE CARD DRAW'
 TABLE = 2
 STAKES = blinds.Blinds()
 NAME = 'Aorist'
+OPPONENT = 'FISH'
 
 # Define menu opions
 options = {}
@@ -21,6 +23,7 @@ options['n'] = ('(N)ame change', 'pick_name()')
 options['s'] = ('(S)takes', 'pick_limit()')
 options['t'] = ('(T)able size', 'pick_table()')
 options['m'] = ('(M)enu', 'menu()')
+options['o'] = ('(O)pponent type', 'pick_opp()')
 options['q'] = ('(Q)uit', 'exitgracefully()')
 
 
@@ -37,8 +40,9 @@ def menu():
     print('Settings:')
     print('Playername: {}'.format(NAME))
     print('Game:       {}'.format(GAME))
-    print('Table Size: {}'.format(TABLE))
     print('Stakes:     {}'.format(STAKES))
+    print('Table Size: {}'.format(TABLE))
+    print('Opponent type: {}'.format(OPPONENT))
     print('')
     for o in options:
         print(options[o][0])
@@ -59,6 +63,23 @@ def pick_limit():
         if choice in STAKES.blind_dict.keys():
             STAKES.set_level(choice)
             print('You selected {}'.format(STAKES))
+            break
+        else:
+            print('Selection not available, try again.')
+
+
+def pick_opp():
+    print('What type of opponent do you want to play:(default is FISH')
+
+    for t in player.TYPES:
+        print(t)
+
+    while True:
+        choice = input(':> ')
+        if choice.upper() in player.TYPES:
+            global OPPONENT
+            OPPONENT = choice.upper()
+            print('You selected {}'.format(OPPONENT))
             break
         else:
             print('Selection not available, try again.')
