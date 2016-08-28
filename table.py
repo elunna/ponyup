@@ -12,7 +12,6 @@ class Table():
             raise ValueError('Not a valid table size!')
 
         self.TOKENS = {'D': -1, 'SB': -1, 'BB': -1}
-
         self.seats = []
         for i in range(size):
             self.seats.append(None)
@@ -59,15 +58,6 @@ class Table():
         p = self.players[self.counter]
         self.counter += 1
         return p
-
-    def btn(self):
-        return self.TOKENS['D']
-
-    def get_sb(self):
-        return self.TOKENS['SB']
-
-    def get_bb(self):
-        return self.TOKENS['BB']
 
     def add_player(self, s, p):
         """ Adds a player p to the table at seat s"""
@@ -135,14 +125,14 @@ class Table():
     def move_button(self):
         # Move the button to the next valid player/seat
         # Also set the blinds appropriately!
-        self.TOKENS['D'] = self.next(self.btn())
+        self.TOKENS['D'] = self.next(self.TOKENS['D'])
 
         if len(self.get_players()) == 2:
-            self.TOKENS['SB'] = self.btn()
-            self.TOKENS['BB'] = self.next(self.btn())
+            self.TOKENS['SB'] = self.TOKENS['D']
+            self.TOKENS['BB'] = self.next(self.TOKENS['D'])
         elif len(self.get_players()) > 2:
-            self.TOKENS['SB'] = self.next(self.btn())
-            self.TOKENS['BB'] = self.next(self.get_sb())
+            self.TOKENS['SB'] = self.next(self.TOKENS['D'])
+            self.TOKENS['BB'] = self.next(self.TOKENS['SB'])
         else:
             raise ValueError('Not enough players at the table!')
 
@@ -166,9 +156,9 @@ class Table():
         """
         Returns a list of players with cards, ordered by small blind first.
         """
-        if self.get_sb() < 0:
+        if self.TOKENS['SB'] < 0:
             raise Exception('Trying to get cardholders before blinds were set!')
-        sb = self.get_sb()
+        sb = self.TOKENS['SB']
 
         seats = list(range(len(self)))
         seats = seats[sb:] + seats[0:sb]

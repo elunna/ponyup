@@ -126,14 +126,14 @@ class Round():
         Gets the small and big blind positions from the table and makes each player bet the
         appropriate mount to the pot. Returns a string describing what the blinds posted.
         """
-        if self._table.btn() == -1:
+        if self._table.TOKENS['D'] == -1:
             raise Exception('Button has not been set yet!')
 
         if len(self._table.get_players()) < 2:
             raise ValueError('Not enough players to play!')
             exit()
-        sb = self._table.seats[self._table.get_sb()]
-        bb = self._table.seats[self._table.get_bb()]
+        sb = self._table.seats[self._table.TOKENS['SB']]
+        bb = self._table.seats[self._table.TOKENS['BB']]
 
         # Bet the SB and BB amounts and add to the pot
         self.pot += sb.bet(self._session.blinds.SB)
@@ -152,7 +152,7 @@ class Round():
             # Preflop the first bettor is right after the BB
             self.level = 1
             self.betsize = self._session.blinds.BB
-            self.closer = self._table.get_bb()
+            self.closer = self._table.TOKENS['BB']
             self.bettor = self._table.next(self.closer)
             # Copy the starting stack for the first round (because blinds were posted)
             self.betstack = self.startstack.copy()
@@ -162,8 +162,8 @@ class Round():
             self.level = 0
             self.betsize = self._session.blinds.BB * 2
 
-            self.bettor = self._table.next_player_w_cards(self._table.btn())
-            before_button = (self._table.btn() - 1) % len(self._table)
+            self.bettor = self._table.next_player_w_cards(self._table.TOKENS['D'])
+            before_button = (self._table.TOKENS['D'] - 1) % len(self._table)
             self.closer = self._table.next_player_w_cards(before_button)
 
             # Remember starting stack size.

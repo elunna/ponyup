@@ -156,7 +156,7 @@ class TestGame(unittest.TestCase):
     """
     # If the button(and blinds haven't been set, raise an exception.)
     def test_postblinds_btnnotset_raiseException(self):
-        self.assertEqual(self.r._table.btn(), -1, 'Button should be -1!')
+        self.assertEqual(self.r._table.TOKENS['D'], -1, 'Button should be -1!')
         self.assertRaises(Exception, self.r.post_blinds)
 
     # 2 players(spaced out). SB=1, BB=2, startingstacks=1000
@@ -164,7 +164,7 @@ class TestGame(unittest.TestCase):
         for i in [1, 2, 4, 5]:
             self.r._table.remove_player(i)
         self.r._table.move_button()  # verify the button is 0
-        self.assertEqual(self.r._table.btn(), 0)
+        self.assertEqual(self.r._table.TOKENS['D'], 0)
         self.r.post_blinds()
         self.assertEqual(self.r._table.seats[0].chips, 999)
         self.assertEqual(self.r._table.seats[3].chips, 998)
@@ -175,7 +175,7 @@ class TestGame(unittest.TestCase):
         for i in [1, 3, 5]:
             self.r._table.remove_player(i)
         self.r._table.move_button()  # verify the button is 0
-        self.assertEqual(self.r._table.btn(), 0)
+        self.assertEqual(self.r._table.TOKENS['D'], 0)
         self.r.post_blinds()
         self.assertEqual(self.r._table.seats[2].chips, 999)
         self.assertEqual(self.r._table.seats[4].chips, 998)
@@ -184,7 +184,7 @@ class TestGame(unittest.TestCase):
     # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_6players_pot3(self):
         self.r._table.move_button()  # verify the button is 0
-        self.assertEqual(self.r._table.btn(), 0)
+        self.assertEqual(self.r._table.TOKENS['D'], 0)
         self.r.post_blinds()
         self.assertEqual(self.r._table.seats[1].chips, 999)
         self.assertEqual(self.r._table.seats[2].chips, 998)
