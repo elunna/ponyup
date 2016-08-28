@@ -152,6 +152,13 @@ class TestTable(unittest.TestCase):
         result = len(t.get_players())
         self.assertEqual(expected, result)
 
+    # Adding 1 player to an empty table, returns True
+    def test_addplayer_toEmptyTable_returnsTrue(self):
+        t = table.Table(6)
+        expected = True
+        result = t.add_player(0, player.Player('bob0', 'CPU'))
+        self.assertEqual(expected, result)
+
     # Adding 1 player to an empty table, contains the added player
     def test_addplayer_toEmptyTable_containsPlayer(self):
         t = table.Table(6)
@@ -162,12 +169,14 @@ class TestTable(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # Adding 1 player to an occupied spot,
-    def test_addplayer_tooccupiedspot_raiseException(self):
+    def test_addplayer_tooccupiedspot_returnsFalse(self):
         t = table.Table(6)
         p1 = player.Player('bob0', 'CPU')
         p2 = player.Player('bob1', 'CPU')
+        expected = False
         t.add_player(0, p1)
-        self.assertRaises(ValueError, t.add_player, 0, p2)
+        result = t.add_player(0, p2)
+        self.assertEqual(expected, result)
 
     # Adding a duplicate player to the table, should raise exception.
     def test_addplayer_duplicateplayer_raiseException(self):
@@ -177,7 +186,9 @@ class TestTable(unittest.TestCase):
         p3 = player.Player('bob1', 'CPU')
         t.add_player(0, p1)
         t.add_player(1, p2)
-        self.assertRaises(ValueError, t.add_player, 3, p3)
+        expected = False
+        result = t.add_player(3, p3)
+        self.assertEqual(expected, result)
 
     """
     Tests for indexof

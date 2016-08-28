@@ -69,15 +69,19 @@ class Table():
         return p
 
     def add_player(self, s, p):
-        """ Adds a player p to the table at seat s"""
+        """
+        Adds a player p to the table at seat s. Returns True if successful, False otherwise.
+        """
+        # Check if the player is already sitting.
         for seat in self:
             if p.name == seat.name:
-                raise ValueError('Player {} is already at the table!'.format(p))
+                return False
 
         if self.seats[s] is None:
             self.seats[s] = p
+            return True
         else:
-            raise ValueError('Seat {} is occupied.'.format(s))
+            return False
 
     def get_index(self, plyr):
         for i, s in enumerate(self.seats):
