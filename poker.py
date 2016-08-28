@@ -68,10 +68,9 @@ class Round():
             self.startstack[p.name] = p.chips
 
     def __str__(self):
-        """
-        Show the current size of the pot.
-        """
-        _str = 'Pot: ${:}'.format(self.pot)
+        """ Show the current size of the pot. """
+        _str = 'Pot: '
+        _str += colors.color('${}'.format(self.pot), 'yellow')
         return _str
 
     def deal_cards(self, qty, faceup=False):
@@ -290,7 +289,8 @@ class Round():
         return award_dict
 
     def award_pot(self, player, amt):
-        print('\t{} wins {} chips'.format(player, amt))
+        chips = colors.color('${}'.format(amt), 'yellow')
+        print('\t{} wins {}'.format(player, chips))
         player.add_chips(amt)
 
     def betting_round(self):
