@@ -155,3 +155,38 @@ def GSSD():
 def wheeldraw():
     h = [('3', 'h'), ('4', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')]
     return [card.Card(x[0], x[1]) for x in h]
+
+
+def BDFD1():
+    h = [('2', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('K', 'h')]
+    return [card.Card(x[0], x[1]) for x in h]
+
+
+def BDFD2():
+    h = [('A', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('K', 'h')]
+    return [card.Card(x[0], x[1]) for x in h]
+
+
+def highcards1():
+    h = [('A', 'd'), ('4', 's'), ('Q', 's'), ('7', 's'), ('K', 'h')]
+    return [card.Card(x[0], x[1]) for x in h]
+
+
+def acehigh():
+    h = [('A', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('9', 'h')]
+    return [card.Card(x[0], x[1]) for x in h]
+
+
+def BDSD1():
+    h = [('2', 'd'), ('7', 's'), ('8', 's'), ('9', 'd'), ('K', 'h')]
+    return [card.Card(x[0], x[1]) for x in h]
+
+
+def BDSD2():
+    h = [('2', 'd'), ('7', 's'), ('8', 's'), ('T', 'd'), ('K', 'h')]
+    return [card.Card(x[0], x[1]) for x in h]
+
+
+def junk():
+    h = [('2', 'd'), ('3', 's'), ('6', 's'), ('8', 'd'), ('T', 'h')]
+    return [card.Card(x[0], x[1]) for x in h]

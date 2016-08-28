@@ -116,30 +116,31 @@ def draw_discards(cards, ranklist):
             # The obvious discard is the dangling high card
             return [cards[-2]]
 
-    # Draw to high cards
-    if card.RANKS[ranklist[2].rank] > 9:
+    # Draw to high cards (J+)
+    if card.RANKS[ranklist[2].rank] > 10:
         highcards = ''.join([ranklist[i].rank for i in range(3)])
         return cardlist.strip_ranks(cards, highcards)
-    elif card.RANKS[ranklist[1].rank] > 9:
+    elif card.RANKS[ranklist[1].rank] > 10:
         highcards = ''.join([ranklist[i].rank for i in range(2)])
         return cardlist.strip_ranks(cards, highcards)
+
+    # Draw to an Ace
+    # We'll generally draw to an Ace over any backdoor draws.
+    if ranklist[0].rank == 'A':
+        return cardlist.strip_ranks(cards, 'A')
 
     if suit_count == 3:  # Backdoor flush draw
         return cardlist.strip_suits(cards, suit)
 
-    # Draw to an Ace almost as a last resort
-    if ranklist[0].rank == 'A':
-        return cardlist.strip_ranks(cards, 'A')
-
     # Backdoor straight draws are pretty desparate
     BDSD = check_draw(cards, 3, 0)
     if BDSD is not None:
-        return extract_discards(cards, OESD)
+        return extract_discards(cards, BDSD)
 
     # 1-gap Backdoor straight draws are truly desparate!
     BDSD = check_draw(cards, 3, 1)
     if BDSD is not None:
-        return extract_discards(cards, OESD)
+        return extract_discards(cards, BDSD)
 
     # Last ditch effort - just draw to the best 2.
     highcards = ''.join([ranklist[i].rank for i in range(2)])
@@ -157,7 +158,6 @@ def discard_phase(table, deck):
     muckpile = []
 
     for p in holdingcards:
-
         ishuman = p.playertype == 'HUMAN'
         # Discard!
         if ishuman:

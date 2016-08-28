@@ -142,13 +142,65 @@ class TestDraw5(unittest.TestCase):
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
         self.assertEqual(expected, result)
 
-    """
-    #  - Discard the non-pair card
-    def test_autodiscard__returns(self):
-        #
-        h = hand.Hand(pokerhands.
+    # BDFD(low cards) - Discard the non-flush cards
+    def test_autodiscard_BDFD1returns2cards(self):
+        # [('2', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('K', 'h')]
+        h = hand.Hand(pokerhands.BDFD1())
         h.unhide()
-        expected = []
+        expected = ['2d', 'Kh']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
         self.assertEqual(expected, result)
-    """
+
+    # BDFD(with 2 high cards) - Discard the low cards
+    def test_autodiscard_BDFD2returns3cards(self):
+        # [('A', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('K', 'h')]
+        h = hand.Hand(pokerhands.BDFD2())
+        h.unhide()
+        expected = ['4s', '5s', '7s']
+        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        self.assertEqual(expected, result)
+
+    # 3 High cards - Discard the 2 low cards
+    def test_autodiscard_highcards_returns2cards(self):
+        # [('A', 'd'), ('4', 's'), ('Q', 's'), ('7', 's'), ('K', 'h')]
+        h = hand.Hand(pokerhands.highcards1())
+        h.unhide()
+        expected = ['4s', '7s']
+        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        self.assertEqual(expected, result)
+
+    # Ace high - Discard the non-pair card
+    def test_autodiscard_acehigh_returns4cards(self):
+        # [('A', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('9', 'h')]
+        h = hand.Hand(pokerhands.acehigh())
+        h.unhide()
+        expected = ['4s', '5s', '7s', '9h']
+        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        self.assertEqual(expected, result)
+
+    # 0 gap BDSD - Discard the non-connected cards
+    def test_autodiscard_BDSD_returns2cards(self):
+        # [('2', 'd'), ('7', 's'), ('8', 's'), ('9', 'd'), ('K', 'h')]
+        h = hand.Hand(pokerhands.BDSD1())
+        h.unhide()
+        expected = ['2d', 'Kh']
+        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        self.assertEqual(expected, result)
+
+    # 1 gap BDSD - Discard the non-connected cards
+    def test_autodiscard_BDSD2_returns2cards(self):
+        # [('2', 'd'), ('7', 's'), ('8', 's'), ('9', 'd'), ('K', 'h')]
+        h = hand.Hand(pokerhands.BDSD2())
+        h.unhide()
+        expected = ['2d', 'Kh']
+        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        self.assertEqual(expected, result)
+
+    # Medium cards/junk - Discard the 3 low cards
+    def test_autodiscard_junk_returns(self):
+        #  [('2', 'd'), ('3', 's'), ('6', 's'), ('8', 'd'), ('T', 'h')]
+        h = hand.Hand(pokerhands.junk())
+        h.unhide()
+        expected = ['2d', '3s', '6s']
+        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        self.assertEqual(expected, result)
