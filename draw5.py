@@ -108,6 +108,14 @@ def draw_discards(cards, ranklist):
     if GSSD is not None:
         return extract_discards(cards, GSSD)
 
+    # Test for the wheel draw
+    if ranklist[0].rank == 'A':
+        WD = check_draw(cards, 3, 1)
+
+        if WD is not None and WD[-1].val() <= 5:
+            # The obvious discard is the dangling high card
+            return [cards[-2]]
+
     # Draw to high cards
     if card.RANKS[ranklist[2].rank] > 9:
         highcards = ''.join([ranklist[i].rank for i in range(3)])
@@ -120,7 +128,7 @@ def draw_discards(cards, ranklist):
         return cardlist.strip_suits(cards, suit)
 
     # Draw to an Ace almost as a last resort
-    elif ranklist[1].rank == 'A':
+    if ranklist[0].rank == 'A':
         return cardlist.strip_ranks(cards, 'A')
 
     # Backdoor straight draws are pretty desparate
@@ -220,7 +228,7 @@ def is_integer(num):
 def check_draw(cards, qty, gap):
     # Assume cards are sorted
     for i in range((len(cards) - qty) + 1):
-        if cardlist.get_allgaps(cards[i: qty + i]) == gap:
+        if cardlist.get_allgaps(cards[i: qty + i]) <= gap:
             return cards[i: qty + i]
     else:
         return None
