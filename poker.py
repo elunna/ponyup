@@ -3,7 +3,7 @@ import betting
 import colors
 import deck
 import setup_table
-import stacksizes
+import stacks
 import strategy
 
 STARTINGCHIPS = 1000
@@ -63,7 +63,7 @@ class Round():
 
         #  Remember starting stacks of all playerso
         self.betstack = {}
-        self.starting_stacks = stacksizes.get_stacksizes(self._table)
+        self.starting_stacks = stacks.stackdict(self._table)
 
     def __str__(self):
         """ Show the current size of the pot. """
@@ -160,20 +160,15 @@ class Round():
             self.closer = self._table.next_player_w_cards(before_button)
 
             # Remember starting stack size.
-            self.betstack = stacksizes.get_stacksizes(self._table)
-
-    def get_stack_to_pot_list(self):
-        """
-        Returns a list of tuples. Each tuple is a stack and pot pair. The list get sorted
-        by stacksize.
-        """
-        return sorted([(stack, self.sidepots[stack]) for stack in self.sidepots])
+            self.betstack = stacks.stackdict(self._table)
 
     def process_sidepots(self, handlist):
-        """ Calculates which players are eligible to win which portions of the pot. Returns
-        a dictionary of players and amounts. """
+        """
+        Calculates which players are eligible to win which portions of the pot. Returns a
+        dictionary of players and amounts.
+        """
         # Organize the sidepots into an ascending sorted list.
-        stacks_n_pots = self.get_stack_to_pot_list()
+        stacks_n_pots = stacks.get_stack_to_pot_list(self.sidepots)
 
         leftovers = self.pot
 
