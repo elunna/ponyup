@@ -1,4 +1,5 @@
 from __future__ import print_function
+import colors
 import random
 
 # Table class
@@ -21,10 +22,19 @@ class Table():
         return len(self.seats)
 
     def __str__(self):
-        line = '-'*50
-        _str = '{:3}{:7}{:15}{:10}{:10}\n'.format(
-            '#', 'Tokens', 'Player', 'Chips', 'Hand')
-        _str += line.center(70)
+        _str = ''
+        #  _str = '{:3}{:7}{:4}{:15}{:10}{:10}\n'.format(
+            #  '#', 'Blinds', 'Btn', 'Player', 'Chips', 'Hand')
+        _str += '{:5}'.format('Seat')
+        _str += '{:7}'.format('Blinds')
+        _str += '{:7}'.format('Dealer')
+        _str += '{:20}'.format('Player')
+        _str += '{:<16}'.format('Chips')
+        _str += '{:16}'.format('Hand')
+        _str += '\n'
+
+        line = '-'*70
+        _str += line
         _str += '\n'
 
         for i, s in enumerate(self.seats):
@@ -32,18 +42,28 @@ class Table():
                 # No player is occupying the seat
                 _str += '{}\n'.format(i)
             else:
-                _str += '{:<3}'.format(i)
+                _str += '{:<5}'.format(i)
 
-                tokens = ''
-                for k in reversed(sorted(self.TOKENS.keys())):
-                    if self.TOKENS[k] == i:
-                        tokens += '[{}]'.format(k)
-                _str += '{:7}{:15}${:<9}'.format(tokens, str(s), s.chips, )
+            if self.TOKENS['SB'] == i:
+                _str += colors.color('{:7}'.format('[SB]'), 'lightblue')
+            elif self.TOKENS['BB'] == i:
+                _str += colors.color('{:7}'.format('[BB]'), 'blue')
+            else:
+                _str += ' '*7
 
-                # Display hand if available
-                if s._hand is not None:
-                    _str += str(s._hand)
-                _str += '\n'
+            if self.TOKENS['D'] == i:
+                _str += colors.color('{:7}'.format('[D]'), 'purple')
+            else:
+                _str += ' '*7
+
+            _str += '{:20}'.format(s.name)
+
+            _str += colors.color('${:<15}'.format(s.chips), 'yellow')
+
+            # Display hand if available
+            if s._hand is not None:
+                _str += '{:16}'.format(str(s._hand))
+            _str += '\n'
 
         return _str
 
