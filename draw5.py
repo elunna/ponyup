@@ -4,37 +4,37 @@ import cardlist
 import evaluator as ev
 import poker
 
+DEALT = 5
+
 
 class Draw5Session(poker.Session):
     def play(self):
-        """ Defines the structure of a hand played in the game."""
+        """ Play a round of Five Card Draw."""
         _round = poker.Round(self)
 
         if len(self._table.get_cardholders()) > 0:
             raise Exception('One or more players have cards before the deal!')
 
-        # todo: Postblinds
         _round.post_blinds()
+        _round.deal_cards(DEALT)
+        _round.sortcards()
 
-        # A simple 1-bet
-        #  newround.ante_up()
+        print(_round)           # Display pot
+        print(self._table)      # Show table pre draw
 
-        # Five card draw - deal 5 cards to each player
-        _round.deal_cards(5)
-
-        # Show table pre draw
-        print(_round)
-        print(self._table)
-
-        # Pre-draw betting round
+        # Pre-draw betting
         _round.setup_betting()
         victor = _round.betting_round()
 
-        if victor is None:
-            _round.muck.extend(discard_phase(self._table, _round.d))
+        print(_round)           # Display pot
 
-            # Show table post draw
-            print(self._table)
+        if victor is None:
+            # Discard phase
+            discards = discard_phase(self._table, _round.d)
+            _round.muck.extend(discards)
+            _round.sortcards()
+
+            print(self._table)  # Show table post draw
 
             # Post-draw betting round
             _round.setup_betting()

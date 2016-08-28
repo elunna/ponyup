@@ -13,11 +13,11 @@ def make(num, hero=None, gametype="DRAW5"):
     nameset = names.generate_random_namelist(num)
 
     for i, s in enumerate(t.seats):
+        # Always put hero in 0 seat.
         if i == 0 and hero is not None:
             t.add_player(0, player.Player(hero, 'HUMAN'))
 
         elif nameset[-1] is not None:
-            #  t.add_player(i, player.Player(nameset.pop()))
             t.add_player(i, player_5card.Player5Card(nameset.pop()))
         else:
             nameset.pop()
@@ -35,9 +35,9 @@ def test_table(seats):
 
     return t
 
+
 def deal_cards(table):
     d = deck.Deck()
 
     for p in table:
         p.add_card(d.deal())
-

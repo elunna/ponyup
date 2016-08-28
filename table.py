@@ -81,7 +81,6 @@ class Table():
             raise ValueError('Seat {} is occupied.'.format(s))
 
     def get_index(self, plyr):
-        #  return self.seats.index(plyr)
         for i, s in enumerate(self.seats):
             if s == plyr:
                 return i

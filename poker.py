@@ -15,9 +15,8 @@ class Session():
         game type, the table, and stakes.
     """
     def __init__(self, gametype, structure, tablesize=6, hero=None):
-        """
-        Initialize the poker Game.
-        """
+        """Initialize the poker Game."""
+
         self.blinds = structure
         self.rounds = 1
         self._table = setup_table.make(tablesize, hero)
@@ -40,12 +39,13 @@ class Session():
         print('Stub play function')
 
 
+
 class Round():
     def __init__(self, session):
         """
         Initialize the next round of Poker.
         """
-        self._game = session
+        self._session = session
         self.street = 0
         self.pot = 0
         self.sidepots = {}
@@ -85,6 +85,10 @@ class Round():
                     c.hidden = False
                 p.add_card(c)
 
+    def sortcards(self):
+        for p in self._table:
+            p._hand.sort()
+
     def muck_all_cards(self):
         """
         Fold all player hands and verify that the count of the muck matches the original
@@ -115,7 +119,7 @@ class Round():
     def post_antes(self):
         """ All players bet the ante amount and it's added to the pot. """
         for p in self._table:
-            self.pot += p.bet(self._game.blinds.ANTE)
+            self.pot += p.bet(self._session.blinds.ANTE)
 
     def post_blinds(self):
         """
@@ -132,11 +136,11 @@ class Round():
         bb = self._table.seats[self._table.get_bb()]
 
         # Bet the SB and BB amounts and add to the pot
-        self.pot += sb.bet(self._game.blinds.SB)
-        self.pot += bb.bet(self._game.blinds.BB)
+        self.pot += sb.bet(self._session.blinds.SB)
+        self.pot += bb.bet(self._session.blinds.BB)
         actions = ''
-        actions += '{} posts ${}\n'.format(sb, self._game.blinds.SB)
-        actions += '{} posts ${}\n'.format(bb, self._game.blinds.BB)
+        actions += '{} posts ${}\n'.format(sb, self._session.blinds.SB)
+        actions += '{} posts ${}\n'.format(bb, self._session.blinds.BB)
         return actions
 
     def setup_betting(self):
@@ -147,7 +151,7 @@ class Round():
         if self.street == 0:
             # Preflop the first bettor is right after the BB
             self.level = 1
-            self.betsize = self._game.blinds.BB
+            self.betsize = self._session.blinds.BB
             self.closer = self._table.get_bb()
             self.bettor = self._table.next(self.closer)
             # Copy the starting stack for the first round (because blinds were posted)
@@ -156,7 +160,7 @@ class Round():
         elif self.street > 0:
             # postflop the first bettor is right after the button
             self.level = 0
-            self.betsize = self._game.blinds.BB * 2
+            self.betsize = self._session.blinds.BB * 2
 
             self.bettor = self._table.next_player_w_cards(self._table.btn())
             before_button = (self._table.btn() - 1) % len(self._table)

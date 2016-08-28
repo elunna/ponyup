@@ -39,6 +39,9 @@ class Hand():
         for c in self.cards:
             c.hidden = False
 
+    def sort(self):
+        self.cards = sorted(self.cards)
+
     def update(self):
         self.value = evaluator.get_value(self.cards)
         self.handrank = evaluator.get_type(self.value)

@@ -33,7 +33,7 @@ def menu(options=None):
 
 def get_options(cost, env):
     """ Shows the options available to the current bettor."""
-    completing = (env.betsize - cost) == env._game.blinds.SB
+    completing = (env.betsize - cost) == env._session.blinds.SB
 
     OPTIONS = {}
 
