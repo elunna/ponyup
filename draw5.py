@@ -88,7 +88,7 @@ def auto_discard(hand):
         return cardlist.strip_ranks(hand.cards, highcards)
 
     # Process any available draws
-    return draw_discards(sorted(cardlist.cards[:]), ranklist)
+    return draw_discards(sorted(hand.cards[:]), ranklist)
 
 
 def draw_discards(cards, ranklist):
@@ -101,12 +101,12 @@ def draw_discards(cards, ranklist):
     # Test for open-ended straight draw(s)
     OESD = check_draw(cards, 4, 0)
     if OESD is not None:
-        return extract_discards(OESD)
+        return extract_discards(cards, OESD)
 
     # Test for gutshot straight draw(s)
     GSSD = check_draw(cards, 4, 1)
     if GSSD is not None:
-        return extract_discards(GSSD)
+        return extract_discards(cards, GSSD)
 
     # Draw to high cards
     if card.RANKS[ranklist[2].rank] > 9:
@@ -126,14 +126,14 @@ def draw_discards(cards, ranklist):
     # Backdoor straight draws are pretty desparate
     BDSD = check_draw(cards, 3, 0)
     if BDSD is not None:
-        return extract_discards(OESD)
+        return extract_discards(cards, OESD)
 
     # 1-gap Backdoor straight draws are truly desparate!
     BDSD = check_draw(cards, 3, 1)
     if BDSD is not None:
-        return extract_discards(OESD)
+        return extract_discards(cards, OESD)
 
-    # Last ditch - just draw to the best 2???
+    # Last ditch effort - just draw to the best 2.
     highcards = ''.join([ranklist[i].rank for i in range(2)])
     return cardlist.strip_ranks(cards, highcards)
 
@@ -219,9 +219,9 @@ def is_integer(num):
 
 def check_draw(cards, qty, gap):
     # Assume cards are sorted
-    for i in range((len(cards)-qty)+1):
-        if cardlist.get_allgaps(card[i:qty+i]) == 0:
-            return card[i:qty+i]
+    for i in range((len(cards) - qty) + 1):
+        if cardlist.get_allgaps(cards[i: qty + i]) == gap:
+            return cards[i: qty + i]
     else:
         return None
 

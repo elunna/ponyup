@@ -33,125 +33,125 @@ def deal_duplicates():
 
 
 def royalflush():
-    rf = [('A', 's'), ('K', 's'), ('J', 's'), ('T', 's'), ('Q', 's')]
-    return [card.Card(x[0], x[1]) for x in rf]
+    h = [('A', 's'), ('K', 's'), ('J', 's'), ('T', 's'), ('Q', 's')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def straightflush_high():
-    sf = [('9', 's'), ('K', 's'), ('Q', 's'), ('J', 's'), ('T', 's')]
-    return [card.Card(x[0], x[1]) for x in sf]
+    h = [('9', 's'), ('K', 's'), ('Q', 's'), ('J', 's'), ('T', 's')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def straightflush_low():
-    sf = [('2', 's'), ('A', 's'), ('3', 's'), ('4', 's'), ('5', 's')]
-    return [card.Card(x[0], x[1]) for x in sf]
+    h = [('2', 's'), ('A', 's'), ('3', 's'), ('4', 's'), ('5', 's')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def quads_high():
-    quads = [('A', 's'), ('A', 'd'), ('A', 'h'), ('A', 'c'), ('K', 'c')]
-    return [card.Card(x[0], x[1]) for x in quads]
+    h = [('A', 's'), ('A', 'd'), ('A', 'h'), ('A', 'c'), ('K', 'c')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def quads_low():
-    quads = [('2', 's'), ('2', 'd'), ('2', 'h'), ('2', 'c'), ('3', 'c')]
-    return [card.Card(x[0], x[1]) for x in quads]
+    h = [('2', 's'), ('2', 'd'), ('2', 'h'), ('2', 'c'), ('3', 'c')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def boat_high():
-    fullhouse = [('A', 's'), ('A', 'd'), ('A', 'h'), ('K', 'd'), ('K', 'c')]
-    return [card.Card(x[0], x[1]) for x in fullhouse]
+    h = [('A', 's'), ('A', 'd'), ('A', 'h'), ('K', 'd'), ('K', 'c')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def boat_low():
-    fullhouse = [('2', 's'), ('2', 'd'), ('2', 'h'), ('3', 'd'), ('3', 'c')]
-    return [card.Card(x[0], x[1]) for x in fullhouse]
+    h = [('2', 's'), ('2', 'd'), ('2', 'h'), ('3', 'd'), ('3', 'c')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def flush_high():
-    flush = [('A', 's'), ('K', 's'), ('Q', 's'), ('J', 's'), ('9', 's')]
-    return [card.Card(x[0], x[1]) for x in flush]
+    h = [('A', 's'), ('K', 's'), ('Q', 's'), ('J', 's'), ('9', 's')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def flush_low():
-    flush = [('2', 's'), ('3', 's'), ('4', 's'), ('5', 's'), ('7', 's')]
-    return [card.Card(x[0], x[1]) for x in flush]
+    h = [('2', 's'), ('3', 's'), ('4', 's'), ('5', 's'), ('7', 's')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def straight_high():
-    straight = [('A', 's'), ('T', 'c'), ('K', 's'), ('J', 'd'), ('Q', 'h')]
-    return [card.Card(x[0], x[1]) for x in straight]
+    h = [('A', 's'), ('T', 'c'), ('K', 's'), ('J', 'd'), ('Q', 'h')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def straight_mid():
-    straight = [('8', 's'), ('7', 'h'), ('9', 's'), ('T', 'd'), ('J', 'h')]
-    return [card.Card(x[0], x[1]) for x in straight]
+    h = [('8', 's'), ('7', 'h'), ('9', 's'), ('T', 'd'), ('J', 'h')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def straight_low():
-    straight = [('2', 's'), ('3', 'h'), ('A', 's'), ('4', 'd'), ('5', 'c')]
-    return [card.Card(x[0], x[1]) for x in straight]
+    h = [('2', 's'), ('3', 'h'), ('A', 's'), ('4', 'd'), ('5', 'c')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def set_high():
-    trips = [('A', 's'), ('K', 'h'), ('A', 'h'), ('A', 'd'), ('Q', 'c')]
-    return [card.Card(x[0], x[1]) for x in trips]
+    h = [('A', 's'), ('K', 'h'), ('A', 'h'), ('A', 'd'), ('Q', 'c')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def set_low():
-    trips = [('2', 's'), ('2', 'h'), ('2', 'h'), ('3', 'd'), ('4', 'c')]
-    return [card.Card(x[0], x[1]) for x in trips]
+    h = [('2', 's'), ('2', 'h'), ('2', 'h'), ('3', 'd'), ('4', 'c')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def twopair_high():
-    twopair = [('A', 's'), ('A', 'h'), ('K', 's'), ('K', 'd'), ('Q', 'c')]
-    return [card.Card(x[0], x[1]) for x in twopair]
+    h = [('A', 's'), ('A', 'h'), ('K', 's'), ('K', 'd'), ('Q', 'c')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def twopair_low():
-    twopair = [('2', 's'), ('2', 'h'), ('3', 's'), ('3', 'd'), ('4', 'c')]
-    return [card.Card(x[0], x[1]) for x in twopair]
+    h = [('2', 's'), ('2', 'h'), ('3', 's'), ('3', 'd'), ('4', 'c')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def pair_high():
-    pair = [('K', 's'), ('Q', 'h'), ('A', 's'), ('A', 'd'), ('J', 'c')]
-    return [card.Card(x[0], x[1]) for x in pair]
+    h = [('K', 's'), ('Q', 'h'), ('A', 's'), ('A', 'd'), ('J', 'c')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def pair_low():
-    pair = [('2', 's'), ('3', 'h'), ('2', 'c'), ('4', 'd'), ('5', 'c')]
-    return [card.Card(x[0], x[1]) for x in pair]
+    h = [('2', 's'), ('3', 'h'), ('2', 'c'), ('4', 'd'), ('5', 'c')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def OESFD():
-    pair = [('J', 's'), ('T', 's'), ('8', 's'), ('2', 'd'), ('9', 's')]
-    return [card.Card(x[0], x[1]) for x in pair]
+    h = [('J', 's'), ('T', 's'), ('8', 's'), ('2', 'd'), ('9', 's')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def GSSFD():
-    pair = [('J', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
-    return [card.Card(x[0], x[1]) for x in pair]
+    h = [('J', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def flushdrawA():
-    pair = [('A', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
-    return [card.Card(x[0], x[1]) for x in pair]
+    h = [('A', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def flushdrawB():
-    pair = [('3', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
-    return [card.Card(x[0], x[1]) for x in pair]
+    h = [('3', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def OESD():
-    pair = [('J', 'h'), ('T', 's'), ('8', 'c'), ('2', 'd'), ('9', 's')]
-    return [card.Card(x[0], x[1]) for x in pair]
+    h = [('J', 'h'), ('T', 's'), ('8', 'c'), ('2', 'd'), ('9', 's')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def GSSD():
-    pair = [('J', 'h'), ('T', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')]
-    return [card.Card(x[0], x[1]) for x in pair]
+    h = [('J', 'h'), ('T', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')]
+    return [card.Card(x[0], x[1]) for x in h]
 
 
 def wheeldraw():
-    pair = [('3', 'h'), ('4', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')]
-    return [card.Card(x[0], x[1]) for x in pair]
+    h = [('3', 'h'), ('4', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')]
+    return [card.Card(x[0], x[1]) for x in h]
