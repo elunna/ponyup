@@ -302,10 +302,8 @@ class Round():
             elif p.playertype == 'HUMAN':
                 print(self)
                 o = betting.menu(options)
-                #  action_string = self.process_option(o)
             else:
                 o = strategy.makeplay(p, self, options)
-                #  action_string = self.process_option(o)
             action_string = self.process_option(o)
             print(action_string)
 
@@ -356,15 +354,20 @@ class Round():
         else:
             return colors.color(act_str, 'white') + amt
 
+    def show_cards(self):
+        _str = ''
+        for p in self._table.get_cardholders():
+            p.showhand()
+            line = '\t\t\t\t {:15} shows: {:10}'.format(str(p), str(p._hand))
+            _str += line + '\n'
+        return _str
+
     def showdown(self):
         """
         Compare all the hands of players holding cards and determine the winner(s).
         Return a dictionary of players and the amounts they will be awarded.
         """
-        for p in self._table.get_cardholders():
-            p.showhand()
-            print('{:15} shows: {}: {}, {}'.format(
-                str(p), p._hand, p._hand.handrank, p._hand.description))
+        print(self.show_cards())
 
         handlist = self._table.get_valuelist()
         self.process_allins()
