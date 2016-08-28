@@ -209,7 +209,7 @@ def human_discard(hand):
     print(' '*35 + '1  2  3  4  5')
     print(' '*35, end='')
     for c in hand.cards:
-        print('{:3}'.format(str(c)), end='')
+        print('{} '.format(str(c)), end='')
     print('')
     print('Enter the cards you want to discard:')
     print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
