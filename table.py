@@ -156,19 +156,6 @@ class Table():
                 players.append(self.remove_player(i))
         return players
 
-    def get_valuelist(self):
-        """
-        Find all the players with cards and return a list of hand values and player objects.
-        """
-        handlist = []
-        for p in self.get_players(CARDS=True):
-            handlist.append((p._hand.value, p))
-        return handlist
-
-    def valuelist2(self):
-        """ Find all the players with cards and return a list of hand values. """
-        return [p._hand.value for p in self._table.get_players(hascards=True)]
-
     def get_players(self, CARDS=False, CHIPS=False):
         """
         Returns a list of players at the table, ordered from SB first to Button Last. Can

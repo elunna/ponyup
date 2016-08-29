@@ -599,30 +599,3 @@ class TestTable(unittest.TestCase):
         expected = self.t.seats[:]
         result = self.t.remove_broke()
         self.assertEqual(expected, result)
-
-    """
-    Tests for get_valuelist()
-    """
-    # No players have cards, returns empty list
-    def test_getvaluelist_nocards_emptylist(self):
-        self.t.move_button()
-        expected = []
-        result = self.t.get_valuelist()
-        self.assertEqual(expected, result)
-
-    # 1 player with cards, list is 1 long.
-    def test_getvaluelist_1hascards_listis1long(self):
-        self.t.move_button()
-        c = card.Card('A', 's')
-        self.t.seats[0].add_card(c)
-        expected = 1
-        result = len(self.t.get_valuelist())
-        self.assertEqual(expected, result)
-
-    # 6 players with cards, list is 6 long.
-    def test_getvaluelist_6havecards_listis6long(self):
-        self.t.move_button()
-        setup_table.deal_cards(self.t)
-        expected = 6
-        result = len(self.t.get_valuelist())
-        self.assertEqual(expected, result)
