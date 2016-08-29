@@ -211,8 +211,8 @@ class TestGame(unittest.TestCase):
 
     # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_6players_pot3(self):
-        self.r._table.move_button()  # verify the button is 0
-        self.assertEqual(self.r._table.TOKENS['D'], 0)
+        self.r._table.move_button()
+        self.assertEqual(self.r._table.TOKENS['D'], 0)  # verify the button is 0
         self.r.post_blinds()
         self.assertEqual(self.r._table.seats[1].chips, 999)
         self.assertEqual(self.r._table.seats[2].chips, 998)
@@ -220,7 +220,8 @@ class TestGame(unittest.TestCase):
 
     # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_6players_returnsString(self):
-        self.r._table.move_button()  # verify the button is 0
+        self.r._table.move_button()
+        self.assertEqual(self.r._table.TOKENS['D'], 0)  # verify the button is 0
         expected = 'bob1 posts $1\nbob2 posts $2\n'
         result = self.r.post_blinds()
         self.assertEqual(expected, result)
@@ -229,7 +230,17 @@ class TestGame(unittest.TestCase):
     Tests for invested(player)
     """
     # New table - player has invested nothing.
+    def test_invested_nobets_returns0(self):
+        expected = 0
+        result = self.r.invested(self.r._table.seats[0])
+        self.assertEqual(expected, result)
+
     # After betting 100 - player invested 100.
+    def test_invested_bet100_returns100(self):
+        expected = 100
+        self.r._table.seats[0].bet(100)
+        result = self.r.invested(self.r._table.seats[0])
+        self.assertEqual(expected, result)
 
     """
     Tests for get_allin_stacks()

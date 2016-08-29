@@ -145,7 +145,7 @@ class Round():
         return actions
 
     def invested(self, player):
-        return self.betstack[player.name] - player.chips
+        return self.starting_stacks[player.name] - player.chips
 
     def get_allin_stacks(self):
         return [self.startingstacks[p.name]
@@ -241,15 +241,15 @@ class Round():
             sidepot = 0
             for p in self._table:
                 # Get the players total invested amount over the round
-                invested = self.starting_stacks[p.name] - p.chips
+                i = self.invested(p)
 
                 # If stacksize is less than invested, they can only win the stacksize.
-                if stacksize <= invested:
+                if stacksize <= i:
                     sidepot += stacksize
-                elif stacksize > invested:
+                elif stacksize > i:
                     # if their stacksize is more than invested, they can win the entire invested
                     # amount.
-                    sidepot += invested
+                    sidepot += i
 
             sidepots[stacksize] = sidepot
 
@@ -287,7 +287,8 @@ class Round():
 
         while playing:
             p = self._table.seats[self.bettor]
-            cost = (self.betsize * self.level) - self.invested(p)
+            invested = self.betstack[p.name] - p.chips
+            cost = (self.betsize * self.level) - invested
             options = betting.get_options(cost, self)
 
             if p.chips == 0:
