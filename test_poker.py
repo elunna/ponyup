@@ -237,13 +237,6 @@ class TestGame(unittest.TestCase):
     # Award 2 players -100 chips. Raise exception.
 
     """
-    Tests for award_pot(player, amt)
-    """
-    # Award 1 player 100 chips. Their stack goes up 100.
-    # Try awarding -100. Should raise an exception.
-    # Try awarding a player with no cards. Should raise an exception.
-
-    """
     Tests for betting_round()
     """
     # Export the invested variable to betting.has_invested(player)

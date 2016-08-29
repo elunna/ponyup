@@ -286,12 +286,6 @@ class Round():
             award_dict[r_winner] += remainder
         return award_dict
 
-    def award_pot(self, player, amt):
-        chips = colors.color('${}'.format(amt), 'yellow')
-        txt = '{:>15} wins {}'.format(str(player), chips).rjust(84)
-        print(txt)
-        player.add_chips(amt)
-
     def invested(self, player):
         return self.betstack[player.name] - player.chips
 

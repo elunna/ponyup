@@ -20,3 +20,10 @@ class TestBetting(unittest.TestCase):
         expected = 2.0
         result = betting.calc_odds(5, 10)
         self.assertEqual(expected, result)
+
+    """
+    Tests for award_pot(player, amt)
+    """
+    # Award 1 player 100 chips. Their stack goes up 100.
+    # Try awarding -100. Should raise an exception.
+    # Try awarding a player with no cards. Should raise an exception.

@@ -1,4 +1,5 @@
 from __future__ import print_function
+import betting
 import card
 import cardlist
 import evaluator as ev
@@ -51,7 +52,7 @@ class Draw5Session(poker.Session):
 
         # Award pot
         for plyr, amt in award_dict.items():
-            _round.award_pot(plyr, int(amt))
+            betting.award_pot(plyr, int(amt))
 
         # ================== CLEANUP
         # Cleanup all cards

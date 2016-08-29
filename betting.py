@@ -65,3 +65,10 @@ def get_options(cost, env):
         option_dict['c'] = Option('CALL', cost, 0)
 
     return option_dict
+
+
+def award_pot(player, amt):
+    chips = colors.color('${}'.format(amt), 'yellow')
+    txt = '{:>15} wins {}'.format(str(player), chips).rjust(84)
+    print(txt)
+    player.add_chips(amt)
