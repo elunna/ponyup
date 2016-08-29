@@ -1,8 +1,9 @@
 import unittest
 import blinds
-import draw5
 import card
+import draw5
 import poker
+import pokerhands
 import setup_table
 
 
@@ -60,6 +61,15 @@ class TestGame(unittest.TestCase):
     """
     Tests for sortcards()
     """
+    # deal highcards1():
+    #  h = [('A', 'd'), ('4', 's'), ('Q', 's'), ('7', 's'), ('K', 'h')]
+    def test_sortcards_humandealt_sorted(self):
+        h = pokerhands.highcards1()
+        self.r._table.seats[0]._hand.cards = h[:]
+        expected = sorted(h)
+        self.r.sortcards()
+        result = self.r._table.seats[0]._hand.cards
+        self.assertEqual(expected, result)
 
     """
     Tests for muck_all_cards()
@@ -226,7 +236,7 @@ class TestGame(unittest.TestCase):
     """
 
     """
-    Tests for make_sidepot(stacksize)
+    Tests for make_sidepots(self, _stacks):
     """
 
     """
