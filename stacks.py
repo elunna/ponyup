@@ -32,11 +32,3 @@ def stackdict(table):
     for p in table:
         stacks[p.name] = p.chips
     return stacks
-
-
-def get_stack_to_pot_list(sidepots):
-    """
-    Returns a list of tuples. Each tuple is a stack and pot pair. The list get sorted
-    by stacksize.
-    """
-    return sorted([(stack, sidepots[stack]) for stack in sidepots])
