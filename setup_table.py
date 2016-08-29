@@ -34,6 +34,17 @@ def test_table(seats):
     return t
 
 
+def allin_table(seats):
+    # Populates a table with different levels of stack sizes by 100's
+    # ex: 100, 200, 300, 400, etc.
+    DEFAULT_CHIPS = 100
+    t = table.Table(seats)
+    for i in range(seats):
+        t.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
+        t.seats[i].add_chips(DEFAULT_CHIPS * (i + 1))
+    return t
+
+
 def deal_cards(table):
     d = deck.Deck()
 
