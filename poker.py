@@ -86,7 +86,9 @@ class Round():
         _str = ''
         for p in self._table.get_players(CARDS=True):
             p.showhand()
-            line = '\t\t\t\t {:15} shows: {:10}'.format(str(p), str(p._hand))
+            line = '\t\t\t\t {:>15} shows {:10}\n'.format(str(p), str(p._hand))
+            line += '\t\t\t {:>15} has  {}: {}'.format(
+                str(p), str(p._hand.handrank), str(p._hand.description))
             _str += line + '\n'
         return _str
 
@@ -144,6 +146,16 @@ class Round():
         actions += '{} posts ${}\n'.format(bb, self._session.blinds.BB)
         return actions
 
+    def get_valuelist(self):
+        """
+        Find all players with cards; return a list of hand values and player objects.
+        """
+        return [(p._hand.value, p) for p in self._table.get_players(CARDS=True)]
+
+    def valuelist2(self):
+        """ Find all the players with cards and return a list of hand values. """
+        return [p._hand.value for p in self._table.get_players(hascards=True)]
+
     def invested(self, player):
         return self.starting_stacks[player.name] - player.chips
 
@@ -178,64 +190,16 @@ class Round():
             # Remember starting stack size.
             self.betstack = stacks.stackdict(self._table)
 
-    def process_sidepots(self, sidepots, handlist):
+    def make_sidepots(self, allins):
         """
-        Calculates which players are eligible to win which portions of the pot. Returns a
-        dictionary of players and amounts.
+        Sidepot is how much the given stack size(s) can win.  Takes in a list of all-in
+        stack-size amounts and returns a dictionary of pot:stacksize pairs that show what
+        sidepots are available and what stack size is required to win it.
         """
-        # Organize the sidepots into an ascending sorted list.
-        stacks_n_pots = stacks.get_stack_to_pot_list(sidepots)
+        POTS = {}
 
-        leftovers = self.pot
-
-        # Process the main pot first, 1st sidepot, 2nd sidepot, etc.
-        for i, pot in enumerate(sorted(stacks_n_pots)):
-            share = 0
-            # Calculate the pot
-            if i == 0:
-                share = pot[1]
-                leftovers -= pot[1]
-            else:
-                lastpot = stacks_n_pots[i - 1][1]
-                share = pot[1] - lastpot
-                leftovers -= share
-
-            winners = self.eligible_for_pot(handlist, share, pot[0])
-            print('Awarding ${} pot'.format(share))
-            return self.split_pot(winners, share)
-
-        if leftovers > 0:
-            # We'll pass stacks_n_pots)[0] + 1 so that all the elibigle players are
-            # just above the largest allin.
-            above_allin = max(stacks_n_pots)[0] + 1
-            winners = self.eligible_for_pot(handlist, leftovers, above_allin)
-            print('Awarding ${} pot'.format(leftovers))
-            return self.split_pot(winners, leftovers)
-
-    def eligible_for_pot(self, handlist, pot, stack):
-        """
-        Determine what players are eligible to win pots and sidepots.
-        """
-        eligible = [p for p in handlist if self.starting_stacks[p[1].name] >= stack]
-
-        bestvalue = 0
-        # Determine the best handvalue the eligible players have.
-        for e in eligible:
-            if e[0] > bestvalue:
-                bestvalue = e[0]
-
-        winners = [h[1] for h in eligible if h[0] == bestvalue]
-
-        return winners
-
-    def make_sidepots(self, _stacks):
-        """
-        Sidepot is how much the given stack size(s) can win.
-        """
-        sidepots = {}
-
-        for stacksize in _stacks:
-            if stacksize in sidepots:
+        for stacksize in allins:
+            if stacksize in POTS:
                 continue
 
             sidepot = 0
@@ -251,9 +215,60 @@ class Round():
                     # amount.
                     sidepot += i
 
-            sidepots[stacksize] = sidepot
+            # Adjust the sidepot
+            # The sidepot is what is leftover after taking off the next-lesser sidepot.
+            if len(POTS) == 0:
+                POTS[stacksize] = sidepot
+            else:
+                #  last_sidepot = POTS[max(POTS)]
+                POTS[stacksize] = sidepot - sum(POTS.values())
+        return POTS
 
-        return sidepots
+    def process_sidepots(self, sidepots):
+        """
+        Calculates which players are eligible to win which portions of the pot.
+        Returns a dictionary of pot shares and player lists.
+        """
+        leftovers = self.pot
+        shares = {}
+        if len(sidepots) == 0:
+            required_stack = 0
+        else:
+            required_stack = max(sidepots) + 1
+
+        while len(sidepots) > 0:
+            stack = min(sidepots)
+            share = sidepots[stack]
+            leftovers -= share
+            shares[share] = self.eligible_for_pot(stack)
+            sidepots.pop(stack)
+
+        if leftovers > 0:
+            # The above_allin variable lets anyone above the allin threshold win the leftovers.
+            shares[leftovers] = self.eligible_for_pot(required_stack)
+        return shares
+
+    def eligible_for_pot(self, stack_required):
+        """
+        Makes a list of the players who qualify the given stack size and who have (or tie) the
+        best hand of all cardholding players.
+        """
+        eligible_players = self.get_eligible(stack_required)
+        best_hand = self.best_hand_val(eligible_players)
+        return [p for p in eligible_players if p._hand.value == best_hand]
+
+    def best_hand_val(self, players):
+        """ Determine the best handvalue within the givenplayer group. """
+        best = 0
+        for p in players:
+            if p._hand.value > best:
+                best = p._hand.value
+        return best
+
+    def get_eligible(self, stack_req):
+        """ Returns a list of players who had the minimum starting stack size. """
+        cardholders = self._table.get_players(CARDS=True)
+        return [p for p in cardholders if self.starting_stacks[p.name] >= stack_req]
 
     def split_pot(self, winners, amt):
         """
@@ -302,12 +317,13 @@ class Round():
             print(action_string)
 
             #  if self._table.valid_bettors() == 1:
-            if self._table.get_players(CARDS=True) == 1:
+            cardholders = self._table.get_players(CARDS=True)
+            if len(cardholders) == 1:
                 print('Only one player left!')
-                winner = self._table.seats[self._table.next_player_w_cards(self.bettor)]
-                self.PLAYING = False
+                #  winner = self._table.seats[self._table.next_player_w_cards(self.bettor)]
+                #  winner =
                 # Return the single winner as a list so award_pot can use it.
-                return [winner]
+                return cardholders
 
             elif self.bettor == self.closer:
                 # Reached the last bettor, betting is closed.
@@ -356,15 +372,19 @@ class Round():
         """
         print(self.show_cards())
 
-        handlist = self._table.get_valuelist()
         allins = self.get_allins()
         sidepots = self.make_sidepots(allins)
+        # Return the award_dict
+        return self.process_sidepots(sidepots)
 
-        if len(sidepots) == 0:
-            # No sidepots, so the minimum for elibility is 0.
+    def process_awards(self, award_dict):
+        for sidepot, winners in award_dict.items():
+            print('Awarding ${} pot'.format(sidepot))
+            for p, s in self.split_pot(winners, sidepot).items():
+                self.award_pot(p, s)
 
-            winners = self.eligible_for_pot(handlist, self.pot, 0)
-            return self.split_pot(winners, self.pot)
-
-        else:
-            return self.process_sidepots(sidepots, handlist)
+    def award_pot(self, player, amt):
+        chips = colors.color('${}'.format(amt), 'yellow')
+        txt = '{:>15} wins {}'.format(str(player), chips).rjust(84)
+        print(txt)
+        player.add_chips(amt)
