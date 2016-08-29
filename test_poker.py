@@ -9,7 +9,15 @@ import setup_table
 
 class TestGame(unittest.TestCase):
     """
-    Setup a table filled with 6 players for testing.
+    poker.Session #############################################
+    """
+
+    """
+    poker.Round   #############################################
+    """
+
+    """
+    Setup a session and round, with a table filled with 6 players.
     """
     def setUp(self):
         STAKES = blinds.Blinds()
@@ -17,14 +25,16 @@ class TestGame(unittest.TestCase):
         g._table = setup_table.test_table(6)
         self.r = poker.Round(g)
 
-    """
-    Tests for __str__()
-    """
     # New round - pot = 0
     def test_newround_potis0(self):
         expected = 0
         result = self.r.pot
         self.assertEqual(expected, result)
+
+    """
+    Tests for __str__()
+    """
+    # None yet.
 
     """
     Tests for deal_cards(qty, faceup=False)
@@ -57,6 +67,11 @@ class TestGame(unittest.TestCase):
         self.r.deal_cards(1, faceup=True)
         for s in self.r._table:
             self.assertFalse(s._hand.cards[0].hidden)
+
+    """
+    Tests show_cards()
+    """
+    # Deal cards to 2 players, should be able to see CPU cards
 
     """
     Tests for sortcards()
@@ -211,6 +226,19 @@ class TestGame(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for invested(player)
+    """
+    # New table - player has invested nothing.
+    # After betting 100 - player invested 100.
+
+    """
+    Tests for get_allin_stacks()
+    """
+    # No allins, returns empty list
+    # 1 allin, returns list with 1 stack size.
+    # 2 allins, returns list with 2 stack sizes.
+
+    """
     Tests for setup_betting()
     """
     # 2 players. SB and BTN should be together.
@@ -225,19 +253,11 @@ class TestGame(unittest.TestCase):
     """
 
     """
-    Tests for get_allin_stacks()
-    """
-    # No allins, returns empty list
-    # 1 allin, returns list with 1 stack size.
-    # 2 allins, returns list with 2 stack sizes.
-
-    """
-    Tests for process_allins()
-    """
-
-    """
     Tests for make_sidepots(self, _stacks):
     """
+    # 2 players, 1 allin
+    # 3 players, 1 allin
+    # 3 players, 2 allins
 
     """
     Tests for split_pot(winners, amt)
@@ -265,11 +285,6 @@ class TestGame(unittest.TestCase):
     # RAISE - Players chips are diminished by the raiseamount
     # CHECK - bet level is same
     # COMPLETE - Players chips are diminished by the bet amount
-
-    """
-    Tests show_cards()
-    """
-    # Deal cards to 2 players, should be able to see CPU cards
 
     """
     Tests for showdown()

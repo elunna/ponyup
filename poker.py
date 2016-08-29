@@ -82,6 +82,14 @@ class Round():
                     c.hidden = False
                 p.add_card(c)
 
+    def show_cards(self):
+        _str = ''
+        for p in self._table.get_players(CARDS=True):
+            p.showhand()
+            line = '\t\t\t\t {:15} shows: {:10}'.format(str(p), str(p._hand))
+            _str += line + '\n'
+        return _str
+
     def sortcards(self):
         for p in self._table:
             p._hand.sort()
@@ -135,6 +143,14 @@ class Round():
         actions += '{} posts ${}\n'.format(sb, self._session.blinds.SB)
         actions += '{} posts ${}\n'.format(bb, self._session.blinds.BB)
         return actions
+
+    def invested(self, player):
+        return self.betstack[player.name] - player.chips
+
+    def get_allin_stacks(self):
+        return [self.startingstacks[p.name]
+                for p in self._table.get_players(CARDS=True)
+                if p.is_allin()]
 
     def setup_betting(self):
         """
@@ -212,11 +228,6 @@ class Round():
 
         return winners
 
-    def get_allin_stacks(self):
-        return [self.startingstacks[p.name]
-                for p in self._table.get_players(CARDS=True)
-                if p.is_allin()]
-
     def make_sidepots(self, _stacks):
         """
         Sidepot is how much the given stack size(s) can win.
@@ -267,9 +278,6 @@ class Round():
             r_winner = self._table.seats[first_after_btn]
             award_dict[r_winner] += remainder
         return award_dict
-
-    def invested(self, player):
-        return self.betstack[player.name] - player.chips
 
     def betting_round(self):
         """
@@ -339,14 +347,6 @@ class Round():
             return colors.color(act_str, 'purple')
         else:
             return colors.color(act_str, 'white') + amt
-
-    def show_cards(self):
-        _str = ''
-        for p in self._table.get_players(CARDS=True):
-            p.showhand()
-            line = '\t\t\t\t {:15} shows: {:10}'.format(str(p), str(p._hand))
-            _str += line + '\n'
-        return _str
 
     def showdown(self):
         """
