@@ -162,18 +162,17 @@ class Round():
             # Remember starting stack size.
             self.betstack = stacks.stackdict(self._table)
 
-    def process_sidepots(self, handlist):
+    def process_sidepots(self, sidepots, handlist):
         """
         Calculates which players are eligible to win which portions of the pot. Returns a
         dictionary of players and amounts.
         """
         # Organize the sidepots into an ascending sorted list.
-        stacks_n_pots = stacks.get_stack_to_pot_list(self.sidepots)
+        stacks_n_pots = stacks.get_stack_to_pot_list(sidepots)
 
         leftovers = self.pot
 
-        # Go through and process the main pot first,
-        # then the 1st sidepot, 2nd sidepot, etc.
+        # Process the main pot first, 1st sidepot, 2nd sidepot, etc.
         for i, pot in enumerate(sorted(stacks_n_pots)):
             share = 0
             # Calculate the pot
@@ -215,52 +214,35 @@ class Round():
 
     def get_allin_stacks(self):
         return [self.startingstacks[p.name]
-                for p in self.table.get_players(hascards=True)
+                for p in self._table.get_players(CARDS=True)
                 if p.is_allin()]
 
-    def process_allins(self):
+    def make_sidepots(self, _stacks):
         """
-        Determine which players are all-in in order to create sidepots.
+        Sidepot is how much the given stack size(s) can win.
         """
-        for p in self._table.get_players(CARDS=True):
-            # Look for allins and create sidepots
-            if p.chips == 0:
-                allin = self.starting_stacks[p.name]
+        sidepots = {}
 
-                self.make_sidepot(allin)
+        for stacksize in _stacks:
+            if stacksize in sidepots:
+                continue
 
-    def make_sidepot(self, stacksize):
-        """
-        How this function works:
-        When the showdown is calculating the winners, it detects allin players
-        and will send them here to create a sidepot.
+            sidepot = 0
+            for p in self._table:
+                # Get the players total invested amount over the round
+                invested = self.starting_stacks[p.name] - p.chips
 
-        "Sidepot is a bit of a misnomer since it is actually how much the given stack size
-        can win. The first side pot created will actually be the "main pot" that all players
-        are eligible for. This system will make it easier to calculate the winnings at the end.
-        """
-        if stacksize in self.sidepots:
-            # There is already a sidepot for this stacksize
-            return
+                # If stacksize is less than invested, they can only win the stacksize.
+                if stacksize <= invested:
+                    sidepot += stacksize
+                elif stacksize > invested:
+                    # if their stacksize is more than invested, they can win the entire invested
+                    # amount.
+                    sidepot += invested
 
-        print('')
-        mainpot = 0
+            sidepots[stacksize] = sidepot
 
-        # Go through the table of players
-        for p in self._table:
-            # For each player, get their total invested amount over the round
-            invested = self.starting_stacks[p.name] - p.chips
-
-            # If stacksize is less than invested, they can only win the stacksize.
-            if stacksize <= invested:
-                # mainpot: add the allin stacksize
-                mainpot += stacksize
-            elif stacksize > invested:
-                # if the allin stacksize is more than the invested,
-                # they can win all the invested amount
-                mainpot += invested
-
-        self.sidepots[stacksize] = mainpot
+        return sidepots
 
     def split_pot(self, winners, amt):
         """
@@ -374,13 +356,14 @@ class Round():
         print(self.show_cards())
 
         handlist = self._table.get_valuelist()
+        allins = self.get_allin_stacks()
+        sidepots = self.make_sidepots(allins)
 
-        self.process_allins()
-
-        if len(self.sidepots) == 0:
+        if len(sidepots) == 0:
             # No sidepots, so the minimum for elibility is 0.
+
             winners = self.eligible_for_pot(handlist, self.pot, 0)
             return self.split_pot(winners, self.pot)
 
         else:
-            return self.process_sidepots(handlist)
+            return self.process_sidepots(sidepots, handlist)
