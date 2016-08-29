@@ -147,9 +147,9 @@ class Round():
     def invested(self, player):
         return self.starting_stacks[player.name] - player.chips
 
-    def get_allin_stacks(self):
-        return [self.startingstacks[p.name]
-                for p in self._table.get_players(CARDS=True)
+    def get_allins(self):
+        """ Returns a list of all stack sizes that went all in this round."""
+        return [self.starting_stacks[p.name] for p in self._table.get_players(CARDS=True)
                 if p.is_allin()]
 
     def setup_betting(self):
@@ -357,7 +357,7 @@ class Round():
         print(self.show_cards())
 
         handlist = self._table.get_valuelist()
-        allins = self.get_allin_stacks()
+        allins = self.get_allins()
         sidepots = self.make_sidepots(allins)
 
         if len(sidepots) == 0:

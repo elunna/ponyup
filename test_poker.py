@@ -246,8 +246,25 @@ class TestGame(unittest.TestCase):
     Tests for get_allin_stacks()
     """
     # No allins, returns empty list
+    def test_getallins_none_returnsemptylist(self):
+        expected = []
+        result = self.r.get_allins()
+        self.assertEqual(expected, result)
+
     # 1 allin, returns list with 1 stack size.
+    def test_getallins_1allin_returns1stack(self):
+        expected = [1000]
+        self.r._table.seats[0].bet(1000)
+        result = self.r.get_allins()
+        self.assertEqual(expected, result)
+
     # 2 allins, returns list with 2 stack sizes.
+    def test_getallins_2allin_returns2stacks(self):
+        expected = [1000, 1000]
+        self.r._table.seats[0].bet(1000)
+        self.r._table.seats[1].bet(1000)
+        result = self.r.get_allins()
+        self.assertEqual(expected, result)
 
     """
     Tests for setup_betting()
