@@ -288,7 +288,8 @@ class Round():
 
     def award_pot(self, player, amt):
         chips = colors.color('${}'.format(amt), 'yellow')
-        print('\t{} wins {}'.format(player, chips))
+        txt = '{:>15} wins {}'.format(str(player), chips).rjust(84)
+        print(txt)
         player.add_chips(amt)
 
     def invested(self, player):
