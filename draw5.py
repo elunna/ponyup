@@ -175,7 +175,7 @@ def discard_phase(table, deck):
             muckpile.append(p.discard(c))
             draw = deck.deal()
 
-            if p.is_human:
+            if p.is_human():
                 draw.hidden = False
                 human_draw.append(draw)
 
