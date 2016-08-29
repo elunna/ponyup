@@ -10,7 +10,7 @@ import sys
 import table
 
 GAME = 'FIVE CARD DRAW'
-TABLE = 2
+TABLE = 6
 STAKES = blinds.Blinds()
 NAME = 'Aorist'
 OPPONENT = 'FISH'
@@ -139,6 +139,7 @@ def exitgracefully():
 
 if __name__ == "__main__":
     while True:
+        STAKES.set_level(10)
         os.system('clear')
         print_logo()
         menu()
