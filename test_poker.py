@@ -6,6 +6,8 @@ import poker
 import pokerhands
 import setup_table
 
+STAKES = blinds.Blinds()
+
 
 class TestGame(unittest.TestCase):
     """
@@ -20,9 +22,13 @@ class TestGame(unittest.TestCase):
     Setup a session and round, with a table filled with 6 players.
     """
     def setUp(self):
-        STAKES = blinds.Blinds()
         g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6)
         g._table = setup_table.test_table(6)
+        self.r = poker.Round(g)
+
+    def make_allin_table(self, seats):
+        g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6)
+        g._table = setup_table.allin_table(seats)
         self.r = poker.Round(g)
 
     # New round - pot = 0
@@ -273,19 +279,56 @@ class TestGame(unittest.TestCase):
     # 2 players. BB is not BTN.
 
     """
+    Tests for make_sidepots(self, _stacks):
+    """
+    # 2 players, 1 allin
+    def test_makesidepots_2plyr_1allin_returns1sidepot(self):
+        self.make_allin_table(2)
+        expected = {100: 200}
+        for p in self.r._table:
+            p.bet(100)
+        allins = self.r.get_allins()
+        result = self.r.make_sidepots(allins)
+        self.assertEqual(expected, result)
+
+    # 3 players, 1 allin
+    def test_makesidepots_3plyr_1allin_returns1sidepot(self):
+        self.make_allin_table(3)
+        expected = {100: 300}
+        for p in self.r._table:
+            p.bet(100)
+        allins = self.r.get_allins()
+        result = self.r.make_sidepots(allins)
+        self.assertEqual(expected, result)
+
+    # 3 players, 2 allins
+    def test_makesidepots_3plyr_2allin_returns2sidepot(self):
+        self.make_allin_table(3)
+        expected = {100: 300, 200: 500}
+        for p in self.r._table:
+            p.bet(200)
+        allins = self.r.get_allins()
+        result = self.r.make_sidepots(allins)
+        self.assertEqual(expected, result)
+
+    # 4 players, 3 allins
+    def test_makesidepots_4plyr_3allin_returns3sidepot(self):
+        self.make_allin_table(4)
+        expected = {100: 400, 200: 700, 300: 900}
+        for p in self.r._table:
+            p.bet(300)
+        allins = self.r.get_allins()
+        result = self.r.make_sidepots(allins)
+        self.assertEqual(expected, result)
+
+
+    """
     Tests for process_sidepots(handlist)
     """
 
     """
     Tests for eligible_for_pot(handlist, pot, stack)
     """
-
-    """
-    Tests for make_sidepots(self, _stacks):
-    """
-    # 2 players, 1 allin
-    # 3 players, 1 allin
-    # 3 players, 2 allins
 
     """
     Tests for split_pot(winners, amt)
