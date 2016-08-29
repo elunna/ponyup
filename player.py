@@ -74,3 +74,6 @@ class Player():
 
     def is_allin(self):
         return self.chips == 0
+
+    def has_cards(self):
+        return len(self._hand) > 0

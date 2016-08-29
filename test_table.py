@@ -38,7 +38,6 @@ class TestTable(unittest.TestCase):
         expected = 6
         result = len(self.t)
         self.assertEqual(expected, result)
-
     """
     Tests for __str__()
     """
@@ -257,21 +256,102 @@ class TestTable(unittest.TestCase):
         result = p1 in t
         self.assertEqual(expected, result)
 
-    """
-    Tests for valid_bettors()
-    """
-    # 0 players holding cards, gets an array size 0
-    def test_validbettors_0withcards_returns0(self):
+    # 0 players holding cards, gets a list size 0
+    def test_getplayers_cardsandchips_0withcards_returns0(self):
+        self.t.randomize_button()
         expected = 0
-        result = self.t.valid_bettors()
+        result = len(self.t.get_players(CARDS=True, CHIPS=True))
         self.assertEqual(expected, result)
 
-    # 1 players holding cards, gets an array size 1
-    def test_validbettors_1withcards_returns1(self):
+    # 1 players holding cards, gets a list size 1
+    def test_getplayers_cardsandchips_1withcards_returns1(self):
+        self.t.randomize_button()
         expected = 1
         c = card.Card('A', 's')
         self.t.seats[0].add_card(c)
-        result = self.t.valid_bettors()
+        result = len(self.t.get_players(CARDS=True, CHIPS=True))
+        self.assertEqual(expected, result)
+
+    """
+    Tests for get_players(hascards=True)
+    """
+    # 1 player with cards. Button is -1. Raises Exception
+    def test_getplayers_withcards_seat0hascards_raiseException(self):
+        c = card.Card('A', 's')
+        self.t.seats[0].add_card(c)
+        self.assertRaises(Exception, self.t.get_players(CARDS=True))
+
+    # 1 player with cards. Button moved to 0. Returns the player
+    def test_getplayers_withcards_btn0_seat0hascards_returnsPlayer(self):
+        self.t.move_button()
+        # Make sure the btn is at 0
+        self.assertTrue(self.t.TOKENS['D'] == 0)
+
+        c = card.Card('A', 's')
+        self.t.seats[0].add_card(c)
+        expected = [self.t.seats[0]]
+        result = self.t.get_players(CARDS=True)
+        self.assertEqual(expected, result)
+
+    # 2 player with cards. Button moved to 0. Returns the player
+    # Since it's heads up, the sb/btn(0) should be first in the returned list
+    def test_getplayers_withcards_btn0_seat0and1hascards_return0(self):
+        t = setup_table.test_table(2)
+        t.move_button()
+        self.assertEqual(t.TOKENS['D'], 0)  # Make sure the btn is at 0
+        self.assertEqual(t.TOKENS['SB'], 0)  # Make sure the sb is at 0.
+
+        setup_table.deal_cards(t)
+        expected = t.seats[0]
+        result = t.get_players(CARDS=True)[0]
+        self.assertEqual(expected, result)
+
+    # 2 player with cards. Button moved to 0. Returns the player
+    # Since it's heads up, the sb/btn(0) should be first in the returned list
+    def test_getplayers_withcards_btn1_seat0and1hascards_return1(self):
+        t = setup_table.test_table(2)
+        t.move_button()
+        t.move_button()
+        # Make sure the btn is at 1
+        self.assertEqual(t.TOKENS['D'], 1)
+        # Make sure the sb is at 1.
+        self.assertEqual(t.TOKENS['SB'], 1)
+        setup_table.deal_cards(t)
+
+        expected = t.seats[1]
+        result = t.get_players(CARDS=True)[0]
+        self.assertEqual(expected, result)
+
+    # 6 players with cards, Button at 0. Returns list with seat 1 first.
+    def test_getplayers_withcards_6havecards_btn0_seat1first(self):
+        self.t.move_button()
+        # Make sure the btn is at 0
+        self.assertEqual(self.t.TOKENS['D'], 0)
+
+        setup_table.deal_cards(self.t)
+
+        expected = self.t.seats[1]
+        result = self.t.get_players(CARDS=True)[0]
+        self.assertEqual(expected, result)
+
+    # 6 players with cards, Button at 5. Returns list with seat 0 first.
+    def test_getplayers_withcards_6havecards_btn5_seat0first(self):
+        self.t.TOKENS['BTN'] = 4
+        self.t.move_button()
+        # Make sure the btn is at 0
+        self.assertEqual(self.t.TOKENS['D'], 0)
+
+        setup_table.deal_cards(self.t)
+        expected = self.t.seats[1]
+        result = self.t.get_players(CARDS=True)[0]
+        self.assertEqual(expected, result)
+
+    # 6 players with cards, Button at 0. Returns list that's size 6.
+    def test_getplayers_withcards_6havecards_lengthis6(self):
+        self.t.move_button()
+        setup_table.deal_cards(self.t)
+        expected = 6
+        result = len(self.t.get_players(CARDS=True))
         self.assertEqual(expected, result)
 
     """
@@ -494,109 +574,6 @@ class TestTable(unittest.TestCase):
         t.randomize_button()
         result = t.TOKENS['D'] >= 0 and t.TOKENS['D'] < seats
         self.assertTrue(result)
-
-    """
-    Tests for get_cardholders()
-    """
-    # 1 player with cards. Button is -1. Raises Exception
-    def test_getcardholders_btnnotset_seat0hascards_raiseException(self):
-        c = card.Card('A', 's')
-        self.t.seats[0].add_card(c)
-        self.assertRaises(Exception, self.t.get_cardholders)
-
-    # 1 player with cards. Button moved to 0. Returns the player
-    def test_getcardholders_btn0_seat0hascards_returnsPlayer(self):
-        self.t.move_button()
-        # Make sure the btn is at 0
-        self.assertTrue(self.t.TOKENS['D'] == 0)
-
-        c = card.Card('A', 's')
-        self.t.seats[0].add_card(c)
-        expected = [self.t.seats[0]]
-        result = self.t.get_cardholders()
-        self.assertEqual(expected, result)
-
-    # 2 player with cards. Button moved to 0. Returns the player
-    # Since it's heads up, the sb/btn(0) should be first in the returned list
-    def test_getcardholders_btn0_seat0and1hascards_return0(self):
-        seats = 2
-        t = setup_table.test_table(seats)
-        t.move_button()
-        # Make sure the btn is at 0
-        self.assertEqual(t.TOKENS['D'], 0)
-        # Make sure the sb is at 0.
-        self.assertEqual(t.TOKENS['SB'], 0)
-
-        setup_table.deal_cards(t)
-        expected = t.seats[0]
-        result = t.get_cardholders()[0]
-        self.assertEqual(expected, result)
-
-    # 2 player with cards. Button moved to 0. Returns the player
-    # Since it's heads up, the sb/btn(0) should be first in the returned list
-    def test_getcardholders_btn1_seat0and1hascards_return1(self):
-        seats = 2
-        t = setup_table.test_table(seats)
-        t.move_button()
-        t.move_button()
-        # Make sure the btn is at 1
-        self.assertEqual(t.TOKENS['D'], 1)
-        # Make sure the sb is at 1.
-        self.assertEqual(t.TOKENS['SB'], 1)
-        setup_table.deal_cards(t)
-
-        expected = t.seats[1]
-        result = t.get_cardholders()[0]
-        self.assertEqual(expected, result)
-
-    # 6 players with cards, Button at 0. Returns list with seat 1 first.
-    def test_getcardholders_6havecards_btn0_seat1first(self):
-        self.t.move_button()
-        # Make sure the btn is at 0
-        self.assertEqual(self.t.TOKENS['D'], 0)
-
-        setup_table.deal_cards(self.t)
-
-        expected = self.t.seats[1]
-        result = self.t.get_cardholders()[0]
-        self.assertEqual(expected, result)
-
-    # 6 players with cards, Button at 5. Returns list with seat 0 first.
-    def test_getcardholders_6havecards_btn5_seat0first(self):
-        self.t.TOKENS['BTN'] = 4
-        self.t.move_button()
-        # Make sure the btn is at 0
-        self.assertEqual(self.t.TOKENS['D'], 0)
-
-        setup_table.deal_cards(self.t)
-        expected = self.t.seats[1]
-        result = self.t.get_cardholders()[0]
-        self.assertEqual(expected, result)
-
-    # 6 players with cards, Button at 0. Returns list that's size 6.
-    def test_getcardholders_6havecards_lengthis6(self):
-        self.t.move_button()
-        setup_table.deal_cards(self.t)
-        expected = 6
-        result = len(self.t.get_cardholders())
-        self.assertEqual(expected, result)
-
-    """
-    Tests for has_cards(s)
-    """
-    # Seat 0 has cards, should return True
-    def test_hascards_playerhascards_returnsTrue(self):
-        c = card.Card('A', 's')
-        self.t.seats[0].add_card(c)
-        expected = True
-        result = self.t.has_cards(0)
-        self.assertEqual(expected, result)
-
-    # Seat 0 doesn't have cards, should return False
-    def test_hascards_playerhasnocards_returnsFalse(self):
-        expected = False
-        result = self.t.has_cards(0)
-        self.assertEqual(expected, result)
 
     """
     Tests for remove_broke_players()

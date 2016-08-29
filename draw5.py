@@ -12,7 +12,7 @@ class Draw5Session(poker.Session):
         """ Play a round of Five Card Draw."""
         _round = poker.Round(self)
 
-        if len(self._table.get_cardholders()) > 0:
+        if len(self._table.get_players(CARDS=True)) > 0:
             raise Exception('One or more players have cards before the deal!')
 
         _round.post_blinds()
@@ -43,10 +43,10 @@ class Draw5Session(poker.Session):
                 # Check for winners/showdown
                 award_dict = _round.showdown()
             else:
-                winner = _round._table.get_cardholders()
+                winner = _round._table.get_players(CARDS=True)
                 award_dict = _round.split_pot(winner, _round.pot)
         else:
-            winner = _round._table.get_cardholders()
+            winner = _round._table.get_players(CARDS=True)
             award_dict = _round.split_pot(winner, _round.pot)
 
         # Award pot
@@ -155,7 +155,7 @@ def discard_phase(table, deck):
 
     print('Discard phase: ' + '~'*55)
     # Make sure the button goes last!
-    holdingcards = table.get_cardholders()
+    holdingcards = table.get_players(CARDS=True)
     muckpile = []
 
     for p in holdingcards:

@@ -33,7 +33,7 @@ class TestGame(unittest.TestCase):
         self.r._table.move_button()
         self.r.deal_cards(1)
         expected = 6
-        result = len(self.r._table.get_cardholders())
+        result = len(self.r._table.get_players(CARDS=True))
         self.assertEqual(expected, result)
 
     # 6 players, deal 1 - decksize == 48
@@ -70,7 +70,7 @@ class TestGame(unittest.TestCase):
         self.r.deal_cards(1)
         self.r.muck_all_cards()
         expected = 0
-        result = len(self.r._table.get_cardholders())
+        result = len(self.r._table.get_players(CARDS=True))
         self.assertEqual(expected, result)
 
     # 6 players, deal 1 - verify_muck is True after running

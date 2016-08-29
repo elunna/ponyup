@@ -26,13 +26,11 @@ def make(num, hero=None, gametype="DRAW5"):
 
 def test_table(seats):
     # Populate a Table of the specified # of seats with players.
+    DEFAULT_CHIPS = 1000
     t = table.Table(seats)
     for i in range(seats):
         t.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
-
-    for p in t:
-        p.add_chips(1000)
-
+        t.seats[i].add_chips(DEFAULT_CHIPS)
     return t
 
 

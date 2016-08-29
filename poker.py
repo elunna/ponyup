@@ -104,7 +104,7 @@ class Round():
         elif len(self.muck) != self.DECKSIZE:
             return False
         # Check that all players have folded.
-        elif len(self._table.get_cardholders()) > 0:
+        elif len(self._table.get_players(CARDS=True)) > 0:
             return False
         else:
             return True
@@ -215,14 +215,14 @@ class Round():
 
     def get_allin_stacks(self):
         return [self.startingstacks[p.name]
-                for p in self.table.get_cardholders()
+                for p in self.table.get_players(hascards=True)
                 if p.is_allin()]
 
     def process_allins(self):
         """
         Determine which players are all-in in order to create sidepots.
         """
-        for p in self._table.get_cardholders():
+        for p in self._table.get_players(CARDS=True):
             # Look for allins and create sidepots
             if p.chips == 0:
                 allin = self.starting_stacks[p.name]
@@ -292,7 +292,7 @@ class Round():
         player.add_chips(amt)
 
     def invested(self, player):
-        self.betstack[player.name] - player.chips
+        return self.betstack[player.name] - player.chips
 
     def betting_round(self):
         """
@@ -315,7 +315,8 @@ class Round():
             action_string = self.process_option(o)
             print(action_string)
 
-            if self._table.valid_bettors() == 1:
+            #  if self._table.valid_bettors() == 1:
+            if self._table.get_players(CARDS=True) == 1:
                 print('Only one player left!')
                 winner = self._table.seats[self._table.next_player_w_cards(self.bettor)]
                 self.PLAYING = False
@@ -364,7 +365,7 @@ class Round():
 
     def show_cards(self):
         _str = ''
-        for p in self._table.get_cardholders():
+        for p in self._table.get_players(CARDS=True):
             p.showhand()
             line = '\t\t\t\t {:15} shows: {:10}'.format(str(p), str(p._hand))
             _str += line + '\n'
@@ -388,4 +389,3 @@ class Round():
 
         else:
             return self.process_sidepots(handlist)
-

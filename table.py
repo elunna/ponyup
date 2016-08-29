@@ -99,17 +99,6 @@ class Table():
             self.seats[index] = None
         return p
 
-    def get_players(self):
-        # Returns a list of all the active players at the table
-        return [p for p in self.seats if p is not None]
-
-    def valid_bettors(self):
-        count = 0
-        for i in range(len(self)):
-            if self.has_cards(i):
-                count += 1
-        return count
-
     def next(self, from_seat, step=1):
         length = len(self)
         if from_seat < -1 or from_seat >= len(self):
@@ -130,7 +119,7 @@ class Table():
         for i in range(len(self)):
             seat = self.next(seat, step)
 
-            if self.has_cards(seat) and seat != from_seat:
+            if self.seats[seat].has_cards() and seat != from_seat:
                 return seat
         else:
             raise Exception('Error finding player with cards!')
@@ -149,13 +138,6 @@ class Table():
         else:
             raise ValueError('Not enough players at the table!')
 
-    def get_playerdict(self):
-        players = {}
-        for i, s in enumerate(self.seats):
-            if s is not None:
-                players[i] = s
-        return players
-
     def randomize_button(self):
         # Place the button at a random seat
         seats = list(self.get_playerdict().keys())
@@ -164,24 +146,6 @@ class Table():
 
         # This will also set the blinds...
         self.move_button()
-
-    def get_cardholders(self):
-        """
-        Returns a list of players with cards, ordered by small blind first.
-        """
-        if self.TOKENS['SB'] < 0:
-            raise Exception('Trying to get cardholders before blinds were set!')
-        sb = self.TOKENS['SB']
-
-        seats = list(range(len(self)))
-        seats = seats[sb:] + seats[0:sb]
-        return [self.seats[s] for s in seats if self.has_cards(s)]
-
-    def has_cards(self, s):
-        if self.seats[s] is not None:
-            return len(self.seats[s]._hand) > 0
-        else:
-            return False
 
     def remove_broke(self):
         """ Remove players with no chips from the table. """
@@ -197,10 +161,39 @@ class Table():
         Find all the players with cards and return a list of hand values and player objects.
         """
         handlist = []
-        for p in self.get_cardholders():
+        for p in self.get_players(CARDS=True):
             handlist.append((p._hand.value, p))
         return handlist
 
     def valuelist2(self):
         """ Find all the players with cards and return a list of hand values. """
-        return [p._hand.value for p in self._table.get_cardholders()]
+        return [p._hand.value for p in self._table.get_players(hascards=True)]
+
+    def get_players(self, CARDS=False, CHIPS=False):
+        """
+        Returns a list of players at the table, ordered from SB first to Button Last. Can
+        specify if players have cards and/or chips.
+        """
+        # If the button has not been set, return an unordered list of players.
+        if self.TOKENS['SB'] == -1 or self.TOKENS['BB'] == -1:
+            return [s for s in self.seats if s is not None]
+
+        sb = self.TOKENS['SB']
+        seats = list(range(sb, len(self))) + list(range(sb))
+
+        players = [self.seats[s] for s in seats if self.seats[s] is not None]
+
+        if CARDS is True:
+            players = list(filter((lambda x: x.has_cards() == True), players))
+
+        if CHIPS is True:
+            players = list(filter((lambda x: not x.is_allin() == True), players))
+
+        return players
+
+    def get_playerdict(self):
+        players = {}
+        for i, s in enumerate(self.seats):
+            if s is not None:
+                players[i] = s
+        return players
