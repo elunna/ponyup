@@ -87,9 +87,7 @@ class Round():
         for p in self._table.get_players(CARDS=True):
             p.showhand()
             line = '\t\t\t\t {:>15} shows {:10}\n'.format(str(p), str(p._hand))
-            line += '\t\t\t {:>15} has  {}: {}'.format(
-                str(p), str(p._hand.handrank), str(p._hand.description))
-            _str += line + '\n'
+            _str += line
         return _str
 
     def sortcards(self):
@@ -381,12 +379,16 @@ class Round():
 
     def process_awards(self, award_dict):
         for sidepot, winners in award_dict.items():
-            print('Awarding ${} pot'.format(sidepot))
             for p, s in self.split_pot(winners, sidepot).items():
                 self.award_pot(p, s)
 
     def award_pot(self, player, amt):
+        h_txt = '{:>15} wins with a {}: {}'.format(str(player), str(player._hand.handrank),
+                                                   str(player._hand.description))
         chips = colors.color('${}'.format(amt), 'yellow')
-        txt = '{:>15} wins {}'.format(str(player), chips).rjust(84)
+        w_txt = '{:>15} wins {}'.format(str(player), chips)
+        txt = h_txt.strip().rjust(70)
+        txt += '\n'
+        txt += w_txt.strip().rjust(84)
         print(txt)
         player.add_chips(amt)
