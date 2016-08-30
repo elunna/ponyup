@@ -306,13 +306,14 @@ class Round():
             cost = (self.betsize * self.level) - invested
             options = betting.get_options(cost, self)
 
-            if p.chips == 0:
-                print('{} is all in.'.format(p))
+            if p.is_allin():
+                o = betting.allin_option()
             elif p.playertype == 'HUMAN':
                 print(self)
                 o = betting.menu(options)
             else:
                 o = strategy.makeplay(p, self, options)
+
             action_string = self.process_option(o)
             print(action_string)
 
@@ -343,7 +344,8 @@ class Round():
 
         if option[0] == 'FOLD':
             self.muck.extend(p.fold())
-
+        elif option[0] == 'ALLIN':
+            return '{} is all in.'.format(p)
         elif option[2] > 0:
             # It's a raise, so we'll need to reset last better.
             self.closer = self._table.next_player_w_cards(self.bettor, -1)

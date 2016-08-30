@@ -2,6 +2,8 @@ from __future__ import print_function
 from collections import namedtuple
 import colors
 
+Option = namedtuple('Option', ['action', 'cost', 'level'])
+
 
 def calc_odds(bet, pot):
     """ Calculate the odds offered to a player given a bet amount and a pot amount."""
@@ -30,12 +32,15 @@ def menu(options=None):
             print('Invalid choice, try again.')
 
 
+def allin_option():
+    return Option('ALLIN', 0, 0)
+
+
 def get_options(cost, env):
     """ Shows the options available to the current bettor."""
     completing = (env.betsize - cost) == env._session.blinds.SB
 
     option_dict = {}
-    Option = namedtuple('Option', ['action', 'cost', 'level'])
 
     if env.street == 0 and completing:
         # Completing the small blind
