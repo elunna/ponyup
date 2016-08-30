@@ -3,6 +3,10 @@ import blinds_house
 
 class Blinds():
     def __init__(self, structure_dict=None, level=1):
+        """
+        Initialize the Blinds object with a given blind structure, or use the default house
+        structure.
+        """
         if structure_dict is None:
             self.blind_dict = blinds_house.house_limits
         else:
@@ -10,18 +14,27 @@ class Blinds():
         self.set_level(level)
 
     def __str__(self):
+        """
+        Returns the stakes, as in the small bet/big bet amounts.
+        """
         if self.ANTE > 0:
             return '${}/${}, Ante: ${}'.format(self.BB, self.BB * 2, self.ANTE)
         else:
             return '${}/${}'.format(self.BB, self.BB * 2)
 
     def set_level(self, level):
+        """
+        Set the blind level, if valid.
+        """
         if level < 1 or level > len(self.blind_dict):
             raise ValueError('level is out of bounds!')
 
         self.BB, self.SB, self.ANTE = self.blind_dict.get(level)
 
     def sb_to_ante_ratio(self):
+        """
+        Returns the SB-to-Ante ratio of the current small blind and ante.
+        """
         # Use only one decimal place.
         if self.ANTE > 0:
             return round(self.SB / self.ANTE, 1)
@@ -29,6 +42,9 @@ class Blinds():
             return 0
 
     def levels(self):
+        """
+        Returns a listing of all the available blind levels in the structure.
+        """
         for k in sorted(self.blind_dict.keys()):
             BB, SB, ante = self.blind_dict[k]
             blinds = '${}/${}'.format(BB, BB * 2)

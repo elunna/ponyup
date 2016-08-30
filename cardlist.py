@@ -2,14 +2,17 @@ from collections import namedtuple
 import card
 
 
-def is_set(itemlist):
+def is_set(items):
     """
-    Return False if a list contains any duplicate entries and True if they are all unique.
+    Return False if items contains any duplicate entries and True if they are all unique.
     """
-    return len(set(itemlist)) == len(itemlist)
+    return len(set(items)) == len(items)
 
 
 def rank_dict(cards):
+    """
+    Returns a dictionary of rank/counts for the list of cards.
+    """
     ranks = {}
     for c in cards:
         if c.rank in ranks:
@@ -21,16 +24,13 @@ def rank_dict(cards):
 
 def rank_list(cards):
     """
-    Returns a list of quantity/rank pairs by making a rank dictionary,
-    converting it to a list and sorting it by rank.
+    Returns a list of quantity/rank pairs by making a rank dictionary, converting it to a list
+    and sorting it by rank.
     """
-    ranks = rank_dict(cards)
     Ranklist = namedtuple('Ranklist', ['quantity', 'rank'])
-
-    #  L = [(ranks[r], r) for r in ranks]
+    ranks = rank_dict(cards)
     L = [Ranklist(quantity=ranks[r], rank=r) for r in ranks]
 
-    #  return sorted(L, key=lambda x: (-x[0], -card.RANKS[x[1]]))
     return sorted(L, key=lambda x: (-x.quantity, -card.RANKS[x.rank]))
 
 
@@ -63,6 +63,9 @@ def suitedcard_dict(cards):
 
 
 def count_suit(cards, suit):
+    """
+    Counts how many cards of the given suit occur in the card list.
+    """
     count = 0
     for c in cards:
         if c.suit == suit:
@@ -71,8 +74,9 @@ def count_suit(cards, suit):
 
 
 def get_gap(card1, card2):
-    """ Return how many spaces are between the ranks of 2 cards.
-    Example: For 87, 8 - 7 = 1, but the gap is actually 0. Paired cards have no gap
+    """
+    Return how many spaces are between the ranks of 2 cards.
+    Example: For 87, 8 - 7 = 1, but the gap is actually 0. Paired cards have no gap.
     """
     if card1.rank == card2.rank:
         return -1
@@ -85,7 +89,6 @@ def get_allgaps(cards):
     Takes a list of cards and determines how many gaps are between all the ranks (when
     they occur in sorted order. Should work regardless of order
     """
-
     ordered = sorted(cards)
     gaps = 0
 

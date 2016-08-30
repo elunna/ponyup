@@ -7,6 +7,9 @@ import itertools
 
 
 def n_choose_k(n, k):
+    """
+    Returns how many combos of k are in a group of n.
+    """
     if n <= 0 or k <= 0:
         raise ValueError('N or K passed is less than or equal to 0!')
     elif k > n:
@@ -40,11 +43,14 @@ def get_combolist(cards, n):
     return list(itertools.combinations(cards, n))
 
 
-def get_allcombos(cards):
+def get_allcombos(items):
+    """
+    Returns all combos of all possible sizes in the given list.
+    """
     combos = []
-    maxsize = len(cards) + 1
+    maxsize = len(items) + 1
     for i in range(1, maxsize):
-        for c in list(get_combolist(cards, i)):
+        for c in list(get_combolist(items, i)):
             combos.append(c)
     return combos
 
@@ -70,8 +76,10 @@ def typecount_dict(handlist):
 
 
 def get_unique_5cardhands(combolist):
-    # Filter out all the hands that have the same value so we can see how many unique values
-    # there are.
+    """
+    Filters out all the hands that have the same value so we can see how many unique values
+    there are.
+    """
     hands = {}
 
     # Run through all combinations of 5 card hands
@@ -88,7 +96,6 @@ def sort_handslist(handdict):
     """
     Takes a list of Hands and returns a list sorted by value.
     """
-    # Sort by value
     sortedhands = []
     for h in handdict:
         sortedhands.append((handdict[h].value, handdict[h].handrank, handdict[h].cards))

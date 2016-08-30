@@ -44,7 +44,6 @@ def dominant_suit(cards):
     to be broken because the suited cards are the same rank, break the tie by using the
     traditional ranking of suits.
     """
-
     # First create a dictionary to count the suits
     suitdict = cardlist.suitedcard_dict(cards)
 
@@ -161,8 +160,6 @@ def get_value(cards):
 def get_description(value, cards):
     """
     Returns a fitting text description of the passed pokerhand.
-
-    Note: May want to refactor to only take a list of cards.
     """
     ranks = cardlist.rank_list(cards)
     ctype = get_type(value)
@@ -187,7 +184,9 @@ def get_description(value, cards):
 
 
 def process_nonpairhands(cards, sortedranks):
-    # Non pair-type hands
+    """
+    Returns the value of a non-pair hand.
+    """
     if is_suited(cards):
         if is_straight(cards):
             if cards[0].rank == 'T':
@@ -209,6 +208,9 @@ def process_nonpairhands(cards, sortedranks):
 
 
 def process_pairhands(ranks):
+    """
+    Returns the value of a pair-type hand.
+    """
     if len(ranks) > 1:
         if ranks[0][0] == 3 and ranks[1][0] == 2:
             return HANDTYPES['FULL HOUSE'] + score_ranklist(ranks)

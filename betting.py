@@ -37,6 +37,9 @@ class BettingRound():
             self.betstack = r._table.stackdict()
 
     def get_bettor(self):
+        """
+        Returns the current active bettor.
+        """
         return self.r._table.seats[self.bettor]
 
     def play(self):
@@ -81,7 +84,9 @@ class BettingRound():
             return None
 
     def process_option(self, option):
-        """ Performs the option picked by a player. """
+        """
+        Performs the option picked by a player.
+        """
         p = self.get_bettor()
         actualbet = 0
 
@@ -116,7 +121,9 @@ class BettingRound():
             return colors.color(act_str, 'white') + amt
 
     def get_options(self, cost):
-        """ Shows the options available to the current bettor."""
+        """
+        Shows the options available to the current bettor.
+        """
         completing = (self.betsize - cost) == self.r.blinds.SB
 
         option_dict = {}
@@ -152,7 +159,9 @@ class BettingRound():
 
 
 def calc_odds(bet, pot):
-    """ Calculate the odds offered to a player given a bet amount and a pot amount."""
+    """
+    Calculate the odds offered to a player given a bet amount and a pot amount.
+    """
     if bet < 0 or pot < 0:
         raise ValueError('bet or pot must be positive!')
     odds = pot / bet
@@ -160,7 +169,9 @@ def calc_odds(bet, pot):
 
 
 def menu(options=None):
-    """ Display a list of betting options for the current player. """
+    """
+    Display a list of betting options for the current player.
+    """
     nice_opts = ['[' + colors.color(v.action[0], 'white', STYLE='BOLD') + ']' +
                  v.action[1:].lower()
                  for k, v in sorted(options.items())]
@@ -179,8 +190,14 @@ def menu(options=None):
 
 
 def allin_option():
+    """
+    Returns the option for players that are all-in.
+    """
     return Option('ALLIN', 0, 0)
 
 
 def spacing(level):
+    """
+    Spaces the player actions by the current bet level.
+    """
     return '    ' * level

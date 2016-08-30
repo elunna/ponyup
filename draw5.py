@@ -9,7 +9,9 @@ DEALT = 5
 
 class Draw5Session(poker.Session):
     def play(self):
-        """ Play a round of Five Card Draw."""
+        """
+        Play a round of Five Card Draw.
+        """
         _round = poker.Round(self)
 
         if len(self._table.get_players(CARDS=True)) > 0:
@@ -66,7 +68,10 @@ class Draw5Session(poker.Session):
 
 
 def auto_discard(hand):
+    """
+    Calculates the best discard in a 5 card hand.
     # hand is a Hand object
+    """
     PAT_HANDS = ['STRAIGHT', 'FLUSH', 'FULL HOUSE', 'STRAIGHT FLUSH', 'ROYAL FLUSH']
     DIS_RANKS = ['PAIR', 'TRIPS', 'QUADS']
 
@@ -89,6 +94,9 @@ def auto_discard(hand):
 
 
 def draw_discards(cards, ranklist):
+    """
+    Calculates the approprate card to discard for any draw-type hands.
+    """
     suit = ev.dominant_suit(cards)
     suit_count = cardlist.count_suit(cards, suit)
 
@@ -149,7 +157,6 @@ def discard_phase(table, deck):
     Goes through a table and offers all players with cards the option to discard.
     Returns a list of all the discards (ie:"muck" cards)
     """
-
     print('Discard phase: ' + '~'*55)
     # Make sure the button goes last!
     holdingcards = table.get_players(CARDS=True)
@@ -187,6 +194,9 @@ def discard_phase(table, deck):
 
 
 def human_discard(hand):
+    """
+    Offers the human player a menu of discard options and returns the list of chosen discards.
+    """
     print('Your discard....1  2  3  4  5'.rjust(70))
     hands = ' '.join([str(c) for c in hand.cards])
     print('\t'*7 + hands)
@@ -216,7 +226,9 @@ def human_discard(hand):
 
 
 def is_integer(num):
-    """ Determines if the variable is an integer"""
+    """
+    Determines if the variable is an integer.
+    """
     try:
         int(num)
         return True
@@ -225,6 +237,10 @@ def is_integer(num):
 
 
 def check_draw(cards, qty, gap):
+    """
+    Check if there is a straight draw in the list of cards. Can specify how many cards the
+    straight draw is and how many gaps are acceptable.
+    """
     # Assume cards are sorted
     for i in range((len(cards) - qty) + 1):
         if cardlist.get_allgaps(cards[i: qty + i]) <= gap:
@@ -234,4 +250,7 @@ def check_draw(cards, qty, gap):
 
 
 def extract_discards(cards, keep):
+    """
+    Returns the cards we should discard from a group of cards.
+    """
     return [c for c in cards if c not in keep]

@@ -24,6 +24,10 @@ COLORS = {
 
 
 def color(string, fg, bg='GRAY', STYLE='NORMAL'):
+    """
+    Returns a colored version of the given string. Can specify the foreground color, background
+    color, and style of returned text.
+    """
     if fg.upper() in COLORS:
         return '{}{};{};{}m{}{}'.format(
             CSI,
@@ -34,9 +38,3 @@ def color(string, fg, bg='GRAY', STYLE='NORMAL'):
             CSI_end)
     else:
         raise ValueError('Passed arg color is not in the available colors!')
-
-if __name__ == "__main__":
-    text = 'Octavia is best pony!'
-    print(color(text, 'green'))
-    print(color(text, 'red'))
-    print(color(text, 'yellow'))
