@@ -185,3 +185,10 @@ class Table():
             if s is not None:
                 players[i] = s
         return players
+
+    def stackdict(self):
+        """ Returns a name/stacksize dictionary for each player at the table. """
+        stacks = {}
+        for p in self:
+            stacks[p.name] = p.chips
+        return stacks

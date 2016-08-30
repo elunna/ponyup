@@ -24,11 +24,3 @@ def effective(table):
 def stacklist(table):
     """ Returns a list of all the stack sizes. """
     return [p.chips for p in table]
-
-
-def stackdict(table):
-    """ Returns a name/stacksize dictionary for each player at the table. """
-    stacks = {}
-    for p in table:
-        stacks[p.name] = p.chips
-    return stacks
