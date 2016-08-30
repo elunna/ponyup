@@ -446,3 +446,12 @@ class TestPoker(unittest.TestCase):
     # Award 1 player 100 chips. Their stack goes up 100.
     # Try awarding -100. Should raise an exception.
     # Try awarding a player with no cards. Should raise an exception.
+
+    """
+    Tests for next_street()
+    """
+    def test_nextstreet_street0_streetIs1(self):
+        self.r.next_street()
+        expected = 1
+        result = self.r.street
+        self.assertEqual(expected, result)

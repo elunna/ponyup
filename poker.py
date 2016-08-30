@@ -325,3 +325,6 @@ class Round():
         txt = w_txt.strip().rjust(84)
         print(txt)
         player.add_chips(amt)
+
+    def next_street(self):
+        self.street += 1
