@@ -1,11 +1,20 @@
 import unittest
 import betting
+import draw5
+import setup_table
 
 
 class TestBetting(unittest.TestCase):
     """
-    Tests for calc_odds(bet, pot):
+    Setup a session and round, with a table filled with 6 players.
     """
+    def setUp(self, seats=6):
+        g = draw5.Draw5Session('FIVE CARD DRAW', tablesize=6)
+        g._table = setup_table.test_table(seats)
+        g._table.move_button()
+        self.assertEqual(g._table.TOKENS['D'], 0)  # verify the button is 0
+        self.r = g.new_round()
+        self.br = betting.BettingRound(self.r)
 
     """
     Tests for BettingRound initialization
@@ -44,6 +53,25 @@ class TestBetting(unittest.TestCase):
     """
     Tests for get_bettor()
     """
+    # 6 players, new table. Preflop. BTN=0, SB=1, BB=2. bettor should be 3.
+    def test_getbettor_6plyr_preflop_returns3(self):
+        self.setUp(6)
+        expected = self.r._table.seats[3]
+        result = self.br.get_bettor()
+        self.assertEqual(expected, result)
+
+    # 6 players, new table. Postflop. BTN=0, SB=1, BB=2. bettor should be 1.
+    # 2 players, new table. Preflop. BTN/SB=0, BB=1. bettor should be 0.
+    # 2 players, new table. Postflop. BTN/SB=0, BB=1. bettor should be 1.
+
+    """
+    Tests for get_closer()
+    """
+    # 6 players, new table. Preflop. BTN=0, SB=1, BB=2. closer should be 2.
+    # 6 players, new table. Postflop. BTN=0, SB=1, BB=2. bettor should be 0.
+
+    # 2 players, new table. Preflop. BTN/SB=0, BB=1. closer should be 1.
+    # 2 players, new table. Postflop. BTN/SB=0, BB=1. bettor should be 0.
 
 ################################################################################
     """

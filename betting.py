@@ -156,6 +156,12 @@ class BettingRound():
         """
         return self.r._table.seats[self.bettor]
 
+    def get_closer(self):
+        """
+        Returns the player who will close the betting.
+        """
+        return self.r._table.seats[self.closer]
+
 
 def calc_odds(bet, pot):
     """
