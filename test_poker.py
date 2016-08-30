@@ -471,20 +471,6 @@ class TestPoker(unittest.TestCase):
     # Export the cost variable.
 
     """
-    Tests for process_option(option)
-    """
-    # CHECK - bet level is same
-    # CHECK - Players chips stay the same
-    # FOLD - player doesn't have cards
-    # FOLD - Players chips stay the same
-    # BET - bet level is raised by one
-    # BET - Players chips are diminished by the bet amount
-    # RAISE - bet level is raised by one
-    # RAISE - Players chips are diminished by the raiseamount
-    # CHECK - bet level is same
-    # COMPLETE - Players chips are diminished by the bet amount
-
-    """
     Tests for showdown()
     """
 
@@ -514,3 +500,10 @@ class TestPoker(unittest.TestCase):
         expected = 6
         result = len(self.r.get_valuelist())
         self.assertEqual(expected, result)
+
+    """
+    Tests for award_pot(player, amt)
+    """
+    # Award 1 player 100 chips. Their stack goes up 100.
+    # Try awarding -100. Should raise an exception.
+    # Try awarding a player with no cards. Should raise an exception.

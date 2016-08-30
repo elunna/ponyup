@@ -312,7 +312,7 @@ class Round():
             else:
                 o = strategy.makeplay(p, self, options)
 
-            action_string = self.process_option(o)
+            action_string = betting.process_option(o, self)
             print(action_string)
 
             #  if self._table.valid_bettors() == 1:
@@ -335,35 +335,6 @@ class Round():
             # The betting round is over, and there are multiple players still remaining.
             self.street += 1
             return None
-
-    def process_option(self, option):
-        """ Performs the option picked by a player. """
-        p = self._table.seats[self.bettor]
-
-        if option[0] == 'FOLD':
-            self.muck.extend(p.fold())
-        elif option[0] == 'ALLIN':
-            return '{} is all in.'.format(p)
-        elif option[2] > 0:
-            # It's a raise, so we'll need to reset last better.
-            self.closer = self._table.next_player_w_cards(self.bettor, -1)
-            self.pot += p.bet(option[1])
-            self.level += option[2]
-        else:
-            self.pot += p.bet(option[1])
-
-        act_str = ''
-        act_str += '  ' * self.level
-        act_str += '{} {}s'.format(p, option[0].lower())
-
-        amt = colors.color(' $' + str(option[1]), 'yellow')
-
-        if option[0] in ['BET', 'RAISE']:
-            return colors.color(act_str, 'red') + amt
-        elif option[0] in ['FOLD', 'CHECK']:
-            return colors.color(act_str, 'purple')
-        else:
-            return colors.color(act_str, 'white') + amt
 
     def showdown(self):
         """
