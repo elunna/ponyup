@@ -3,7 +3,7 @@ from collections import namedtuple
 import colors
 import strategy
 
-Option = namedtuple('Option', ['action', 'cost', 'level'])
+Action = namedtuple('Action', ['name', 'cost', 'level'])
 
 
 class BettingRound():
@@ -124,30 +124,30 @@ class BettingRound():
 
         if self.r.street == 0 and completing:
             # Completing the small blind
-            option_dict['f'] = Option('FOLD', 0, 0)
-            option_dict['c'] = Option('COMPLETE', cost, 0)
-            option_dict['r'] = Option('RAISE', cost + self.betsize, 1)
+            option_dict['f'] = Action('FOLD', 0, 0)
+            option_dict['c'] = Action('COMPLETE', cost, 0)
+            option_dict['r'] = Action('RAISE', cost + self.betsize, 1)
 
         elif cost == 0 and self.level >= 1:
             # Typical BB, Straddle, or post situation.
-            option_dict['c'] = Option('CHECK', 0, 0)
-            option_dict['r'] = Option('RAISE', cost + self.betsize, 1)
+            option_dict['c'] = Action('CHECK', 0, 0)
+            option_dict['r'] = Action('RAISE', cost + self.betsize, 1)
 
         elif cost == 0 and self.level == 0:
             # Noone has opened betting yet on a postblind round
-            option_dict['c'] = Option('CHECK', 0, 0)
-            option_dict['b'] = Option('BET', self.betsize, 1)
+            option_dict['c'] = Action('CHECK', 0, 0)
+            option_dict['b'] = Action('BET', self.betsize, 1)
 
         elif cost > 0 and self.level < self.betcap:
             # There has been a bet/raises, but still can re-raise
-            option_dict['f'] = Option('FOLD', 0, 0)
-            option_dict['c'] = Option('CALL', cost, 0)
-            option_dict['r'] = Option('RAISE', cost + self.betsize, 1)
+            option_dict['f'] = Action('FOLD', 0, 0)
+            option_dict['c'] = Action('CALL', cost, 0)
+            option_dict['r'] = Action('RAISE', cost + self.betsize, 1)
 
         elif cost > 0 and self.level == self.betcap:
             # The raise cap has been met, can only call or fold.
-            option_dict['f'] = Option('FOLD', 0, 0)
-            option_dict['c'] = Option('CALL', cost, 0)
+            option_dict['f'] = Action('FOLD', 0, 0)
+            option_dict['c'] = Action('CALL', cost, 0)
 
         return option_dict
 
@@ -172,8 +172,8 @@ def menu(options=None):
     """
     Display a list of betting options for the current player.
     """
-    nice_opts = ['[' + colors.color(v.action[0], 'white', STYLE='BOLD') + ']' +
-                 v.action[1:].lower()
+    nice_opts = ['[' + colors.color(v.name[0], 'white', STYLE='BOLD') + ']' +
+                 v.name[1:].lower()
                  for k, v in sorted(options.items())]
     choices = '/'.join(nice_opts)
 
@@ -193,7 +193,7 @@ def allin_option():
     """
     Returns the option for players that are all-in.
     """
-    return Option('ALLIN', 0, 0)
+    return Action('ALLIN', 0, 0)
 
 
 def spacing(level):
