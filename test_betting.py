@@ -252,6 +252,47 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    # Tests for next_bettor()
+    """
+    # 6 players, street 1: Current bettor=3, next should be 4
+    def test_nextbettor_6players_street1_returnsPlayer4(self):
+        self.setUp(6)
+        self.br = betting.BettingRound(self.r)
+        expected = 4
+        nb = self.br.next_bettor()
+        result = self.r._table.get_index(nb)
+        self.assertEqual(expected, result)
+
+    # 6 players, street 2: Current bettor=1, next should be 2
+    def test_nextbettor_6players_street2_returnsPlayer2(self):
+        self.setUp(6)
+        self.r.next_street()
+        self.br = betting.BettingRound(self.r)
+        expected = 2
+        nb = self.br.next_bettor()
+        result = self.r._table.get_index(nb)
+        self.assertEqual(expected, result)
+
+    # 2 players, street 1: Current bettor=0, next should be 1
+    def test_nextbettor_2players_street1_returnsPlayer1(self):
+        self.setUp(2)
+        self.br = betting.BettingRound(self.r)
+        expected = 1
+        nb = self.br.next_bettor()
+        result = self.r._table.get_index(nb)
+        self.assertEqual(expected, result)
+
+    # 2 players, street2: Current bettor=1, next should be 0
+    def test_nextbettor_2players_street2_returnsPlayer0(self):
+        self.setUp(2)
+        self.r.next_street()
+        self.br = betting.BettingRound(self.r)
+        expected = 0
+        nb = self.br.next_bettor()
+        result = self.r._table.get_index(nb)
+        self.assertEqual(expected, result)
+
+    """
     # Tests for action_string(self, action):
     """
     # Bet

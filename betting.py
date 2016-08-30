@@ -53,7 +53,7 @@ class BettingRound():
                 playing = False
             else:
                 # Set next bettor
-                self.bettor = self.r._table.next_player_w_cards(self.bettor)
+                self.bettor = self.next_bettor()
 
         else:
             # The betting round is over, and there are multiple players still remaining.
@@ -135,6 +135,8 @@ class BettingRound():
         return option_dict
 
     def set_bettor_and_closer(self):
+        if self.r._table.TOKENS['D'] == -1:
+            raise Exception('Cannot set bettor or closer in the if button isn\'t set!')
         if self.r.street == 0:
             self.closer = self.r._table.TOKENS['BB']
             self.bettor = self.r._table.next(self.closer)
@@ -177,6 +179,10 @@ class BettingRound():
 
     def cost(self, amt_invested):
         return (self.betsize * self.level) - amt_invested
+
+    def next_bettor(self):
+        nb = self.r._table.next_player_w_cards(self.bettor)
+        return self.r._table.seats[nb]
 
 
 def calc_odds(bet, pot):
