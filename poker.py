@@ -151,16 +151,6 @@ class Round():
         actions += '{} posts ${}\n'.format(bb, self.blinds.BB)
         return actions
 
-    def get_valuelist(self):
-        """
-        Find all players with cards; return a list of hand values and player objects.
-        """
-        return [(p._hand.value, p) for p in self._table.get_players(CARDS=True)]
-
-    def valuelist2(self):
-        """ Find all the players with cards and return a list of hand values. """
-        return [p._hand.value for p in self._table.get_players(hascards=True)]
-
     def invested(self, player):
         """
         Return the difference between the players current stack-size and the amount at the

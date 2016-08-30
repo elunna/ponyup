@@ -475,33 +475,6 @@ class TestPoker(unittest.TestCase):
     """
 
     """
-    Tests for get_valuelist()
-    """
-    # No players have cards, returns empty list
-    def test_getvaluelist_nocards_emptylist(self):
-        self.r._table.move_button()
-        expected = []
-        result = self.r.get_valuelist()
-        self.assertEqual(expected, result)
-
-    # 1 player with cards, list is 1 long.
-    def test_getvaluelist_1hascards_listis1long(self):
-        self.r._table.move_button()
-        c = card.Card('A', 's')
-        self.r._table.seats[0].add_card(c)
-        expected = 1
-        result = len(self.r.get_valuelist())
-        self.assertEqual(expected, result)
-
-    # 6 players with cards, list is 6 long.
-    def test_getvaluelist_6havecards_listis6long(self):
-        self.r._table.move_button()
-        self.r.deal_cards(1)
-        expected = 6
-        result = len(self.r.get_valuelist())
-        self.assertEqual(expected, result)
-
-    """
     Tests for award_pot(player, amt)
     """
     # Award 1 player 100 chips. Their stack goes up 100.
