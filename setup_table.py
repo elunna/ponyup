@@ -36,7 +36,7 @@ def make(num, hero=None, gametype="DRAW5"):
     return t
 
 
-def test_table(seats):
+def test_table(seats, cards=False, CHIPS=STARTINGCHIPS):
     # Populate a Table of the specified # of seats with players.
     # This table doesn't have button or blinds set.
     t = table.Table(seats)
@@ -44,6 +44,9 @@ def test_table(seats):
     for i in range(seats):
         t.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
         t.seats[i].add_chips(STARTINGCHIPS)
+
+    if cards:
+        deal_cards(t, 5)
     return t
 
 
@@ -51,10 +54,10 @@ def allin_table(seats, REVERSEHANDS=False):
     # Populates a table with different levels of stack sizes by 100's
     # ex: 100, 200, 300, 400, etc.
     DEFAULT_CHIPS = 100
-    t = table.Table(seats)
-    for i in range(seats):
-        t.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
-        t.seats[i].add_chips(DEFAULT_CHIPS * (i + 1))
+    t = test_table(seats)
+
+    for i, p in enumerate(t):
+        p.chips = DEFAULT_CHIPS * (i + 1)
 
     if REVERSEHANDS is True:
         deal_hands_weakfirst(t)
@@ -63,11 +66,12 @@ def allin_table(seats, REVERSEHANDS=False):
     return t
 
 
-def deal_cards(table):
+def deal_cards(table, qty=5):
     d = deck.Deck()
 
     for p in table:
-        p.add_card(d.deal())
+        for i in range(qty):
+            p.add_card(d.deal())
 
 
 def deal_hands_strongfirst(table):
