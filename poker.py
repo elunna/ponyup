@@ -127,7 +127,7 @@ class Round():
         All players bet the ante amount and it's added to the pot.
         """
         for p in self._table:
-            self.pot += p.bet(self._session.blinds.ANTE)
+            self.pot += p.bet(self.blinds.ANTE)
 
     def post_blinds(self):
         """
