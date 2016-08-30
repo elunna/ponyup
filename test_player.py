@@ -95,6 +95,12 @@ class TestPlayer(unittest.TestCase):
         result = p.chips
         self.assertEqual(expected, result)
 
+    # If a player has 1 and bets 1, they have 0 chips.
+    def test_bet_negativebet_raisesException(self):
+        p = player.Player('Erik')
+        p.add_chips(1)
+        self.assertRaises(ValueError, p.bet, -1)
+
     """
     Tests for add_chips(amt)
     """

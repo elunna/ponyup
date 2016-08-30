@@ -27,6 +27,8 @@ class Player():
         #  return self.name == other.name
 
     def bet(self, amt):
+        if amt < 0:
+            raise ValueError('Player cannot bet a negative amount!')
         if amt > self.chips:
             # Put the player all-in
             amt = self.chips
