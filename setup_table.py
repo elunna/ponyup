@@ -4,6 +4,8 @@ import player
 import player_5card
 import table
 
+STARTINGCHIPS = 1000
+
 
 def make(num, hero=None, gametype="DRAW5"):
     # The hero variable lets someone pass in a Human player name
@@ -21,16 +23,16 @@ def make(num, hero=None, gametype="DRAW5"):
             t.add_player(i, player_5card.Player5Card(nameset.pop()))
         else:
             nameset.pop()
+        t.seats[i].chips = STARTINGCHIPS
     return t
 
 
 def test_table(seats):
     # Populate a Table of the specified # of seats with players.
-    DEFAULT_CHIPS = 1000
     t = table.Table(seats)
     for i in range(seats):
         t.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
-        t.seats[i].add_chips(DEFAULT_CHIPS)
+        t.seats[i].add_chips(STARTINGCHIPS)
     return t
 
 
