@@ -296,12 +296,6 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for setup_betting()
-    """
-    # 2 players. SB and BTN should be together.
-    # 2 players. BB is not BTN.
-
-    """
     Tests for make_sidepots(self, _stacks):
     """
     # 2 players, 1 allin
@@ -463,12 +457,6 @@ class TestPoker(unittest.TestCase):
     # Award 1 player 100 chips. Their stack goes up 100.
     # Award 2 players 100 chips. Each stack goes up 50
     # Award 2 players -100 chips. Raise exception.
-
-    """
-    Tests for betting_round()
-    """
-    # Export the invested variable to betting.has_invested(player)
-    # Export the cost variable.
 
     """
     Tests for showdown()

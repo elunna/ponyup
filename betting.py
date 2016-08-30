@@ -36,12 +36,6 @@ class BettingRound():
             #  self.closer = table.next_player_w_cards(before_button)
             self.betstack = r._table.stackdict()
 
-    def get_bettor(self):
-        """
-        Returns the current active bettor.
-        """
-        return self.r._table.seats[self.bettor]
-
     def play(self):
         """
         Performs a round of betting between all the players that have cards and chips.
@@ -156,6 +150,12 @@ class BettingRound():
             option_dict['c'] = Option('CALL', cost, 0)
 
         return option_dict
+
+    def get_bettor(self):
+        """
+        Returns the current active bettor.
+        """
+        return self.r._table.seats[self.bettor]
 
 
 def calc_odds(bet, pot):
