@@ -12,7 +12,7 @@ class BettingRound():
         Manages the betting info and activities. Takes in a Round object as r.
         """
         self.r = r
-        self.betcap = 4
+        self.BETCAP = 4
         self.set_bettor_and_closer()
 
         # Preflop: Headsup
@@ -131,13 +131,13 @@ class BettingRound():
             option_dict['c'] = Action('CHECK', 0, 0)
             option_dict['b'] = Action('BET', self.betsize, 1)
 
-        elif cost > 0 and self.level < self.betcap:
+        elif cost > 0 and self.level < self.BETCAP:
             # There has been a bet/raises, but still can re-raise
             option_dict['f'] = Action('FOLD', 0, 0)
             option_dict['c'] = Action('CALL', cost, 0)
             option_dict['r'] = Action('RAISE', cost + self.betsize, 1)
 
-        elif cost > 0 and self.level == self.betcap:
+        elif cost > 0 and self.level == self.BETCAP:
             # The raise cap has been met, can only call or fold.
             option_dict['f'] = Action('FOLD', 0, 0)
             option_dict['c'] = Action('CALL', cost, 0)
