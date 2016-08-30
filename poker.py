@@ -1,5 +1,6 @@
 from __future__ import print_function
 import betting
+import blinds as b
 import colors
 import deck
 import setup_table
@@ -12,12 +13,15 @@ class Session():
     The Session object manages the general structure of a poker game. It sets up the essentials:
         game type, the table, and stakes.
     """
-    def __init__(self, gametype, blinds, tablesize=6, hero=None):
+    def __init__(self, gametype, blinds=None, tablesize=6, hero=None):
         """
         Initialize the poker Session settings.
         """
 
-        self.blinds = blinds
+        if blinds is None:
+            self.blinds = b.Blinds()
+        else:
+            self.blinds = blinds
         self.rounds = 1
         self._table = setup_table.make(tablesize, hero)
         self._table.randomize_button()
@@ -31,6 +35,9 @@ class Session():
         _str += stakes.rjust(DISPLAYWIDTH)
 
         return _str
+
+    def new_round(self):
+        return Round(self)
 
     def play(self):
         """
