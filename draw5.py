@@ -43,21 +43,12 @@ class Draw5Session(poker.Session):
                 # Showdown!
                 award_dict = _round.showdown()
             else:
-                #  winner = _round._table.get_players(CARDS=True)
-                #  award_dict = _round.split_pot(winner, _round.pot)
                 award_dict = {_round.pot: victor}
         else:
-            #  winner = _round._table.get_players(CARDS=True)
-            #  award_dict = _round.split_pot(winner, _round.pot)
             award_dict = {_round.pot: victor}
-
-        # Award pot(s)
-        #  for plyr, amt in award_dict.items():
-            #  betting.award_pot(plyr, int(amt))
 
         _round.process_awards(award_dict)
 
-        # ================== CLEANUP
         # Cleanup all cards
         _round.muck_all_cards()
         _round.verify_muck()
