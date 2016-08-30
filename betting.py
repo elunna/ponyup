@@ -23,7 +23,7 @@ class BettingRound():
             self.bettor = r._table.next(self.closer)
 
             # Copy the starting stack for the first round (because blinds were posted)
-            self.betstack = r._table.stackdict()
+            self.betstack = r.starting_stacks
 
         elif r.street > 0:
             # postflop the first bettor is right after the button
