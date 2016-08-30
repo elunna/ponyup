@@ -63,7 +63,10 @@ class Draw5Session(poker.Session):
         _round.verify_muck()
 
         # Remove broke players
-        _round._table.remove_broke()
+        broke_players = _round._table.remove_broke()
+        if broke_players:
+            for p in broke_players:
+                print('{} left the table with no money!'.format(p))
 
         # Move the table button
         self._table.move_button()
