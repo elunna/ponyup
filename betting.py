@@ -64,24 +64,17 @@ class BettingRound():
         Performs the option picked by a player.
         """
         p = self.get_bettor()
-        #  actualbet = 0
 
         if action.name == 'FOLD':
             self.r.muck.extend(p.fold())
-        elif action.name == 'ALLIN':
-            pass
-            return colors.color('{}{} is all in.'.format(spacing(self.level), p), 'gray')
+        elif action.name in ['CHECK', 'ALLIN']:
+            return
         elif action.level > 0:
-            # It's a raise, so we'll need to reset last better.
+            # It's a bet or raise, so we'll need to reset last better.
             self.closer = self.r._table.next_player_w_cards(self.bettor, -1)
-            #  actualbet = p.bet(action.cost)
-            #  self.r.pot += actualbet
-            self.r.pot += action.cost
-            self.level += action.level
-        else:
-            #  actualbet = p.bet(action.cost)
-            #  self.r.pot += actualbet
-            self.level += action.level
+
+        self.r.pot += p.bet(action.cost)
+        self.level += action.level
 
     def action_string(self, action):
         p = self.get_bettor()
@@ -89,17 +82,20 @@ class BettingRound():
         act_str += spacing(self.level)
         act_str += '{} {}s'.format(p, action.name.lower())
 
-        #  amt = colors.color(' $' + str(actualbet), 'yellow')
         amt = colors.color(' $' + str(action.cost), 'yellow')
 
         if action.name in ['BET', 'RAISE']:
             return colors.color(act_str, 'red') + amt
+        elif action.name == 'CALL':
+            return colors.color(act_str, 'white') + amt
         elif action.name == 'FOLD':
             return colors.color(act_str, 'purple')
         elif action.name == 'CHECK':
             return colors.color(act_str, 'white')
+        elif action.name == 'ALLIN':
+            return colors.color('{}{} is all in.'.format(spacing(self.level), p), 'gray')
         else:
-            return colors.color(act_str, 'white') + amt
+            raise Exception('Error processing the action!')
 
     def get_options(self, cost):
         """
