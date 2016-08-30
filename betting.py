@@ -75,11 +75,12 @@ def get_options(cost, env):
 def process_option(option, env):
     """ Performs the option picked by a player. """
     p = env._table.seats[env.bettor]
+    SPACE = '  ' * env.level
 
     if option[0] == 'FOLD':
         env.muck.extend(p.fold())
     elif option[0] == 'ALLIN':
-        return '{} is all in.'.format(p)
+        return colors.color('{}{} is all in.'.format(SPACE, p), 'gray')
     elif option[2] > 0:
         # It's a raise, so we'll need to reset last better.
         env.closer = env._table.next_player_w_cards(env.bettor, -1)
@@ -89,14 +90,16 @@ def process_option(option, env):
         env.pot += p.bet(option[1])
 
     act_str = ''
-    act_str += '  ' * env.level
+    act_str += SPACE
     act_str += '{} {}s'.format(p, option[0].lower())
 
     amt = colors.color(' $' + str(option[1]), 'yellow')
 
     if option[0] in ['BET', 'RAISE']:
         return colors.color(act_str, 'red') + amt
-    elif option[0] in ['FOLD', 'CHECK']:
+    elif option[0] == 'FOLD':
         return colors.color(act_str, 'purple')
+    elif option[0] == 'CHECK':
+        return colors.color(act_str, 'white')
     else:
         return colors.color(act_str, 'white') + amt
