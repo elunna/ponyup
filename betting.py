@@ -54,7 +54,7 @@ class BettingRound():
                 print('pot is {}'.format(self.r.pot))
                 o = menu(options)
             else:
-                o = strategy.makeplay(p, self, options)
+                o = strategy.makeplay(p, self.r, options)
 
             action_string = self.process_option(o)
             print(action_string)

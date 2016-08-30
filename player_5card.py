@@ -52,13 +52,14 @@ class Player5Card(player.Player):
     def __init__(self, name, playertype=None):
         self.set_name(name)
         self._type = playertype
-
+        self.strategies = {}
         if playertype is None:
-            self.strat = random.choice(list(TYPES.keys()))
+            random_playertype = random.choice(list(TYPES.keys()))
+            self.strategies = TYPES[random_playertype]
         elif playertype not in TYPES:
             raise ValueError('type argument is not valid.')
         else:
-            self.strat = TYPES[playertype]
+            self.strategies = TYPES[playertype]
 
         self.chips = 0
         self._hand = hand.Hand()

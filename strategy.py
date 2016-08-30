@@ -12,7 +12,7 @@ To greatly simplify, we'll just start with cards and handvalue.
 """
 
 
-class Strategy():
+class strategiesegy():
     def __init__(self):
         self.pre_call = None
         self.pre_raise = None
@@ -21,21 +21,21 @@ class Strategy():
         self.bluff = None
 
 
-def makeplay(player, bet_round, options):
+def makeplay(player, _round, options):
     handval = player._hand.value
 
-    if bet_round.r.street == 0:
-        if handval >= player.strat['pre_raise']:
+    if _round.street == 0:
+        if handval >= player.strategies['pre_raise']:
             return pick_raise(options)
-        elif handval >= player.strat['pre_call']:
+        elif handval >= player.strategies['pre_call']:
             return pick_call(options)
         else:
             return pick_other(options)
 
-    elif bet_round.r.street == 1:
-        if handval >= player.strat['post_raise']:
+    elif _round.street == 1:
+        if handval >= player.strategies['post_raise']:
             return pick_raise(options)
-        elif handval >= player.strat['post_call']:
+        elif handval >= player.strategies['post_call']:
             return pick_call(options)
         else:
             return pick_other(options)
