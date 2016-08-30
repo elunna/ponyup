@@ -93,11 +93,44 @@ class TestBetting(unittest.TestCase):
     """
     Tests for get_closer()
     """
-    # 6 players, new table. Preflop. BTN=0, SB=1, BB=2. closer should be 2.
-    # 6 players, new table. Postflop. BTN=0, SB=1, BB=2. bettor should be 0.
+    # 6 players, new table. Predraw. BTN=0, SB=1, BB=2. closer should be 2.
+    def test_getcloser_6plyr_predraw_returnsseat2(self):
+        closer = 2
+        self.setUp(6)
+        self.br = betting.BettingRound(self.r)
+        expected = self.r._table.seats[closer]
+        result = self.br.get_closer()
+        self.assertEqual(expected, result)
 
-    # 2 players, new table. Preflop. BTN/SB=0, BB=1. closer should be 1.
-    # 2 players, new table. Postflop. BTN/SB=0, BB=1. bettor should be 0.
+    # 6 players, new table. Postdraw. BTN=0, SB=1, BB=2. closer should be 0.
+    def test_getcloser_6plyr_postdraw_returnsseat0(self):
+        closer = 0
+        self.setUp(6)
+        self.r.next_street()
+        self.br = betting.BettingRound(self.r)
+        expected = self.r._table.seats[closer]
+        result = self.br.get_closer()
+        self.assertEqual(expected, result)
+
+    # 2 players, new table. Predraw. BTN/SB=0, BB=1. closer should be 1.
+    def test_getcloser_2plyr_predraw_returnsseat1(self):
+        closer = 1
+        self.setUp(2)
+        self.br = betting.BettingRound(self.r)
+        expected = self.r._table.seats[closer]
+        result = self.br.get_closer()
+        self.assertEqual(expected, result)
+
+    # 2 players, new table. Postdraw. BTN/SB=0, BB=1. closer should be 0.
+    def test_getcloser_2plyr_postdraw_returnsseat0(self):
+        closer = 0
+        self.setUp(2)
+        self.r.next_street()
+        self.br = betting.BettingRound(self.r)
+        expected = self.r._table.seats[closer]
+        result = self.br.get_closer()
+        self.assertEqual(expected, result)
+
 
 ################################################################################
     """
