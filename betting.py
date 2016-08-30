@@ -50,7 +50,7 @@ class BettingRound():
 
             if p.is_allin():
                 o = allin_option()
-            elif p.playertype == 'HUMAN':
+            elif p.is_human():
                 print('pot is {}'.format(self.r.pot))
                 o = menu(options)
             else:
