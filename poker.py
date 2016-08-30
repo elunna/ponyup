@@ -315,15 +315,11 @@ class Round():
             action_string = betting.process_option(o, self)
             print(action_string)
 
-            #  if self._table.valid_bettors() == 1:
             cardholders = self._table.get_players(CARDS=True)
             if len(cardholders) == 1:
                 oneleft = '{}Only one player left!'.format(betting.spacing(self.level))
                 print(colors.color(oneleft, 'LIGHTBLUE'))
-                #  winner = self._table.seats[self._table.next_player_w_cards(self.bettor)]
-                #  winner =
-                # Return the single winner as a list so award_pot can use it.
-                return cardholders
+                return cardholders.pop()
 
             elif self.bettor == self.closer:
                 # Reached the last bettor, betting is closed.
@@ -347,20 +343,23 @@ class Round():
         allins = self.get_allins()
         sidepots = self.make_sidepots(allins)
         # Return the award_dict
-        return self.process_sidepots(sidepots)
+        self.process_awards(self.process_sidepots(sidepots))
 
     def process_awards(self, award_dict):
         for sidepot, winners in award_dict.items():
             for p, s in self.split_pot(winners, sidepot).items():
+
+                h_txt = '{:>15} wins with a {}: {}'.format(
+                    str(p),
+                    str(p._hand.handrank),
+                    str(p._hand.description)
+                )
+                print(h_txt.strip().rjust(70))
                 self.award_pot(p, s)
 
     def award_pot(self, player, amt):
-        h_txt = '{:>15} wins with a {}: {}'.format(str(player), str(player._hand.handrank),
-                                                   str(player._hand.description))
         chips = colors.color('${}'.format(amt), 'yellow')
         w_txt = '{:>15} wins {}'.format(str(player), chips)
-        txt = h_txt.strip().rjust(70)
-        txt += '\n'
-        txt += w_txt.strip().rjust(84)
+        txt = w_txt.strip().rjust(84)
         print(txt)
         player.add_chips(amt)

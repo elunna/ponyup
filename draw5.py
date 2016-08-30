@@ -42,13 +42,13 @@ class Draw5Session(poker.Session):
 
             if victor is None:
                 # Showdown!
-                award_dict = _round.showdown()
+                _round.showdown()
             else:
-                award_dict = {_round.pot: victor}
+                # 1 left:
+                _round.award_pot(victor, _round.pot)
         else:
-            award_dict = {_round.pot: victor}
-
-        _round.process_awards(award_dict)
+            # 1 left:
+            _round.award_pot(victor, _round.pot)
 
         # Cleanup all cards
         _round.muck_all_cards()
