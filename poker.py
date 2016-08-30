@@ -7,24 +7,34 @@ import setup_table
 
 DISPLAYWIDTH = 70
 
+STREETS = {
+    'OMAHA': [1, 1, 2, 2],
+    'HOLDEM': [1, 1, 2, 2],
+    'FIVE CARD DRAW': [1, 2],
+    'FIVE CARD STUD': [1, 1, 2, 2],
+    'SEVEN CARD STUD': [1, 1, 2, 2, 2],
+}
+
 
 class Session():
     """
     The Session object manages the general structure of a poker game. It sets up the essentials:
         game type, the table, and stakes.
     """
-    def __init__(self, gametype, blinds=None, tablesize=6, hero=None):
+    def __init__(self, gametype, blinds=None, tablesize=None, hero=None):
         """
         Initialize the poker Session settings.
         """
+        self.gametype = gametype
+        self.rounds = 1
+        self._table = setup_table.make(tablesize, hero)
+        self._table.randomize_button()
 
+        self.streets = STREETS[gametype]
         if blinds is None:
             self.blinds = b.Blinds()
         else:
             self.blinds = blinds
-        self.rounds = 1
-        self._table = setup_table.make(tablesize, hero)
-        self._table.randomize_button()
 
     def __str__(self):
         """
@@ -53,6 +63,7 @@ class Round():
         """
         self.blinds = session.blinds
         self.street = 0
+        self.streets = session.streets
         self.pot = 0
         self.sidepots = {}
         self._table = session._table
@@ -61,7 +72,7 @@ class Round():
         self.d = deck.Deck()
         self.DECKSIZE = len(self.d)
 
-        #  Remember starting stacks of all playerso
+        #  Remember starting stacks of all players
         self.starting_stacks = self._table.stackdict()
 
     def __str__(self):

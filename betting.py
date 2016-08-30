@@ -147,10 +147,10 @@ class BettingRound():
             self.level = 0
 
     def set_betsize(self):
-        if self.r.street == 0:
-            self.betsize = self.r.blinds.BB
-        elif self.r.street > 0:
-            self.betsize = self.r.blinds.BB * 2
+        if self.r.street > len(self.r.streets):
+            raise Exception('The street is larger than the number of streets in the game!')
+        else:
+            self.betsize = self.r.streets[self.r.street] * self.r.blinds.BB
 
     def set_stacks(self):
         if self.r.street == 0:

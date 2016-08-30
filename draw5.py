@@ -12,7 +12,6 @@ class Draw5Session(poker.Session):
         """
         Play a round of Five Card Draw.
         """
-        #  _round = poker.Round(self)
         _round = self.new_round()
 
         if len(self._table.get_players(CARDS=True)) > 0:

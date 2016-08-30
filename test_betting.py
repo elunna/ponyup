@@ -216,7 +216,22 @@ class TestBetting(unittest.TestCase):
     """
     Tests for set_betsize(self):
     """
-    # Depends on the game type...
+    # FiveCardDraw: street 1, BB=2, betsize = 2
+    def test_setbetsize_street1_betsize2(self):
+        self.setUp(2)
+        self.br = betting.BettingRound(self.r)
+        expected = 2
+        result = self.br.betsize
+        self.assertEqual(expected, result)
+
+    # FiveCardDraw: street 2, BB=2, betsize = 4
+    def test_setbetsize_street2_betsize4(self):
+        self.setUp(2)
+        self.r.next_street()
+        self.br = betting.BettingRound(self.r)
+        expected = 4
+        result = self.br.betsize
+        self.assertEqual(expected, result)
 
     """
     Tests for set_stacks(self):
