@@ -200,4 +200,4 @@ def spacing(level):
     """
     Spaces the player actions by the current bet level.
     """
-    return '    ' * level
+    return '  ' * level
