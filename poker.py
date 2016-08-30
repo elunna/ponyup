@@ -318,7 +318,8 @@ class Round():
             #  if self._table.valid_bettors() == 1:
             cardholders = self._table.get_players(CARDS=True)
             if len(cardholders) == 1:
-                print('Only one player left!')
+                oneleft = '{}Only one player left!'.format(betting.spacing(self.level))
+                print(colors.color(oneleft, 'LIGHTBLUE'))
                 #  winner = self._table.seats[self._table.next_player_w_cards(self.bettor)]
                 #  winner =
                 # Return the single winner as a list so award_pot can use it.
