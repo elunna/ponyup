@@ -77,39 +77,38 @@ class BettingRound():
             # The betting round is over, and there are multiple players still remaining.
             return None
 
-    def process_option(self, option):
+    def process_option(self, action):
         """
         Performs the option picked by a player.
         """
         p = self.get_bettor()
         actualbet = 0
 
-        if option[0] == 'FOLD':
+        if action.name == 'FOLD':
             self.r.muck.extend(p.fold())
-        elif option[0] == 'ALLIN':
+        elif action.name == 'ALLIN':
             return colors.color('{}{} is all in.'.format(spacing(self.level), p), 'gray')
-        elif option[2] > 0:
+        elif action.level > 0:
             # It's a raise, so we'll need to reset last better.
             self.closer = self.r._table.next_player_w_cards(self.bettor, -1)
-            actualbet = p.bet(option[1])
+            actualbet = p.bet(action.cost)
             self.r.pot += actualbet
-            self.level += option[2]
+            self.level += action.level
         else:
-            actualbet = p.bet(option[1])
-            #  self.pot += p.bet(option[1])
+            actualbet = p.bet(action.cost)
             self.r.pot += actualbet
 
         act_str = ''
         act_str += spacing(self.level)
-        act_str += '{} {}s'.format(p, option[0].lower())
+        act_str += '{} {}s'.format(p, action.name.lower())
 
         amt = colors.color(' $' + str(actualbet), 'yellow')
 
-        if option[0] in ['BET', 'RAISE']:
+        if action.name in ['BET', 'RAISE']:
             return colors.color(act_str, 'red') + amt
-        elif option[0] == 'FOLD':
+        elif action.name == 'FOLD':
             return colors.color(act_str, 'purple')
-        elif option[0] == 'CHECK':
+        elif action.name == 'CHECK':
             return colors.color(act_str, 'white')
         else:
             return colors.color(act_str, 'white') + amt
