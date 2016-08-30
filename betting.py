@@ -14,19 +14,16 @@ class BettingRound():
         self.r = r
         self.BETCAP = 4
         self.set_bettor_and_closer()
+        self.set_level()
 
         # Preflop: Headsup
         if r.street == 0:
-            # Preflop the first bettor is right after the BB
-            self.level = 1
             self.betsize = r.blinds.BB
-
             # Copy the starting stack for the first round (because blinds were posted)
             self.betstack = r.starting_stacks
 
         elif r.street > 0:
             # postflop the first bettor is right after the button
-            self.level = 0
             self.betsize = r.blinds.BB * 2
             self.betstack = r._table.stackdict()
 
@@ -38,7 +35,7 @@ class BettingRound():
 
         while playing:
             p = self.get_bettor()
-            invested = self.betstack[p.name] - p.chips
+            invested = self.invested(p)
             cost = (self.betsize * self.level) - invested
             options = self.get_options(cost)
 
@@ -152,6 +149,12 @@ class BettingRound():
             self.bettor = self.r._table.next_player_w_cards(self.r._table.TOKENS['D'])
             self.closer = self.r._table.next_player_w_cards(self.bettor, -1)
 
+    def set_level(self):
+        if self.r.street == 0:
+            self.level = 1
+        else:
+            self.level = 0
+
     def get_bettor(self):
         """
         Returns the current active bettor.
@@ -163,6 +166,12 @@ class BettingRound():
         Returns the player who will close the betting.
         """
         return self.r._table.seats[self.closer]
+
+    def invested(self, player):
+        return self.betstack[player.name] - player.chips
+
+    def cost(self, amt_invested):
+        return (self.betsize * self.level) - amt_invested
 
 
 def calc_odds(bet, pot):

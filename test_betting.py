@@ -134,7 +134,6 @@ class TestBetting(unittest.TestCase):
     """
     Tests for set_bettor_and_closer()
     """
-
     # 6 players. Predraw. BTN=0, SB=1, BB=2. closer=2, bettor=3
     def test_setbettorandcloser_6plyr_predraw(self):
         closer, bettor = 2, 3
@@ -168,6 +167,52 @@ class TestBetting(unittest.TestCase):
         self.br = betting.BettingRound(self.r)
         self.assertEqual(closer, self.br.closer)
         self.assertEqual(bettor, self.br.bettor)
+
+    """
+    Tests for invested(player)
+    """
+    # Player bet 100 during the round.
+    def test_invested_playerbet100_returns100(self):
+        self.setUp(2)
+        self.br = betting.BettingRound(self.r)
+        bettor = self.br.get_bettor()
+        bettor.bet(100)
+        expected = 100
+        result = self.br.invested(bettor)
+        self.assertEqual(expected, result)
+
+    """
+    Tests for cost(self, amt_invested)
+    """
+    # Street 1: Bet = 2. Player hasn't put any money in. Cost = 2.
+    def test_cost_UTG_predraw_callfor2_costs2(self):
+        self.setUp(6)
+        self.br = betting.BettingRound(self.r)
+        invested = self.br.invested(self.br.get_bettor())
+        expected = 2
+        result = self.br.cost(invested)
+        self.assertEqual(expected, result)
+
+    # Street 1: Bet = 2. Bettor is SB, put in 1. Cost = 1.
+    def test_cost_SB_predraw_complete_costs1(self):
+        self.setUp(2)
+        self.r.post_blinds()
+        self.br = betting.BettingRound(self.r)
+        invested = self.br.invested(self.br.get_bettor())
+        expected = 1
+        result = self.br.cost(invested)
+        self.assertEqual(expected, result)
+
+    # Street 2: Bet = 2. Bettor is BB, Cost = 0.
+    def test_cost_BB_openbetting_costs0(self):
+        self.setUp(2)
+        self.r.next_street()
+        self.br = betting.BettingRound(self.r)
+        invested = self.br.invested(self.br.get_bettor())
+        expected = 0
+        result = self.br.cost(invested)
+        self.assertEqual(expected, result)
+
 
 ################################################################################
     """
