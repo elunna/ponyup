@@ -251,6 +251,14 @@ class TestBetting(unittest.TestCase):
         result = self.br.stacks
         self.assertEqual(expected, result)
 
+    """
+    # Tests for action_string(self, action):
+    """
+    # Bet
+    # Raise
+    # Call
+    # Fold
+    # Allin
 
 ################################################################################
     """
