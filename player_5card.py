@@ -1,20 +1,8 @@
 import hand
 import player
 import pokerhands
+import random
 
-
-class Player5Card(player.Player):
-    def __init__(self, name, playertype='FISH'):
-        self.set_name(name)
-        self.playertype = playertype
-
-        if playertype not in TYPES:
-            raise ValueError('type argument is not valid.')
-        else:
-            self.strat = TYPES[playertype]
-
-        self.chips = 0
-        self._hand = hand.Hand()
 
 FISH = {
     'pre_call': 0,
@@ -58,3 +46,19 @@ TYPES = {
     'MOUSE': MOUSE,
     'LION': LION,
 }
+
+
+class Player5Card(player.Player):
+    def __init__(self, name, playertype=None):
+        self.set_name(name)
+        self._type = playertype
+
+        if playertype is None:
+            self.strat = random.choice(list(TYPES.keys()))
+        elif playertype not in TYPES:
+            raise ValueError('type argument is not valid.')
+        else:
+            self.strat = TYPES[playertype]
+
+        self.chips = 0
+        self._hand = hand.Hand()

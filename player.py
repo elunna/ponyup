@@ -7,7 +7,7 @@ TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
 class Player():
     def __init__(self, name, playertype="CPU"):
         self.set_name(name)
-        self.playertype = playertype
+        self._type = playertype
         self.chips = 0
         self._hand = hand.Hand()
 
@@ -52,7 +52,7 @@ class Player():
     # hand management
     def add_card(self, card):
         # Make sure we can see the card! (if we're human...)
-        if self.playertype == 'HUMAN':
+        if self._type == 'HUMAN':
             card.hidden = False
         self._hand.add(card)
 
@@ -72,7 +72,7 @@ class Player():
         return upcards
 
     def is_human(self):
-        return self.playertype == 'HUMAN'
+        return self._type == 'HUMAN'
 
     def is_allin(self):
         return self.chips == 0
