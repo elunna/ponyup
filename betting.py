@@ -13,14 +13,13 @@ class BettingRound():
         """
         self.r = r
         self.betcap = 4
+        self.set_bettor_and_closer()
 
         # Preflop: Headsup
         if r.street == 0:
             # Preflop the first bettor is right after the BB
             self.level = 1
             self.betsize = r.blinds.BB
-            self.closer = r._table.TOKENS['BB']
-            self.bettor = r._table.next(self.closer)
 
             # Copy the starting stack for the first round (because blinds were posted)
             self.betstack = r.starting_stacks
@@ -29,11 +28,6 @@ class BettingRound():
             # postflop the first bettor is right after the button
             self.level = 0
             self.betsize = r.blinds.BB * 2
-
-            self.bettor = r._table.next_player_w_cards(r._table.TOKENS['D'])
-            self.closer = r._table.next_player_w_cards(self.bettor, -1)
-            #  before_button = (table.TOKENS['D'] - 1) % len(table)
-            #  self.closer = table.next_player_w_cards(before_button)
             self.betstack = r._table.stackdict()
 
     def play(self):
@@ -149,6 +143,14 @@ class BettingRound():
             option_dict['c'] = Action('CALL', cost, 0)
 
         return option_dict
+
+    def set_bettor_and_closer(self):
+        if self.r.street == 0:
+            self.closer = self.r._table.TOKENS['BB']
+            self.bettor = self.r._table.next(self.closer)
+        else:
+            self.bettor = self.r._table.next_player_w_cards(self.r._table.TOKENS['D'])
+            self.closer = self.r._table.next_player_w_cards(self.bettor, -1)
 
     def get_bettor(self):
         """

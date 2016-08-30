@@ -131,6 +131,43 @@ class TestBetting(unittest.TestCase):
         result = self.br.get_closer()
         self.assertEqual(expected, result)
 
+    """
+    Tests for set_bettor_and_closer()
+    """
+
+    # 6 players. Predraw. BTN=0, SB=1, BB=2. closer=2, bettor=3
+    def test_setbettorandcloser_6plyr_predraw(self):
+        closer, bettor = 2, 3
+        self.setUp(6)
+        self.br = betting.BettingRound(self.r)
+        self.assertEqual(closer, self.br.closer)
+        self.assertEqual(bettor, self.br.bettor)
+
+    # 6 players. Postdraw. BTN=0, SB=1, BB=2. closer=0, bettor=1
+    def test_setbettorandcloser_6plyr_postdraw(self):
+        closer, bettor = 0, 1
+        self.setUp(6)
+        self.r.next_street()
+        self.br = betting.BettingRound(self.r)
+        self.assertEqual(closer, self.br.closer)
+        self.assertEqual(bettor, self.br.bettor)
+
+    # 2 players. Predraw. BTN/SB=0, BB=1. closer=1, bettor=0
+    def test_setbettorandcloser_2plyr_predraw(self):
+        closer, bettor = 1, 0
+        self.setUp(2)
+        self.br = betting.BettingRound(self.r)
+        self.assertEqual(closer, self.br.closer)
+        self.assertEqual(bettor, self.br.bettor)
+
+    # 2 players. Postdraw. BTN/SB=0, BB=1. closer=0, bettor=1
+    def test_setbettorandcloser_2plyr_postdraw(self):
+        closer, bettor = 0, 1
+        self.setUp(2)
+        self.r.next_street()
+        self.br = betting.BettingRound(self.r)
+        self.assertEqual(closer, self.br.closer)
+        self.assertEqual(bettor, self.br.bettor)
 
 ################################################################################
     """
