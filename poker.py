@@ -14,7 +14,9 @@ class Session():
         game type, the table, and stakes.
     """
     def __init__(self, gametype, blinds, tablesize=6, hero=None):
-        """Initialize the poker Game."""
+        """
+        Initialize the poker Session settings.
+        """
 
         self.blinds = blinds
         self.rounds = 1
@@ -25,7 +27,9 @@ class Session():
             p.chips = STARTINGCHIPS
 
     def __str__(self):
-        """ Represents the game as the round # and the stakes level. """
+        """
+        Returns the Session info.
+        """
         _str = 'Round: {:<5}\n'.format(self.rounds)
         stakes = 'Stakes: {}'.format(self.blinds)
         _str += stakes.rjust(DISPLAYWIDTH)
@@ -33,7 +37,9 @@ class Session():
         return _str
 
     def play(self):
-        """ Defines the structure of how a single hand in the poker game is played."""
+        """
+        Defines the structure of how a single hand in the poker game is played.
+        """
         print('Stub play function')
 
 
@@ -56,14 +62,17 @@ class Round():
         self.starting_stacks = self._table.stackdict()
 
     def __str__(self):
-        """ Show the current size of the pot. """
+        """
+        Return info about the current round.
+        """
         _str = 'Pot: '
         _str += colors.color('${}'.format(self.pot), 'yellow')
         return _str.rjust(84)
 
     def deal_cards(self, qty, faceup=False):
         """
-        Deal the specified quantity of cards to each player.
+        Deal the specified quantity of cards to each player. If faceup is True, the cards are
+        dealt face-up, otherwise they are face-down.
         """
         for i in range(qty):
             for p in self._table:
@@ -73,6 +82,9 @@ class Round():
                 p.add_card(c)
 
     def show_cards(self):
+        """
+        Unhides all player hands and returns a string that shows all the player hands.
+        """
         _str = ''
         for p in self._table.get_players(CARDS=True):
             p.showhand()
@@ -81,11 +93,16 @@ class Round():
         return _str
 
     def sortcards(self):
+        """
+        Sort all cards in all players hands.
+        """
         for p in self._table:
             p._hand.sort()
 
     def muck_all_cards(self):
-        """ Muck all player hands, and muck the contents of the deck. """
+        """
+        Muck all player hands, and muck the contents of the deck.
+        """
         # Clear hands
         for p in self._table:
             self.muck.extend(p.fold())
@@ -94,7 +111,9 @@ class Round():
             self.muck.append(self.d.deal())
 
     def verify_muck(self):
-        """ Verify that the integrity of the deck has not been compromised. """
+        """
+        Verify that the integrity of the deck has not been compromised.
+        """
         # Make sure that all cards have been used up.
         if len(self.d) != 0:
             return False
@@ -108,7 +127,9 @@ class Round():
             return True
 
     def post_antes(self):
-        """ All players bet the ante amount and it's added to the pot. """
+        """
+        All players bet the ante amount and it's added to the pot.
+        """
         for p in self._table:
             self.pot += p.bet(self._session.blinds.ANTE)
 
@@ -145,10 +166,16 @@ class Round():
         return [p._hand.value for p in self._table.get_players(hascards=True)]
 
     def invested(self, player):
+        """
+        Return the difference between the players current stack-size and the amount at the
+        start of the round.
+        """
         return self.starting_stacks[player.name] - player.chips
 
     def get_allins(self):
-        """ Returns a list of all stack sizes that went all in this round."""
+        """
+        Returns a list of all stack sizes that went all-in this round.
+        """
         return [self.starting_stacks[p.name] for p in self._table.get_players(CARDS=True)
                 if p.is_allin()]
 
@@ -220,7 +247,9 @@ class Round():
         return [p for p in eligible_players if p._hand.value == best_hand]
 
     def best_hand_val(self, players):
-        """ Determine the best handvalue within the givenplayer group. """
+        """
+        Determine the best handvalue within the given player group.
+        """
         best = 0
         for p in players:
             if p._hand.value > best:
@@ -228,7 +257,9 @@ class Round():
         return best
 
     def get_eligible(self, stack_req):
-        """ Returns a list of players who had the minimum starting stack size. """
+        """
+        Returns a list of players who had the minimum starting stack size.
+        """
         cardholders = self._table.get_players(CARDS=True)
         return [p for p in cardholders if self.starting_stacks[p.name] >= stack_req]
 
@@ -238,7 +269,6 @@ class Round():
         they must split the pot If there is a remainder amount, we give it to the next left of
         the BTN.  (ie: Usually the SB)
         """
-
         award_dict = {}
         if len(winners) > 1:
             share = int(amt / len(winners))
@@ -257,6 +287,9 @@ class Round():
         return award_dict
 
     def betting_round(self):
+        """
+        Run through a round of betting. Returns a victor if it exists.
+        """
         br = betting.BettingRound(self)
         victor = br.play()
         self.street += 1
@@ -264,8 +297,8 @@ class Round():
 
     def showdown(self):
         """
-        Compare all the hands of players holding cards and determine the winner(s).
-        Return a dictionary of players and the amounts they will be awarded.
+        Compare all the hands of players holding cards and determine the winner(s). Awards each
+        winner the appropriate amount.
         """
         print(self.show_cards())
 
@@ -275,6 +308,10 @@ class Round():
         self.process_awards(self.process_sidepots(sidepots))
 
     def process_awards(self, award_dict):
+        """
+        Takes in the dictionary of awards/players and awards each player their share. Uses
+        split pot to correctly split up ties.
+        """
         for sidepot, winners in award_dict.items():
             for p, s in self.split_pot(winners, sidepot).items():
 
@@ -287,6 +324,9 @@ class Round():
                 self.award_pot(p, s)
 
     def award_pot(self, player, amt):
+        """
+        Adds the specified amount to a players stack.
+        """
         chips = colors.color('${}'.format(amt), 'yellow')
         w_txt = '{:>15} wins {}'.format(str(player), chips)
         txt = w_txt.strip().rjust(84)
