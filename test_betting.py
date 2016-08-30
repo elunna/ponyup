@@ -10,10 +10,11 @@ class TestBetting(unittest.TestCase):
     """
     def setUp(self, seats=6):
         g = draw5.Draw5Session('FIVE CARD DRAW', tablesize=6)
-        g._table = setup_table.allin_table(seats)
+        g._table = setup_table.test_table(seats, cards=True)
         g._table.move_button()
         self.assertEqual(g._table.TOKENS['D'], 0)  # verify the button is 0
         self.r = g.new_round()
+        self.r.post_blinds()
 
     """
     Tests for BettingRound initialization
@@ -176,7 +177,7 @@ class TestBetting(unittest.TestCase):
         self.setUp(2)
         self.br = betting.BettingRound(self.r)
         bettor = self.br.get_bettor()
-        bettor.bet(100)
+        bettor.bet(99)
         expected = 100
         result = self.br.invested(bettor)
         self.assertEqual(expected, result)
@@ -196,7 +197,6 @@ class TestBetting(unittest.TestCase):
     # Street 1: Bet = 2. Bettor is SB, put in 1. Cost = 1.
     def test_cost_SB_predraw_complete_costs1(self):
         self.setUp(2)
-        self.r.post_blinds()
         self.br = betting.BettingRound(self.r)
         invested = self.br.invested(self.br.get_bettor())
         expected = 1
@@ -211,6 +211,29 @@ class TestBetting(unittest.TestCase):
         invested = self.br.invested(self.br.get_bettor())
         expected = 0
         result = self.br.cost(invested)
+        self.assertEqual(expected, result)
+
+    """
+    Tests for set_betsize(self):
+    """
+    # Depends on the game type...
+
+    """
+    Tests for set_stacks(self):
+    """
+    def test_setstacks_predraw_fullstacks(self):
+        self.setUp(2)
+        self.br = betting.BettingRound(self.r)
+        expected = {'bob0': 1000, 'bob1': 1000}
+        result = self.br.stacks
+        self.assertEqual(expected, result)
+
+    def test_setstacks_postdraw_stacksminusblinds(self):
+        self.setUp(2)
+        self.r.next_street()
+        self.br = betting.BettingRound(self.r)
+        expected = {'bob0': 999, 'bob1': 998}
+        result = self.br.stacks
         self.assertEqual(expected, result)
 
 
