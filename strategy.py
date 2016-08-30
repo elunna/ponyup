@@ -21,10 +21,10 @@ class Strategy():
         self.bluff = None
 
 
-def makeplay(player, _game, options):
+def makeplay(player, bet_round, options):
     handval = player._hand.value
 
-    if _game.street == 0:
+    if bet_round.r.street == 0:
         if handval >= player.strat['pre_raise']:
             return pick_raise(options)
         elif handval >= player.strat['pre_call']:
@@ -32,7 +32,7 @@ def makeplay(player, _game, options):
         else:
             return pick_other(options)
 
-    elif _game.street == 1:
+    elif bet_round.r.street == 1:
         if handval >= player.strat['post_raise']:
             return pick_raise(options)
         elif handval >= player.strat['post_call']:

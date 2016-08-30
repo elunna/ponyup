@@ -3,8 +3,6 @@ import betting
 import colors
 import deck
 import setup_table
-import stacks
-import strategy
 
 STARTINGCHIPS = 1000
 DISPLAYWIDTH = 70
@@ -15,10 +13,10 @@ class Session():
     The Session object manages the general structure of a poker game. It sets up the essentials:
         game type, the table, and stakes.
     """
-    def __init__(self, gametype, structure, tablesize=6, hero=None):
+    def __init__(self, gametype, blinds, tablesize=6, hero=None):
         """Initialize the poker Game."""
 
-        self.blinds = structure
+        self.blinds = blinds
         self.rounds = 1
         self._table = setup_table.make(tablesize, hero)
         self._table.randomize_button()
@@ -44,26 +42,18 @@ class Round():
         """
         Initialize the next round of Poker.
         """
-        self._session = session
+        self.blinds = session.blinds
         self.street = 0
         self.pot = 0
         self.sidepots = {}
-        self.betcap = 4
-        self.betsize = 0
-        self.level = 0
         self._table = session._table
 
         self.muck = []
         self.d = deck.Deck()
         self.DECKSIZE = len(self.d)
 
-        # Create a list of the players from the table, and place the button at index 0
-        self.bettor = None
-        self.closer = None
-
         #  Remember starting stacks of all playerso
-        self.betstack = {}
-        self.starting_stacks = stacks.stackdict(self._table)
+        self.starting_stacks = self._table.stackdict()
 
     def __str__(self):
         """ Show the current size of the pot. """
@@ -137,11 +127,11 @@ class Round():
         bb = self._table.seats[self._table.TOKENS['BB']]
 
         # Bet the SB and BB amounts and add to the pot
-        self.pot += sb.bet(self._session.blinds.SB)
-        self.pot += bb.bet(self._session.blinds.BB)
+        self.pot += sb.bet(self.blinds.SB)
+        self.pot += bb.bet(self.blinds.BB)
         actions = ''
-        actions += '{} posts ${}\n'.format(sb, self._session.blinds.SB)
-        actions += '{} posts ${}\n'.format(bb, self._session.blinds.BB)
+        actions += '{} posts ${}\n'.format(sb, self.blinds.SB)
+        actions += '{} posts ${}\n'.format(bb, self.blinds.BB)
         return actions
 
     def get_valuelist(self):
@@ -161,32 +151,6 @@ class Round():
         """ Returns a list of all stack sizes that went all in this round."""
         return [self.starting_stacks[p.name] for p in self._table.get_players(CARDS=True)
                 if p.is_allin()]
-
-    def setup_betting(self):
-        """
-        Set betsize, level, currentbettor and lastbettor.
-        """
-        # Preflop: Headsup
-        if self.street == 0:
-            # Preflop the first bettor is right after the BB
-            self.level = 1
-            self.betsize = self._session.blinds.BB
-            self.closer = self._table.TOKENS['BB']
-            self.bettor = self._table.next(self.closer)
-            # Copy the starting stack for the first round (because blinds were posted)
-            self.betstack = self.starting_stacks.copy()
-
-        elif self.street > 0:
-            # postflop the first bettor is right after the button
-            self.level = 0
-            self.betsize = self._session.blinds.BB * 2
-
-            self.bettor = self._table.next_player_w_cards(self._table.TOKENS['D'])
-            before_button = (self._table.TOKENS['D'] - 1) % len(self._table)
-            self.closer = self._table.next_player_w_cards(before_button)
-
-            # Remember starting stack size.
-            self.betstack = stacks.stackdict(self._table)
 
     def make_sidepots(self, allins):
         """
@@ -293,45 +257,10 @@ class Round():
         return award_dict
 
     def betting_round(self):
-        """
-        Performs a round of betting between all the players that have cards and chips.
-        """
-        playing = True
-
-        while playing:
-            p = self._table.seats[self.bettor]
-            invested = self.betstack[p.name] - p.chips
-            cost = (self.betsize * self.level) - invested
-            options = betting.get_options(cost, self)
-
-            if p.is_allin():
-                o = betting.allin_option()
-            elif p.playertype == 'HUMAN':
-                print(self)
-                o = betting.menu(options)
-            else:
-                o = strategy.makeplay(p, self, options)
-
-            action_string = betting.process_option(o, self)
-            print(action_string)
-
-            cardholders = self._table.get_players(CARDS=True)
-            if len(cardholders) == 1:
-                oneleft = '{}Only one player left!'.format(betting.spacing(self.level))
-                print(colors.color(oneleft, 'LIGHTBLUE'))
-                return cardholders.pop()
-
-            elif self.bettor == self.closer:
-                # Reached the last bettor, betting is closed.
-                playing = False
-            else:
-                # Set next bettor
-                self.bettor = self._table.next_player_w_cards(self.bettor)
-
-        else:
-            # The betting round is over, and there are multiple players still remaining.
-            self.street += 1
-            return None
+        br = betting.BettingRound(self)
+        victor = br.play()
+        self.street += 1
+        return victor
 
     def showdown(self):
         """
