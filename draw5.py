@@ -38,6 +38,7 @@ class Draw5Session(poker.Session):
             # Post-draw betting round
             _round.setup_betting()
             victor = _round.betting_round()
+            print(_round)           # Display pot
 
             if victor is None:
                 # Showdown!
