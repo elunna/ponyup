@@ -30,6 +30,7 @@ class Table():
             if s is None:
                 # No player is occupying the seat
                 _str += '{}\n'.format(i)
+                continue
             else:
                 _str += '{:<5}'.format(i)
 
@@ -148,7 +149,7 @@ class Table():
         self.move_button()
 
     def remove_broke(self):
-        """ Remove players with no chips from the table. """
+        """ Remove players with no chips from the table and return them in a list. """
         players = []
         for p in self:
             if p.chips == 0:
