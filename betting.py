@@ -53,7 +53,7 @@ class BettingRound():
                 playing = False
             else:
                 # Set next bettor
-                self.bettor = self.next_bettor()
+                self.next_bettor()
 
         else:
             # The betting round is over, and there are multiple players still remaining.
@@ -181,8 +181,10 @@ class BettingRound():
         return (self.betsize * self.level) - amt_invested
 
     def next_bettor(self):
-        nb = self.r._table.next_player_w_cards(self.bettor)
-        return self.r._table.seats[nb]
+        self.bettor = self.r._table.next_player_w_cards(self.bettor)
+
+    def done(self):
+        return self.bettor == self.closer
 
 
 def calc_odds(bet, pot):
