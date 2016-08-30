@@ -9,14 +9,6 @@ import setup_table
 
 STAKES = blinds.Blinds()
 
-HANDS = (pokerhands.royalflush(),
-         pokerhands.straightflush_high(),
-         pokerhands.boat_high(),
-         pokerhands.flush_high(),
-         pokerhands.straight_high(),
-         pokerhands.set_high()
-         )
-
 
 class TestPoker(unittest.TestCase):
     """
@@ -35,24 +27,10 @@ class TestPoker(unittest.TestCase):
         g._table = setup_table.test_table(6)
         self.r = poker.Round(g)
 
-    def allin_table(self, seats):
+    def allin_table(self, seats, REVERSED_HANDS=False):
         g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6)
-        g._table = setup_table.allin_table(seats)
+        g._table = setup_table.allin_table(seats, REVERSED_HANDS)
         self.r = poker.Round(g)
-        # Deal out the hands: strongest first
-        for i, s in enumerate(self.r._table.seats):
-            s._hand.cards = HANDS[i]
-            s._hand.update()
-
-    def allin_table_reversed_hands(self, seats):
-        g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6)
-        g._table = setup_table.allin_table(seats)
-        self.r = poker.Round(g)
-        # Deal out the hands: strongest first
-        reversed_hands = list(reversed(HANDS))
-        for i, s in enumerate(self.r._table.seats):
-            s._hand.cards = list(reversed_hands[i])
-            s._hand.update()
 
     # New round - pot = 0
     def test_newround_potis0(self):
@@ -408,7 +386,7 @@ class TestPoker(unittest.TestCase):
     # Out of 2 players, should have a straight
     def test_besthandval_2players_straight(self):
         seats = 2
-        self.allin_table_reversed_hands(seats)
+        self.allin_table(seats, REVERSED_HANDS=True)
         players = self.r._table.get_players(CARDS=True)
         expected = evaluator.get_value(pokerhands.straight_high())
         result = self.r.best_hand_val(players)
@@ -418,7 +396,7 @@ class TestPoker(unittest.TestCase):
 
     def test_besthandval_3players_flush(self):
         seats = 3
-        self.allin_table_reversed_hands(seats)
+        self.allin_table(seats, REVERSED_HANDS=True)
         players = self.r._table.get_players(CARDS=True)
         expected = evaluator.get_value(pokerhands.flush_high(),)
         result = self.r.best_hand_val(players)
@@ -427,7 +405,7 @@ class TestPoker(unittest.TestCase):
     # Out of 4 players, should have a boat
     def test_besthandval_4players_fullhouse(self):
         seats = 4
-        self.allin_table_reversed_hands(seats)
+        self.allin_table(seats, REVERSED_HANDS=True)
         players = self.r._table.get_players(CARDS=True)
         expected = evaluator.get_value(pokerhands.boat_high(),)
         result = self.r.best_hand_val(players)
@@ -436,7 +414,7 @@ class TestPoker(unittest.TestCase):
     # Out of 5 players, should have a straightflush
     def test_besthandval_5players_straightflush(self):
         seats = 5
-        self.allin_table_reversed_hands(seats)
+        self.allin_table(seats, REVERSED_HANDS=True)
         players = self.r._table.get_players(CARDS=True)
         expected = evaluator.get_value(pokerhands.straightflush_high(),)
         result = self.r.best_hand_val(players)
@@ -445,7 +423,7 @@ class TestPoker(unittest.TestCase):
     # Out of 6 players, should have a royalflush
     def test_besthandval_6players_royalflush(self):
         seats = 6
-        self.allin_table_reversed_hands(seats)
+        self.allin_table(seats, REVERSED_HANDS=True)
         players = self.r._table.get_players(CARDS=True)
         expected = evaluator.get_value(pokerhands.royalflush(),)
         result = self.r.best_hand_val(players)
