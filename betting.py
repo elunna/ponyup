@@ -38,8 +38,8 @@ class BettingRound():
             else:
                 o = strategy.makeplay(p, self.r, options)
 
-            action_string = self.process_option(o)
-            print(action_string)
+            self.process_option(o)
+            print(self.action_string(o))
 
             cardholders = self.r._table.get_players(CARDS=True)
 
@@ -64,27 +64,33 @@ class BettingRound():
         Performs the option picked by a player.
         """
         p = self.get_bettor()
-        actualbet = 0
+        #  actualbet = 0
 
         if action.name == 'FOLD':
             self.r.muck.extend(p.fold())
         elif action.name == 'ALLIN':
+            pass
             return colors.color('{}{} is all in.'.format(spacing(self.level), p), 'gray')
         elif action.level > 0:
             # It's a raise, so we'll need to reset last better.
             self.closer = self.r._table.next_player_w_cards(self.bettor, -1)
-            actualbet = p.bet(action.cost)
-            self.r.pot += actualbet
+            #  actualbet = p.bet(action.cost)
+            #  self.r.pot += actualbet
+            self.r.pot += action.cost
             self.level += action.level
         else:
-            actualbet = p.bet(action.cost)
-            self.r.pot += actualbet
+            #  actualbet = p.bet(action.cost)
+            #  self.r.pot += actualbet
+            self.level += action.level
 
+    def action_string(self, action):
+        p = self.get_bettor()
         act_str = ''
         act_str += spacing(self.level)
         act_str += '{} {}s'.format(p, action.name.lower())
 
-        amt = colors.color(' $' + str(actualbet), 'yellow')
+        #  amt = colors.color(' $' + str(actualbet), 'yellow')
+        amt = colors.color(' $' + str(action.cost), 'yellow')
 
         if action.name in ['BET', 'RAISE']:
             return colors.color(act_str, 'red') + amt
