@@ -11,7 +11,7 @@ import table
 
 GAME = 'FIVE CARD DRAW'
 TABLE = 6
-STAKES = blinds.Blinds()
+BLINDS = blinds.Blinds()
 NAME = 'Aorist'
 OPPONENT = 'FISH'
 
@@ -20,7 +20,7 @@ options = {}
 options['c'] = ('(C)ombination counts', 'view_combos()')
 options['f'] = ('(F)ive card Draw', 'play_poker()')
 options['n'] = ('(N)ame change', 'pick_name()')
-options['s'] = ('(S)takes', 'pick_limit()')
+options['s'] = ('(S)takes', 'pick_limit(BLINDS)')
 options['t'] = ('(T)able size', 'pick_table()')
 options['m'] = ('(M)enu', 'menu()')
 options['o'] = ('(O)pponent type', 'pick_opp()')
@@ -40,7 +40,7 @@ def menu():
     print('Settings:')
     print('Playername: {}'.format(NAME))
     print('Game:       {}'.format(GAME))
-    print('Stakes:     {}'.format(STAKES))
+    print('Stakes:     {}'.format(BLINDS))
     print('Table Size: {}'.format(TABLE))
     print('Opponent type: {}'.format(OPPONENT))
     print('')
@@ -54,15 +54,15 @@ def view_combos():
             combos.n_choose_k(52, i), i))
 
 
-def pick_limit():
+def pick_limit(_blinds):
     print('Please enter what limit you want to play:(default 2/4)')
-    STAKES.levels()
+    _blinds.levels()
 
     while True:
         choice = int(input(':> '))
-        if choice in STAKES.blind_dict.keys():
-            STAKES.set_level(choice)
-            print('You selected {}'.format(STAKES))
+        if choice in _blinds.blind_dict.keys():
+            _blinds.set_level(choice)
+            print('You selected {}'.format(_blinds))
             break
         else:
             print('Selection not available, try again.')
@@ -117,7 +117,7 @@ def play_poker():
     print('Alright, let\'s play some poker!')
 
     print('Initializing new game...\n')
-    g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, TABLE, NAME)
+    g = draw5.Draw5Session('FIVE CARD DRAW', BLINDS, TABLE, NAME)
 
     playing = True
 
@@ -138,8 +138,9 @@ def exitgracefully():
 
 
 if __name__ == "__main__":
+    BLINDS.set_level(10)
+
     while True:
-        STAKES.set_level(10)
         os.system('clear')
         print_logo()
         menu()
