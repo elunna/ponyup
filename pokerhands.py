@@ -4,7 +4,6 @@ This is a collection of functions that return lists of cards that compose all th
 hands and also some variations on them. These are meant to be used for testing.
 """
 from __future__ import print_function
-import deck
 import card
 
 # These are constants to help with computer AI
@@ -16,15 +15,6 @@ PAIR_AA = 21400000000
 TWOPAIR_22 = 30000000000
 TWOPAIR_JJ = 31100000000
 TRIPS = 40000000000
-
-
-def dealhand(quantity):
-    # Deal a regular 5 card hand from a new deck
-    d = deck.Deck()
-    for c in d.cards:
-        c.hidden = False
-    d.shuffle()
-    return [d.deal() for i in range(quantity)]
 
 
 def convert_to_cards(cardlist):
