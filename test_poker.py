@@ -287,6 +287,36 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for calc_sidepot(stacksize):
+    """
+    # 2 players, 1 allin
+    def test_calcsidepot_2plyr_allinfor100_returns200(self):
+        self.allin_table(2)
+        expected = 200
+        for p in self.r._table:
+            p.bet(100)
+        result = self.r.calc_sidepot(100)
+        self.assertEqual(expected, result)
+
+    # 3 players, 1 allin
+    def test_calcsidepot_3plyr_allinfor100_returns300(self):
+        self.allin_table(3)
+        expected = 300
+        for p in self.r._table:
+            p.bet(100)
+        result = self.r.calc_sidepot(100)
+        self.assertEqual(expected, result)
+
+    # 3 players, 2 allin
+    def test_calcsidepot_3plyr_allinfor200_returns500(self):
+        self.allin_table(3)
+        expected = 500
+        for p in self.r._table:
+            p.bet(200)
+        result = self.r.calc_sidepot(200)
+        self.assertEqual(expected, result)
+
+    """
     Tests for process_sidepots(sidepots)
     """
     # 2 players, 2 allins.

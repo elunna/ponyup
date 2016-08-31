@@ -178,19 +178,7 @@ class Round():
             if stacksize in POTS:
                 continue
 
-            sidepot = 0
-            for p in self._table:
-                # Get the players total invested amount over the round
-                i = self.invested(p)
-
-                # If stacksize is less than invested, they can only win the stacksize.
-                if stacksize <= i:
-                    sidepot += stacksize
-                elif stacksize > i:
-                    # if their stacksize is more than invested, they can win the entire invested
-                    # amount.
-                    sidepot += i
-
+            sidepot = self.calc_sidepot(stacksize)
             # Adjust the sidepot
             # The sidepot is what is leftover after taking off the next-lesser sidepot.
             if len(POTS) == 0:
@@ -199,6 +187,21 @@ class Round():
                 #  last_sidepot = POTS[max(POTS)]
                 POTS[stacksize] = sidepot - sum(POTS.values())
         return POTS
+
+    def calc_sidepot(self, stacksize):
+        sidepot = 0
+        for p in self._table:
+            # Get the players total invested amount over the round
+            i = self.invested(p)
+
+            # If stacksize is less than invested, they can only win the stacksize.
+            if stacksize <= i:
+                sidepot += stacksize
+            elif stacksize > i:
+                # if their stacksize is more than invested, they can win the entire invested
+                # amount.
+                sidepot += i
+        return sidepot
 
     def process_sidepots(self, sidepots):
         """
