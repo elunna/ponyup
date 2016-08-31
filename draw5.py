@@ -51,7 +51,7 @@ class Draw5Session(poker.Session):
 
         # Cleanup all cards
         _round.muck_all_cards()
-        _round.verify_muck()
+        _round.check_integrity_post()
 
         # Remove broke players
         broke_players = _round._table.remove_broke()

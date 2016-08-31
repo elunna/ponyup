@@ -124,22 +124,6 @@ class Round():
         while len(self.d) > 0:
             self.muck.append(self.d.deal())
 
-    def verify_muck(self):
-        """
-        Verify that the integrity of the deck has not been compromised.
-        """
-        # Make sure that all cards have been used up.
-        if len(self.d) != 0:
-            return False
-        # Check that the muck is the same size as the original starting deck.
-        elif len(self.muck) != self.DECKSIZE:
-            return False
-        # Check that all players have folded.
-        elif len(self._table.get_players(CARDS=True)) > 0:
-            return False
-        else:
-            return True
-
     def post_antes(self):
         """
         All players bet the ante amount and it's added to the pot.
@@ -345,3 +329,20 @@ class Round():
             raise Exception('The last street has been reached on this game!')
         else:
             self.street += 1
+
+    def check_integrity_post(self):
+        """
+        Verify that the game elements have been cleaned up correctly and that all cards are
+        accounted for.
+        """
+        # Check that all cards have been used up.
+        if len(self.d) != 0:
+            return False
+        # Check that the muck is the same size as the original starting deck.
+        elif len(self.muck) != self.DECKSIZE:
+            return False
+        # Check that all players have folded.
+        elif len(self._table.get_players(CARDS=True)) > 0:
+            return False
+        else:
+            return True
