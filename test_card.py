@@ -219,6 +219,3 @@ class TestCards(unittest.TestCase):
         expected = False
         result = c2 < c1
         self.assertEqual(expected, result)
-
-if __name__ == "__main__":
-    unittest.main()
