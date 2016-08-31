@@ -27,166 +27,137 @@ def dealhand(quantity):
     return [d.deal() for i in range(quantity)]
 
 
+def convert_to_cards(cardlist):
+    return [card.Card(x[0], x[1]) for x in cardlist]
+
+
 def deal_duplicates():
-    dupes = [('A', 's'), ('3', 'h'), ('A', 's'), ('4', 'd'), ('5', 'c')]
-    return [card.Card(x[0], x[1]) for x in dupes]
+    return convert_to_cards([('A', 's'), ('3', 'h'), ('A', 's'), ('4', 'd'), ('5', 'c')])
 
 
 def royalflush():
-    h = [('A', 's'), ('K', 's'), ('J', 's'), ('T', 's'), ('Q', 's')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('A', 's'), ('K', 's'), ('J', 's'), ('T', 's'), ('Q', 's')])
 
 
 def straightflush_high():
-    h = [('9', 's'), ('K', 's'), ('Q', 's'), ('J', 's'), ('T', 's')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('9', 's'), ('K', 's'), ('Q', 's'), ('J', 's'), ('T', 's')])
 
 
 def straightflush_low():
-    h = [('2', 's'), ('A', 's'), ('3', 's'), ('4', 's'), ('5', 's')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('2', 's'), ('A', 's'), ('3', 's'), ('4', 's'), ('5', 's')])
 
 
 def quads_high():
-    h = [('A', 's'), ('A', 'd'), ('A', 'h'), ('A', 'c'), ('K', 'c')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('A', 's'), ('A', 'd'), ('A', 'h'), ('A', 'c'), ('K', 'c')])
 
 
 def quads_low():
-    h = [('2', 's'), ('2', 'd'), ('2', 'h'), ('2', 'c'), ('3', 'c')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('2', 's'), ('2', 'd'), ('2', 'h'), ('2', 'c'), ('3', 'c')])
 
 
 def boat_high():
-    h = [('A', 's'), ('A', 'd'), ('A', 'h'), ('K', 'd'), ('K', 'c')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('A', 's'), ('A', 'd'), ('A', 'h'), ('K', 'd'), ('K', 'c')])
 
 
 def boat_low():
-    h = [('2', 's'), ('2', 'd'), ('2', 'h'), ('3', 'd'), ('3', 'c')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('2', 's'), ('2', 'd'), ('2', 'h'), ('3', 'd'), ('3', 'c')])
 
 
 def flush_high():
-    h = [('A', 's'), ('K', 's'), ('Q', 's'), ('J', 's'), ('9', 's')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('A', 's'), ('K', 's'), ('Q', 's'), ('J', 's'), ('9', 's')])
 
 
 def flush_low():
-    h = [('2', 's'), ('3', 's'), ('4', 's'), ('5', 's'), ('7', 's')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('2', 's'), ('3', 's'), ('4', 's'), ('5', 's'), ('7', 's')])
 
 
 def straight_high():
-    h = [('A', 's'), ('T', 'c'), ('K', 's'), ('J', 'd'), ('Q', 'h')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('A', 's'), ('T', 'c'), ('K', 's'), ('J', 'd'), ('Q', 'h')])
 
 
 def straight_mid():
-    h = [('8', 's'), ('7', 'h'), ('9', 's'), ('T', 'd'), ('J', 'h')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('8', 's'), ('7', 'h'), ('9', 's'), ('T', 'd'), ('J', 'h')])
 
 
 def straight_low():
-    h = [('2', 's'), ('3', 'h'), ('A', 's'), ('4', 'd'), ('5', 'c')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('2', 's'), ('3', 'h'), ('A', 's'), ('4', 'd'), ('5', 'c')])
 
 
 def set_high():
-    h = [('A', 's'), ('K', 'h'), ('A', 'h'), ('A', 'd'), ('Q', 'c')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('A', 's'), ('K', 'h'), ('A', 'h'), ('A', 'd'), ('Q', 'c')])
 
 
 def set_low():
-    h = [('2', 's'), ('2', 'h'), ('2', 'h'), ('3', 'd'), ('4', 'c')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('2', 's'), ('2', 'h'), ('2', 'h'), ('3', 'd'), ('4', 'c')])
 
 
 def twopair_high():
-    h = [('A', 's'), ('A', 'h'), ('K', 's'), ('K', 'd'), ('Q', 'c')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('A', 's'), ('A', 'h'), ('K', 's'), ('K', 'd'), ('Q', 'c')])
 
 
 def twopair_low():
-    h = [('2', 's'), ('2', 'h'), ('3', 's'), ('3', 'd'), ('4', 'c')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('2', 's'), ('2', 'h'), ('3', 's'), ('3', 'd'), ('4', 'c')])
 
 
 def pair_high():
-    h = [('K', 's'), ('Q', 'h'), ('A', 's'), ('A', 'd'), ('J', 'c')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('K', 's'), ('Q', 'h'), ('A', 's'), ('A', 'd'), ('J', 'c')])
 
 
 def pair_low():
-    h = [('2', 's'), ('3', 'h'), ('2', 'c'), ('4', 'd'), ('5', 'c')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('2', 's'), ('3', 'h'), ('2', 'c'), ('4', 'd'), ('5', 'c')])
 
 
 def OESFD():
-    h = [('J', 's'), ('T', 's'), ('8', 's'), ('2', 'd'), ('9', 's')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('J', 's'), ('T', 's'), ('8', 's'), ('2', 'd'), ('9', 's')])
 
 
 def GSSFD():
-    h = [('J', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('J', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')])
 
 
 def flushdrawA():
-    h = [('A', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('A', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')])
 
 
 def flushdrawB():
-    h = [('3', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('3', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')])
 
 
 def OESD():
-    h = [('J', 'h'), ('T', 's'), ('8', 'c'), ('2', 'd'), ('9', 's')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('J', 'h'), ('T', 's'), ('8', 'c'), ('2', 'd'), ('9', 's')])
 
 
 def GSSD():
-    h = [('J', 'h'), ('T', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('J', 'h'), ('T', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')])
 
 
 def wheeldraw():
-    h = [('3', 'h'), ('4', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('3', 'h'), ('4', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')])
 
 
 def BDFD1():
-    h = [('2', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('K', 'h')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('2', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('K', 'h')])
 
 
 def BDFD2():
-    h = [('A', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('K', 'h')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('A', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('K', 'h')])
 
 
 def highcards1():
-    h = [('A', 'd'), ('4', 's'), ('Q', 's'), ('7', 's'), ('K', 'h')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('A', 'd'), ('4', 's'), ('Q', 's'), ('7', 's'), ('K', 'h')])
 
 
 def acehigh():
-    h = [('A', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('9', 'h')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('A', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('9', 'h')])
 
 
 def BDSD1():
-    h = [('2', 'd'), ('7', 's'), ('8', 's'), ('9', 'd'), ('K', 'h')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('2', 'd'), ('7', 's'), ('8', 's'), ('9', 'd'), ('K', 'h')])
 
 
 def BDSD2():
-    h = [('2', 'd'), ('7', 's'), ('8', 's'), ('T', 'd'), ('K', 'h')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('2', 'd'), ('7', 's'), ('8', 's'), ('T', 'd'), ('K', 'h')])
 
 
 def junk():
-    h = [('2', 'd'), ('3', 's'), ('6', 's'), ('8', 'd'), ('T', 'h')]
-    return [card.Card(x[0], x[1]) for x in h]
+    return convert_to_cards([('2', 'd'), ('3', 's'), ('6', 's'), ('8', 'd'), ('T', 'h')])
