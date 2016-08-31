@@ -368,3 +368,23 @@ def is_integer(num):
         return True
     except ValueError:
         return False
+
+
+def check_draw(cards, qty, gap):
+    """
+    Check if there is a straight draw in the list of cards. Can specify how many cards the
+    straight draw is and how many gaps are acceptable.
+    """
+    # Assume cards are sorted
+    for i in range((len(cards) - qty) + 1):
+        if get_allgaps(cards[i: qty + i]) <= gap:
+            return cards[i: qty + i]
+    else:
+        return None
+
+
+def extract_discards(cards, keep):
+    """
+    Returns the cards we should discard from a group of cards.
+    """
+    return [c for c in cards if c not in keep]

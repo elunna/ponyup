@@ -103,18 +103,18 @@ def draw_discards(cards, ranklist):
         return ev.strip_suits(cards, suit)
 
     # Test for open-ended straight draw(s)
-    OESD = check_draw(cards, 4, 0)
+    OESD = ev.check_draw(cards, 4, 0)
     if OESD is not None:
-        return extract_discards(cards, OESD)
+        return ev.extract_discards(cards, OESD)
 
     # Test for gutshot straight draw(s)
-    GSSD = check_draw(cards, 4, 1)
+    GSSD = ev.check_draw(cards, 4, 1)
     if GSSD is not None:
-        return extract_discards(cards, GSSD)
+        return ev.extract_discards(cards, GSSD)
 
     # Test for the wheel draw
     if ranklist[0].rank == 'A':
-        WD = check_draw(cards, 3, 1)
+        WD = ev.check_draw(cards, 3, 1)
 
         if WD is not None and WD[-1].val() <= 5:
             # The obvious discard is the dangling high card
@@ -137,14 +137,14 @@ def draw_discards(cards, ranklist):
         return ev.strip_suits(cards, suit)
 
     # Backdoor straight draws are pretty desparate
-    BDSD = check_draw(cards, 3, 0)
+    BDSD = ev.check_draw(cards, 3, 0)
     if BDSD is not None:
-        return extract_discards(cards, BDSD)
+        return ev.extract_discards(cards, BDSD)
 
     # 1-gap Backdoor straight draws are truly desparate!
-    BDSD = check_draw(cards, 3, 1)
+    BDSD = ev.check_draw(cards, 3, 1)
     if BDSD is not None:
-        return extract_discards(cards, BDSD)
+        return ev.extract_discards(cards, BDSD)
 
     # Last ditch effort - just draw to the best 2.
     highcards = ''.join([ranklist[i].rank for i in range(2)])
@@ -231,23 +231,3 @@ def human_discard(hand):
                 pass
         break
     return discards
-
-
-def check_draw(cards, qty, gap):
-    """
-    Check if there is a straight draw in the list of cards. Can specify how many cards the
-    straight draw is and how many gaps are acceptable.
-    """
-    # Assume cards are sorted
-    for i in range((len(cards) - qty) + 1):
-        if ev.get_allgaps(cards[i: qty + i]) <= gap:
-            return cards[i: qty + i]
-    else:
-        return None
-
-
-def extract_discards(cards, keep):
-    """
-    Returns the cards we should discard from a group of cards.
-    """
-    return [c for c in cards if c not in keep]
