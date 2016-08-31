@@ -301,14 +301,16 @@ class Round():
         print(self.show_cards())
 
         allins = self.get_allins()
-        sidepots = self.make_sidepots(allins)
-        pot_shares = self.process_sidepots(sidepots)
+        stack_shares = self.make_sidepots(allins)
+        sidepots = self.process_sidepots(stack_shares)
+        if not self.valid_sidepots(sidepots):
+            raise Exception('Sidepots are not valid - they do not total the pot amount!')
 
-        if len(pot_shares) > 1:
-            for i, s in enumerate(pot_shares):
+        if len(sidepots) > 1:
+            for i, s in enumerate(sidepots):
                 print('Sidepot #{}: ${}'.format(i+1, s))
 
-        self.process_awards(pot_shares)
+        self.process_awards(sidepots)
 
     def process_awards(self, award_dict):
         """
@@ -344,6 +346,15 @@ class Round():
             raise Exception('The last street has been reached on this game!')
         else:
             self.street += 1
+
+    def valid_sidepots(self, sidepots):
+        total = 0
+        for s in sidepots:
+            total += s
+        if total != self.pot:
+            return False
+        else:
+            return True
 
     def check_integrity_pre(self):
         """
