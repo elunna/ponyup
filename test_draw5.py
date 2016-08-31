@@ -29,7 +29,7 @@ class TestDraw5(unittest.TestCase):
 
     # Full house - no discards
     def test_autodiscard_fullhouse_returnsEmptyList(self):
-        h = hand.Hand(pokerhands.boat_high())
+        h = hand.Hand(pokerhands.fullhouse_high())
         h.unhide()
         expected = []
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -64,7 +64,7 @@ class TestDraw5(unittest.TestCase):
     # Trips - discard the non-trip cards
     def test_autodiscard_trips_returns2cards(self):
         # [('A', 's'), ('K', 'h'), ('A', 'h'), ('A', 'd'), ('Q', 'c')]
-        h = hand.Hand(pokerhands.set_high())
+        h = hand.Hand(pokerhands.trips_high())
         h.unhide()
         expected = ['Qc', 'Kh']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]

@@ -9,10 +9,10 @@ STARTINGCHIPS = 1000
 
 HANDS = (pokerhands.royalflush(),
          pokerhands.straightflush_high(),
-         pokerhands.boat_high(),
+         pokerhands.fullhouse_high(),
          pokerhands.flush_high(),
          pokerhands.straight_high(),
-         pokerhands.set_high()
+         pokerhands.trips_high()
          )
 
 

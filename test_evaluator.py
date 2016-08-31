@@ -28,7 +28,7 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_is_validhand_duplicateCards_returnsFalse(self):
-        h = pokerhands.deal_duplicates()
+        h = pokerhands.dupes()
         expected = False
         result = evaluator.is_validhand(h)
         self.assertEqual(expected, result)

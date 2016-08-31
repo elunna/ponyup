@@ -407,7 +407,7 @@ class TestPoker(unittest.TestCase):
         seats = 4
         self.allin_table(seats, REVERSED_HANDS=True)
         players = self.r._table.get_players(CARDS=True)
-        expected = evaluator.get_value(pokerhands.boat_high(),)
+        expected = evaluator.get_value(pokerhands.fullhouse_high(),)
         result = self.r.best_hand_val(players)
         self.assertEqual(expected, result)
 

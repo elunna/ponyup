@@ -15,7 +15,7 @@ class TestCardList(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_is_set_handwithdupes_returnsFalse(self):
-        h = pokerhands.deal_duplicates()
+        h = pokerhands.dupes()
         expected = False
         result = cardlist.is_set(h)
         self.assertEqual(expected, result)
