@@ -32,10 +32,8 @@ class BettingRound():
 
             if 'a' in options:
                 # Player is allin
-                #  o = allin_option()
                 o = Action('ALLIN', 0, 0)
             elif p.is_human():
-                print('pot is {}'.format(self.r.pot))
                 o = menu(options)
             else:
                 o = strategy.makeplay(p, self.r, options)
