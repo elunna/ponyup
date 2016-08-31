@@ -92,11 +92,7 @@ class Player():
         """
         Returns a list of all the face-up cards the player has.
         """
-        upcards = []
-        for c in self._hand.cards:
-            if c.hidden is False:
-                upcards.append(c)
-        return upcards
+        return [c for c in self._hand.cards if c.hidden is False]
 
     def is_human(self):
         """
