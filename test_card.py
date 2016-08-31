@@ -219,3 +219,19 @@ class TestCards(unittest.TestCase):
         expected = False
         result = c2 < c1
         self.assertEqual(expected, result)
+
+    """
+    Tests for to_card(string)
+    """
+
+    def test_tocard_As_returnsAs(self):
+        string = 'As'
+        rank = 'A'
+        suit = 's'
+        result = card.to_card(string)
+        self.assertEqual(rank, result.rank)
+        self.assertEqual(suit, result.suit)
+
+    def test_tocard_AA_returnsAs(self):
+        string = 'AA'
+        self.assertRaises(Exception, card.to_card, string)
