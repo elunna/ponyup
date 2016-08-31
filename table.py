@@ -2,8 +2,6 @@ from __future__ import print_function
 import colors
 import random
 
-# Table class
-# 4 types of tables, 2-handed, 6-handed, 9-handed, 10-handed
 VALID_SIZES = list(range(1, 10))
 
 
@@ -135,8 +133,13 @@ class Table():
             raise ValueError('Not enough players at the table!')
 
     def randomize_button(self):
-        # Place the button at a random seat
+        """
+        Places the button at a random player's seat. If there is no players at the table, it
+        raises an Exception."
+        """
         seats = list(self.get_playerdict().keys())
+        if len(seats) == 0:
+            raise Exception('Cannot place the button, no players at table!')
         choice = random.choice(seats)
         self.TOKENS['D'] = choice
 
@@ -144,7 +147,9 @@ class Table():
         self.move_button()
 
     def remove_broke(self):
-        """ Remove players with no chips from the table and return them in a list. """
+        """
+        Remove players with no chips from the table and return them in a list.
+        """
         players = []
         for p in self:
             if p.chips == 0:
@@ -175,6 +180,9 @@ class Table():
         return players
 
     def get_playerdict(self):
+        """
+        Returns a dictionary of seat indexes and player names.
+        """
         players = {}
         for i, s in enumerate(self.seats):
             if s is not None:
@@ -182,7 +190,9 @@ class Table():
         return players
 
     def stackdict(self):
-        """ Returns a name/stacksize dictionary for each player at the table. """
+        """
+        Returns a name/stacksize dictionary for each player at the table.
+        """
         stacks = {}
         for p in self:
             stacks[p.name] = p.chips

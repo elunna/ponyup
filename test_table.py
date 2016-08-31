@@ -572,6 +572,12 @@ class TestTable(unittest.TestCase):
         result = t.TOKENS['D'] >= 0 and t.TOKENS['D'] < seats
         self.assertTrue(result)
 
+    # Randomize button on table size 9, but no players
+    def test_randomizebutton_noplayers_raisesException(self):
+        seats = 9
+        t = table.Table(seats)
+        self.assertRaises(Exception, t.randomize_button)
+
     """
     Tests for remove_broke_players()
     """
