@@ -301,7 +301,7 @@ class TestTable(unittest.TestCase):
         self.assertEqual(t.TOKENS['D'], 0)  # Make sure the btn is at 0
         self.assertEqual(t.TOKENS['SB'], 0)  # Make sure the sb is at 0.
 
-        testtools.deal_cards(t)
+        testtools.deal_table_cards(t)
         expected = t.seats[0]
         result = t.get_players(CARDS=True)[0]
         self.assertEqual(expected, result)
@@ -316,7 +316,7 @@ class TestTable(unittest.TestCase):
         self.assertEqual(t.TOKENS['D'], 1)
         # Make sure the sb is at 1.
         self.assertEqual(t.TOKENS['SB'], 1)
-        testtools.deal_cards(t)
+        testtools.deal_table_cards(t)
 
         expected = t.seats[1]
         result = t.get_players(CARDS=True)[0]
@@ -328,7 +328,7 @@ class TestTable(unittest.TestCase):
         # Make sure the btn is at 0
         self.assertEqual(self.t.TOKENS['D'], 0)
 
-        testtools.deal_cards(self.t)
+        testtools.deal_table_cards(self.t)
 
         expected = self.t.seats[1]
         result = self.t.get_players(CARDS=True)[0]
@@ -341,7 +341,7 @@ class TestTable(unittest.TestCase):
         # Make sure the btn is at 0
         self.assertEqual(self.t.TOKENS['D'], 0)
 
-        testtools.deal_cards(self.t)
+        testtools.deal_table_cards(self.t)
         expected = self.t.seats[1]
         result = self.t.get_players(CARDS=True)[0]
         self.assertEqual(expected, result)
@@ -349,7 +349,7 @@ class TestTable(unittest.TestCase):
     # 6 players with cards, Button at 0. Returns list that's size 6.
     def test_getplayers_withcards_6havecards_lengthis6(self):
         self.t.move_button()
-        testtools.deal_cards(self.t)
+        testtools.deal_table_cards(self.t)
         expected = 6
         result = len(self.t.get_players(CARDS=True))
         self.assertEqual(expected, result)

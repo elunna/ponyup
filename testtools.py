@@ -46,7 +46,7 @@ def test_table(seats, cards=False, CHIPS=STARTINGCHIPS):
         t.seats[i].add_chips(STARTINGCHIPS)
 
     if cards:
-        deal_cards(t, 5)
+        deal_table_cards(t, 5)
     return t
 
 
@@ -66,12 +66,20 @@ def allin_table(seats, REVERSEHANDS=False):
     return t
 
 
-def deal_cards(table, qty=5):
+def deal_table_cards(table, qty=5):
     d = deck.Deck()
 
     for p in table:
         for i in range(qty):
             p.add_card(d.deal())
+
+
+def get_cards(quantity):
+    d = deck.Deck()
+    d.shuffle()
+    for c in d.cards:
+        c.hidden = False
+    return [d.deal() for i in range(quantity)]
 
 
 def deal_hands_strongfirst(table):

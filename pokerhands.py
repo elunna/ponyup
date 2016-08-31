@@ -4,6 +4,7 @@ This is a collection of functions that return lists of cards that compose all th
 hands and also some variations on them. These are meant to be used for testing.
 """
 from __future__ import print_function
+import deck
 import card
 
 # These are constants to help with computer AI
