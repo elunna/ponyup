@@ -210,20 +210,27 @@ class Round():
         """
         leftovers = self.pot
         shares = {}
+        # If there are no sidepots, then there is no stacksize requirement to win the main pot.
         if len(sidepots) == 0:
             required_stack = 0
         else:
             required_stack = max(sidepots) + 1
 
         while len(sidepots) > 0:
+            # Work up from the lowest stack to the highest.
             stack = min(sidepots)
-            share = sidepots[stack]
-            leftovers -= share
-            shares[share] = self.eligible_for_pot(stack)
+            pot = sidepots[stack]
+            leftovers -= pot
+
+            # Determine which players can win this share of the pot.
+            shares[pot] = self.eligible_for_pot(stack)
+
+            # Move onto the next sidepot.
             sidepots.pop(stack)
 
+        # Award what is leftover after the sidepots.
         if leftovers > 0:
-            # The above_allin variable lets anyone above the allin threshold win the leftovers.
+            # required_stack lets anyone above the allin threshold win the leftovers.
             shares[leftovers] = self.eligible_for_pot(required_stack)
         return shares
 
