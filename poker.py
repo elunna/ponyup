@@ -285,7 +285,7 @@ class Round():
             award_dict[w] = share
 
         if remainder > 0:
-            first_after_btn = self._table.next(self._table.btn)
+            first_after_btn = self._table.next_player(self._table.btn)
             r_winner = self._table.seats[first_after_btn]
             award_dict[r_winner] += remainder
         return award_dict

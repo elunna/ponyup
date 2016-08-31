@@ -355,125 +355,122 @@ class TestTable(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for next(from_seat)
+    Tests for next_player(self, from_seat, step=1, hascards=False):
     """
     # New setUp table, user supplies from_seat out of list index range. Should raise exception.
-    def test_next_outofboundsseat100_raiseException(self):
+    def test_nextplayer_outofboundsseat100_raiseException(self):
         seat = 100
-        self.assertRaises(ValueError, self.t.next, seat)
+        self.assertRaises(ValueError, self.t.next_player, seat)
 
     # Less than -1 is an error. -1 is the starting point for the button and other tokens.
-    def test_next_outofboundsseatneg2_raiseException(self):
+    def test_nextplayer_outofboundsseatneg2_raiseException(self):
         seat = -2
-        self.assertRaises(ValueError, self.t.next, seat)
+        self.assertRaises(ValueError, self.t.next_player, seat)
 
     # New setUp table, from_seat 0, returns 1
-    def test_next_setUptable_returnSeat0(self):
+    def test_nextplayer_setUptable_returnSeat0(self):
         seat = 0
         expected = 1
-        result = self.t.next(seat)
+        result = self.t.next_player(seat)
         self.assertEqual(expected, result)
 
     # Empty seat between 0 and 2, returns 1
-    def test_next_from0_seat1empty_return2(self):
+    def test_nextplayer_from0_seat1empty_return2(self):
         seat = 0
         self.t.remove_player(1)
         expected = 2
-        result = self.t.next(seat)
+        result = self.t.next_player(seat)
         self.assertEqual(expected, result)
 
     # setUp table, negative step, from_seat 0, returns 5
-    def test_next_negativestep_from0_returnSeat5(self):
+    def test_nextplayer_negativestep_from0_returnSeat5(self):
         seat = 0
         expected = 5
-        result = self.t.next(seat, -1)
+        result = self.t.next_player(seat, -1)
         self.assertEqual(expected, result)
 
     # Empty seat between 4 and 0, returns 5
-    def test_next_negativestep_seat5empty_from0_returnSeat5(self):
+    def test_nextplayer_negativestep_seat5empty_from0_returnSeat5(self):
         seat = 0
         self.t.remove_player(5)
         expected = 4
-        result = self.t.next(seat, -1)
+        result = self.t.next_player(seat, -1)
         self.assertEqual(expected, result)
 
     # No players, return -1
-    def test_next_noplayers_returnsNeg1(self):
+    def test_nextplayer_noplayers_returnsNeg1(self):
         t = table.Table(6)
         seat = 0
-        self.assertRaises(Exception, t.next, seat)
+        self.assertRaises(Exception, t.next_player, seat)
 
     # No players, negative step, return -1
-    def test_next_negativestep_noplayers_returnsNeg1(self):
+    def test_nextplayer_negativestep_noplayers_returnsNeg1(self):
         t = table.Table(6)
         seat = 0
-        self.assertRaises(Exception, t.next, seat)
-
-######################################################
-# Thorough test of next()
+        self.assertRaises(Exception, t.next_player, seat)
 
     # Next, 6 players, from 0, returns 1
-    def test_next_from0_returns1(self):
+    def test_nextplayer_from0_returns1(self):
         expected = 1
-        result = self.t.next(0)
+        result = self.t.next_player(0)
         self.assertEqual(expected, result)
 
     # Next, 6 players, from 1, returns 2
-    def test_next_from1_returns2(self):
+    def test_nextplayer_from1_returns2(self):
         expected = 2
-        result = self.t.next(1)
+        result = self.t.next_player(1)
         self.assertEqual(expected, result)
 
     # Next, 6 players, from 2, returns 3
-    def test_next_from2_returns3(self):
+    def test_nextplayer_from2_returns3(self):
         expected = 3
-        result = self.t.next(2)
+        result = self.t.next_player(2)
         self.assertEqual(expected, result)
 
     # Next, 6 players, from 3, returns 4
-    def test_next_from3_returns4(self):
+    def test_nextplayer_from3_returns4(self):
         expected = 4
-        result = self.t.next(3)
+        result = self.t.next_player(3)
         self.assertEqual(expected, result)
 
     # Next, 6 players, from 4, returns 5
-    def test_next_from4_returns5(self):
+    def test_nextplayer_from4_returns5(self):
         expected = 5
-        result = self.t.next(4)
+        result = self.t.next_player(4)
         self.assertEqual(expected, result)
 
     # Next, 6 players, from 5, returns 0
-    def test_next_from5_returns0(self):
+    def test_nextplayer_from5_returns0(self):
         expected = 0
-        result = self.t.next(5)
+        result = self.t.next_player(5)
         self.assertEqual(expected, result)
 
     """
-    Tests for next_player_w_cards(from_seat, step=1)
+    Tests for nextplayer(from_seat, step=1)
     """
     # 6 seat table, seat 0 has cards - from 0, returns 0
-    def test_nextplayerwcards_from0_seat0hascards_return0(self):
+    def test_nextplayer_withcards_from0_seat0hascards_return0(self):
         t = table.Table(6)
         c = card.Card('A', 's')
         self.t.seats[0].add_card(c)
         seat = 0
-        self.assertRaises(Exception, t.next_player_w_cards, seat)
+        self.assertRaises(Exception, t.next_player, seat)
 
     # 6 seat table, seat 0 has cards - from 1, returns 0
-    def test_nextplayerwcards_from1_seat0hascards_return0(self):
+    def test_nextplayer_withcards_from1_seat0hascards_return0(self):
         c = card.Card('A', 's')
         self.t.seats[0].add_card(c)
         expected = 0
-        result = self.t.next_player_w_cards(1)
+        result = self.t.next_player(1, hascards=True)
         self.assertEqual(expected, result)
 
     # 6 seat table, no cards - raise exception
-    def test_nextplayerwcards_nocards_return0(self):
+    def test_nextplayer_withcards_nocards_return0(self):
         from_seat = 0
-        self.assertRaises(Exception, self.t.next_player_w_cards, from_seat)
+        self.assertRaises(Exception, self.t.next_player, from_seat, hascards=True)
 
     # Full table - all w cards. btn at 0. From 0 returns 1.
-    def test_nextplayerwcards_fulltable_from0_return1(self):
+    def test_nextplayer_withcards_fulltable_from0_return1(self):
         # Button should be at -1 for self.t
         self.t.move_button()
         # Button should be at 0 after move.
@@ -484,21 +481,21 @@ class TestTable(unittest.TestCase):
             seat.add_card(c)
         from_seat = 0
         expected = 1
-        result = self.t.next_player_w_cards(from_seat)
+        result = self.t.next_player(from_seat, hascards=True)
         self.assertEqual(expected, result)
 
     # Full table - seat 3 has cards. btn at 0. From 0 returns 3.
-    def test_nextplayerwcards_seat3hascards_from0_return3(self):
+    def test_nextplayer_withcards_seat3hascards_from0_return3(self):
         self.t.move_button()
         c = card.Card('A', 's')
         self.t.seats[3].add_card(c)
         from_seat = 0
         expected = 3
-        result = self.t.next_player_w_cards(from_seat)
+        result = self.t.next_player(from_seat, hascards=True)
         self.assertEqual(expected, result)
 
     # Full table - all w cards. btn at 0. From 0 returns 5. Negative step
-    def test_nextplayerwcards_fulltable_negstep_from0_return5(self):
+    def test_nextplayer_withcards_fulltable_negstep_from0_return5(self):
         # Button should be at -1 for self.t
         self.t.move_button()
         # Button should be at 0 after move.
@@ -509,17 +506,17 @@ class TestTable(unittest.TestCase):
             seat.add_card(c)
         from_seat = 0
         expected = 5
-        result = self.t.next_player_w_cards(from_seat, -1)
+        result = self.t.next_player(from_seat, -1, hascards=True)
         self.assertEqual(expected, result)
 
     # Full table - seat 3 has cards. btn at 0. negative step. From 0 returns 4.
-    def test_nextplayerwcards_seat4hascards_negstep_from0_return4(self):
+    def test_nextplayer_withcards_seat4hascards_negstep_from0_return4(self):
         self.t.move_button()
         c = card.Card('A', 's')
         self.t.seats[4].add_card(c)
         from_seat = 0
         expected = 4
-        result = self.t.next_player_w_cards(from_seat, -1)
+        result = self.t.next_player(from_seat, -1, hascards=True)
         self.assertEqual(expected, result)
 
     """

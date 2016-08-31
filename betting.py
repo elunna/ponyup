@@ -148,10 +148,10 @@ class BettingRound():
             raise Exception('Cannot set bettor or closer in the if button isn\'t set!')
         if self.r.street == 0:
             self.closer = self.r._table.TOKENS['BB']
-            self.bettor = self.r._table.next(self.closer)
+            self.bettor = self.r._table.next_player(self.closer)
         else:
-            self.bettor = self.r._table.next_player_w_cards(self.r._table.TOKENS['D'])
-            self.closer = self.r._table.next_player_w_cards(self.bettor, -1)
+            self.bettor = self.r._table.next_player(self.r._table.TOKENS['D'], hascards=True)
+            self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
 
     def set_level(self):
         if self.r.street == 0:
@@ -190,7 +190,7 @@ class BettingRound():
         return (self.betsize * self.level) - amt_invested
 
     def next_bettor(self):
-        self.bettor = self.r._table.next_player_w_cards(self.bettor)
+        self.bettor = self.r._table.next_player(self.bettor, hascards=True)
 
     def done(self):
         return self.bettor == self.closer

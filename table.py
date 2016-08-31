@@ -100,42 +100,37 @@ class Table():
             self.seats[index] = None
         return p
 
-    def next(self, from_seat, step=1):
-        length = len(self)
+    def next_player(self, from_seat, step=1, hascards=False):
         if from_seat < -1 or from_seat >= len(self):
             raise ValueError('from_seat is out of bounds!')
+        if abs(step) != 1:
+            raise ValueError('step needs to be 1 or -1.')
 
+        length = len(self)
         for i in range(1, length + 1):
-            currentseat = (from_seat + (i * step)) % length
-            p = self.seats[currentseat]
+            seat = (from_seat + (i * step)) % length
+            p = self.seats[seat]
 
-            if p is not None:
-                return currentseat
+            if p is None:
+                continue
+            elif hascards and not p.has_cards():
+                continue
+            return seat
+
         else:
             raise Exception('Error finding player!')
-
-    # Find next valid player with cards to be the closer
-    def next_player_w_cards(self, from_seat, step=1):
-        seat = from_seat
-        for i in range(len(self)):
-            seat = self.next(seat, step)
-
-            if self.seats[seat].has_cards() and seat != from_seat:
-                return seat
-        else:
-            raise Exception('Error finding player with cards!')
 
     def move_button(self):
         # Move the button to the next valid player/seat
         # Also set the blinds appropriately!
-        self.TOKENS['D'] = self.next(self.TOKENS['D'])
+        self.TOKENS['D'] = self.next_player(self.TOKENS['D'])
 
         if len(self.get_players()) == 2:
             self.TOKENS['SB'] = self.TOKENS['D']
-            self.TOKENS['BB'] = self.next(self.TOKENS['D'])
+            self.TOKENS['BB'] = self.next_player(self.TOKENS['D'])
         elif len(self.get_players()) > 2:
-            self.TOKENS['SB'] = self.next(self.TOKENS['D'])
-            self.TOKENS['BB'] = self.next(self.TOKENS['SB'])
+            self.TOKENS['SB'] = self.next_player(self.TOKENS['D'])
+            self.TOKENS['BB'] = self.next_player(self.TOKENS['SB'])
         else:
             raise ValueError('Not enough players at the table!')
 

@@ -584,6 +584,14 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for check_draw(cards, qty, gap)
+    """
+
+    """
+    Tests for def extract_discards(cards, keep):
+    """
+
+    """
     Tests for to_card(string)
     """
     def test_tocard_As_returnsAs(self):
