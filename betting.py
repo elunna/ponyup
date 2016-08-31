@@ -73,7 +73,7 @@ class BettingRound():
             return
         elif action.level > 0:
             # It's a bet or raise, so we'll need to reset last better.
-            self.closer = self.r._table.next_player_w_cards(self.bettor, -1)
+            self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
 
         self.r.pot += p.bet(action.cost)
         self.level += action.level
