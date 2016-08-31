@@ -28,136 +28,144 @@ def dealhand(quantity):
 
 
 def convert_to_cards(cardlist):
-    return [card.Card(x[0], x[1]) for x in cardlist]
+    return [card.to_card(x) for x in cardlist]
 
 
-def deal_duplicates():
-    return convert_to_cards([('A', 's'), ('3', 'h'), ('A', 's'), ('4', 'd'), ('5', 'c')])
+def dupes():
+    return convert_to_cards(['As', '3h', 'As', '4d', '5c'])
 
 
 def royalflush():
-    return convert_to_cards([('A', 's'), ('K', 's'), ('J', 's'), ('T', 's'), ('Q', 's')])
+    return convert_to_cards(['As', 'Ks', 'Js', 'Ts', 'Qs'])
 
 
 def straightflush_high():
-    return convert_to_cards([('9', 's'), ('K', 's'), ('Q', 's'), ('J', 's'), ('T', 's')])
+    return convert_to_cards(['9s', 'Ks', 'Qs', 'Js', 'Ts'])
 
 
 def straightflush_low():
-    return convert_to_cards([('2', 's'), ('A', 's'), ('3', 's'), ('4', 's'), ('5', 's')])
+    return convert_to_cards(['2s', 'As', '3s', '4s', '5s'])
 
 
 def quads_high():
-    return convert_to_cards([('A', 's'), ('A', 'd'), ('A', 'h'), ('A', 'c'), ('K', 'c')])
+    return convert_to_cards(['As', 'Ad', 'Ah', 'Ac', 'Kc'])
 
 
 def quads_low():
-    return convert_to_cards([('2', 's'), ('2', 'd'), ('2', 'h'), ('2', 'c'), ('3', 'c')])
+    return convert_to_cards(['2s', '2d', '2h', '2c', '3c'])
 
 
-def boat_high():
-    return convert_to_cards([('A', 's'), ('A', 'd'), ('A', 'h'), ('K', 'd'), ('K', 'c')])
+def fullhouse_high():
+    return convert_to_cards(['As', 'Ad', 'Ah', 'Kd', 'Kc'])
 
 
-def boat_low():
-    return convert_to_cards([('2', 's'), ('2', 'd'), ('2', 'h'), ('3', 'd'), ('3', 'c')])
+def fullhouse_low():
+    return convert_to_cards(['2s', '2d', '2h', '3d', '3c'])
 
 
 def flush_high():
-    return convert_to_cards([('A', 's'), ('K', 's'), ('Q', 's'), ('J', 's'), ('9', 's')])
+    return convert_to_cards(['As', 'Ks', 'Qs', 'Js', '9s'])
 
 
 def flush_low():
-    return convert_to_cards([('2', 's'), ('3', 's'), ('4', 's'), ('5', 's'), ('7', 's')])
+    return convert_to_cards(['2s', '3s', '4s', '5s', '7s'])
 
 
 def straight_high():
-    return convert_to_cards([('A', 's'), ('T', 'c'), ('K', 's'), ('J', 'd'), ('Q', 'h')])
+    return convert_to_cards(['As', 'Tc', 'Ks', 'Jd', 'Qh'])
 
 
 def straight_mid():
-    return convert_to_cards([('8', 's'), ('7', 'h'), ('9', 's'), ('T', 'd'), ('J', 'h')])
+    return convert_to_cards(['8s', '7h', '9s', 'Td', 'Jh'])
 
 
 def straight_low():
-    return convert_to_cards([('2', 's'), ('3', 'h'), ('A', 's'), ('4', 'd'), ('5', 'c')])
+    return convert_to_cards(['2s', '3h', 'As', '4d', '5c'])
 
 
-def set_high():
-    return convert_to_cards([('A', 's'), ('K', 'h'), ('A', 'h'), ('A', 'd'), ('Q', 'c')])
+def trips_high():
+    return convert_to_cards(['As', 'Kh', 'Ah', 'Ad', 'Qc'])
 
 
-def set_low():
-    return convert_to_cards([('2', 's'), ('2', 'h'), ('2', 'h'), ('3', 'd'), ('4', 'c')])
+def trips_low():
+    return convert_to_cards(['2s', '2h', '2h', '3d', '4c'])
 
 
 def twopair_high():
-    return convert_to_cards([('A', 's'), ('A', 'h'), ('K', 's'), ('K', 'd'), ('Q', 'c')])
+    return convert_to_cards(['As', 'Ah', 'Ks', 'Kd', 'Qc'])
 
 
 def twopair_low():
-    return convert_to_cards([('2', 's'), ('2', 'h'), ('3', 's'), ('3', 'd'), ('4', 'c')])
+    return convert_to_cards(['2s', '2h', '3s', '3d', '4c'])
 
 
 def pair_high():
-    return convert_to_cards([('K', 's'), ('Q', 'h'), ('A', 's'), ('A', 'd'), ('J', 'c')])
+    return convert_to_cards(['Ks', 'Qh', 'As', 'Ad', 'Jc'])
 
 
 def pair_low():
-    return convert_to_cards([('2', 's'), ('3', 'h'), ('2', 'c'), ('4', 'd'), ('5', 'c')])
+    return convert_to_cards(['2s', '3h', '2c', '4d', '5c'])
 
 
+# Open Ended Straight Flush Draw
 def OESFD():
-    return convert_to_cards([('J', 's'), ('T', 's'), ('8', 's'), ('2', 'd'), ('9', 's')])
+    return convert_to_cards(['Js', 'Ts', '8s', '2d', '9s'])
 
 
+# Gut-Shot Straight Flush Draw
 def GSSFD():
-    return convert_to_cards([('J', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')])
+    return convert_to_cards(['Js', 'Ts', '7s', '2d', '9s'])
 
 
 def flushdrawA():
-    return convert_to_cards([('A', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')])
+    return convert_to_cards(['As', 'Ts', '7s', '2d', '9s'])
 
 
 def flushdrawB():
-    return convert_to_cards([('3', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')])
+    return convert_to_cards(['3s', 'Ts', '7s', '2d', '9s'])
 
 
+# Open Ended Straight Draw
 def OESD():
-    return convert_to_cards([('J', 'h'), ('T', 's'), ('8', 'c'), ('2', 'd'), ('9', 's')])
+    return convert_to_cards(['Jh', 'Ts', '8c', '2d', '9s'])
 
 
+# Gut-shot Straight Draw
 def GSSD():
-    return convert_to_cards([('J', 'h'), ('T', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')])
+    return convert_to_cards(['Jh', 'Ts', 'As', '2d', 'Kh'])
 
 
 def wheeldraw():
-    return convert_to_cards([('3', 'h'), ('4', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')])
+    return convert_to_cards(['3h', '4s', 'As', '2d', 'Kh'])
 
 
+# Backdoor Flush Draw
 def BDFD1():
-    return convert_to_cards([('2', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('K', 'h')])
+    return convert_to_cards(['2d', '4s', '5s', '7s', 'Kh'])
 
 
+# Backdoor Flush Draw
 def BDFD2():
-    return convert_to_cards([('A', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('K', 'h')])
+    return convert_to_cards(['Ad', '4s', '5s', '7s', 'Kh'])
 
 
 def highcards1():
-    return convert_to_cards([('A', 'd'), ('4', 's'), ('Q', 's'), ('7', 's'), ('K', 'h')])
+    return convert_to_cards(['Ad', '4s', 'Qs', '7s', 'Kh'])
 
 
 def acehigh():
-    return convert_to_cards([('A', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('9', 'h')])
+    return convert_to_cards(['Ad', '4s', '5s', '7s', '9h'])
 
 
+# Backdoor Straight Draw
 def BDSD1():
-    return convert_to_cards([('2', 'd'), ('7', 's'), ('8', 's'), ('9', 'd'), ('K', 'h')])
+    return convert_to_cards(['2d', '7s', '8s', '9d', 'Kh'])
 
 
+# Backdoor Straight Draw
 def BDSD2():
-    return convert_to_cards([('2', 'd'), ('7', 's'), ('8', 's'), ('T', 'd'), ('K', 'h')])
+    return convert_to_cards(['2d', '7s', '8s', 'Td', 'Kh'])
 
 
 def junk():
-    return convert_to_cards([('2', 'd'), ('3', 's'), ('6', 's'), ('8', 'd'), ('T', 'h')])
+    return convert_to_cards(['2d', '3s', '6s', '8d', 'Th'])
