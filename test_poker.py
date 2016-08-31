@@ -131,36 +131,6 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for check_integrity_post(self):
-    """
-    # All cards mucked, but 1 card in deck, returns False
-    def test_checkintegritypost_1cardindeck_returnsFalse(self):
-        self.r.muck_all_cards()
-        c = card.Card('A', 's')
-        self.r.d.cards.append(c)
-        expected = False
-        result = self.r.check_integrity_post()
-        self.assertEqual(expected, result)
-
-    # All cards mucked, but 1 player w cards, returns False
-    def test_checkintegritypost_1playerwithcards_returnsFalse(self):
-        self.r._table.move_button()
-        self.r.muck_all_cards()
-        c = card.Card('A', 's')
-        self.r._table.seats[0].add_card(c)
-        expected = False
-        result = self.r.check_integrity_post()
-        self.assertEqual(expected, result)
-
-    # All cards mucked, but card in muck deleted, returns False
-    def test_checkintegritypost_1poppedfrommuck_returnsFalse(self):
-        self.r.muck_all_cards()
-        self.r.muck.pop(0)
-        expected = False
-        result = self.r.check_integrity_post()
-        self.assertEqual(expected, result)
-
-    """
     Tests for post_antes()
     """
     # 6 players ante 1. Pot == 6.
@@ -460,3 +430,33 @@ class TestPoker(unittest.TestCase):
         self.r.next_street()
         self.r.next_street()
         self.assertRaises(Exception, self.r.next_street)
+
+    """
+    Tests for check_integrity_post(self):
+    """
+    # All cards mucked, but 1 card in deck, returns False
+    def test_checkintegritypost_1cardindeck_returnsFalse(self):
+        self.r.muck_all_cards()
+        c = card.Card('A', 's')
+        self.r.d.cards.append(c)
+        expected = False
+        result = self.r.check_integrity_post()
+        self.assertEqual(expected, result)
+
+    # All cards mucked, but 1 player w cards, returns False
+    def test_checkintegritypost_1playerwithcards_returnsFalse(self):
+        self.r._table.move_button()
+        self.r.muck_all_cards()
+        c = card.Card('A', 's')
+        self.r._table.seats[0].add_card(c)
+        expected = False
+        result = self.r.check_integrity_post()
+        self.assertEqual(expected, result)
+
+    # All cards mucked, but card in muck deleted, returns False
+    def test_checkintegritypost_1poppedfrommuck_returnsFalse(self):
+        self.r.muck_all_cards()
+        self.r.muck.pop(0)
+        expected = False
+        result = self.r.check_integrity_post()
+        self.assertEqual(expected, result)
