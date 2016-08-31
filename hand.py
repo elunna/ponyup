@@ -10,7 +10,12 @@ class Hand():
             self.cards = []
         else:
             self.cards = cards
-        self.update()
+
+    def __len__(self):
+        """
+        Returns how many cards are in the hand.
+        """
+        return len(self.cards)
 
     def __str__(self):
         handstr = ''
@@ -25,7 +30,6 @@ class Hand():
         Add a card to the hand.
         """
         self.cards.append(card)
-        self.update()
 
     def discard(self, card):
         """
@@ -33,14 +37,7 @@ class Hand():
         """
         i = self.cards.index(card)
         copy = self.cards.pop(i)
-        self.update()
         return copy
-
-    def __len__(self):
-        """
-        Returns how many cards are in the hand.
-        """
-        return len(self.cards)
 
     def unhide(self):
         """
@@ -55,7 +52,11 @@ class Hand():
         """
         self.cards = sorted(self.cards)
 
-    def update(self):
-        self.value = evaluator.get_value(self.cards)
-        self.handrank = evaluator.get_type(self.value)
-        self.description = evaluator.get_description(self.value, self.cards)
+    def value(self):
+        return evaluator.get_value(self.cards)
+
+    def rank(self):
+        return evaluator.get_type(self.value())
+
+    def desc(self):
+        return evaluator.get_description(self.value(), self.cards)

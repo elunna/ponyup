@@ -248,7 +248,7 @@ class Round():
         """
         eligible_players = self.get_eligible(stack_required)
         best_hand = self.best_hand_val(eligible_players)
-        return [p for p in eligible_players if p._hand.value == best_hand]
+        return [p for p in eligible_players if p._hand.value() == best_hand]
 
     def best_hand_val(self, players):
         """
@@ -256,8 +256,8 @@ class Round():
         """
         best = 0
         for p in players:
-            if p._hand.value > best:
-                best = p._hand.value
+            if p._hand.value() > best:
+                best = p._hand.value()
         return best
 
     def get_eligible(self, stack_req):
@@ -321,8 +321,8 @@ class Round():
 
                 h_txt = '{:>15} wins with a {}: {}'.format(
                     str(p),
-                    str(p._hand.handrank),
-                    str(p._hand.description)
+                    str(p._hand.rank()),
+                    str(p._hand.desc())
                 )
                 print(h_txt.strip().rjust(70))
                 self.award_pot(p, s)

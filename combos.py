@@ -66,7 +66,7 @@ def typecount_dict(handlist):
         v = evaluator.get_value(c)
         t = evaluator.get_type(v)
         #  h = hand.Hand(c)
-        #  rank = h.handrank
+        #  rank = h.rank()
         if t not in type_count:
             type_count[t] = 1
         else:
@@ -86,7 +86,7 @@ def get_unique_5cardhands(combolist):
     for c in combolist:
         #  h = hand.Hand(c)
         v = evaluator.get_value(c)
-        #  hands[h.value] = h
+        #  hands[h.value()] = h
         hands[v] = c
 
     return len(hands)
@@ -98,7 +98,7 @@ def sort_handslist(handdict):
     """
     sortedhands = []
     for h in handdict:
-        sortedhands.append((handdict[h].value, handdict[h].handrank, handdict[h].cards))
+        sortedhands.append((handdict[h].value(), handdict[h].rank(), handdict[h].cards))
 
     return sorted(sortedhands)
 

@@ -238,6 +238,6 @@ def find_best_hand(cards):
     besthand = hands[0]
 
     for h in hands:
-        if h.value > besthand.value:
+        if h.value() > besthand.value():
             besthand = h
     return besthand

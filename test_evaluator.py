@@ -185,8 +185,6 @@ class TestEvaluator(unittest.TestCase):
     """
     Tests for get_type(cards)
     """
-    #  def test_gettype_negativevalue_raiseEx(self):
-        #  self.assertRaises(ValueError, evaluator.get_type, -1)
 
     def test_gettype_negativevalue_returnsINVALID(self):
         expected = 'INVALID'
@@ -267,7 +265,7 @@ class TestEvaluator(unittest.TestCase):
         ]
         besthand = evaluator.find_best_hand(cards)
         expected = 'PAIR'
-        result = besthand.handrank
+        result = besthand.rank()
         self.assertEqual(expected, result)
 
     def test_findbesthand_fullhouse_returnsFULLHOUSE(self):
@@ -281,7 +279,7 @@ class TestEvaluator(unittest.TestCase):
             card.Card('A', 's'),
         ]
         besthand = evaluator.find_best_hand(cards)
-        result = besthand.handrank
+        result = besthand.rank()
         expected = 'FULL HOUSE'
         self.assertEqual(expected, result)
 
@@ -296,7 +294,7 @@ class TestEvaluator(unittest.TestCase):
             card.Card('A', 's'),
         ]
         besthand = evaluator.find_best_hand(cards)
-        result = besthand.handrank
+        result = besthand.rank()
         expected = 'STRAIGHT FLUSH'
         self.assertEqual(expected, result)
 
@@ -311,7 +309,7 @@ class TestEvaluator(unittest.TestCase):
             card.Card('A', 's'),
         ]
         besthand = evaluator.find_best_hand(cards)
-        result = besthand.handrank
+        result = besthand.rank()
         expected = 'QUADS'
         self.assertEqual(expected, result)
 
@@ -326,7 +324,7 @@ class TestEvaluator(unittest.TestCase):
             card.Card('5', 'h'),
         ]
         besthand = evaluator.find_best_hand(cards)
-        result = besthand.handrank
+        result = besthand.rank()
         expected = 'STRAIGHT'
         self.assertEqual(expected, result)
 
@@ -341,7 +339,7 @@ class TestEvaluator(unittest.TestCase):
             card.Card('A', 'c'),
         ]
         besthand = evaluator.find_best_hand(cards)
-        result = besthand.handrank
+        result = besthand.rank()
         expected = 'FLUSH'
         self.assertEqual(expected, result)
 

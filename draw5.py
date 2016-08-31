@@ -77,13 +77,13 @@ def auto_discard(hand):
 
     ranklist = cardlist.rank_list(hand.cards)
 
-    if hand.handrank in PAT_HANDS:
+    if hand.rank() in PAT_HANDS:
         return []  # Don't discard anything
-    elif hand.handrank in DIS_RANKS:
+    elif hand.rank() in DIS_RANKS:
         #  standard discard
         highcards = ranklist[0].rank
         return cardlist.strip_ranks(hand.cards, highcards)
-    elif hand.handrank == 'TWO PAIR':
+    elif hand.rank() == 'TWO PAIR':
         # Keep the two pair, discard 1.
         highcards = ranklist[0].rank + ranklist[1].rank
 

@@ -111,7 +111,7 @@ def run_trial(mydeck, c_copy, discard):
         print('Villain: {}'.format(villain))
         input('Press enter...')
 
-        if hero.value > villain.value:
+        if hero.value() > villain.value():
             WINS += 1
 
         exit()

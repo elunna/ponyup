@@ -78,7 +78,6 @@ def deal_hands_strongfirst(table):
     # Deal out the hands: strongest first
     for i, s in enumerate(table.seats):
         s._hand.cards = HANDS[i]
-        s._hand.update()
 
 
 def deal_hands_weakfirst(table):
@@ -86,4 +85,3 @@ def deal_hands_weakfirst(table):
     reversed_hands = list(reversed(HANDS))
     for i, s in enumerate(table.seats):
         s._hand.cards = list(reversed_hands[i])
-        s._hand.update()

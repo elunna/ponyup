@@ -22,7 +22,7 @@ class strategiesegy():
 
 
 def makeplay(player, _round, options):
-    handval = player._hand.value
+    handval = player._hand.value()
 
     if _round.street == 0:
         if handval >= player.strategies['pre_raise']:

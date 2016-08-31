@@ -23,13 +23,13 @@ def run_trial(testhand, trials):
         deck_copy = deck.Deck(d.cards[:])
         deck_copy.shuffle()
         villain = hand.Hand([deck_copy.deal() for x in range(5)])
-        if hero.value > villain.value:
+        if hero.value() > villain.value():
             WINS += 1
 
     WIN_PERCENT = WINS / TRIALS
-    print('{:<15}{:<15}{:<15}{}'.format(hero.value, hero.handrank, str(hero), WIN_PERCENT))
+    print('{:<15}{:<15}{:<15}{}'.format(hero.value(), hero.rank(), str(hero), WIN_PERCENT))
 
-    return [hero.value, hero.handrank, hero, WIN_PERCENT]
+    return [hero.value(), hero.rank(), hero, WIN_PERCENT]
 
 
 def write_handtrials(results):
