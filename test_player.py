@@ -120,6 +120,11 @@ class TestPlayer(unittest.TestCase):
         result = p.chips
         self.assertEqual(expected, result)
 
+    # Cannot add negative chips!
+    def test_addchips_negativechips_raisesException(self):
+        p = player.Player('Erik')
+        self.assertRaises(Exception, p.add_chips, -100)
+
     """
     Tests for showhand()
     """

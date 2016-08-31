@@ -53,7 +53,10 @@ class Player():
         """
         Adds the specified amount of chips to the player's stack.
         """
-        self.chips += amt
+        if amt < 0:
+            raise Exception('Cannot add negative chips!')
+        else:
+            self.chips += amt
 
     def showhand(self):
         """
