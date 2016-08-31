@@ -65,7 +65,6 @@ class Round():
         self.street = 0
         self.streets = session.streets
         self.pot = 0
-        self.sidepots = {}
         self._table = session._table
 
         self.muck = []
@@ -288,12 +287,18 @@ class Round():
         Compare all the hands of players holding cards and determine the winner(s). Awards each
         winner the appropriate amount.
         """
+        print('SHOWDOWN!')
         print(self.show_cards())
 
         allins = self.get_allins()
         sidepots = self.make_sidepots(allins)
-        # Return the award_dict
-        self.process_awards(self.process_sidepots(sidepots))
+        pot_shares = self.process_sidepots(sidepots)
+
+        if len(pot_shares) > 1:
+            for i, s in enumerate(pot_shares):
+                print('Sidepot #{}: ${}'.format(i+1, s))
+
+        self.process_awards(pot_shares)
 
     def process_awards(self, award_dict):
         """
