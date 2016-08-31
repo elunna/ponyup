@@ -330,6 +330,24 @@ class Round():
         else:
             self.street += 1
 
+    def check_integrity_pre(self):
+        """
+        Verify that the game elements are set up correctly.
+        """
+        # Check that the deck is full.
+        if len(self.d) != self.DECKSIZE:
+            return False
+        # Check that the muck is empty.
+        if len(self.muck) != 0:
+            return False
+        # Check that no players have cards.
+        if len(self._table.get_players(CARDS=True)) > 0:
+            return False
+        # Check that the pot is 0.
+        if self.pot != 0:
+            return False
+        return True
+
     def check_integrity_post(self):
         """
         Verify that the game elements have been cleaned up correctly and that all cards are
@@ -339,10 +357,11 @@ class Round():
         if len(self.d) != 0:
             return False
         # Check that the muck is the same size as the original starting deck.
-        elif len(self.muck) != self.DECKSIZE:
+        if len(self.muck) != self.DECKSIZE:
             return False
         # Check that all players have folded.
-        elif len(self._table.get_players(CARDS=True)) > 0:
+        if len(self._table.get_players(CARDS=True)) > 0:
             return False
-        else:
-            return True
+        # The sum of all sidepots should equal the potsize.
+
+        return True
