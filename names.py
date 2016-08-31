@@ -31,29 +31,6 @@ def random_names(num):
     return nameset
 
 
-def names_with_gaps(num):
-    """
-    Generate a list of unique names with a 2/3 chance of having a gap for each name generated.
-    """
-    nameset = []
-    sparseness = 7
-
-    for i in range(num):
-        # 66% chance that a seat will be filled
-        # So we can test the gaps/skipping/etc.
-        chance = random.randint(0, 10)
-        if chance < sparseness:
-            # Make sure all the names are unique
-            while True:
-                nextname = random.choice(names)
-                if nextname not in nameset:
-                    nameset.append(nextname)
-                    break
-        else:
-            nameset.append(None)
-    return nameset
-
-
 def is_validname(name):
     """
     Returns True if the given name is between 3 and 12 characters long, False otherwise.
