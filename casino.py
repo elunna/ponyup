@@ -19,7 +19,7 @@ OPPONENT = 'FISH'
 # Define menu opions
 options = {}
 options['c'] = ('(C)ombination counts', 'view_combos()')
-options['f'] = ('(F)ive card Draw', 'play_poker()')
+options['p'] = ('(P)lay Poker!', 'play_poker()')
 options['n'] = ('(N)ame change', 'pick_name()')
 options['s'] = ('(S)takes', 'pick_limit(BLINDS)')
 options['t'] = ('(T)able size', 'pick_table()')
@@ -47,12 +47,12 @@ def menu():
     os.system('clear')
     print_logo()
     print('')
-    print('Settings:')
-    print('Playername: {}'.format(NAME))
-    print('Game:       {}'.format(GAME))
-    print('Stakes:     {}'.format(BLINDS))
-    print('Table Size: {}'.format(TABLE))
-    print('Opponent type: {}'.format(OPPONENT))
+    print('-=- Settings -=-'.center(70))
+    print('{:>15}: {}'.format('Playername', NAME))
+    print('{:>15}: {}'.format('Game', GAME))
+    print('{:>15}: {}'.format('Stakes',  BLINDS))
+    print('{:>15}: {}'.format('Seats', TABLE))
+    print('{:>15}: {}'.format('Opponent Type', OPPONENT))
     print('')
     for o in options:
         print(options[o][0])
