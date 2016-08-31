@@ -16,6 +16,9 @@ names = ['Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'M
 
 
 def random_names(num):
+    """
+    Generate a unique list of names from the names module. num specifies how many names.
+    """
     nameset = []
 
     # Make sure all the names are unique
@@ -29,6 +32,9 @@ def random_names(num):
 
 
 def names_with_gaps(num):
+    """
+    Generate a list of unique names with a 2/3 chance of having a gap for each name generated.
+    """
     nameset = []
     sparseness = 7
 
@@ -48,18 +54,26 @@ def names_with_gaps(num):
     return nameset
 
 
-def isValidName(name):
+def is_validname(name):
+    """
+    Returns True if the given name is between 3 and 12 characters long, False otherwise.
+    """
     if len(name) < 3 or len(name) > 12:
         return False
     else:
         return True
 
 
-def contains_surrounding_chars(username):
-    re1 = re.compile(r"[<>/{}[\]~`^'\\]")
-    if re1.search(username):
+def has_surr_char(string):
+    """
+    Returns True if the given string contains any 'surround' characters, False otherwise.
+    These characters many cause bugs in programs if used.
+    """
+
+    re1 = re.compile(r"[<>()/{}[\]~`^'\\]")
+    if re1.search(string):
         #  print ("RE1: Invalid char detected.")
-        return False
+        return True
     else:
         #  print ("RE1: No invalid char detected.")
-        return True
+        return False

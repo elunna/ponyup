@@ -338,4 +338,7 @@ class Round():
         player.add_chips(amt)
 
     def next_street(self):
+        """
+        Advanced the street counter by one.
+        """
         self.street += 1
