@@ -194,7 +194,7 @@ def discard_phase(table, deck):
 
 def discard_menu(hand):
     cards = ' '.join([str(c) for c in hand.cards])
-    txt = 'Your discard....1  2  3  4  5'.rjust(70)
+    txt = 'Your discard....1  2  3  4  5\n'.rjust(70)
     txt += '\t'*7 + cards
     txt += '\n'
     return txt
