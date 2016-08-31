@@ -193,23 +193,32 @@ def discard_phase(table, deck):
     return muckpile
 
 
+def discard_menu(hand):
+    cards = ' '.join([str(c) for c in hand.cards])
+    txt = 'Your discard....1  2  3  4  5'.rjust(70)
+    txt += '\t'*7 + cards
+    txt += '\n'
+    return txt
+
+
+def help_txt():
+    print('')
+    print('Enter the cards you want to discard:')
+    print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
+
+
 def human_discard(hand):
     """
     Offers the human player a menu of discard options and returns the list of chosen discards.
     """
-    print('Your discard....1  2  3  4  5'.rjust(70))
-    hands = ' '.join([str(c) for c in hand.cards])
-    print('\t'*7 + hands)
-
-    print('')
+    print(discard_menu(hand))
     while True:
         helpme = ['?', 'h', 'help']
         choice = input(':> ')
         if choice in helpme:
-            print('')
-            print('Enter the cards you want to discard:')
-            print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
+            help_txt()
             continue
+
         # Split up the #s, and reverse them so we can remove them without the list
         # collapsing and disrupting the numbering.
         validnumbers = ['1', '2', '3', '4', '5']
@@ -217,23 +226,12 @@ def human_discard(hand):
         discards = []
 
         for c in choice:
-            if is_integer(c) and c in validnumbers:
+            if ev.is_integer(c) and c in validnumbers:
                 discards.append(hand.cards[int(c) - 1])
             else:
                 pass
         break
     return discards
-
-
-def is_integer(num):
-    """
-    Determines if the variable is an integer.
-    """
-    try:
-        int(num)
-        return True
-    except ValueError:
-        return False
 
 
 def check_draw(cards, qty, gap):
