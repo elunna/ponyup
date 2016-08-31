@@ -28,10 +28,12 @@ class BettingRound():
             p = self.get_bettor()
             invested = self.invested(p)
             cost = (self.betsize * self.level) - invested
-            options = self.get_options(cost)
+            options = self.get_options(cost, p.chips)
 
-            if p.is_allin():
-                o = allin_option()
+            if 'a' in options:
+                # Player is allin
+                #  o = allin_option()
+                o = Action('ALLIN', 0, 0)
             elif p.is_human():
                 print('pot is {}'.format(self.r.pot))
                 o = menu(options)
@@ -97,40 +99,47 @@ class BettingRound():
         else:
             raise Exception('Error processing the action!')
 
-    def get_options(self, cost):
+    def get_options(self, cost, stack):
         """
         Shows the options available to the current bettor.
         """
-        completing = (self.betsize - cost) == self.r.blinds.SB
-
         option_dict = {}
+        #  completing = (self.betsize - cost) == self.r.blinds.SB
 
-        if self.r.street == 0 and completing:
-            # Completing the small blind
-            option_dict['f'] = Action('FOLD', 0, 0)
-            option_dict['c'] = Action('COMPLETE', cost, 0)
-            option_dict['r'] = Action('RAISE', cost + self.betsize, 1)
+        if stack == 0:
+            option_dict['a'] = Action('ALLIN', 0, 0)
+            # Save some time
+            return option_dict
 
-        elif cost == 0 and self.level >= 1:
-            # Typical BB, Straddle, or post situation.
+        if cost == 0:
             option_dict['c'] = Action('CHECK', 0, 0)
-            option_dict['r'] = Action('RAISE', cost + self.betsize, 1)
-
-        elif cost == 0 and self.level == 0:
-            # Noone has opened betting yet on a postblind round
-            option_dict['c'] = Action('CHECK', 0, 0)
-            option_dict['b'] = Action('BET', self.betsize, 1)
-
-        elif cost > 0 and self.level < self.BETCAP:
-            # There has been a bet/raises, but still can re-raise
+        elif cost > 0:
             option_dict['f'] = Action('FOLD', 0, 0)
-            option_dict['c'] = Action('CALL', cost, 0)
-            option_dict['r'] = Action('RAISE', cost + self.betsize, 1)
 
-        elif cost > 0 and self.level == self.BETCAP:
-            # The raise cap has been met, can only call or fold.
-            option_dict['f'] = Action('FOLD', 0, 0)
-            option_dict['c'] = Action('CALL', cost, 0)
+            if stack >= cost:
+                option_dict['c'] = Action('CALL', cost, 0)
+            else:
+                # Player doesn't have enough for the full call amount
+                option_dict['c'] = Action('CALL', stack, 0)
+
+        if self.level == 0:
+            # Player doesn't have enough for the full bet amount
+            if stack >= self.betsize:
+                option_dict['b'] = Action('BET', self.betsize, 1)
+            else:
+                option_dict['b'] = Action('BET', stack, 1)
+
+        if self.level >= 1 and self.level < self.BETCAP:
+            raise_cost = cost + self.betsize
+
+            if stack < self.betsize:
+                # Player does not have enough chips for a raise.
+                pass
+            elif stack >= raise_cost:
+                option_dict['r'] = Action('RAISE', raise_cost, 1)
+            else:
+                # Player doesn't have enough for a full raise, but enough for a partial raise.
+                option_dict['r'] = Action('RAISE', stack, 1)
 
         return option_dict
 
@@ -216,13 +225,6 @@ def menu(options=None):
             return options[choice]
         else:
             print('Invalid choice, try again.')
-
-
-def allin_option():
-    """
-    Returns the option for players that are all-in.
-    """
-    return Action('ALLIN', 0, 0)
 
 
 def spacing(level):
