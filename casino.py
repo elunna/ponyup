@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from __future__ import print_function
+import colors
 import combos
 import blinds
 import draw5
@@ -28,9 +29,18 @@ options['q'] = ('(Q)uit', 'exitgracefully()')
 
 
 def print_logo():
+    txt = ''
     with open('logo.txt') as f:
-        print(f.read())
-    print('='*70)
+        #  print(f.read())
+        for c in f.read():
+            if c == '$':
+                txt += colors.color(c, 'yellow')
+            else:
+                txt += colors.color(c, 'green')
+    txt += '\n'
+    print(txt)
+    print('~'*70)
+    print('~'*70)
 
 
 def menu():
