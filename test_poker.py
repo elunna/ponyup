@@ -455,3 +455,8 @@ class TestPoker(unittest.TestCase):
         expected = 1
         result = self.r.street
         self.assertEqual(expected, result)
+
+    def test_nextstreet_draw5_street2_raisesException(self):
+        self.r.next_street()
+        self.r.next_street()
+        self.assertRaises(Exception, self.r.next_street)

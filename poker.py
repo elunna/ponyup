@@ -341,4 +341,7 @@ class Round():
         """
         Advanced the street counter by one.
         """
-        self.street += 1
+        if self.street >= len(self.streets):
+            raise Exception('The last street has been reached on this game!')
+        else:
+            self.street += 1
