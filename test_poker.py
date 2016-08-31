@@ -5,7 +5,7 @@ import draw5
 import evaluator
 import poker
 import pokerhands
-import setup_table
+import testtools
 
 STAKES = blinds.Blinds()
 
@@ -24,12 +24,12 @@ class TestPoker(unittest.TestCase):
     """
     def setUp(self):
         g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6)
-        g._table = setup_table.test_table(6)
+        g._table = testtools.test_table(6)
         self.r = poker.Round(g)
 
     def allin_table(self, seats, REVERSED_HANDS=False):
         g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6)
-        g._table = setup_table.allin_table(seats, REVERSED_HANDS)
+        g._table = testtools.allin_table(seats, REVERSED_HANDS)
         self.r = poker.Round(g)
 
     # New round - pot = 0
@@ -167,7 +167,7 @@ class TestPoker(unittest.TestCase):
     def test_postantes_6players_potequals60(self):
         STAKES = blinds.Blinds(level=2)
         g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
-        g._table = setup_table.test_table(6)
+        g._table = testtools.test_table(6)
         self.r = poker.Round(g)
         self.r.post_antes()
         expected = 6
@@ -178,7 +178,7 @@ class TestPoker(unittest.TestCase):
     def test_postantes_6players_stacksequal999(self):
         STAKES = blinds.Blinds(level=2)
         g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
-        g._table = setup_table.test_table(6)
+        g._table = testtools.test_table(6)
         self.r = poker.Round(g)
         self.r.post_antes()
         expected = 999

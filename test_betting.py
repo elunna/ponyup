@@ -1,7 +1,7 @@
 import unittest
 import betting
 import draw5
-import setup_table
+import testtools
 
 
 class TestBetting(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestBetting(unittest.TestCase):
     """
     def setUp(self, seats=6):
         g = draw5.Draw5Session('FIVE CARD DRAW', tablesize=6)
-        g._table = setup_table.test_table(seats, cards=True)
+        g._table = testtools.test_table(seats, cards=True)
         g._table.move_button()
         self.assertEqual(g._table.TOKENS['D'], 0)  # verify the button is 0
         self.r = g.new_round()

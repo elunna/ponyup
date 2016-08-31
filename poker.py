@@ -3,7 +3,7 @@ import betting
 import blinds as b
 import colors
 import deck
-import setup_table
+import testtools
 
 DISPLAYWIDTH = 70
 
@@ -27,7 +27,7 @@ class Session():
         """
         self.gametype = gametype
         self.rounds = 1
-        self._table = setup_table.make(tablesize, hero)
+        self._table = testtools.make(tablesize, hero)
         self._table.randomize_button()
 
         self.streets = STREETS[gametype]
