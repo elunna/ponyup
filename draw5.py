@@ -1,6 +1,5 @@
 from __future__ import print_function
 import card
-import cardlist
 import evaluator as ev
 import poker
 
@@ -75,19 +74,19 @@ def auto_discard(hand):
     PAT_HANDS = ['STRAIGHT', 'FLUSH', 'FULL HOUSE', 'STRAIGHT FLUSH', 'ROYAL FLUSH']
     DIS_RANKS = ['PAIR', 'TRIPS', 'QUADS']
 
-    ranklist = cardlist.rank_list(hand.cards)
+    ranklist = ev.rank_list(hand.cards)
 
     if hand.rank() in PAT_HANDS:
         return []  # Don't discard anything
     elif hand.rank() in DIS_RANKS:
         #  standard discard
         highcards = ranklist[0].rank
-        return cardlist.strip_ranks(hand.cards, highcards)
+        return ev.strip_ranks(hand.cards, highcards)
     elif hand.rank() == 'TWO PAIR':
         # Keep the two pair, discard 1.
         highcards = ranklist[0].rank + ranklist[1].rank
 
-        return cardlist.strip_ranks(hand.cards, highcards)
+        return ev.strip_ranks(hand.cards, highcards)
 
     # Process any available draws
     return draw_discards(sorted(hand.cards[:]), ranklist)
@@ -98,10 +97,10 @@ def draw_discards(cards, ranklist):
     Calculates the approprate card to discard for any draw-type hands.
     """
     suit = ev.dominant_suit(cards)
-    suit_count = cardlist.count_suit(cards, suit)
+    suit_count = ev.count_suit(cards, suit)
 
     if suit_count == 4:
-        return cardlist.strip_suits(cards, suit)
+        return ev.strip_suits(cards, suit)
 
     # Test for open-ended straight draw(s)
     OESD = check_draw(cards, 4, 0)
@@ -124,18 +123,18 @@ def draw_discards(cards, ranklist):
     # Draw to high cards (J+)
     if card.RANKS[ranklist[2].rank] > 10:
         highcards = ''.join([ranklist[i].rank for i in range(3)])
-        return cardlist.strip_ranks(cards, highcards)
+        return ev.strip_ranks(cards, highcards)
     elif card.RANKS[ranklist[1].rank] > 10:
         highcards = ''.join([ranklist[i].rank for i in range(2)])
-        return cardlist.strip_ranks(cards, highcards)
+        return ev.strip_ranks(cards, highcards)
 
     # Draw to an Ace
     # We'll generally draw to an Ace over any backdoor draws.
     if ranklist[0].rank == 'A':
-        return cardlist.strip_ranks(cards, 'A')
+        return ev.strip_ranks(cards, 'A')
 
     if suit_count == 3:  # Backdoor flush draw
-        return cardlist.strip_suits(cards, suit)
+        return ev.strip_suits(cards, suit)
 
     # Backdoor straight draws are pretty desparate
     BDSD = check_draw(cards, 3, 0)
@@ -149,7 +148,7 @@ def draw_discards(cards, ranklist):
 
     # Last ditch effort - just draw to the best 2.
     highcards = ''.join([ranklist[i].rank for i in range(2)])
-    return cardlist.strip_ranks(cards, highcards)
+    return ev.strip_ranks(cards, highcards)
 
 
 def discard_phase(table, deck):
@@ -241,7 +240,7 @@ def check_draw(cards, qty, gap):
     """
     # Assume cards are sorted
     for i in range((len(cards) - qty) + 1):
-        if cardlist.get_allgaps(cards[i: qty + i]) <= gap:
+        if ev.get_allgaps(cards[i: qty + i]) <= gap:
             return cards[i: qty + i]
     else:
         return None
