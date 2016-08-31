@@ -556,15 +556,31 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_stripsuits_stripMultipleSuits_allSuitsWereStripped(self):
-        ace = card.Card('A', 's')
-        king = card.Card('K', 'c')
-        queen = card.Card('Q', 'd')
-        cards = [ace, king, queen]
-
         cards = evaluator.convert_to_cards(['As', 'Kc', 'Qd'])
         cards = evaluator.strip_suits(cards, ['s', 'c'])
         expected = 0
         result = evaluator.count_suit(cards, 's') + evaluator.count_suit(cards, 'c')
+        self.assertEqual(expected, result)
+
+    """
+    Tests for is_integer(num)
+    """
+    # Pass an integer 10. Returns True.
+    def test_isinteger_10_returnsTrue(self):
+        expected = True
+        result = evaluator.is_integer(10)
+        self.assertEqual(expected, result)
+
+    # Pass a string. Returns False.
+    def test_isinteger_string_returnsFalse(self):
+        expected = False
+        result = evaluator.is_integer('string')
+        self.assertEqual(expected, result)
+
+    # Pass a float 10.5. Returns False.
+    def test_isinteger_float_returnsFalse(self):
+        expected = False
+        result = evaluator.is_integer(10.5)
         self.assertEqual(expected, result)
 
     """

@@ -5,6 +5,7 @@ from __future__ import print_function
 from collections import namedtuple
 import card
 import hand
+import numbers
 import itertools
 
 MULTIPLIERS = (100000000, 1000000, 10000, 100, 1)
@@ -363,11 +364,7 @@ def is_integer(num):
     """
     Determines if the variable is an integer.
     """
-    try:
-        int(num)
-        return True
-    except ValueError:
-        return False
+    return isinstance(num, numbers.Integral)
 
 
 def check_draw(cards, qty, gap):
