@@ -357,3 +357,14 @@ def strip_suits(cards, suits):
     There can only be one suit passed.
     """
     return [c for c in cards if c.suit not in suits]
+
+
+def is_integer(num):
+    """
+    Determines if the variable is an integer.
+    """
+    try:
+        int(num)
+        return True
+    except ValueError:
+        return False
