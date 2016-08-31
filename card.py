@@ -65,9 +65,3 @@ class Card:
 
     def __hash__(self):
         return hash(str(self))
-
-
-def to_card(string):
-    if len(string) != 2:
-        raise Exception('String must be exactly 2 characters to convert to a card!')
-    return Card(string[0], string[1])

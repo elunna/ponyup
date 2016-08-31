@@ -240,6 +240,7 @@ class TestEvaluator(unittest.TestCase):
     """
     Tests for get_description(value, cards)
     """
+    # See test_pokerhands.py for extensive tests of get_description.
 
     """
     Tests for process_nonpairhands(cards, sortedranks):
@@ -252,32 +253,15 @@ class TestEvaluator(unittest.TestCase):
     """
     Tests for find_best_hand(cards)
     """
-
     def test_findbesthand_pair_returnsPAIR(self):
-        cards = [
-            card.Card('2', 'c'),
-            card.Card('3', 'c'),
-            card.Card('5', 's'),
-            card.Card('7', 's'),
-            card.Card('K', 'c'),
-            card.Card('A', 'c'),
-            card.Card('A', 's'),
-        ]
+        cards = evaluator.convert_to_cards(['2c', '3c', '5s', '7s', 'Kc', 'Ac', 'As'])
         besthand = evaluator.find_best_hand(cards)
         expected = 'PAIR'
         result = besthand.rank()
         self.assertEqual(expected, result)
 
     def test_findbesthand_fullhouse_returnsFULLHOUSE(self):
-        cards = [
-            card.Card('7', 'c'),
-            card.Card('7', 's'),
-            card.Card('K', 's'),
-            card.Card('K', 'c'),
-            card.Card('A', 'h'),
-            card.Card('A', 'c'),
-            card.Card('A', 's'),
-        ]
+        cards = evaluator.convert_to_cards(['7c', '7s', 'Ks', 'Kc', 'Ah', 'Ac', 'As'])
         besthand = evaluator.find_best_hand(cards)
         result = besthand.rank()
         expected = 'FULL HOUSE'
@@ -658,4 +642,29 @@ class TestEvaluator(unittest.TestCase):
         cards = evaluator.strip_suits(cards, ['s', 'c'])
         expected = 0
         result = evaluator.count_suit(cards, 's') + evaluator.count_suit(cards, 'c')
+        self.assertEqual(expected, result)
+
+    """
+    Tests for to_card(string)
+    """
+    def test_tocard_As_returnsAs(self):
+        string = 'As'
+        rank = 'A'
+        suit = 's'
+        result = evaluator.to_card(string)
+        self.assertEqual(rank, result.rank)
+        self.assertEqual(suit, result.suit)
+
+    def test_tocard_AA_returnsAs(self):
+        string = 'AA'
+        self.assertRaises(Exception, evaluator.to_card, string)
+
+    """
+    Tests for convert_to_cards(cardlist):
+    """
+    def test_tocard_AsKs_returnsCardAsKs(self):
+        As, Ks = card.Card('A', 's'), card.Card('K', 's')
+        cardstr = ['As', 'Ks']
+        expected = [As, Ks]
+        result = evaluator.convert_to_cards(cardstr)
         self.assertEqual(expected, result)

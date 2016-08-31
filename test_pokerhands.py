@@ -4,8 +4,6 @@ import pokerhands
 
 
 class TestPokerHands(unittest.TestCase):
-    # Test Values
-
     ##################################################
     # ROYAL FLUSHES
     ##################################################
