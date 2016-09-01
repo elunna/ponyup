@@ -384,9 +384,7 @@ def is_integer(num):
 def get_best_straight_draw(cards):
     """
     Check if there is a straight draw in the list of cards and returns the best available draw.
-
-    Can specify how many cards the
-    straight draw is and how many gaps are acceptable.
+    Can specify how many cards the straight draw is and how many gaps are acceptable.
     """
     draw_sizes = [4, 3, 2]
     cards = sorted(cards)
@@ -407,6 +405,27 @@ def get_best_straight_draw(cards):
         return None
 
 
+def chk_wheel(cards):
+    # Check if the group of cards counts as a wheel draw. The requirements are that an Ace must
+    # be present in the group of cards and that all other cards must be no higher than a 5.
+    # There must also be no pairs present, otherwise the order of the draw will be disrupted.
+
+    # Make a rank dictionary
+    rankdict = rank_dict(cards)
+
+    # Check for any pairs.
+    if len(cards) != len(rankdict):
+        return False
+    if 'A' not in rankdict:
+        return False
+    wheelcards = ['A', '2', '3', '4', '5']
+    for r in rankdict:
+        if r not in wheelcards:
+            return False
+    else:
+        return True
+
+
 def chk_straight_draw(cards, qty, gap):
     end_index = (len(cards) - qty) + 1
     cards = sorted(cards)
@@ -414,11 +433,13 @@ def chk_straight_draw(cards, qty, gap):
     draws = []
     for i in range(end_index):
         currentslice = cards[i: qty + i]
-        if get_allgaps(currentslice) <= gap:
+        if chk_wheel(currentslice):
+            draws.append(currentslice)
+        elif get_allgaps(currentslice) <= gap:
             draws.append(currentslice)
     if draws:
         # Return the highest, which would be the last added.
-        return draws.pop()
+        return draws[-1]
     else:
         return None
 

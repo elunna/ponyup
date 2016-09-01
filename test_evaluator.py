@@ -580,6 +580,62 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.chk_straight_draw(cards, 3, 0)
         self.assertEqual(expected, result)
 
+    """
+    Tests for chk_wheel(cards):
+    """
+    def test_chkwheel_A_returnsTrue(self):
+        cards = pokerhands.convert_to_cards(['As'])
+        expected = True
+        result = evaluator.chk_wheel(cards)
+        self.assertEqual(expected, result)
+
+    def test_chkwheel_A2_returnsTrue(self):
+        cards = pokerhands.convert_to_cards(['As', '2c'])
+        expected = True
+        result = evaluator.chk_wheel(cards)
+        self.assertEqual(expected, result)
+
+    def test_chkwheel_A23_returnsTrue(self):
+        cards = pokerhands.convert_to_cards(['As', '2c', '3d'])
+        expected = True
+        result = evaluator.chk_wheel(cards)
+        self.assertEqual(expected, result)
+
+    def test_chkwheel_A234_returnsTrue(self):
+        cards = pokerhands.convert_to_cards(['As', '2c', '3d', '4d'])
+        expected = True
+        result = evaluator.chk_wheel(cards)
+        self.assertEqual(expected, result)
+
+    def test_chkwheel_A2345_returnsTrue(self):
+        cards = pokerhands.convert_to_cards(['As', '2c', '3d', '4d', '5h'])
+        expected = True
+        result = evaluator.chk_wheel(cards)
+        self.assertEqual(expected, result)
+
+    def test_chkwheel_AA23_returnsFalse(self):
+        cards = pokerhands.convert_to_cards(['As', 'Ah', '2c', '3d'])
+        expected = False
+        result = evaluator.chk_wheel(cards)
+        self.assertEqual(expected, result)
+
+    def test_chkwheel_A223_returnsFalse(self):
+        cards = pokerhands.convert_to_cards(['As', '2h', '2c', '3d'])
+        expected = False
+        result = evaluator.chk_wheel(cards)
+        self.assertEqual(expected, result)
+
+    def test_chkwheel_AKQJ_returnsFalse(self):
+        cards = pokerhands.convert_to_cards(['As', 'Kc', 'Qd', 'Jd'])
+        expected = False
+        result = evaluator.chk_wheel(cards)
+        self.assertEqual(expected, result)
+
+    def test_chkwheel_2345_returnsFalse(self):
+        cards = pokerhands.convert_to_cards(['2c', '3d', '4d', '5h'])
+        expected = False
+        result = evaluator.chk_wheel(cards)
+        self.assertEqual(expected, result)
 
     """
     Tests for def extract_discards(cards, keep):
