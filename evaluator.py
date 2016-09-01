@@ -385,13 +385,3 @@ def extract_discards(cards, keep):
     Returns the cards we should discard from a group of cards.
     """
     return [c for c in cards if c not in keep]
-
-
-def to_card(string):
-    if len(string) != 2:
-        raise Exception('String must be exactly 2 characters to convert to a card!')
-    return card.Card(string[0], string[1])
-
-
-def convert_to_cards(cardlist):
-    return [to_card(x) for x in cardlist]

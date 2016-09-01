@@ -590,28 +590,3 @@ class TestEvaluator(unittest.TestCase):
     """
     Tests for def extract_discards(cards, keep):
     """
-
-    """
-    Tests for to_card(string)
-    """
-    def test_tocard_As_returnsAs(self):
-        string = 'As'
-        rank = 'A'
-        suit = 's'
-        result = evaluator.to_card(string)
-        self.assertEqual(rank, result.rank)
-        self.assertEqual(suit, result.suit)
-
-    def test_tocard_AA_returnsAs(self):
-        string = 'AA'
-        self.assertRaises(Exception, evaluator.to_card, string)
-
-    """
-    Tests for convert_to_cards(cardlist):
-    """
-    def test_tocard_AsKs_returnsCardAsKs(self):
-        As, Ks = card.Card('A', 's'), card.Card('K', 's')
-        cardstr = ['As', 'Ks']
-        expected = [As, Ks]
-        result = evaluator.convert_to_cards(cardstr)
-        self.assertEqual(expected, result)

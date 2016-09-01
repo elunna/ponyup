@@ -1,4 +1,5 @@
 import unittest
+import card
 import evaluator as ev
 import pokerhands
 
@@ -482,4 +483,38 @@ class TestPokerHands(unittest.TestCase):
         val = ev.get_value(h)
         expected = 'HIGH CARD'
         result = ev.get_type(val)
+        self.assertEqual(expected, result)
+
+    """
+    Tests for to_card(string)
+    """
+    def test_tocard_As_returnsAs(self):
+        string = 'As'
+        rank = 'A'
+        suit = 's'
+        result = pokerhands.to_card(string)
+        self.assertEqual(rank, result.rank)
+        self.assertEqual(suit, result.suit)
+
+    def test_tocard_AA_returnsAs(self):
+        string = 'AA'
+        self.assertRaises(Exception, pokerhands.to_card, string)
+
+    """
+    Tests for convert_to_cards(cardlist):
+    """
+    def test_converttocards_AsKs_returnsCardAsKs(self):
+        As, Ks = card.Card('A', 's'), card.Card('K', 's')
+        cardstr = ['As', 'Ks']
+        expected = [As, Ks]
+        result = pokerhands.convert_to_cards(cardstr)
+        self.assertEqual(expected, result)
+
+    """
+    Tests for make(hand_name):
+    """
+    def test_make_royalflush_returnsRoyalFlush(self):
+        h = pokerhands.make('royalflush')
+        expected = 'ROYAL FLUSH'
+        result = ev.get_type(ev.get_value(h))
         self.assertEqual(expected, result)
