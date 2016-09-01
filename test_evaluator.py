@@ -174,34 +174,42 @@ class TestEvaluator(unittest.TestCase):
         self.assertRaises(ValueError, evaluator.get_type, 1000000000000)
 
     """
-    Tests for get_value(cards)
+    Tests for score_pair_hands(ranklist)
     """
+
     # Test the value of 1 Ace
-    def test_get_value_A_returns1400000000(self):
+    def test_scorepairhands_A_returns1400000000(self):
         cards = [card.Card('A', 's')]
         expected = 1400000000
-        result = evaluator.get_value(cards)
+        result = evaluator.score_pair_hands(cards)
         self.assertEqual(expected, result)
 
     # Test the value of 2 Aces
-    def test_get_value_AA_returns21400000000(self):
+    def test_scorepairhands_AA_returns21400000000(self):
         cards = pokerhands.convert_to_cards(['As', 'Ah'])
         expected = 21400000000
-        result = evaluator.get_value(cards)
+        result = evaluator.score_pair_hands(cards)
         self.assertEqual(expected, result)
 
     # Test the value of 3 Aces
-    def test_get_value_AAA_returns41400000000(self):
+    def test_scorepairhands_AAA_returns41400000000(self):
         cards = pokerhands.convert_to_cards(['As', 'Ah', 'Ac'])
         expected = 41400000000
-        result = evaluator.get_value(cards)
+        result = evaluator.score_pair_hands(cards)
         self.assertEqual(expected, result)
 
     # Test the value of 4 Aces
-    def test_get_value_AAAA_returns81400000000(self):
+    def test_scorepairhands_AAAA_returns81400000000(self):
         cards = pokerhands.convert_to_cards(['As', 'Ah', 'Ac', 'Ad'])
         expected = 81400000000
-        result = evaluator.get_value(cards)
+        result = evaluator.score_pair_hands(cards)
+        self.assertEqual(expected, result)
+
+    # Test the value of 2 pair: AAKK
+    def test_scorepairhands_AAKK_returns31413000000(self):
+        cards = pokerhands.convert_to_cards(['As', 'Ah', 'Kc', 'Kd'])
+        expected = 31413000000
+        result = evaluator.score_pair_hands(cards)
         self.assertEqual(expected, result)
 
     """
