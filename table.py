@@ -16,10 +16,15 @@ class Table():
             self.seats.append(None)
 
     def __len__(self):
-        # Return the total # of seats
+        """
+        Return the total # of seats.
+        """
         return len(self.seats)
 
     def __str__(self):
+        """
+        Return the string representation of the table.
+        """
         _str = ''
         _str = colors.color('{:5}{:7}{:7}{:20}{:<17}{:16}\n'.format(
             'Seat', 'Blinds', 'Dealer', 'Player', 'Chips', 'Hand'), 'gray', STYLE='BOLD')
@@ -56,11 +61,17 @@ class Table():
         return _str
 
     def __iter__(self):
+        """
+        Creates an iterator for the table.
+        """
         self.counter = 0
         self.players = [p for p in self.seats if p is not None]
         return self
 
     def __next__(self):
+        """
+        Move to the next item in the iterator.
+        """
         if self.counter > len(self.players) - 1:
             raise StopIteration
         p = self.players[self.counter]
@@ -83,6 +94,10 @@ class Table():
             return False
 
     def get_index(self, plyr):
+        """
+        Tries to find the player in the table and returns it's index. Returns -1 if it can't
+        find the player.
+        """
         for i, s in enumerate(self.seats):
             if s == plyr:
                 return i
@@ -90,13 +105,22 @@ class Table():
             return -1
 
     def __contains__(self, plyr):
+        """
+        Returns True if the player is occupying a seat at the table, False otherwise.
+        """
         return plyr in self.seats
 
     def remove_player(self, index):
+        """
+        Removes and returns a player from a given seat index. If the seat is empty, raises a
+        ValueError exception.
+        """
         p = self.seats[index]
-        if p is not None:
+        if p is None:
+            raise ValueError('The seat is already empty!')
+        else:
             self.seats[index] = None
-        return p
+            return p
 
     def next_player(self, from_seat, step=1, hascards=False):
         if from_seat < -1 or from_seat >= len(self):

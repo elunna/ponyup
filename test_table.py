@@ -229,6 +229,17 @@ class TestTable(unittest.TestCase):
         result = self.t.seats[0] is None
         self.assertEqual(expected, result)
 
+    def test_removeplayer_removeseat0_returnsPlayer(self):
+        expected = self.t.seats[0]
+        #  expected = player.Player('bob0', 'CPU')
+        result = self.t.remove_player(0)
+        self.assertEqual(expected, result)
+
+    def test_removeplayer_emptyseat_raisesException(self):
+        self.t.remove_player(0)
+        self.assertTrue(self.t.seats[0] is None)
+        self.assertRaises(ValueError, self.t.remove_player, 0)
+
     """
     Tests for get_players()
     """
