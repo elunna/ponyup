@@ -34,7 +34,7 @@ class TestPokerHands(unittest.TestCase):
     ##################################################
     def test_getvalue_straightflushhigh_returns90900000000(self):
         h = pokerhands.make('straightflush_high')
-        expected = 90900000000
+        expected = 91300000000
         result = ev.get_value(h)
         self.assertEqual(expected, result)
 

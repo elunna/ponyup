@@ -124,30 +124,30 @@ class TestEvaluator(unittest.TestCase):
     Tests for is_straight(cards)
     """
     # Test a low straight hand
-    def test_isstraight_lowstraight_returnsTrue(self):
+    def test_isstraight_lowstraight_returns5(self):
         hand = pokerhands.make('straight_low')
-        expected = True
+        expected = 5
         result = evaluator.is_straight(hand)
         self.assertEqual(expected, result)
 
     # Test a mid straight hand
-    def test_isstraight_midstraight_returnsTrue(self):
+    def test_isstraight_midstraight_returnsPostiveNum(self):
         hand = pokerhands.make('straight_mid')
         expected = True
-        result = evaluator.is_straight(hand)
+        result = evaluator.is_straight(hand) > 0
         self.assertEqual(expected, result)
 
     # Test a high straight hand
-    def test_isstraight_highstraight_returnsTrue(self):
+    def test_isstraight_highstraight_returnsA(self):
         hand = pokerhands.make('straight_high')
-        expected = True
+        expected = 14
         result = evaluator.is_straight(hand)
         self.assertEqual(expected, result)
 
     # Test a non-straight hand
-    def test_isstraight_nonstraight_returnsFalse(self):
+    def test_isstraight_nonstraight_returns0(self):
         hand = pokerhands.make('wheeldraw')
-        expected = False
+        expected = 0
         result = evaluator.is_straight(hand)
         self.assertEqual(expected, result)
 
@@ -241,14 +241,6 @@ class TestEvaluator(unittest.TestCase):
     Tests for get_description(value, cards)
     """
     # See test_pokerhands.py for extensive tests of get_description.
-
-    """
-    Tests for process_nonpairhands(cards, sortedranks):
-    """
-
-    """
-    Tests for process_pairhands(sortedranks):
-    """
 
     """
     Tests for find_best_hand(cards)

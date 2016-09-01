@@ -87,18 +87,19 @@ def is_suited(cards):
 
 def is_straight(cards):
     """
-    Returns True if the hand is a straight, False otherwise.
+    Check the list of cards to see if it is a valid straight. If it is, returns the highest rank
+    in straight, otherwise returns -1.
     """
     if not is_validhand(cards):
-        return False
+        return 0
     elif get_allgaps(cards) == 0:
-        return True
-    cards = sorted(cards)
-    return cards[0].rank == '2' \
-        and cards[1].rank == '3' \
-        and cards[2].rank == '4' \
-        and cards[3].rank == '5' \
-        and cards[4].rank == 'A'
+        return max(cards).val()
+
+    for c, r in zip(sorted(cards), [2, 3, 4, 5, 14]):
+        if c.val() != r:
+            return 0
+    else:
+        return 5
 
 
 def score_ranklist(ranklist):
@@ -155,26 +156,26 @@ def get_value(cards):
 
     if len(ranklist) == 5:
         # Returns the value of a non-pair hand.
+        FIVEHIGH = 5
+        ACEHIGH = 14
+        straight_chk = is_straight(cards)
         if is_suited(cards):
-            if is_straight(cards):
-                if cards[0].rank == 'T':
-                    return HANDTYPES['ROYAL FLUSH']
-                elif cards[0].rank == '2':
-                    return HANDTYPES['STRAIGHT FLUSH']
-                else:
-                    return HANDTYPES['STRAIGHT FLUSH'] \
-                        + card.RANKS[ranklist[4][1]] * MULTIPLIERS[0]
+            if straight_chk == ACEHIGH:
+                return HANDTYPES['ROYAL FLUSH']
+            elif straight_chk == FIVEHIGH:
+                return HANDTYPES['STRAIGHT FLUSH']
+            elif straight_chk > FIVEHIGH:
+                return HANDTYPES['STRAIGHT FLUSH'] + straight_chk * MULTIPLIERS[0]
             else:
                 return HANDTYPES['FLUSH'] + score_ranklist(ranklist)
-        elif is_straight(cards):
-            if cards[0].rank == '2':
-                return HANDTYPES['STRAIGHT']
-            else:
-                return HANDTYPES['STRAIGHT'] + score_ranklist(ranklist)
+        elif straight_chk == FIVEHIGH:
+            return HANDTYPES['STRAIGHT']
+        elif straight_chk:
+            return HANDTYPES['STRAIGHT'] + score_ranklist(ranklist)
         else:
             return HANDTYPES['HIGH CARD'] + score_ranklist(ranklist)
 
-    elif len(ranklist) >= 1:
+    if len(ranklist) >= 1:
 
         # Returns the value of a pair-type hand.
         if len(ranklist) > 1:
@@ -192,8 +193,7 @@ def get_value(cards):
         elif ranklist[0][0] == 4:
             return HANDTYPES['QUADS'] + score_ranklist(ranklist)
 
-    else:
-        return HANDTYPES['INVALID']
+    return HANDTYPES['INVALID']
 
 
 def get_description(value, cards):
