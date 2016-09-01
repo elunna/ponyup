@@ -49,47 +49,31 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_dominantsuit_2diffranks_returnshigherrank(self):
-        cards = []
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('K', 'c'))
+        cards = pokerhands.convert_to_cards(['As', 'Kc'])
         expected = 's'
         result = evaluator.dominant_suit(cards)
         self.assertEqual(expected, result)
 
     def test_dominantsuit_3diffranks_returnshigherrank(self):
-        cards = []
-        cards.append(card.Card('K', 'c'))
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('Q', 'h'))
+        cards = pokerhands.convert_to_cards(['Kc', 'As', 'Qh'])
         expected = 's'
         result = evaluator.dominant_suit(cards)
         self.assertEqual(expected, result)
 
     def test_dominantsuit_4diffranks_returnshigherrank(self):
-        cards = []
-        cards.append(card.Card('K', 'c'))
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('J', 'd'))
-        cards.append(card.Card('Q', 'h'))
+        cards = pokerhands.convert_to_cards(['Kc', 'As', 'Jd', 'Qh'])
         expected = 's'
         result = evaluator.dominant_suit(cards)
         self.assertEqual(expected, result)
 
     def test_dominantsuit_3cards2suitedSpades_returnsSpades(self):
-        cards = []
-        cards.append(card.Card('K', 'c'))
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('Q', 's'))
+        cards = pokerhands.convert_to_cards(['Kc', 'As', 'Qs'])
         expected = 's'
         result = evaluator.dominant_suit(cards)
         self.assertEqual(expected, result)
 
     def test_dominantsuit_HigherSpades_returnsSpades(self):
-        cards = []
-        cards.append(card.Card('A', 'c'))
-        cards.append(card.Card('K', 's'))
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('Q', 'c'))
+        cards = pokerhands.convert_to_cards(['Ac', 'Ks', 'As', 'Qc'])
         expected = 's'
         result = evaluator.dominant_suit(cards)
         self.assertEqual(expected, result)
@@ -98,24 +82,19 @@ class TestEvaluator(unittest.TestCase):
     Tests for is_suited(cards)
     """
     def test_issuited_1card_returnsTrue(self):
-        cards = []
-        cards.append(card.Card('A', 's'))
+        cards = [card.Card('A', 's')]
         expected = True
         result = evaluator.is_suited(cards)
         self.assertEqual(expected, result)
 
     def test_issuited_2suitedcards_returnsTrue(self):
-        cards = []
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('2', 's'))
+        cards = pokerhands.convert_to_cards(['As', '2s'])
         expected = True
         result = evaluator.is_suited(cards)
         self.assertEqual(expected, result)
 
     def test_issuited_2unsuitedcard_returnsFalse(self):
-        cards = []
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('A', 'd'))
+        cards = pokerhands.convert_to_cards(['As', 'Ad'])
         expected = False
         result = evaluator.is_suited(cards)
         self.assertEqual(expected, result)
@@ -171,13 +150,13 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_scorecardlist_AK_returns1413(self):
-        cards = [card.Card('A', 's'), card.Card('K', 's')]
+        cards = pokerhands.convert_to_cards(['As', 'Ks'])
         expected = 1413
         result = evaluator.score_cardlist(cards)
         self.assertEqual(expected, result)
 
     def test_scorecardlist_AKQ_returns141312(self):
-        cards = [card.Card('A', 's'), card.Card('K', 's'), card.Card('Q', 's')]
+        cards = pokerhands.convert_to_cards(['As', 'Ks', 'Qs'])
         expected = 141312
         result = evaluator.score_cardlist(cards)
         self.assertEqual(expected, result)
@@ -206,33 +185,21 @@ class TestEvaluator(unittest.TestCase):
 
     # Test the value of 2 Aces
     def test_get_value_AA_returns21400000000(self):
-        cards = [
-            card.Card('A', 's'),
-            card.Card('A', 'h'),
-        ]
+        cards = pokerhands.convert_to_cards(['As', 'Ah'])
         expected = 21400000000
         result = evaluator.get_value(cards)
         self.assertEqual(expected, result)
 
     # Test the value of 3 Aces
     def test_get_value_AAA_returns41400000000(self):
-        cards = [
-            card.Card('A', 's'),
-            card.Card('A', 'h'),
-            card.Card('A', 'c'),
-        ]
+        cards = pokerhands.convert_to_cards(['As', 'Ah', 'Ac'])
         expected = 41400000000
         result = evaluator.get_value(cards)
         self.assertEqual(expected, result)
 
     # Test the value of 4 Aces
     def test_get_value_AAAA_returns81400000000(self):
-        cards = [
-            card.Card('A', 's'),
-            card.Card('A', 'h'),
-            card.Card('A', 'c'),
-            card.Card('A', 'd'),
-        ]
+        cards = pokerhands.convert_to_cards(['As', 'Ah', 'Ac', 'Ad'])
         expected = 81400000000
         result = evaluator.get_value(cards)
         self.assertEqual(expected, result)
@@ -303,8 +270,7 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_is_set_1card_returnsTrue(self):
-        c = card.Card('A', 's')
-        h = [c]
+        h = [card.Card('A', 's')]
         expected = True
         result = evaluator.is_set(h)
         self.assertEqual(expected, result)
@@ -345,16 +311,14 @@ class TestEvaluator(unittest.TestCase):
     Tests for rank_list(cards)
     """
     def test_ranklist_1Ace_lenEquals1(self):
-        cards = []
-        cards.append(card.Card('A', 's'))
+        cards = [card.Card('A', 's')]
         expected = 1
         ranklist = evaluator.rank_list(cards)
         result = len(ranklist)
         self.assertEqual(expected, result)
 
     def test_ranklist_1Ace_1AceCounted(self):
-        cards = []
-        cards.append(card.Card('A', 's'))
+        cards = [card.Card('A', 's')]
         ranklist = evaluator.rank_list(cards)
         expected_qty = ranklist[0][0]
         expected_rank = ranklist[0][1]
@@ -362,18 +326,14 @@ class TestEvaluator(unittest.TestCase):
             expected_qty == 1, expected_rank == 'A')
 
     def test_ranklist_2Aces_lenEquals1(self):
-        cards = []
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('A', 'h'))
+        cards = pokerhands.convert_to_cards(['As', 'Ah'])
         expected = 1
         ranklist = evaluator.rank_list(cards)
         result = len(ranklist)
         self.assertEqual(expected, result)
 
     def test_ranklist_2Aces_2AcesCounted(self):
-        cards = []
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('A', 'h'))
+        cards = pokerhands.convert_to_cards(['As', 'Ah'])
         ranklist = evaluator.rank_list(cards)
         expected_qty = ranklist[0][0]
         expected_rank = ranklist[0][1]
@@ -381,9 +341,7 @@ class TestEvaluator(unittest.TestCase):
             expected_qty == 2, expected_rank == 'A')
 
     def test_ranklist_AK_lenEquals2(self):
-        cards = []
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('K', 'h'))
+        cards = pokerhands.convert_to_cards(['As', 'Kh'])
         expected = 2
         ranklist = evaluator.rank_list(cards)
         result = len(ranklist)
