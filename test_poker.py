@@ -51,7 +51,7 @@ class TestPoker(unittest.TestCase):
         self.r._table.move_button()
         self.r.deal_cards(1)
         expected = 6
-        result = len(self.r._table.get_players(CARDS=True))
+        result = len(self.r._table.get_players(hascards=True))
         self.assertEqual(expected, result)
 
     # 6 players, deal 1 - decksize == 48
@@ -102,7 +102,7 @@ class TestPoker(unittest.TestCase):
         self.r.deal_cards(1)
         self.r.muck_all_cards()
         expected = 0
-        result = len(self.r._table.get_players(CARDS=True))
+        result = len(self.r._table.get_players(hascards=True))
         self.assertEqual(expected, result)
 
     # 6 players, deal 1 - verify_muck is True after running
@@ -387,7 +387,7 @@ class TestPoker(unittest.TestCase):
     def test_besthandval_2players_straight(self):
         seats = 2
         self.allin_table(seats, REVERSED_HANDS=True)
-        players = self.r._table.get_players(CARDS=True)
+        players = self.r._table.get_players(hascards=True)
         expected = evaluator.get_value(pokerhands.straight_high())
         result = self.r.best_hand_val(players)
         self.assertEqual(expected, result)
@@ -397,7 +397,7 @@ class TestPoker(unittest.TestCase):
     def test_besthandval_3players_flush(self):
         seats = 3
         self.allin_table(seats, REVERSED_HANDS=True)
-        players = self.r._table.get_players(CARDS=True)
+        players = self.r._table.get_players(hascards=True)
         expected = evaluator.get_value(pokerhands.flush_high(),)
         result = self.r.best_hand_val(players)
         self.assertEqual(expected, result)
@@ -406,7 +406,7 @@ class TestPoker(unittest.TestCase):
     def test_besthandval_4players_fullhouse(self):
         seats = 4
         self.allin_table(seats, REVERSED_HANDS=True)
-        players = self.r._table.get_players(CARDS=True)
+        players = self.r._table.get_players(hascards=True)
         expected = evaluator.get_value(pokerhands.fullhouse_high(),)
         result = self.r.best_hand_val(players)
         self.assertEqual(expected, result)
@@ -415,7 +415,7 @@ class TestPoker(unittest.TestCase):
     def test_besthandval_5players_straightflush(self):
         seats = 5
         self.allin_table(seats, REVERSED_HANDS=True)
-        players = self.r._table.get_players(CARDS=True)
+        players = self.r._table.get_players(hascards=True)
         expected = evaluator.get_value(pokerhands.straightflush_high(),)
         result = self.r.best_hand_val(players)
         self.assertEqual(expected, result)
@@ -424,7 +424,7 @@ class TestPoker(unittest.TestCase):
     def test_besthandval_6players_royalflush(self):
         seats = 6
         self.allin_table(seats, REVERSED_HANDS=True)
-        players = self.r._table.get_players(CARDS=True)
+        players = self.r._table.get_players(hascards=True)
         expected = evaluator.get_value(pokerhands.royalflush(),)
         result = self.r.best_hand_val(players)
         self.assertEqual(expected, result)

@@ -165,7 +165,7 @@ def discard_phase(table, deck):
     """
     print('Discard phase: ' + '~'*55)
     # Make sure the button goes last!
-    holdingcards = table.get_players(CARDS=True)
+    holdingcards = table.get_players(hascards=True)
     muckpile = []
 
     for p in holdingcards:

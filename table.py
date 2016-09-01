@@ -188,7 +188,7 @@ class Table():
                 players.append(self.remove_player(i))
         return players
 
-    def get_players(self, CARDS=False, CHIPS=False):
+    def get_players(self, hascards=False, haschips=False):
         """
         Returns a list of players at the table, ordered from SB first to Button Last. Can
         specify if players have cards and/or chips.
@@ -202,10 +202,10 @@ class Table():
 
         players = [self.seats[s] for s in seats if self.seats[s] is not None]
 
-        if CARDS is True:
+        if hascards is True:
             players = list(filter((lambda x: x.has_cards() == True), players))
 
-        if CHIPS is True:
+        if haschips is True:
             players = list(filter((lambda x: not x.is_allin() == True), players))
 
         return players

@@ -271,7 +271,7 @@ class TestTable(unittest.TestCase):
     def test_getplayers_cardsandchips_0withcards_returns0(self):
         self.t.randomize_button()
         expected = 0
-        result = len(self.t.get_players(CARDS=True, CHIPS=True))
+        result = len(self.t.get_players(hascards=True, haschips=True))
         self.assertEqual(expected, result)
 
     # 1 players holding cards, gets a list size 1
@@ -280,7 +280,7 @@ class TestTable(unittest.TestCase):
         expected = 1
         c = card.Card('A', 's')
         self.t.seats[0].add_card(c)
-        result = len(self.t.get_players(CARDS=True, CHIPS=True))
+        result = len(self.t.get_players(hascards=True, haschips=True))
         self.assertEqual(expected, result)
 
     """
@@ -290,7 +290,7 @@ class TestTable(unittest.TestCase):
     def test_getplayers_withcards_seat0hascards_raiseException(self):
         c = card.Card('A', 's')
         self.t.seats[0].add_card(c)
-        self.assertRaises(Exception, self.t.get_players(CARDS=True))
+        self.assertRaises(Exception, self.t.get_players(hascards=True))
 
     # 1 player with cards. Button moved to 0. Returns the player
     def test_getplayers_withcards_btn0_seat0hascards_returnsPlayer(self):
@@ -301,7 +301,7 @@ class TestTable(unittest.TestCase):
         c = card.Card('A', 's')
         self.t.seats[0].add_card(c)
         expected = [self.t.seats[0]]
-        result = self.t.get_players(CARDS=True)
+        result = self.t.get_players(hascards=True)
         self.assertEqual(expected, result)
 
     # 2 player with cards. Button moved to 0. Returns the player
@@ -314,7 +314,7 @@ class TestTable(unittest.TestCase):
 
         testtools.deal_table_cards(t)
         expected = t.seats[0]
-        result = t.get_players(CARDS=True)[0]
+        result = t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
 
     # 2 player with cards. Button moved to 0. Returns the player
@@ -330,7 +330,7 @@ class TestTable(unittest.TestCase):
         testtools.deal_table_cards(t)
 
         expected = t.seats[1]
-        result = t.get_players(CARDS=True)[0]
+        result = t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
 
     # 6 players with cards, Button at 0. Returns list with seat 1 first.
@@ -342,7 +342,7 @@ class TestTable(unittest.TestCase):
         testtools.deal_table_cards(self.t)
 
         expected = self.t.seats[1]
-        result = self.t.get_players(CARDS=True)[0]
+        result = self.t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
 
     # 6 players with cards, Button at 5. Returns list with seat 0 first.
@@ -354,7 +354,7 @@ class TestTable(unittest.TestCase):
 
         testtools.deal_table_cards(self.t)
         expected = self.t.seats[1]
-        result = self.t.get_players(CARDS=True)[0]
+        result = self.t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
 
     # 6 players with cards, Button at 0. Returns list that's size 6.
@@ -362,7 +362,7 @@ class TestTable(unittest.TestCase):
         self.t.move_button()
         testtools.deal_table_cards(self.t)
         expected = 6
-        result = len(self.t.get_players(CARDS=True))
+        result = len(self.t.get_players(hascards=True))
         self.assertEqual(expected, result)
 
     """

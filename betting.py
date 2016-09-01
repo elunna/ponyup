@@ -41,7 +41,7 @@ class BettingRound():
             self.process_option(o)
             print(self.action_string(o))
 
-            cardholders = self.r._table.get_players(CARDS=True)
+            cardholders = self.r._table.get_players(hascards=True)
 
             if len(cardholders) == 1:
                 oneleft = '{}Only one player left!'.format(spacing(self.level))

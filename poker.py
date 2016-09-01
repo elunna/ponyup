@@ -99,7 +99,7 @@ class Round():
         Unhides all player hands and returns a string that shows all the player hands.
         """
         _str = ''
-        for p in self._table.get_players(CARDS=True):
+        for p in self._table.get_players(hascards=True):
             p.showhand()
             line = '\t\t\t\t {:>15} shows {:10}\n'.format(str(p), str(p._hand))
             _str += line
@@ -163,7 +163,7 @@ class Round():
         """
         Returns a list of all stack sizes that went all-in this round.
         """
-        return [self.starting_stacks[p.name] for p in self._table.get_players(CARDS=True)
+        return [self.starting_stacks[p.name] for p in self._table.get_players(hascards=True)
                 if p.is_allin()]
 
     def make_sidepots(self, allins):
@@ -260,7 +260,7 @@ class Round():
         """
         Returns a list of players who had the minimum starting stack size.
         """
-        cardholders = self._table.get_players(CARDS=True)
+        cardholders = self._table.get_players(hascards=True)
         return [p for p in cardholders if self.starting_stacks[p.name] >= stack_req]
 
     def split_pot(self, winners, amt):
@@ -374,7 +374,7 @@ class Round():
         if len(self.muck) != 0:
             return False
         # Check that no players have cards.
-        if len(self._table.get_players(CARDS=True)) > 0:
+        if len(self._table.get_players(hascards=True)) > 0:
             return False
         # Check that the pot is 0.
         if self.pot != 0:
@@ -393,7 +393,7 @@ class Round():
         if len(self.muck) != self.DECKSIZE:
             return False
         # Check that all players have folded.
-        if len(self._table.get_players(CARDS=True)) > 0:
+        if len(self._table.get_players(hascards=True)) > 0:
             return False
         # The sum of all sidepots should equal the potsize.
 
