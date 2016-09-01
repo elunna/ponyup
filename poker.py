@@ -300,7 +300,7 @@ class Round():
         Compare all the hands of players holding cards and determine the winner(s). Awards each
         winner the appropriate amount.
         """
-        print('SHOWDOWN!')
+        print('Showdown!' + '~'*60)
         print(self.show_cards())
 
         allins = self.get_allins()
