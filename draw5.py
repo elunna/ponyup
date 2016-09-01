@@ -110,18 +110,18 @@ def draw_discards(cards, ranklist):
         return ev.strip_suits(cards, suit)
 
     # Test for open-ended straight draw(s)
-    OESD = ev.check_draw(cards, 4, 0)
+    OESD = ev.chk_straight_draw(cards, 4, 0)
     if OESD is not None:
         return ev.extract_discards(cards, OESD)
 
     # Test for gutshot straight draw(s)
-    GSSD = ev.check_draw(cards, 4, 1)
+    GSSD = ev.chk_straight_draw(cards, 4, 1)
     if GSSD is not None:
         return ev.extract_discards(cards, GSSD)
 
     # Test for the wheel draw
     if ranklist[0].rank == 'A':
-        WD = ev.check_draw(cards, 3, 1)
+        WD = ev.chk_straight_draw(cards, 3, 1)
 
         if WD is not None and WD[-1].val() <= 5:
             # The obvious discard is the dangling high card
@@ -144,12 +144,12 @@ def draw_discards(cards, ranklist):
         return ev.strip_suits(cards, suit)
 
     # Backdoor straight draws are pretty desparate
-    BDSD = ev.check_draw(cards, 3, 0)
+    BDSD = ev.chk_straight_draw(cards, 3, 0)
     if BDSD is not None:
         return ev.extract_discards(cards, BDSD)
 
     # 1-gap Backdoor straight draws are truly desparate!
-    BDSD = ev.check_draw(cards, 3, 1)
+    BDSD = ev.chk_straight_draw(cards, 3, 1)
     if BDSD is not None:
         return ev.extract_discards(cards, BDSD)
 

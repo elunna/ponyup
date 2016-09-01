@@ -381,15 +381,44 @@ def is_integer(num):
     return isinstance(num, numbers.Integral)
 
 
-def check_draw(cards, qty, gap):
+def get_best_straight_draw(cards):
     """
-    Check if there is a straight draw in the list of cards. Can specify how many cards the
+    Check if there is a straight draw in the list of cards and returns the best available draw.
+
+    Can specify how many cards the
     straight draw is and how many gaps are acceptable.
     """
-    # Assume cards are sorted
-    for i in range((len(cards) - qty) + 1):
-        if get_allgaps(cards[i: qty + i]) <= gap:
-            return cards[i: qty + i]
+    draw_sizes = [4, 3, 2]
+    cards = sorted(cards)
+    HANDSIZE = 5
+    draws = []
+
+    for size in draw_sizes:
+        maxgap = HANDSIZE - size
+
+        for gap in range(maxgap + 1):
+            result = chk_straight_draw(cards, size, gap)
+            if result:
+                draws.append(result)
+    if draws:
+        # Return the highest, which would be the last added.
+        return draws.pop()
+    else:
+        return None
+
+
+def chk_straight_draw(cards, qty, gap):
+    end_index = (len(cards) - qty) + 1
+    cards = sorted(cards)
+
+    draws = []
+    for i in range(end_index):
+        currentslice = cards[i: qty + i]
+        if get_allgaps(currentslice) <= gap:
+            draws.append(currentslice)
+    if draws:
+        # Return the highest, which would be the last added.
+        return draws.pop()
     else:
         return None
 
