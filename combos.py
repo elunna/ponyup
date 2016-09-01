@@ -4,6 +4,7 @@ from __future__ import print_function
 import deck
 import evaluator
 import itertools
+import pickle
 
 
 def n_choose_k(n, k):
@@ -125,6 +126,13 @@ def enumerate_unique_5cardhands(combolist):
     sortedhands = sort_handslist(unique_hands)
     print_unique_5cardhands(sortedhands)
 
+
+def write_handcombos():
+    print('Enumerating unique 5-card hands by value')
+    unique_hands = get_unique_5cardhands()
+
+    with open('handcombos.dat', 'wb') as db:
+        pickle.dump(unique_hands, db)
 
 if __name__ == "__main__":
     d = deck.Deck()
