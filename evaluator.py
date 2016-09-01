@@ -175,25 +175,28 @@ def get_value(cards):
         else:
             return HANDTYPES['HIGH CARD'] + score_ranklist(ranklist)
 
-    if len(ranklist) >= 1:
+    elif len(ranklist) >= 1:
+        return score_pair_hands(ranklist)
+    else:
+        return HANDTYPES['INVALID']
 
-        # Returns the value of a pair-type hand.
-        if len(ranklist) > 1:
-            if ranklist[0][0] == 3 and ranklist[1][0] == 2:
-                return HANDTYPES['FULL HOUSE'] + score_ranklist(ranklist)
-            elif ranklist[0][0] == 2 and ranklist[1][0] == 2:
-                return HANDTYPES['TWO PAIR'] + score_ranklist(ranklist)
 
-        if ranklist[0][0] == 1:
-            return HANDTYPES['HIGH CARD'] + score_ranklist(ranklist)
-        elif ranklist[0][0] == 2:
-            return HANDTYPES['PAIR'] + score_ranklist(ranklist)
-        elif ranklist[0][0] == 3:
-            return HANDTYPES['TRIPS'] + score_ranklist(ranklist)
-        elif ranklist[0][0] == 4:
-            return HANDTYPES['QUADS'] + score_ranklist(ranklist)
+def score_pair_hands(ranklist):
+    # Returns the value of a pair-type hand.
+    if len(ranklist) > 1:
+        if ranklist[0].quantity == 3 and ranklist[1].quantity == 2:
+            return HANDTYPES['FULL HOUSE'] + score_ranklist(ranklist)
+        elif ranklist[0].quantity == 2 and ranklist[1].quantity == 2:
+            return HANDTYPES['TWO PAIR'] + score_ranklist(ranklist)
 
-    return HANDTYPES['INVALID']
+    if ranklist[0].quantity == 1:
+        return HANDTYPES['HIGH CARD'] + score_ranklist(ranklist)
+    elif ranklist[0].quantity == 2:
+        return HANDTYPES['PAIR'] + score_ranklist(ranklist)
+    elif ranklist[0].quantity == 3:
+        return HANDTYPES['TRIPS'] + score_ranklist(ranklist)
+    elif ranklist[0].quantity == 4:
+        return HANDTYPES['QUADS'] + score_ranklist(ranklist)
 
 
 def get_description(value, cards):
