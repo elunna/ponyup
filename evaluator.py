@@ -24,6 +24,18 @@ HANDTYPES = {
     'INVALID': -1
 }
 
+DRAWTYPES = {
+    'STRAIGHT FLUSH DRAW': 5000,
+    'FLUSH DRAW': 4000,
+    'STRAIGHT DRAW': 2000,
+    'GUTSHOT DRAW': 1000,
+    'BACKDOOR FLUSH DRAW': 200,
+    'BACKDOOR STRAIGHT DRAW': 100,
+    '2 SUITED DRAW': 20,
+    '2 CONNECTED DRAW': 10,
+    'HIGH CARD DRAW': 0
+}
+
 
 def is_validhand(cards):
     """
