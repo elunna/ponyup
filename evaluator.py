@@ -151,8 +151,10 @@ def get_value(cards):
     it is("pair", "two pair", etc), but having less than 5 cards automatically filters out the
     hands that require 5: straights, flushes, full house, etc.
     """
-    cards = sorted(cards, key=lambda x: card.RANKS[x.rank])
-    ranklist = rank_list(cards)
+    #  cards = sorted(cards, key=lambda x: card.RANKS[x.rank])
+    #  ranklist = rank_list(cards)
+
+    ranklist = rank_list(sorted(cards))
 
     if len(ranklist) == 5:
         # Returns the value of a non-pair hand.
@@ -176,12 +178,14 @@ def get_value(cards):
             return HANDTYPES['HIGH CARD'] + score_ranklist(ranklist)
 
     elif len(ranklist) >= 1:
-        return score_pair_hands(ranklist)
+        return score_pair_hands(cards)
     else:
         return HANDTYPES['INVALID']
 
 
-def score_pair_hands(ranklist):
+def score_pair_hands(cards):
+    ranklist = rank_list(sorted(cards))
+
     # Returns the value of a pair-type hand.
     if len(ranklist) > 1:
         if ranklist[0].quantity == 3 and ranklist[1].quantity == 2:
