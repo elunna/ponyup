@@ -66,30 +66,46 @@ class Draw5Session(poker.Session):
         self.rounds += 1
 
 
-def auto_discard(hand):
+def made_hand_discards(hand, ranklist):
     """
-    Calculates the best discard in a 5 card hand.
-    # hand is a Hand object
+    Determine the best cards to discard for a given made hand.
+    hand is a Hand object.
     """
     PAT_HANDS = ['STRAIGHT', 'FLUSH', 'FULL HOUSE', 'STRAIGHT FLUSH', 'ROYAL FLUSH']
     DIS_RANKS = ['PAIR', 'TRIPS', 'QUADS']
-
-    ranklist = ev.rank_list(hand.cards)
 
     if hand.rank() in PAT_HANDS:
         return []  # Don't discard anything
     elif hand.rank() in DIS_RANKS:
         #  standard discard
-        highcards = ranklist[0].rank
-        return ev.strip_ranks(hand.cards, highcards)
+        paircard = ranklist[0].rank
+        return ev.strip_ranks(hand.cards, paircard)
     elif hand.rank() == 'TWO PAIR':
         # Keep the two pair, discard 1.
-        highcards = ranklist[0].rank + ranklist[1].rank
+        paircard = ranklist[0].rank + ranklist[1].rank
 
-        return ev.strip_ranks(hand.cards, highcards)
+        return ev.strip_ranks(hand.cards, paircard)
 
-    # Process any available draws
-    return draw_discards(sorted(hand.cards[:]), ranklist)
+
+def auto_discard(hand, max_discards=5):
+    """
+    Calculates the best discard in a 5 card hand. Takes a maximum number of allowed discards. If
+    the auto-pick for discards is larger than the max, we will pop out the lowest cards(thereby
+    keeping the higher and more valuable cards) until we reach the allowable number.
+    # hand is a Hand object
+    """
+    ranklist = ev.rank_list(hand.cards)
+    if hand.rank() == 'HIGH CARD':
+        # Process any available draws
+        discards = draw_discards(sorted(hand.cards[:]), ranklist)
+    else:
+        discards = made_hand_discards(hand, ranklist)
+
+    while len(discards) > max_discards:
+        lowcard = min(discards)
+        discards.remove(lowcard)
+
+    return discards
 
 
 def draw_discards(cards, ranklist):
@@ -162,10 +178,14 @@ def discard_phase(table, deck):
     muckpile = []
 
     for p in holdingcards:
+        max_discards = (5 if len(deck) >= 5 else len(deck))
+        if max_discards == 0:
+            print('Deck has been depleted!')
+            break
         if p.is_human():
-            discards = human_discard(p._hand)
+            discards = human_discard(p._hand, max_discards)
         else:
-            discards = auto_discard(p._hand)
+            discards = auto_discard(p._hand, max_discards)
 
         if discards:
             print('{} discards {}'.format(str(p), discards).rjust(70))
@@ -206,7 +226,7 @@ def help_txt():
     print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
 
 
-def human_discard(hand):
+def human_discard(hand, max_discards=5):
     """
     Offers the human player a menu of discard options and returns the list of chosen discards.
     """
@@ -223,6 +243,11 @@ def human_discard(hand):
         valid_picks = ['1', '2', '3', '4', '5']
         picks = sorted(
             [int(x) for x in set(user_str) if x in valid_picks], reverse=True)
+
+        if len(picks) > max_discards:
+            print('Sorry, the deck is low -- you can only pick up to {} cards.'.format(
+                max_discards))
+            continue
 
         discards = []
 
