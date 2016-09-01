@@ -63,5 +63,9 @@ def convert_to_cards(cardlist):
     return [to_card(x) for x in cardlist]
 
 
-def make(hand_name):
-    return convert_to_cards(POKERHANDS[hand_name])
+def make(hand_name, hidden=True):
+    h = convert_to_cards(POKERHANDS[hand_name])
+    if not hidden:
+        for c in h:
+            c.hidden = False
+    return h
