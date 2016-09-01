@@ -213,21 +213,20 @@ def human_discard(hand):
     print(discard_menu(hand))
     while True:
         helpme = ['?', 'h', 'help']
-        choice = input(':> ')
-        if choice in helpme:
+        user_str = input(':> ')
+        if user_str in helpme:
             help_txt()
             continue
 
         # Split up the #s, and reverse them so we can remove them without the list
         # collapsing and disrupting the numbering.
-        validnumbers = ['1', '2', '3', '4', '5']
-        choice = sorted(list(choice), reverse=True)
+        valid_picks = ['1', '2', '3', '4', '5']
+        picks = sorted(
+            [int(x) for x in set(user_str) if x in valid_picks], reverse=True)
+
         discards = []
 
-        for c in choice:
-            if ev.is_integer(c) and c in validnumbers:
-                discards.append(hand.cards[int(c) - 1])
-            else:
-                pass
+        for n in picks:
+            discards.append(hand.cards[int(n) - 1])
         break
     return discards
