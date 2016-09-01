@@ -427,6 +427,8 @@ def chk_wheel(cards):
 
 
 def chk_straight_draw(cards, qty, gap):
+    if qty > len(cards):
+        raise ValueError('qty cannot be larger than the length of the card list!')
     end_index = (len(cards) - qty) + 1
     cards = sorted(cards)
 
