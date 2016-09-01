@@ -141,7 +141,7 @@ class TestPlayer(unittest.TestCase):
     # A five card hand is not not hidden
     def test_showhand_has5cards_allareup(self):
         p = player.Player('Erik')
-        for c in pokerhands.royalflush():
+        for c in pokerhands.make('royalflush'):
             p.add_card(c)
         p.showhand()
         expected = True

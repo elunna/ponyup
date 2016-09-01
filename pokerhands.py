@@ -4,6 +4,7 @@ This is a collection of functions that return lists of cards that compose all th
 hands and also some variations on them. These are meant to be used for testing.
 """
 from __future__ import print_function
+import card
 
 # These are constants to help with computer AI
 HI_AQ = 1412000000
@@ -44,9 +45,23 @@ POKERHANDS = {
     'wheeldraw': ['3h', '4s', 'As', '2d', 'Kh'],
     'BDFD1': ['2d', '4s', '5s', '7s', 'Kh'],
     'BDFD2': ['Ad', '4s', '5s', '7s', 'Kh'],
-    'highcards1': ['Ad', '4s', 'Qs', '7s', 'Kh'],
+    'highcards': ['Ad', '4s', 'Qs', '7s', 'Kh'],
     'acehigh': ['Ad', '4s', '5s', '7s', '9h'],
     'BDSD1': ['2d', '7s', '8s', '9d', 'Kh'],
     'BDSD2': ['2d', '7s', '8s', 'Td', 'Kh'],
     'junk': ['2d', '3s', '6s', '8d', 'Th']
 }
+
+
+def to_card(string):
+    if len(string) != 2:
+        raise Exception('String must be exactly 2 characters to convert to a card!')
+    return card.Card(string[0], string[1])
+
+
+def convert_to_cards(cardlist):
+    return [to_card(x) for x in cardlist]
+
+
+def make(hand):
+    return convert_to_cards(POKERHANDS[hand])

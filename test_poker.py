@@ -86,7 +86,7 @@ class TestPoker(unittest.TestCase):
     # deal highcards1():
     #  h = [('A', 'd'), ('4', 's'), ('Q', 's'), ('7', 's'), ('K', 'h')]
     def test_sortcards_humandealt_sorted(self):
-        h = pokerhands.highcards1()
+        h = pokerhands.make('highcards')
         self.r._table.seats[0]._hand.cards = h[:]
         expected = sorted(h)
         self.r.sortcards()
@@ -388,7 +388,7 @@ class TestPoker(unittest.TestCase):
         seats = 2
         self.allin_table(seats, REVERSED_HANDS=True)
         players = self.r._table.get_players(hascards=True)
-        expected = evaluator.get_value(pokerhands.straight_high())
+        expected = evaluator.get_value(pokerhands.make('straight_high'))
         result = self.r.best_hand_val(players)
         self.assertEqual(expected, result)
 
@@ -398,7 +398,7 @@ class TestPoker(unittest.TestCase):
         seats = 3
         self.allin_table(seats, REVERSED_HANDS=True)
         players = self.r._table.get_players(hascards=True)
-        expected = evaluator.get_value(pokerhands.flush_high(),)
+        expected = evaluator.get_value(pokerhands.make('flush_high'))
         result = self.r.best_hand_val(players)
         self.assertEqual(expected, result)
 
@@ -407,7 +407,7 @@ class TestPoker(unittest.TestCase):
         seats = 4
         self.allin_table(seats, REVERSED_HANDS=True)
         players = self.r._table.get_players(hascards=True)
-        expected = evaluator.get_value(pokerhands.fullhouse_high(),)
+        expected = evaluator.get_value(pokerhands.make('fullhouse_high'))
         result = self.r.best_hand_val(players)
         self.assertEqual(expected, result)
 
@@ -416,7 +416,7 @@ class TestPoker(unittest.TestCase):
         seats = 5
         self.allin_table(seats, REVERSED_HANDS=True)
         players = self.r._table.get_players(hascards=True)
-        expected = evaluator.get_value(pokerhands.straightflush_high(),)
+        expected = evaluator.get_value(pokerhands.make('straightflush_high'))
         result = self.r.best_hand_val(players)
         self.assertEqual(expected, result)
 
@@ -425,7 +425,7 @@ class TestPoker(unittest.TestCase):
         seats = 6
         self.allin_table(seats, REVERSED_HANDS=True)
         players = self.r._table.get_players(hascards=True)
-        expected = evaluator.get_value(pokerhands.royalflush(),)
+        expected = evaluator.get_value(pokerhands.make('royalflush'))
         result = self.r.best_hand_val(players)
         self.assertEqual(expected, result)
 

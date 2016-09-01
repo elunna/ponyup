@@ -28,13 +28,13 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_is_validhand_duplicateCards_returnsFalse(self):
-        h = pokerhands.dupes()
+        h = pokerhands.make('dupes')
         expected = False
         result = evaluator.is_validhand(h)
         self.assertEqual(expected, result)
 
     def test_is_validhand_royalflush_returnsTrue(self):
-        h = pokerhands.royalflush()
+        h = pokerhands.make('royalflush')
         expected = True
         result = evaluator.is_validhand(h)
         self.assertEqual(expected, result)
@@ -125,28 +125,28 @@ class TestEvaluator(unittest.TestCase):
     """
     # Test a low straight hand
     def test_isstraight_lowstraight_returnsTrue(self):
-        hand = pokerhands.straight_low()
+        hand = pokerhands.make('straight_low')
         expected = True
         result = evaluator.is_straight(hand)
         self.assertEqual(expected, result)
 
     # Test a mid straight hand
     def test_isstraight_midstraight_returnsTrue(self):
-        hand = pokerhands.straight_mid()
+        hand = pokerhands.make('straight_mid')
         expected = True
         result = evaluator.is_straight(hand)
         self.assertEqual(expected, result)
 
     # Test a high straight hand
     def test_isstraight_highstraight_returnsTrue(self):
-        hand = pokerhands.straight_high()
+        hand = pokerhands.make('straight_high')
         expected = True
         result = evaluator.is_straight(hand)
         self.assertEqual(expected, result)
 
     # Test a non-straight hand
     def test_isstraight_nonstraight_returnsFalse(self):
-        hand = pokerhands.wheeldraw()
+        hand = pokerhands.make('wheeldraw')
         expected = False
         result = evaluator.is_straight(hand)
         self.assertEqual(expected, result)
@@ -299,13 +299,13 @@ class TestEvaluator(unittest.TestCase):
     Tests for is_set(cards)
     """
     def test_is_set_royalflush_returnsTrue(self):
-        h = pokerhands.royalflush()
+        h = pokerhands.make('royalflush')
         expected = True
         result = evaluator.is_set(h)
         self.assertEqual(expected, result)
 
     def test_is_set_handwithdupes_returnsFalse(self):
-        h = pokerhands.dupes()
+        h = pokerhands.make('dupes')
         expected = False
         result = evaluator.is_set(h)
         self.assertEqual(expected, result)

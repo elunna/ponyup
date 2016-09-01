@@ -13,7 +13,7 @@ class TestDraw5(unittest.TestCase):
     """
     # Royal flush - no discards
     def test_autodiscard_royalflush_returnsEmptyList(self):
-        h = hand.Hand(pokerhands.royalflush())
+        h = hand.Hand(pokerhands.make('royalflush'))
         h.unhide()
         expected = []
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -21,7 +21,7 @@ class TestDraw5(unittest.TestCase):
 
     # Straight flush - no discards
     def test_autodiscard_straightflush_returnsEmptyList(self):
-        h = hand.Hand(pokerhands.straightflush_high())
+        h = hand.Hand(pokerhands.make('straightflush_high'))
         h.unhide()
         expected = []
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -29,7 +29,7 @@ class TestDraw5(unittest.TestCase):
 
     # Full house - no discards
     def test_autodiscard_fullhouse_returnsEmptyList(self):
-        h = hand.Hand(pokerhands.fullhouse_high())
+        h = hand.Hand(pokerhands.make('fullhouse_high'))
         h.unhide()
         expected = []
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -37,7 +37,7 @@ class TestDraw5(unittest.TestCase):
 
     # Flush - no discards
     def test_autodiscard_flush_returnsEmptyList(self):
-        h = hand.Hand(pokerhands.flush_low())
+        h = hand.Hand(pokerhands.make('flush_low'))
         h.unhide()
         expected = []
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -45,7 +45,7 @@ class TestDraw5(unittest.TestCase):
 
     # Straight - no discards
     def test_autodiscard_straight_returnsEmptyList(self):
-        h = hand.Hand(pokerhands.straight_mid())
+        h = hand.Hand(pokerhands.make('straight_mid'))
         h.unhide()
         expected = []
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -54,7 +54,7 @@ class TestDraw5(unittest.TestCase):
     # Quads - discard the non quad card
     def test_autodiscard_quads_returns1card(self):
         # [('A', 's'), ('A', 'd'), ('A', 'h'), ('A', 'c'), ('K', 'c')]
-        h = hand.Hand(pokerhands.quads_high())
+        h = hand.Hand(pokerhands.make('quads_high'))
         h.unhide()
         expected = ['Kc']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -64,7 +64,7 @@ class TestDraw5(unittest.TestCase):
     # Trips - discard the non-trip cards
     def test_autodiscard_trips_returns2cards(self):
         # [('A', 's'), ('K', 'h'), ('A', 'h'), ('A', 'd'), ('Q', 'c')]
-        h = hand.Hand(pokerhands.trips_high())
+        h = hand.Hand(pokerhands.make('trips_high'))
         h.unhide()
         expected = ['Qc', 'Kh']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -73,7 +73,7 @@ class TestDraw5(unittest.TestCase):
     # Pair - Discard the non-pair cards
     def test_autodiscard_pair_returns3cards(self):
         # [('K', 's'), ('Q', 'h'), ('A', 's'), ('A', 'd'), ('J', 'c')]
-        h = hand.Hand(pokerhands.pair_high())
+        h = hand.Hand(pokerhands.make('pair_high'))
         h.unhide()
         expected = ['Jc', 'Qh', 'Ks']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -82,7 +82,7 @@ class TestDraw5(unittest.TestCase):
     # Two-Pair - Discard the non-pair card
     def test_autodiscard_2pair_returns1card(self):
         # [('A', 's'), ('A', 'h'), ('K', 's'), ('K', 'd'), ('Q', 'c')]
-        h = hand.Hand(pokerhands.twopair_high())
+        h = hand.Hand(pokerhands.make('twopair_high'))
         h.unhide()
         expected = ['Qc']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -91,7 +91,7 @@ class TestDraw5(unittest.TestCase):
     # OESFD - Discard the non-flush card
     def test_autodiscard_OESFD_returns1card(self):
         # [('J', 's'), ('T', 's'), ('8', 's'), ('2', 'd'), ('9', 's')]
-        h = hand.Hand(pokerhands.OESFD())
+        h = hand.Hand(pokerhands.make('OESFD'))
         h.unhide()
         expected = ['2d']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -100,7 +100,7 @@ class TestDraw5(unittest.TestCase):
     # GSSFD - Discard the non-flush card
     def test_autodiscard_GSSFD_returns1card(self):
         # [('J', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
-        h = hand.Hand(pokerhands.GSSFD())
+        h = hand.Hand(pokerhands.make('GSSFD'))
         h.unhide()
         expected = ['2d']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -109,7 +109,7 @@ class TestDraw5(unittest.TestCase):
     # Flush draw - Discard the non-flush card
     def test_autodiscard_flushdraw_returns1card(self):
         # [('A', 's'), ('T', 's'), ('7', 's'), ('2', 'd'), ('9', 's')]
-        h = hand.Hand(pokerhands.flushdrawA())
+        h = hand.Hand(pokerhands.make('flushdrawA'))
         h.unhide()
         expected = ['2d']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -118,7 +118,7 @@ class TestDraw5(unittest.TestCase):
     # OESD - Discard the non-straight card
     def test_autodiscard_OESD_returns1card(self):
         # [('J', 'h'), ('T', 's'), ('8', 'c'), ('2', 'd'), ('9', 's')]
-        h = hand.Hand(pokerhands.OESD())
+        h = hand.Hand(pokerhands.make('OESD'))
         h.unhide()
         expected = ['2d']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -127,7 +127,7 @@ class TestDraw5(unittest.TestCase):
     # GSSD - Discard the non-straightcard
     def test_autodiscard_GSSD_returns(self):
         # [('J', 'h'), ('T', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')]
-        h = hand.Hand(pokerhands.GSSD())
+        h = hand.Hand(pokerhands.make('GSSD'))
         h.unhide()
         expected = ['2d']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -136,7 +136,7 @@ class TestDraw5(unittest.TestCase):
     # Wheel draw - Discard the high card
     def test_autodiscard_wheel_returns(self):
         # [('3', 'h'), ('4', 's'), ('A', 's'), ('2', 'd'), ('K', 'h')]
-        h = hand.Hand(pokerhands.wheeldraw())
+        h = hand.Hand(pokerhands.make('wheeldraw'))
         h.unhide()
         expected = ['Kh']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -145,7 +145,7 @@ class TestDraw5(unittest.TestCase):
     # BDFD(low cards) - Discard the non-flush cards
     def test_autodiscard_BDFD1returns2cards(self):
         # [('2', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('K', 'h')]
-        h = hand.Hand(pokerhands.BDFD1())
+        h = hand.Hand(pokerhands.make('BDFD1'))
         h.unhide()
         expected = ['2d', 'Kh']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -154,7 +154,7 @@ class TestDraw5(unittest.TestCase):
     # BDFD(with 2 high cards) - Discard the low cards
     def test_autodiscard_BDFD2returns3cards(self):
         # [('A', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('K', 'h')]
-        h = hand.Hand(pokerhands.BDFD2())
+        h = hand.Hand(pokerhands.make('BDFD2'))
         h.unhide()
         expected = ['4s', '5s', '7s']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -163,7 +163,7 @@ class TestDraw5(unittest.TestCase):
     # 3 High cards - Discard the 2 low cards
     def test_autodiscard_highcards_returns2cards(self):
         # [('A', 'd'), ('4', 's'), ('Q', 's'), ('7', 's'), ('K', 'h')]
-        h = hand.Hand(pokerhands.highcards1())
+        h = hand.Hand(pokerhands.make('highcards'))
         h.unhide()
         expected = ['4s', '7s']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -172,7 +172,7 @@ class TestDraw5(unittest.TestCase):
     # Ace high - Discard the non-pair card
     def test_autodiscard_acehigh_returns4cards(self):
         # [('A', 'd'), ('4', 's'), ('5', 's'), ('7', 's'), ('9', 'h')]
-        h = hand.Hand(pokerhands.acehigh())
+        h = hand.Hand(pokerhands.make('acehigh'))
         h.unhide()
         expected = ['4s', '5s', '7s', '9h']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -181,7 +181,7 @@ class TestDraw5(unittest.TestCase):
     # 0 gap BDSD - Discard the non-connected cards
     def test_autodiscard_BDSD_returns2cards(self):
         # [('2', 'd'), ('7', 's'), ('8', 's'), ('9', 'd'), ('K', 'h')]
-        h = hand.Hand(pokerhands.BDSD1())
+        h = hand.Hand(pokerhands.make('BDSD1'))
         h.unhide()
         expected = ['2d', 'Kh']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -190,7 +190,7 @@ class TestDraw5(unittest.TestCase):
     # 1 gap BDSD - Discard the non-connected cards
     def test_autodiscard_BDSD2_returns2cards(self):
         # [('2', 'd'), ('7', 's'), ('8', 's'), ('9', 'd'), ('K', 'h')]
-        h = hand.Hand(pokerhands.BDSD2())
+        h = hand.Hand(pokerhands.make('BDSD2'))
         h.unhide()
         expected = ['2d', 'Kh']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]
@@ -199,7 +199,7 @@ class TestDraw5(unittest.TestCase):
     # Medium cards/junk - Discard the 3 low cards
     def test_autodiscard_junk_returns(self):
         #  [('2', 'd'), ('3', 's'), ('6', 's'), ('8', 'd'), ('T', 'h')]
-        h = hand.Hand(pokerhands.junk())
+        h = hand.Hand(pokerhands.make('junk'))
         h.unhide()
         expected = ['2d', '3s', '6s']
         result = [repr(c) for c in sorted(draw5.auto_discard(h))]

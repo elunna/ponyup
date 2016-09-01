@@ -7,12 +7,12 @@ import table
 
 STARTINGCHIPS = 1000
 
-HANDS = (pokerhands.royalflush(),
-         pokerhands.straightflush_high(),
-         pokerhands.fullhouse_high(),
-         pokerhands.flush_high(),
-         pokerhands.straight_high(),
-         pokerhands.trips_high()
+HANDS = (pokerhands.make('royalflush'),
+         pokerhands.make('straightflush_high'),
+         pokerhands.make('fullhouse_high'),
+         pokerhands.make('flush_high'),
+         pokerhands.make('straight_high'),
+         pokerhands.make('trips_high')
          )
 
 
