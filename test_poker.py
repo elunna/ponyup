@@ -490,3 +490,8 @@ class TestPoker(unittest.TestCase):
         expected = False
         result = self.r.check_integrity_post()
         self.assertEqual(expected, result)
+
+    """
+    Tests for cleanup()
+    """
+    # After cleanup, there should be no broke players.

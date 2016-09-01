@@ -11,53 +11,44 @@ class Draw5Session(poker.Session):
         """
         Play a round of Five Card Draw.
         """
-        _round = self.new_round()
+        r = self.new_round()
+        r.check_integrity_pre()
 
-        if len(self._table.get_players(CARDS=True)) > 0:
-            raise Exception('One or more players have cards before the deal!')
-
-        _round.post_blinds()
-        _round.deal_cards(DEALT)
-        _round.sortcards()
+        r.post_blinds()
+        r.deal_cards(DEALT)
+        r.sortcards()
 
         print(self._table)      # Show table pre draw
 
         # Pre-draw betting
-        victor = _round.betting_round()
+        victor = r.betting_round()
 
-        print(_round)           # Display pot
+        print(r)           # Display pot
 
         if victor is None:
             # Discard phase
-            discards = discard_phase(self._table, _round.d)
-            _round.muck.extend(discards)
-            _round.sortcards()
+            discards = discard_phase(self._table, r.d)
+            r.muck.extend(discards)
+            r.sortcards()
 
             print(self._table)  # Show table post draw
 
             # Post-draw betting round
-            victor = _round.betting_round()
-            print(_round)           # Display pot
+            victor = r.betting_round()
+            print(r)           # Display pot
 
             if victor is None:
                 # Showdown!
-                _round.showdown()
+                r.showdown()
             else:
                 # 1 left:
-                _round.award_pot(victor, _round.pot)
+                r.award_pot(victor, r.pot)
         else:
             # 1 left:
-            _round.award_pot(victor, _round.pot)
+            r.award_pot(victor, r.pot)
 
         # Cleanup all cards
-        _round.muck_all_cards()
-        _round.check_integrity_post()
-
-        # Remove broke players
-        broke_players = _round._table.remove_broke()
-        if broke_players:
-            for p in broke_players:
-                print('{} left the table with no money!'.format(p))
+        r.cleanup()
 
         # Move the table button
         self._table.move_button()

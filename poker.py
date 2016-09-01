@@ -398,3 +398,13 @@ class Round():
         # The sum of all sidepots should equal the potsize.
 
         return True
+
+    def cleanup(self):
+        self.muck_all_cards()
+        self.check_integrity_post()
+
+        # Remove broke players
+        broke_players = self._table.remove_broke()
+        if broke_players:
+            for p in broke_players:
+                print('{} left the table with no money!'.format(p))
