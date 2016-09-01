@@ -59,8 +59,12 @@ def to_card(string):
     return card.Card(string[0], string[1])
 
 
-def convert_to_cards(cardlist):
-    return [to_card(x) for x in cardlist]
+def convert_to_cards(strings):
+    # Unhide for testing purposes
+    cards = [to_card(x) for x in strings]
+    for c in cards:
+        c.hidden = False
+    return cards
 
 
 def make(hand_name, hidden=False):
