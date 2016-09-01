@@ -6,9 +6,18 @@ import random
 import sys
 import time
 
-# Rules:
-# If a player runs out of cards they lose.
-# If a player draws a last card for war that is an exception.
+"""
+Simulates a standard game of War. Players each start with a 27 card stack, 2 jokers included.
+Each player plays a card and tries to beat the rank of the other. The winner keeps the 2 cards.
+If two cards of the same rank are played, a "War" round is played where 3 additional cards are
+set down by each player, and a final determining card is played for all 10 cards. If these
+cards tie for rank, we proceed to an additional level of War and so on. Play ends when one
+player has won all the cards.
+
+Other clarification:
+* If a player runs out of cards they lose.
+* If a player draws a last card for war that is an exception.
+"""
 
 WAR = {
     1: 'WAR',
@@ -21,7 +30,9 @@ WAR = {
 
 
 def get_players():
-    # Creates 2 players and deals a deck evenly between them.
+    """
+    Creates 2 players and deals a deck evenly between them.
+    """
     players = [[], []]
     d = deck.Deck2Joker()
     d.shuffle()
@@ -33,12 +44,13 @@ def get_players():
 
 
 def get_gamestate(players):
-    # Returns a number that indicates the state of the game:
-    # 0 = Tie
-    # 1 = Player 1 won
-    # 2 = Player 2 won
-    # -1 = Still playing
-
+    """
+    Returns a number that indicates the state of the game:
+        0 = Tie
+        1 = Player 1 won
+        2 = Player 2 won
+        -1 = Still playing
+    """
     if len(players[0]) == 0 and len(players[1]) == 0:
         return 0
     elif len(players[0]) == 0:
@@ -65,7 +77,9 @@ def get_winner(players):
 
 
 def display_cards(cardlist):
-    """ Returns a string representing the cards in the list."""
+    """
+    Returns a string representing the cards in the list.
+    """
     for c in cardlist:
         c.hidden = False
         print('{} '.format(str(c)), end='')
@@ -87,11 +101,16 @@ def show_topcards(players):
 
 
 def award_cards(plyr, spoils):
-    # Add the compared cards to specified player's stack
+    """
+    Add the compared cards to specified player's stack
+    """
     plyr.extend(spoils)
 
 
 def get_spoils(players, qty):
+    """
+    Collects the cards that go into the War pile.
+    """
     spoils = []
     for i in range(qty):
         if get_gamestate(players) >= 0:
@@ -103,6 +122,9 @@ def get_spoils(players, qty):
 
 
 def playround(players, warlevel):
+    """
+    Play through one round of War.
+    """
     if get_gamestate(players) >= 0:
         gameover(players)
 
@@ -123,11 +145,17 @@ def playround(players, warlevel):
 
 
 def get_wartext(level):
+    """
+    Display the correct text for when a round hits any level of War.
+    """
     expoints = 2 * (level + 1)
     return '{}{}'.format(WAR[level], '!' * expoints)
 
 
 def war(players, level, spoils):
+    """
+    Executes a round of War when each player ties for rank.
+    """
     print(get_wartext(level))
     # Pause button
     #  input()
@@ -153,6 +181,9 @@ def war(players, level, spoils):
 
 
 def gameover(players):
+    """
+    The game has ended, prints out the appropriate ending text, and exits.
+    """
     state = get_gamestate(players)
     print('Game over! ', end='')
     if state == 0:
@@ -165,6 +196,9 @@ def gameover(players):
 
 
 def gameloop(players):
+    """
+    The main game loop that controls the game flow.
+    """
     rounds = 0
     while True:
 

@@ -22,6 +22,9 @@ class strategiesegy():
 
 
 def makeplay(player, _round, options):
+    """
+    Determines the appropriate play based on the street and handstrength.
+    """
     handval = player._hand.value()
 
     if _round.street == 0:
@@ -42,6 +45,10 @@ def makeplay(player, _round, options):
 
 
 def pick_raise(options):
+    """
+    Pick the most aggressive action available
+    RAISE > BET > CALL
+    """
     if 'r' in options:
         return options['r']
     elif 'b' in options:
@@ -51,6 +58,10 @@ def pick_raise(options):
 
 
 def pick_call(options):
+    """
+    Pick the 1-bet option
+    BET > CALL
+    """
     if 'b' in options:
         return options['b']
     else:
@@ -58,6 +69,10 @@ def pick_call(options):
 
 
 def pick_other(options):
+    """
+    Pick the passive option
+    FOLD or check/call
+    """
     if 'f' in options:
         return options['f']
     elif 'c' in options:

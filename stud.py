@@ -53,7 +53,9 @@ class Stud5Game(poker.Session):
 
 
 def determine_bringin(self, table, gametype):
-    # Finds which player has the lowest showing card and returns that player.
+    """
+    Finds which player has the lowest showing card and returns that player.
+    """
     suitvalues = {'c': 1, 'd': 2, 'h': 3, 's': 4}
     index = -1
     if gametype == "STUD5":

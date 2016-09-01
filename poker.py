@@ -189,6 +189,9 @@ class Round():
         return POTS
 
     def calc_sidepot(self, stacksize):
+        """
+        Calculates the maximum value a stacksize can win from the current pot.
+        """
         sidepot = 0
         for p in self._table:
             # Get the players total invested amount over the round
@@ -348,6 +351,10 @@ class Round():
             self.street += 1
 
     def valid_sidepots(self, sidepots):
+        """
+        Verifies that all sidepots add up to the current pot amount. If the sum of the sidepots
+        equals the pot, returns True. Otherwise returns False.
+        """
         total = 0
         for s in sidepots:
             total += s

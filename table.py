@@ -123,6 +123,12 @@ class Table():
             return p
 
     def next_player(self, from_seat, step=1, hascards=False):
+        """
+        Attempts to find the index of the next valid player from the from_seat. If step is -1
+        it will search backwards on the table. Step can only be 1 or -1. We can also specify to
+        search for the next player with cards by setting hascards to True. If no player is found
+        after searching the length of the table, an exception is raised.
+        """
         if from_seat < -1 or from_seat >= len(self):
             raise ValueError('from_seat is out of bounds!')
         if abs(step) != 1:
@@ -143,8 +149,9 @@ class Table():
             raise Exception('Error finding player!')
 
     def move_button(self):
-        # Move the button to the next valid player/seat
-        # Also set the blinds appropriately!
+        """
+        Moves the button to the next valid player/seat and sets the blinds.
+        """
         self.TOKENS['D'] = self.next_player(self.TOKENS['D'])
 
         if len(self.get_players()) == 2:
