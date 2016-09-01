@@ -21,103 +21,100 @@ TRIALS = 10000
 # 5) We find which discard combo has the best %
 
 
-def test(cards):
-    if len(cards) != 5:
-        raise ValueError('Non-valid hand!')
-        exit()
-
+def new_deck_minus_hand(_hand):
     d = deck.Deck()
-    for c in cards:
-        c.hidden = False
+    d.unhide()
+    for c in _hand:
         # Remove cards in hand from deck
         d.remove(c)
+    return d
 
-    # Unhide cards in deck
-    for c in d.cards:
-        c.hidden = False
+
+def rm_discards_from_hand(cards, discards):
+    # Remove the discard cards from hand
+    cards = cards[:]
+    for x in discards:
+        cards.remove(x)
+    return cards
+
+
+def test(cards):
+    d = new_deck_minus_hand(cards)
 
     print('Cards: {}'.format(cards))
     discard_combos = combos.get_allcombos(cards)
+
+    print('All {} combos of discards...'.format(len(discard_combos)))
+    for dc in discard_combos:
+        print(dc)
+
     print('Combos VS RANDOM HANDS!')
     print('{} Trials'.format(TRIALS))
 
     results = []
-    for dis in discard_combos:
-        wins = run_trial(d, cards[:], dis)
-        print('{:20}: Discard {:15} -- Win {}'.format(str(cards), str(dis), wins))
-        results.append((wins, dis))
+    for dc in discard_combos:
+        h = rm_discards_from_hand(cards, dc)
 
-    print('')
-    print('Sorting and printing our results for {}'.format(cards))
-    for r in sorted(results):
-        print(r)
+        wins = run_trials(d, h, dc)
+        results.append((wins, dc))
+        #  print('{:20}: Discard {:15} -- Win {}'.format(str(cards), str(dc), wins))
+    return results
 
 
-def run_trial(mydeck, c_copy, discard):
-    # Remove the discard cards from hand
-    for dis in discard:
-        c_copy.remove(dis)
-
+def run_trials(_deck, _hand, discard):
     WINS = 0
+    # Remove discards from deck
+    for c in discard:
+        _deck.remove(c)
 
-    # Begin trials
     for i in range(TRIALS):
-        d = deck.Deck(mydeck.cards[:])
+        # Reset deck
+        d = deck.Deck(_deck.cards[:])
         d.shuffle()
 
-        while len(c_copy) < 5:
-            #  hero.add(d_copy.deal())
-            c_copy.append(d.deal())
+        # Redraw for the hand.
+        while len(_hand) < 5:
+            _hand.append(d.deal())
 
-        hero = hand.Hand(c_copy)
+        hero = hand.Hand(_hand)
 
-        #  villain = hand.Hand([d_copy.deal() for x in range(5)])
-        villain = hand.Hand()
+        villain = hand.Hand([d.deal() for x in range(5)])
 
-        for v in range(5):
-            villain.add(d.deal())
+        if len(hero) != 5 or len(villain) != 5:
+            raise ValueError('Hero or villian hand is corrupt!')
 
-        # Make villain discard?
-        #  villian_dis = fivecarddraw.auto_discard(villain)
-        #  for c in villian_dis:
-            #  villain.discard(c)
-            #  villain.add(d_copy.deal())
-
-        if len(hero) != 5:
-            raise ValueError('Hero hand is corrupt!')
-        if len(villain) != 5:
-            raise ValueError('Villain hand is corrupt!')
-
-        #  mucksize = len(hero) + len(villain) + len(discard) + len(villian_dis) + len(d_copy)
         mucksize = len(hero) + len(villain) + len(discard) + len(d)
+
+        #  if mucksize != 52:
+            #  raise ValueError('Deck miscount!')
 
         if mucksize != 52:
             print('mucksize = {}'.format(mucksize))
             print('hero hand: {}'.format(len(hero)))
             print('villain hand: {}'.format(len(villain)))
             print('hero discard: {}'.format(len(discard)))
-            print(discard)
-            #  print('villain discard: {}'.format(villian_dis))
+            print('hero discard: {}'.format(discard))
             print('deck: {}'.format(sorted(d.cards)))
             print('deck size: {}'.format(len(d)))
 
+            playedcards = []
+            playedcards.extend(hero.cards)
+            playedcards.extend(villain.cards)
+
             for i in discard:
                 if i in d.cards:
-                    print('{} was found in the deck - should be discard!'.format(i))
+                    print('{} was found in the deck - was discarded!'.format(i))
+
+            for i in playedcards:
+                if i in d.cards:
+                    print('{} was found in the deck - already played!'.format(i))
 
             raise ValueError('Deck miscount!')
 
-        print('Hero: {}'.format(hero))
-        print('Villain: {}'.format(villain))
-        input('Press enter...')
-
+        print('Hero: {}, Villain: {}'.format(hero, villain))
         if hero.value() > villain.value():
             WINS += 1
 
-        exit()
-
-    #  WIN_PERCENT = WINS / TRIALS
-    #  return WIN_PERCENT
     return WINS
 
 if __name__ == "__main__":
@@ -125,7 +122,9 @@ if __name__ == "__main__":
     print('Test the winrates of different discard combos.')
     print('Run {} trials for each unique hand.'.format(TRIALS))
     print('*'*80)
-    h1 = pokerhands.deal_OESD()
-    test(h1)
-    #  h2 = handtests.deal_GSSD()
-    #  test(h2)
+    h1 = pokerhands.make('OESD', hidden=False)
+    results = test(h1)
+
+    print('')
+    for r in sorted(results):
+        print(r)
