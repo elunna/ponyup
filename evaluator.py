@@ -208,25 +208,26 @@ def get_description(value, cards):
     Returns a fitting text description of the passed pokerhand.
     """
     ranks = rank_list(cards)
-    ctype = get_type(value)
+    RANK = get_type(value)
+    BASEVALUE = 10000000000
 
     if len(cards) == 0:
         return 'No cards!'
-    elif ctype in ['STRAIGHT', 'STRAIGHT FLUSH']:
-        if value % 10000000000 == 0:
+    elif RANK in ['STRAIGHT', 'STRAIGHT FLUSH']:
+        if value % BASEVALUE == 0:
             return '5 High'
         else:
-            return '{} High'.format(ranks[0][1])
-    elif ctype in ['QUADS', 'TRIPS', 'PAIR']:
-        return '{}\'s'.format(ranks[0][1])
-    elif ctype == 'FULL HOUSE':
+            return '{} High'.format(ranks[0].rank)
+    elif RANK in ['QUADS', 'TRIPS', 'PAIR']:
+        return '{}\'s'.format(ranks[0].rank)
+    elif RANK == 'FULL HOUSE':
         return '{}\'s full of {}\'s'.format(
-            ranks[0][1], ranks[1][1])
-    elif ctype == 'TWO PAIR':
+            ranks[0].rank, ranks[1].rank)
+    elif RANK == 'TWO PAIR':
         return '{}\'s and {}\'s'.format(
-            ranks[0][1], ranks[1][1])
+            ranks[0].rank, ranks[1].rank)
     else:
-        return '{} High'.format(ranks[0][1])
+        return '{} High'.format(ranks[0].rank)
 
 
 def find_best_hand(cards):
