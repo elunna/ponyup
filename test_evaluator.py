@@ -254,42 +254,42 @@ class TestEvaluator(unittest.TestCase):
     Tests for find_best_hand(cards)
     """
     def test_findbesthand_pair_returnsPAIR(self):
-        cards = evaluator.convert_to_cards(['2c', '3c', '5s', '7s', 'Kc', 'Ac', 'As'])
+        cards = pokerhands.convert_to_cards(['2c', '3c', '5s', '7s', 'Kc', 'Ac', 'As'])
         besthand = evaluator.find_best_hand(cards)
         expected = 'PAIR'
         result = besthand.rank()
         self.assertEqual(expected, result)
 
     def test_findbesthand_fullhouse_returnsFULLHOUSE(self):
-        cards = evaluator.convert_to_cards(['7c', '7s', 'Ks', 'Kc', 'Ah', 'Ac', 'As'])
+        cards = pokerhands.convert_to_cards(['7c', '7s', 'Ks', 'Kc', 'Ah', 'Ac', 'As'])
         besthand = evaluator.find_best_hand(cards)
         result = besthand.rank()
         expected = 'FULL HOUSE'
         self.assertEqual(expected, result)
 
     def test_findbesthand_straightflush_returnsSTRAIGHTFLUSH(self):
-        cards = evaluator.convert_to_cards(['4s', '5s', '6s', '7s', '8s', 'Ks', 'As'])
+        cards = pokerhands.convert_to_cards(['4s', '5s', '6s', '7s', '8s', 'Ks', 'As'])
         besthand = evaluator.find_best_hand(cards)
         result = besthand.rank()
         expected = 'STRAIGHT FLUSH'
         self.assertEqual(expected, result)
 
     def test_findbesthand_quads_returnsQUADS(self):
-        cards = evaluator.convert_to_cards(['Kc', 'Kd', 'Ks', 'Ac', 'Kd', 'Ah', 'As'])
+        cards = pokerhands.convert_to_cards(['Kc', 'Kd', 'Ks', 'Ac', 'Kd', 'Ah', 'As'])
         besthand = evaluator.find_best_hand(cards)
         result = besthand.rank()
         expected = 'QUADS'
         self.assertEqual(expected, result)
 
     def test_findbesthand_straight_returnsSTRAIGHT(self):
-        cards = evaluator.convert_to_cards(['Ac', 'As', '2c', '3s', '4h', '5s', '5h'])
+        cards = pokerhands.convert_to_cards(['Ac', 'As', '2c', '3s', '4h', '5s', '5h'])
         besthand = evaluator.find_best_hand(cards)
         result = besthand.rank()
         expected = 'STRAIGHT'
         self.assertEqual(expected, result)
 
     def test_findbesthand_flush_returnsFLUSH(self):
-        cards = evaluator.convert_to_cards(['8s', '9s', 'Tc', 'Js', 'Qs', 'Ks', 'Ac'])
+        cards = pokerhands.convert_to_cards(['8s', '9s', 'Tc', 'Js', 'Qs', 'Ks', 'Ac'])
         besthand = evaluator.find_best_hand(cards)
         result = besthand.rank()
         expected = 'FLUSH'
@@ -328,7 +328,7 @@ class TestEvaluator(unittest.TestCase):
     Tests for rank_dict(cards)
     """
     def test_rankdict_0Ace_counts0(self):
-        cards = evaluator.convert_to_cards(['Kc', '2s'])
+        cards = pokerhands.convert_to_cards(['Kc', '2s'])
         expected = 0
         rankdict = evaluator.rank_dict(cards)
         # 0 is the default in case there are no Aces
@@ -336,14 +336,14 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_rankdict_1Ace_counts1(self):
-        cards = evaluator.convert_to_cards(['Kc', 'As'])
+        cards = pokerhands.convert_to_cards(['Kc', 'As'])
         expected = 1
         rankdict = evaluator.rank_dict(cards)
         result = rankdict.get('A')
         self.assertEqual(expected, result)
 
     def test_rankdict_2Aces_counts2(self):
-        cards = evaluator.convert_to_cards(['Ah', 'Kc', 'As'])
+        cards = pokerhands.convert_to_cards(['Ah', 'Kc', 'As'])
         expected = 2
         rankdict = evaluator.rank_dict(cards)
         result = rankdict.get('A')
@@ -401,7 +401,7 @@ class TestEvaluator(unittest.TestCase):
     Tests for suit_dict(cards)
     """
     def test_suitdict_0Spades_counts0(self):
-        cards = evaluator.convert_to_cards(['Kc', '2h'])
+        cards = pokerhands.convert_to_cards(['Kc', '2h'])
         expected = 0
         suitdict = evaluator.suit_dict(cards)
         # 0 is the default in case there are no Aces
@@ -409,21 +409,21 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_suitdict_0Spade_counts0(self):
-        cards = evaluator.convert_to_cards(['Kc', 'Ah'])
+        cards = pokerhands.convert_to_cards(['Kc', 'Ah'])
         expected = 0
         suitdict = evaluator.suit_dict(cards)
         result = suitdict.get('s', 0)
         self.assertEqual(expected, result)
 
     def test_suitdict_1Spade_counts1(self):
-        cards = evaluator.convert_to_cards(['Kc', 'As'])
+        cards = pokerhands.convert_to_cards(['Kc', 'As'])
         expected = 1
         suitdict = evaluator.suit_dict(cards)
         result = suitdict.get('s')
         self.assertEqual(expected, result)
 
     def test_suitdict_2Spade_counts2(self):
-        cards = evaluator.convert_to_cards(['Kc', '2s', 'As'])
+        cards = pokerhands.convert_to_cards(['Kc', '2s', 'As'])
         expected = 2
         suitdict = evaluator.suit_dict(cards)
         result = suitdict.get('s')
@@ -433,7 +433,7 @@ class TestEvaluator(unittest.TestCase):
     Tests for suitedcard_dict(cards)
     """
     def test_suitedcarddict_0Spades_listlenEquals0(self):
-        cards = evaluator.convert_to_cards(['Kc', '2h'])
+        cards = pokerhands.convert_to_cards(['Kc', '2h'])
         expected = 0
         suitdict = evaluator.suitedcard_dict(cards)
         # Empty list is the default in case there are no Aces
@@ -441,7 +441,7 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_suitedcarddict_1Spade_listlenEquals1(self):
-        cards = evaluator.convert_to_cards(['Kc', 'As'])
+        cards = pokerhands.convert_to_cards(['Kc', 'As'])
         expected = 1
         suitdict = evaluator.suitedcard_dict(cards)
         # Empty list is the default in case there are no Aces
@@ -458,7 +458,7 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_countsuit_1spade_returns1(self):
-        cards = evaluator.convert_to_cards(['Kc', 'As'])
+        cards = pokerhands.convert_to_cards(['Kc', 'As'])
         expected = 1
         result = evaluator.count_suit(cards, 's')
         self.assertEqual(expected, result)
@@ -505,25 +505,25 @@ class TestEvaluator(unittest.TestCase):
     Tests for get_allgaps(cards)
     """
     def test_getallgaps_1card_returns0(self):
-        cards = evaluator.convert_to_cards(['Kc', 'As'])
+        cards = pokerhands.convert_to_cards(['Kc', 'As'])
         expected = 0
         result = evaluator.get_allgaps(cards)
         self.assertEqual(expected, result)
 
     def test_getallgaps_2connected_returns0(self):
-        cards = evaluator.convert_to_cards(['Kc', 'As'])
+        cards = pokerhands.convert_to_cards(['Kc', 'As'])
         expected = 0
         result = evaluator.get_allgaps(cards)
         self.assertEqual(expected, result)
 
     def test_getallgaps_2cards1gap_returns1(self):
-        cards = evaluator.convert_to_cards(['Qc', 'As'])
+        cards = pokerhands.convert_to_cards(['Qc', 'As'])
         expected = 1
         result = evaluator.get_allgaps(cards)
         self.assertEqual(expected, result)
 
     def test_getallgaps_3cards1gap_returns1(self):
-        cards = evaluator.convert_to_cards(['Tc', 'Js', 'Ks'])
+        cards = pokerhands.convert_to_cards(['Tc', 'Js', 'Ks'])
         expected = 1
         result = evaluator.get_allgaps(cards)
         self.assertEqual(expected, result)
@@ -540,7 +540,7 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_stripranks_stripAcesAndKings_containsNothing(self):
-        cards = evaluator.convert_to_cards(['As', 'Kc'])
+        cards = pokerhands.convert_to_cards(['As', 'Kc'])
         expected = []
         result = evaluator.strip_ranks(cards, ['A', 'K'])
         self.assertEqual(expected, result)
@@ -549,14 +549,14 @@ class TestEvaluator(unittest.TestCase):
     Tests for strip_suits(cards, suit)
     """
     def test_stripsuits_stripSpades_containsNoSpades(self):
-        cards = evaluator.convert_to_cards(['As', 'Kc'])
+        cards = pokerhands.convert_to_cards(['As', 'Kc'])
         cards = evaluator.strip_suits(cards, 's')
         expected = 0
         result = evaluator.count_suit(cards, 's')
         self.assertEqual(expected, result)
 
     def test_stripsuits_stripMultipleSuits_allSuitsWereStripped(self):
-        cards = evaluator.convert_to_cards(['As', 'Kc', 'Qd'])
+        cards = pokerhands.convert_to_cards(['As', 'Kc', 'Qd'])
         cards = evaluator.strip_suits(cards, ['s', 'c'])
         expected = 0
         result = evaluator.count_suit(cards, 's') + evaluator.count_suit(cards, 'c')
