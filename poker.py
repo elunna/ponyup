@@ -292,7 +292,6 @@ class Round():
         """
         br = betting.BettingRound(self)
         victor = br.play()
-        self.street += 1
         return victor
 
     def showdown(self):

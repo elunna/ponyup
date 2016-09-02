@@ -18,6 +18,33 @@ class Draw5Session(poker.Session):
         r.deal_cards(DEALT)
         r.sortcards()
 
+        for s in self.streets:
+            print(self._table)
+            if r.street == 1:
+                # Discard phase
+                discards = discard_phase(self._table, r.d)
+                r.muck.extend(discards)
+                r.sortcards()
+                # print table after discarding and drawing
+                print(self._table)
+
+            victor = r.betting_round()
+            print(r)           # Display pot
+
+            if victor is None:
+                r.next_street()
+            else:
+                # One player left, award them the pot!
+                r.award_pot(victor, r.pot)
+                break
+        else:
+            r.showdown()
+
+        r.cleanup()
+        self._table.move_button()
+        self.rounds += 1
+
+        """
         print(self._table)      # Show table pre draw
 
         # Pre-draw betting
@@ -46,15 +73,7 @@ class Draw5Session(poker.Session):
         else:
             # 1 left:
             r.award_pot(victor, r.pot)
-
-        # Cleanup all cards
-        r.cleanup()
-
-        # Move the table button
-        self._table.move_button()
-
-        # Advance round counter
-        self.rounds += 1
+        """
 
 
 def made_hand_discards(hand, ranklist):
