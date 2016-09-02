@@ -95,19 +95,34 @@ def deal_hands_weakfirst(table):
         s._hand.cards = list(reversed_hands[i])
 
 
-def deal_stud5_table(table):
-    down = pokerhands.convert_to_cards(['As', 'Ks', 'Qs', 'Js', 'Ts', '9s'])
-    up = pokerhands.convert_to_cards(['Ah', 'Kh', 'Qh', 'Jh', 'Th', '9h'])
+def deallist(table, cards, faceup=False):
+    if faceup:
+        for c in cards:
+            c.hidden = False
 
     for p in table:
-        p.add_card(down.pop(0))
-        p.add_card(up.pop(0))
+        p.add_card(cards.pop(0))
 
 
-def deal_stud5_table2(table):
+def deal_stud(table, qty, matchingranks=0):
     down = pokerhands.convert_to_cards(['As', 'Ks', 'Qs', 'Js', 'Ts', '9s'])
-    up = pokerhands.convert_to_cards(['5h', '5c', 'Qh', 'Jh', 'Th', '9h'])
+    if qty == 2:
+        deallist(table, down)
+    elif qty == 3:
+        deallist(table, down)
+        deallist(table, down)
+    else:
+        raise Exception('bad qty!')
 
-    for p in table:
-        p.add_card(down.pop(0))
-        p.add_card(up.pop(0))
+    if matchingranks == 0:
+        up = pokerhands.convert_to_cards(['Ah', 'Kh', 'Qh', 'Jh', 'Th', '9h'])
+    elif matchingranks == 2:
+        up = pokerhands.convert_to_cards(['5h', '5c', 'Qh', 'Jh', 'Th', '9h'])
+    elif matchingranks == 3:
+        up = pokerhands.convert_to_cards(['5s', '5c', 'Qh', 'Jh', '5d', '9h'])
+    elif matchingranks == 4:
+        up = pokerhands.convert_to_cards(['5s', '5c', 'Qh', 'Jh', '5d', '5h'])
+    else:
+        raise Exception('bad matchingranks #, 0, 2, 3, or 4!')
+
+    deallist(table, up, faceup=True)

@@ -71,3 +71,9 @@ def bringin(table):
             if card.SUITVALUES[c.suit] < card.SUITVALUES[lowcard.suit]:
                 lowcard, player = c, p
     return player
+
+def highhand(table):
+    """
+    Finds which player has the highest showing hand and return their seat index.
+    """
+
