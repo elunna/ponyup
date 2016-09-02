@@ -174,7 +174,7 @@ class Round():
         """
         POTS = {}
 
-        for stacksize in allins:
+        for stacksize in sorted(allins):
             if stacksize in POTS:
                 continue
 
