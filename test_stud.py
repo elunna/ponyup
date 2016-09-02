@@ -20,7 +20,7 @@ HANDS_4CARD = {
 def get_dealt_table(hands):
     t = testtools.test_table(len(hands))
     for k, v in hands.items():
-        t.seats[k]._hand = v
+        t.seats[k]._hand.cards = v
     return t
 
 

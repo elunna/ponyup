@@ -1,5 +1,6 @@
 from __future__ import print_function
 import card
+import evaluator
 import poker
 
 
@@ -75,5 +76,25 @@ def bringin(table):
 
 def highhand(table):
     """
-    Finds which player has the highest showing hand and return their seat index.
+    Finds which player has the highest showing hand and return their seat index.  For stud
+    games, after the first street, the high hand on board initiates the action (a tie is broken
+    by position, with the player who received cards first acting first).
     """
+    up_start = 1
+
+    highvalue = 0
+    player = None
+    ties = []
+
+    for p in table:
+        h = p._hand.cards[up_start:]
+        value = evaluator.get_value(h)
+
+        if value > highvalue:
+            highvalue, player = value, p
+            ties = []  # Reset any lower ties.
+        elif value == highvalue:
+            ties.append(table.get_index(p))
+            if player not in ties:
+                ties.append(table.get_index(player))
+    return table.get_index(player)
