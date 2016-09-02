@@ -94,7 +94,11 @@ def highhand(table):
             highvalue, player = value, p
             ties = []  # Reset any lower ties.
         elif value == highvalue:
-            ties.append(table.get_index(p))
+            ties.append(p)
             if player not in ties:
-                ties.append(table.get_index(player))
-    return table.get_index(player)
+                ties.append(player)
+
+    if ties:
+        return sorted([table.get_index(p) for p in ties])
+    else:
+        return table.get_index(player)
