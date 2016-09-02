@@ -52,15 +52,11 @@ class Stud5Game(poker.Session):
         self.rounds += 1
 
 
-def bringin(table, gametype):
+def bringin(table):
     """
     Finds which player has the lowest showing card and returns that player.
     """
     index = -1
-    if gametype == "STUD5":
-        index = 1
-    if gametype == "STUD7":
-        index = 2
 
     # Start with the lowest as the highest possible card to beat.
     lowcard = card.Card('Z', 's')

@@ -12,12 +12,12 @@ class TestStud(unittest.TestCase):
         t = testtools.test_table(6)
         testtools.deal_stud5_table(t)
         expected = 5
-        result = t.get_index(stud.bringin(t, "gametype"))
+        result = t.get_index(stud.bringin(t))
         self.assertEqual(expected, result)
 
     def test_bringin_tiedcards_seat1haslowersuit_returns1(self):
         t = testtools.test_table(6)
         testtools.deal_stud5_table2(t)
         expected = 1
-        result = t.get_index(stud.bringin(t, "gametype"))
+        result = t.get_index(stud.bringin(t))
         self.assertEqual(expected, result)
