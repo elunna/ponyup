@@ -43,7 +43,7 @@ def test_table(seats, cards=False, CHIPS=STARTINGCHIPS):
 
     for i in range(seats):
         t.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
-        t.seats[i].add_chips(STARTINGCHIPS)
+        t.seats[i].chips = STARTINGCHIPS
 
     if cards:
         deal_table_cards(t, 5)
