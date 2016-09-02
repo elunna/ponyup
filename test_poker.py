@@ -31,8 +31,6 @@ class TestPoker(unittest.TestCase):
         self.g._table = testtools.allin_table(seats, REVERSED_HANDS)
         self.r = poker.Round(self.g)
 
-    def allin_situation1(self, seats, REVERSED_HANDS=False):
-        self.r = poker.Round(g)
 
     def everybody_bet(self, bet):
         for p in self.r._table:
@@ -288,6 +286,20 @@ class TestPoker(unittest.TestCase):
         result = self.r.make_sidepots(allins)
         self.assertEqual(expected, result)
 
+    # 5 players, 2 allins, challenge stack sizes.
+    def test_makesidepots_4plyr_2allin_returns2sidepot(self):
+        # Setup a problem situation
+        self.g._table = testtools.test_table(4)
+        stacks = [1000, 1000, 225, 100]
+        for p in self.g._table:
+            p.chips = stacks.pop(0)
+        self.r = poker.Round(self.g)
+        self.everybody_bet(300)
+
+        expected = {100: 400, 225: 375}
+        allins = self.r.get_allins()
+        result = self.r.make_sidepots(allins)
+        self.assertEqual(expected, result)
     """
     Tests for calc_sidepot(stacksize):
     """
