@@ -4,52 +4,42 @@ import evaluator
 import poker
 
 
-class Stud5Game(poker.Session):
+class Stud5Session(poker.Session):
     def play(self):
-        _round = self.new_round()
-
-        # Post antes
-        _round.post_antes()
-
-        # Show table pre draw
-        print(_round)
-
-        # 1 face down, 1 up
-        _round.deal_cards(1)
-        _round.deal_cards(1, faceup=True)
-
-        print(self._table)
-
-        bringin = _round.determine_bringin('STUD5')
-        print('Bringin is {}'.format(bringin))
-
         """
-        for street in range(4):
-            if street == 0:
-                # Five card stud - deal 2 cards to each player
-                # 1 up and 1 down
-                newround.deal_cards(1)
-                newround.deal_cards(1, faceup=True)
+        Play a round of Five Card Draw.
+        """
+        r = self.new_round()
+        r.check_integrity_pre()
+        r.post_antes()
+
+        for s in self.streets:
+            print(self._table)
+            if r.street == 0:
+                # 1 face down, 1 up
+                r.deal_cards(1)
+                r.deal_cards(1, faceup=True)
+
+                # The bringin determines the first bettor.
+                utg = r.determine_bringin()
+                print('Bringin is {}'.format(bringin))
+
             else:
-                newround.deal_cards(1, faceup=True)
+                r.deal_cards(1, faceup=True)
 
-            newround.setup_betting()
-            victor = newround.betting()
+            victor = r.betting_round()
+            print(r)           # Display pot
 
-            if victor is not None:
-                newround.award_pot(victor, newround.pot)
+            if victor is None:
+                r.next_street()
+            else:
+                # One player left, award them the pot!
+                r.award_pot(victor, r.pot)
                 break
         else:
-            # Check for winners/showdown
-            newround.showdown()
-        """
+            r.showdown()
 
-        # ================== CLEANUP
-        _round.muck_all_cards()
-        # Remove broke players
-        _round.remove_broke_players()
-
-        # Advance round counter
+        r.cleanup()
         self.rounds += 1
 
 
@@ -74,13 +64,16 @@ def bringin(table):
     return table.get_index(player)
 
 
-def highhand(table):
+def highhand(table, gametype):
     """
     Finds which player has the highest showing hand and return their seat index.  For stud
     games, after the first street, the high hand on board initiates the action (a tie is broken
     by position, with the player who received cards first acting first).
     """
-    up_start = 1
+    if gametype == 'SEVEN CARD STUD':
+        up_start = 2
+    elif gametype == 'FIVE CARD STUD':
+        up_start = 1
 
     highvalue = 0
     player = None

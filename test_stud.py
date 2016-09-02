@@ -118,32 +118,37 @@ class TestStud(unittest.TestCase):
     """
     Tests for highhand(table)
     """
+    # Stud5:
     def test_highhand_3cards_pairAces_return0(self):
         t = get_dealt_table(HANDS_3CARD)
         expected = 0
-        result = stud.highhand(t)
+        result = stud.highhand(t, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
+    # Stud5:
     def test_highhand_4cards_AceHigh_return0(self):
         t = get_dealt_table(HANDS_4CARD)
         expected = 0
-        result = stud.highhand(t)
+        result = stud.highhand(t, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
+    # Stud5:
     def test_highhand_3cards_2tied_return02(self):
         t = get_dealt_table(HANDS_3CARD_2TIED)
         expected = [0, 2]
-        result = stud.highhand(t)
+        result = stud.highhand(t, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
+    # Stud5:
     def test_highhand_4cards_2tied_return02(self):
         t = get_dealt_table(HANDS_4CARD_TIED)
         expected = [0, 2]
-        result = stud.highhand(t)
+        result = stud.highhand(t, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
+    # Stud5:
     def test_highhand_3cards_3tied_return023(self):
         t = get_dealt_table(HANDS_3CARD_3TIED)
         expected = [0, 1, 2]
-        result = stud.highhand(t)
+        result = stud.highhand(t, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
