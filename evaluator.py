@@ -406,41 +406,52 @@ def get_best_straight_draw(cards):
 
 
 def chk_wheel(cards):
-    # Check if the group of cards counts as a wheel draw. The requirements are that an Ace must
-    # be present in the group of cards and that all other cards must be no higher than a 5.
-    # There must also be no pairs present, otherwise the order of the draw will be disrupted.
-
-    # Make a rank dictionary
+    """
+    Check if the group of cards(passed as a rank dictionary) counts as a wheel draw. The
+    requirements are that an Ace must be present in the group of cards and that all other cards
+    must be no higher than a 5.  There must also be no pairs present, otherwise the order of the
+    draw will be disrupted.
+    """
     rankdict = rank_dict(cards)
-
-    # Check for any pairs.
-    if len(cards) != len(rankdict):
-        return False
+    wheelcards = ['A', '2', '3', '4', '5']
     if 'A' not in rankdict:
         return False
-    wheelcards = ['A', '2', '3', '4', '5']
-    for r in rankdict:
-        if r not in wheelcards:
+    for k, v in rankdict.items():
+        if k not in wheelcards:
+            return False
+        elif v > 1:
             return False
     else:
         return True
 
 
 def chk_straight_draw(cards, qty, gap):
-    if qty > len(cards):
+    # Remove any extra pairs first - they interfere with checking straight draws.
+    pared = remove_pairs(cards)
+
+    if qty > len(pared):
         raise ValueError('qty cannot be larger than the length of the card list!')
-    end_index = (len(cards) - qty) + 1
-    cards = sorted(cards)
 
     draws = []
+
+    # Check for wheel draws, we should only have to check the first x cards, where x is qty-1,
+    # because the Ace takes out one card. For this exceptional case, we will ignore the gap
+    # because wheel draws are inherently gapped anyway. We also add this to the draws list first
+    # so that if a better draw comes up later it will be used instead.
+    if max(pared).rank == 'A':
+        # Take the low cards and add the Ace (which should be at the end of the sorted list.
+        aceslice = pared[0: qty - 1]
+        aceslice.append(pared[-1])
+        if chk_wheel(aceslice):
+            draws.append(aceslice)
+
+    end_index = (len(pared) - qty) + 1
     for i in range(end_index):
-        currentslice = cards[i: qty + i]
-        if chk_wheel(currentslice):
-            draws.append(currentslice)
-        elif get_allgaps(currentslice) <= gap:
+        currentslice = pared[i: qty + i]
+        if get_allgaps(currentslice) <= gap:
             draws.append(currentslice)
     if draws:
-        # Return the highest, which would be the last added.
+        # Return the highest draw found, which would be the last added.
         return draws[-1]
     else:
         return None
@@ -451,3 +462,17 @@ def extract_discards(cards, keep):
     Returns the cards we should discard from a group of cards.
     """
     return [c for c in cards if c not in keep]
+
+
+def remove_pairs(cards):
+    """
+    Goes through a list of cards and removes any extra pairs.
+    """
+    cards = sorted(cards)
+    newlist = []
+    for i, c in enumerate(sorted(cards)):
+        if i == 0:
+            newlist.append(c)
+        elif c.rank != cards[i - 1].rank:
+            newlist.append(c)
+    return newlist
