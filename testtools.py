@@ -93,3 +93,21 @@ def deal_hands_weakfirst(table):
     reversed_hands = list(reversed(HANDS))
     for i, s in enumerate(table.seats):
         s._hand.cards = list(reversed_hands[i])
+
+
+def deal_stud5_table(table):
+    down = pokerhands.convert_to_cards(['As', 'Ks', 'Qs', 'Js', 'Ts', '9s'])
+    up = pokerhands.convert_to_cards(['Ah', 'Kh', 'Qh', 'Jh', 'Th', '9h'])
+
+    for p in table:
+        p.add_card(down.pop(0))
+        p.add_card(up.pop(0))
+
+
+def deal_stud5_table2(table):
+    down = pokerhands.convert_to_cards(['As', 'Ks', 'Qs', 'Js', 'Ts', '9s'])
+    up = pokerhands.convert_to_cards(['5h', '5c', 'Qh', 'Jh', 'Th', '9h'])
+
+    for p in table:
+        p.add_card(down.pop(0))
+        p.add_card(up.pop(0))
