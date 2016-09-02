@@ -44,37 +44,6 @@ class Draw5Session(poker.Session):
         self._table.move_button()
         self.rounds += 1
 
-        """
-        print(self._table)      # Show table pre draw
-
-        # Pre-draw betting
-        victor = r.betting_round()
-
-        print(r)           # Display pot
-
-        if victor is None:
-            # Discard phase
-            discards = discard_phase(self._table, r.d)
-            r.muck.extend(discards)
-            r.sortcards()
-
-            print(self._table)  # Show table post draw
-
-            # Post-draw betting round
-            victor = r.betting_round()
-            print(r)           # Display pot
-
-            if victor is None:
-                # Showdown!
-                r.showdown()
-            else:
-                # 1 left:
-                r.award_pot(victor, r.pot)
-        else:
-            # 1 left:
-            r.award_pot(victor, r.pot)
-        """
-
 
 def made_hand_discards(hand, ranklist):
     """

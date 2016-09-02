@@ -29,26 +29,19 @@ class BettingRound():
             p = self.get_bettor()
             self.player_bets(p)
 
-            winner = self.one_left()
+            winner = one_left(self.r._table)
             if winner:
                 oneleft = '{}Only one player left!'.format(spacing(self.level))
                 print(colors.color(oneleft, 'LIGHTBLUE'))
                 self.playing = False
                 return winner
 
-            elif self.bettor == self.closer:
+            elif self.done():
                 # Reached the last bettor, betting is closed.
                 self.playing = False
             else:
                 # Set next bettor
                 self.next_bettor()
-
-    def one_left(self):
-        cardholders = self.r._table.get_players(hascards=True)
-        if len(cardholders) == 1:
-            return cardholders.pop()
-        else:
-            return None
 
     def player_bets(self, p):
         invested = self.invested(p)
@@ -176,6 +169,9 @@ class BettingRound():
     def next_bettor(self):
         self.bettor = self.r._table.next_player(self.bettor, hascards=True)
 
+    def done(self):
+        return self.bettor == self.closer
+
     def action_string(self, action):
         p = self.get_bettor()
         act_str = ''
@@ -234,3 +230,11 @@ def spacing(level):
     Spaces the player actions by the current bet level.
     """
     return '  ' * level
+
+
+def one_left(table):
+    cardholders = table.get_players(hascards=True)
+    if len(cardholders) == 1:
+        return cardholders.pop()
+    else:
+        return None
