@@ -8,6 +8,7 @@ import hand
 import numbers
 import itertools
 
+HANDSIZE = 5
 MULTIPLIERS = (100000000, 1000000, 10000, 100, 1)
 
 HANDTYPES = {
@@ -168,10 +169,10 @@ def get_value(cards):
 
     ranklist = rank_list(sorted(cards))
 
-    if len(ranklist) == 5:
+    if len(ranklist) == HANDSIZE:
         # Returns the value of a non-pair hand.
-        FIVEHIGH = 5
-        ACEHIGH = 14
+        FIVEHIGH, ACEHIGH = 5, 14
+
         straight_chk = is_straight(cards)
         if is_suited(cards):
             if straight_chk == ACEHIGH:
@@ -247,9 +248,9 @@ def find_best_hand(cards):
     Takes a list of cards and determines the best available 5 card hand and returns that
     hand as a Hand.
     """
-    if len(cards) < 5:
+    if len(cards) < HANDSIZE:
         return None
-    hands = [hand.Hand(c) for c in itertools.combinations(cards, 5)]
+    hands = [hand.Hand(c) for c in itertools.combinations(cards, HANDSIZE)]
     besthand = hands[0]
 
     for h in hands:
