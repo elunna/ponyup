@@ -23,14 +23,20 @@ class TestPoker(unittest.TestCase):
     Setup a session and round, with a table filled with 6 players.
     """
     def setUp(self):
-        g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6)
-        g._table = testtools.test_table(6)
-        self.r = poker.Round(g)
+        self.g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6)
+        self.g._table = testtools.test_table(6)
+        self.r = poker.Round(self.g)
 
     def allin_table(self, seats, REVERSED_HANDS=False):
-        g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6)
-        g._table = testtools.allin_table(seats, REVERSED_HANDS)
+        self.g._table = testtools.allin_table(seats, REVERSED_HANDS)
+        self.r = poker.Round(self.g)
+
+    def allin_situation1(self, seats, REVERSED_HANDS=False):
         self.r = poker.Round(g)
+
+    def everybody_bet(self, bet):
+        for p in self.r._table:
+            self.r.pot += p.bet(bet)
 
     # New round - pot = 0
     def test_newround_potis0(self):
@@ -250,8 +256,7 @@ class TestPoker(unittest.TestCase):
     def test_makesidepots_2plyr_1allin_returns1sidepot(self):
         self.allin_table(2)
         expected = {100: 200}
-        for p in self.r._table:
-            p.bet(100)
+        self.everybody_bet(100)
         allins = self.r.get_allins()
         result = self.r.make_sidepots(allins)
         self.assertEqual(expected, result)
@@ -260,8 +265,7 @@ class TestPoker(unittest.TestCase):
     def test_makesidepots_3plyr_1allin_returns1sidepot(self):
         self.allin_table(3)
         expected = {100: 300}
-        for p in self.r._table:
-            p.bet(100)
+        self.everybody_bet(100)
         allins = self.r.get_allins()
         result = self.r.make_sidepots(allins)
         self.assertEqual(expected, result)
@@ -270,8 +274,7 @@ class TestPoker(unittest.TestCase):
     def test_makesidepots_3plyr_2allin_returns2sidepot(self):
         self.allin_table(3)
         expected = {100: 300, 200: 200}
-        for p in self.r._table:
-            p.bet(200)
+        self.everybody_bet(200)
         allins = self.r.get_allins()
         result = self.r.make_sidepots(allins)
         self.assertEqual(expected, result)
@@ -280,8 +283,7 @@ class TestPoker(unittest.TestCase):
     def test_makesidepots_4plyr_3allin_returns3sidepot(self):
         self.allin_table(4)
         expected = {100: 400, 200: 300, 300: 200}
-        for p in self.r._table:
-            p.bet(300)
+        self.everybody_bet(300)
         allins = self.r.get_allins()
         result = self.r.make_sidepots(allins)
         self.assertEqual(expected, result)
@@ -293,8 +295,7 @@ class TestPoker(unittest.TestCase):
     def test_calcsidepot_2plyr_allinfor100_returns200(self):
         self.allin_table(2)
         expected = 200
-        for p in self.r._table:
-            p.bet(100)
+        self.everybody_bet(100)
         result = self.r.calc_sidepot(100)
         self.assertEqual(expected, result)
 
@@ -302,8 +303,7 @@ class TestPoker(unittest.TestCase):
     def test_calcsidepot_3plyr_allinfor100_returns300(self):
         self.allin_table(3)
         expected = 300
-        for p in self.r._table:
-            p.bet(100)
+        self.everybody_bet(100)
         result = self.r.calc_sidepot(100)
         self.assertEqual(expected, result)
 
@@ -311,8 +311,7 @@ class TestPoker(unittest.TestCase):
     def test_calcsidepot_3plyr_allinfor200_returns500(self):
         self.allin_table(3)
         expected = 500
-        for p in self.r._table:
-            p.bet(200)
+        self.everybody_bet(200)
         result = self.r.calc_sidepot(200)
         self.assertEqual(expected, result)
 
@@ -325,8 +324,7 @@ class TestPoker(unittest.TestCase):
         self.allin_table(seats)
         p0, p1 = [p for p in self.r._table.seats]
         expected = {200: [p0], 100: [p1]}
-        for p in self.r._table:
-            p.bet(200)
+        self.everybody_bet(200)
         sidepots = self.r.make_sidepots(self.r.get_allins())
         result = self.r.process_sidepots(sidepots)
         self.assertEqual(expected, result)
@@ -336,8 +334,7 @@ class TestPoker(unittest.TestCase):
         seats = 3
         self.allin_table(seats)
         p0, p1, p2 = [p for p in self.r._table.seats]
-        for p in self.r._table:
-            p.bet(300)
+        self.everybody_bet(300)
         sidepots = self.r.make_sidepots(self.r.get_allins())
         expected = {300: [p0], 200: [p1], 100: [p2]}
         result = self.r.process_sidepots(sidepots)
