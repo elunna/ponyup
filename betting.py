@@ -76,27 +76,6 @@ class BettingRound():
         self.r.pot += p.bet(action.cost)
         self.level += action.level
 
-    def action_string(self, action):
-        p = self.get_bettor()
-        act_str = ''
-        act_str += spacing(self.level)
-        act_str += '{} {}s'.format(p, action.name.lower())
-
-        amt = colors.color(' $' + str(action.cost), 'yellow')
-
-        if action.name in ['BET', 'RAISE']:
-            return colors.color(act_str, 'red') + amt
-        elif action.name == 'CALL':
-            return colors.color(act_str, 'white') + amt
-        elif action.name == 'FOLD':
-            return colors.color(act_str, 'purple')
-        elif action.name == 'CHECK':
-            return colors.color(act_str, 'white')
-        elif action.name == 'ALLIN':
-            return colors.color('{}{} is all in.'.format(spacing(self.level), p), 'gray')
-        else:
-            raise Exception('Error processing the action!')
-
     def get_options(self, cost, stack):
         """
         Shows the options available to the current bettor.
@@ -192,6 +171,27 @@ class BettingRound():
 
     def done(self):
         return self.bettor == self.closer
+
+    def action_string(self, action):
+        p = self.get_bettor()
+        act_str = ''
+        act_str += spacing(self.level)
+        act_str += '{} {}s'.format(p, action.name.lower())
+
+        amt = colors.color(' $' + str(action.cost), 'yellow')
+
+        if action.name in ['BET', 'RAISE']:
+            return colors.color(act_str, 'red') + amt
+        elif action.name == 'CALL':
+            return colors.color(act_str, 'white') + amt
+        elif action.name == 'FOLD':
+            return colors.color(act_str, 'purple')
+        elif action.name == 'CHECK':
+            return colors.color(act_str, 'white')
+        elif action.name == 'ALLIN':
+            return colors.color('{}{} is all in.'.format(spacing(self.level), p), 'gray')
+        else:
+            raise Exception('Error processing the action!')
 
 
 def calc_odds(bet, pot):
