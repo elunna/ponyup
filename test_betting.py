@@ -21,6 +21,14 @@ class TestBetting(unittest.TestCase):
     """
 
     """
+    Tests for player_bets(p)
+    """
+
+    """
+    Tests for one_left()
+    """
+
+    """
     Tests for process_option(option)
     """
     # CHECK - bet level is same
@@ -291,14 +299,14 @@ class TestBetting(unittest.TestCase):
         self.br = betting.BettingRound(self.r)
         expected = True
         self.br.next_bettor()  # 0 -> 1
-        result = self.br.done()
+        result = self.br.playing()
         self.assertEqual(expected, result)
 
     def test_done_BBnotacted_returnsFalse(self):
         self.setUp(2)
         self.br = betting.BettingRound(self.r)
         expected = False
-        result = self.br.done()
+        result = self.br.playing()
         self.assertEqual(expected, result)
 
     """

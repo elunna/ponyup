@@ -12,6 +12,7 @@ class BettingRound():
         Manages the betting info and activities. Takes in a Round object as r.
         """
         self.r = r
+
         self.BETCAP = 4
         self.set_bettor_and_closer()
         self.set_level()
@@ -22,42 +23,48 @@ class BettingRound():
         """
         Performs a round of betting between all the players that have cards and chips.
         """
-        playing = True
+        self.playing = True
 
-        while playing:
+        while self.playing:
             p = self.get_bettor()
-            invested = self.invested(p)
-            cost = (self.betsize * self.level) - invested
-            options = self.get_options(cost, p.chips)
+            self.player_bets(p)
 
-            if 'a' in options:
-                # Player is allin
-                o = Action('ALLIN', 0, 0)
-            elif p.is_human():
-                o = menu(options)
-            else:
-                o = strategy.makeplay(p, self.r, options)
-
-            self.process_option(o)
-            print(self.action_string(o))
-
-            cardholders = self.r._table.get_players(hascards=True)
-
-            if len(cardholders) == 1:
+            winner = self.one_left()
+            if winner:
                 oneleft = '{}Only one player left!'.format(spacing(self.level))
                 print(colors.color(oneleft, 'LIGHTBLUE'))
-                return cardholders.pop()
+                self.playing = False
+                return winner
 
             elif self.bettor == self.closer:
                 # Reached the last bettor, betting is closed.
-                playing = False
+                self.playing = False
             else:
                 # Set next bettor
                 self.next_bettor()
 
+    def one_left(self):
+        cardholders = self.r._table.get_players(hascards=True)
+        if len(cardholders) == 1:
+            return cardholders.pop()
         else:
-            # The betting round is over, and there are multiple players still remaining.
             return None
+
+    def player_bets(self, p):
+        invested = self.invested(p)
+        cost = (self.betsize * self.level) - invested
+        options = self.get_options(cost, p.chips)
+
+        if 'a' in options:
+            # Player is allin
+            o = Action('ALLIN', 0, 0)
+        elif p.is_human():
+            o = menu(options)
+        else:
+            o = strategy.makeplay(p, self.r, options)
+
+        self.process_option(o)
+        print(self.action_string(o))
 
     def process_option(self, action):
         """
@@ -168,9 +175,6 @@ class BettingRound():
 
     def next_bettor(self):
         self.bettor = self.r._table.next_player(self.bettor, hascards=True)
-
-    def done(self):
-        return self.bettor == self.closer
 
     def action_string(self, action):
         p = self.get_bettor()
