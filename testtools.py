@@ -105,7 +105,8 @@ def deallist(table, cards, faceup=False):
 
 
 def deal_stud(table, qty, matchingranks=0):
-    down = pokerhands.convert_to_cards(['As', 'Ks', 'Qs', 'Js', 'Ts', '9s'])
+    down = pokerhands.convert_to_cards(['As', 'Ks', 'Qs', 'Js', 'Ts', '9s',
+                                        '2d', '3d', '4d', '2s', '3s', '4s'])
     if qty == 2:
         deallist(table, down)
     elif qty == 3:
