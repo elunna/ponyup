@@ -2,12 +2,12 @@ import colors
 
 # Use tuples instead of lists
 SUITS = ('c', 'd', 'h', 's')
+SUITVALUES = {'c': 1, 'd': 2, 'h': 3, 's': 4}
+COLORS = {'c': 'green', 'd': 'blue', 'h': 'red', 's': 'white'}
 
 # Fancy way of creating the card/value dictionary.
 FACECARDS = {'T': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14, 'Z': 15}
 RANKS = dict({str(x): x for x in range(2, 10)}, **FACECARDS)
-
-COLORS = {'c': 'green', 'd': 'blue', 'h': 'red', 's': 'white'}
 
 
 class Card:
