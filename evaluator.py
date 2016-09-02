@@ -381,30 +381,6 @@ def is_integer(num):
     return isinstance(num, numbers.Integral)
 
 
-def get_best_straight_draw(cards):
-    """
-    Check if there is a straight draw in the list of cards and returns the best available draw.
-    Can specify how many cards the straight draw is and how many gaps are acceptable.
-    """
-    draw_sizes = [4, 3, 2]
-    cards = sorted(cards)
-    HANDSIZE = 5
-    draws = []
-
-    for size in draw_sizes:
-        maxgap = HANDSIZE - size
-
-        for gap in range(maxgap + 1):
-            result = chk_straight_draw(cards, size, gap)
-            if result:
-                draws.append(result)
-    if draws:
-        # Return the highest, which would be the last added.
-        return draws.pop()
-    else:
-        return None
-
-
 def chk_wheel(cards):
     """
     Check if the group of cards(passed as a rank dictionary) counts as a wheel draw. The
@@ -476,3 +452,56 @@ def remove_pairs(cards):
         elif c.rank != cards[i - 1].rank:
             newlist.append(c)
     return newlist
+
+
+def evaluate_draws(cards):
+    """
+    Calculates the approprate card to discard for any draw-type hands.
+    """
+    suit = dominant_suit(cards)
+    suit_count = count_suit(cards, suit)
+
+    # 4 card draws
+    if suit_count == 4:
+        flush_draw = strip_suits(cards, suit)
+        if chk_straight_draw(flush_draw, 4, 0):
+            return flush_draw, "STRAIGHT FLUSH DRAW"
+        else:
+            return flush_draw, "FLUSH DRAW"
+
+    OESD = chk_straight_draw(cards, 4, 0)
+    if OESD is not None:
+        return OESD, "OPEN ENDED STRAIGHT DRAW"
+
+    GSSD = chk_straight_draw(cards, 4, 1)
+    if GSSD is not None:
+        return GSSD, "GUTSHOT STRAIGHT DRAW"
+
+    # 3 card draws
+
+    # Draw to high cards (T+)
+    hc = sorted(cards[-3:])
+    if hc[0].rank > 9:
+        return hc, "HIGHCARDS"
+
+    # Backdoor flush draw, 7+
+    if suit_count == 3:
+        flush_draw = strip_suits(cards, suit)
+        if min(flush_draw).val() > 7:
+            return flush_draw, "BACKDOOR FLUSH DRAW"
+
+    # Backdoor straight draw, 7+
+    BDSD = chk_straight_draw(cards, 3, 2)
+    if BDSD is not None and min(BDSD).val() > 7:
+        return BDSD, "BACKDOOR STRAIGHT DRAW"
+
+    # Check for 2 high cards J+
+    if hc[1].val() > 10:
+        return hc[1:], "HIGH CARDS"
+
+    # Draw to an Ace or King
+    if hc[2].val() >= 13:
+        return hc[2], "HIGH CARD DRAW"
+
+    # Last ditch effort - just draw to the best 2.
+    return hc[1:], "LOW CARDS"

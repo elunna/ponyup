@@ -723,3 +723,7 @@ class TestEvaluator(unittest.TestCase):
         expected = pokerhands.convert_to_cards(['2h', '3d', 'As'])
         result = evaluator.remove_pairs(cards)
         self.assertEqual(expected, result)
+
+    """
+    Tests for evaluate_draws(cards)
+    """
