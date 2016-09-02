@@ -106,6 +106,8 @@ def draw_discards(cards, ranklist):
     suit = ev.dominant_suit(cards)
     suit_count = ev.count_suit(cards, suit)
 
+    # Check 4 card draws first
+    # Flush draws
     if suit_count == 4:
         return ev.strip_suits(cards, suit)
 
@@ -118,14 +120,6 @@ def draw_discards(cards, ranklist):
     GSSD = ev.chk_straight_draw(cards, 4, 1)
     if GSSD is not None:
         return ev.extract_discards(cards, GSSD)
-
-    # Test for the wheel draw
-    if ranklist[0].rank == 'A':
-        WD = ev.chk_straight_draw(cards, 3, 1)
-
-        if WD is not None and WD[-1].val() <= 5:
-            # The obvious discard is the dangling high card
-            return [cards[-2]]
 
     # Draw to high cards (J+)
     if card.RANKS[ranklist[2].rank] > 10:
