@@ -8,6 +8,7 @@ import hand
 import numbers
 import itertools
 
+Ranklist = namedtuple('Ranklist', ['quantity', 'rank'])
 HANDSIZE = 5
 MULTIPLIERS = (100000000, 1000000, 10000, 100, 1)
 
@@ -284,7 +285,6 @@ def rank_list(cards):
     Returns a list of quantity/rank pairs by making a rank dictionary, converting it to a list
     and sorting it by rank.
     """
-    Ranklist = namedtuple('Ranklist', ['quantity', 'rank'])
     ranks = rank_dict(cards)
     L = [Ranklist(quantity=ranks[r], rank=r) for r in ranks]
 
