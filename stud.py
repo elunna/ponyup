@@ -12,24 +12,24 @@ class Stud5Session(poker.Session):
         r.post_antes()
 
         for s in self.streets:
-            print(self._table)
             if r.street == 0:
                 # 1 face down, 1 up
                 r.deal_cards(1)
                 r.deal_cards(1, faceup=True)
 
                 # The bringin determines the first bettor.
-                bring = self.r.bringin(r._table)
+                bring = poker.bringin(r._table)
                 print('Bringin is {}'.format(bring))
 
             else:
                 r.deal_cards(1, faceup=True)
-                high = self.r.highhand(r._table)
+                high = poker.highhand(r._table, r.gametype)
                 if len(high) > 1:
                     print('There is a tie for high hand, going with {}'.format(high[0]))
                 else:
                     print('Seat {} has the high hand and will act first.')
 
+            print(self._table)
             victor = r.betting_round()
             print(r)           # Display pot
 
