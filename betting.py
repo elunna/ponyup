@@ -2,6 +2,7 @@ from __future__ import print_function
 from collections import namedtuple
 import colors
 import strategy
+import poker
 
 Action = namedtuple('Action', ['name', 'cost', 'level'])
 
@@ -136,10 +137,10 @@ class BettingRound():
 
     def set_bettors_w_antes(self):
         if self.r.street == 0:
-            self.bettor = self.r.bringin(self.r._table)
+            self.bettor = poker.bringin(self.r._table)
             self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
         else:
-            self.bettor = self.r.highhand(self.r._table)
+            self.bettor = poker.highhand(self.r._table)
             self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
 
     def set_level(self):
