@@ -8,7 +8,9 @@ import draw5
 import player
 import os
 import sys
+import stud
 import table
+import testtools
 
 GAME = 'FIVE CARD DRAW'
 TABLE = 2
@@ -147,7 +149,13 @@ def play_poker():
     print('Alright, let\'s play some poker!')
 
     print('Initializing new game...\n')
-    g = draw5.Draw5Session('FIVE CARD DRAW', BLINDS, TABLE, NAME)
+
+    t = testtools.make_game_table(TABLE, GAME, OPPONENT, NAME)
+
+    if GAME == "FIVE CARD DRAW":
+        g = draw5.Draw5Session(GAME, t, BLINDS)
+    elif GAME == "FIVE CARD STUD":
+        g = stud.Stud5Session(GAME, t, BLINDS)
 
     playing = True
 
