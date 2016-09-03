@@ -81,3 +81,39 @@ def make(hand_name, hidden=False):
         for c in h:
             c.hidden = False
     return h
+
+HANDS_3CARD = {
+    0: convert_to_cards(['2s', 'As', 'Ah']),
+    1: convert_to_cards(['2h', 'Ks', 'Kh']),
+    2: convert_to_cards(['2c', 'Qs', 'Qh']),
+}
+
+HANDS_3CARD_2TIED = {
+    0: convert_to_cards(['2s', 'As', 'Ah']),
+    1: convert_to_cards(['2h', 'Ks', 'Kh']),
+    2: convert_to_cards(['2c', 'Ad', 'Ac']),
+}
+
+HANDS_3CARD_3TIED = {
+    0: convert_to_cards(['2s', 'As', 'Ks']),
+    1: convert_to_cards(['2h', 'Ah', 'Kh']),
+    2: convert_to_cards(['2c', 'Ac', 'Kc']),
+    3: convert_to_cards(['3s', '4s', '5s']),
+    4: convert_to_cards(['3d', '4d', '5d']),
+    5: convert_to_cards(['2c', '4c', '5c']),
+}
+
+
+HANDS_4CARD = {
+    0: convert_to_cards(['Qs', 'Kh', 'As']),
+    1: convert_to_cards(['Jh', 'Ts', 'Qh']),
+    2: convert_to_cards(['8c', '9s', 'Js']),
+    2: convert_to_cards(['5c', '6s', '7s']),
+}
+
+HANDS_4CARD_TIED = {
+    0: convert_to_cards(['Qs', 'Kh', 'As']),
+    1: convert_to_cards(['Jh', 'Ts', 'Qh']),
+    2: convert_to_cards(['Qc', 'Ks', 'Ac']),
+    3: convert_to_cards(['5c', '6s', '7s']),
+}

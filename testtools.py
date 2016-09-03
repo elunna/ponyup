@@ -1,6 +1,6 @@
 import blinds
 import deck
-import draw5
+import sessions
 import names
 import player
 import player_5card
@@ -158,4 +158,11 @@ def make_game_table(num, gametype, playertype, heroname):
 def get_draw5_sesh_1_2_blinds():
     STAKES = blinds.Blinds()
     table = test_table(6)
-    return draw5.Draw5Session('FIVE CARD DRAW', table, STAKES)
+    return sessions.Draw5Session('FIVE CARD DRAW', table, STAKES)
+
+
+def get_dealt_table(hands):
+    t = test_table(len(hands))
+    for k, v in hands.items():
+        t.seats[k]._hand.cards = v
+    return t

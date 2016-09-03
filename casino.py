@@ -4,12 +4,11 @@ from __future__ import print_function
 import colors
 import combos
 import blinds
-import draw5
 import player
 import poker
 import os
+import sessions
 import sys
-import stud
 import table
 import testtools
 
@@ -131,7 +130,7 @@ def pick_name():
 
 def pick_game():
     print('What game do you want to play?')
-    gamelist = sorted(poker.GAMES.keys())
+    gamelist = sorted(sessions.GAMES.keys())
 
     for i, k in enumerate(gamelist):
         print('{}: {}'.format(i + 1, k))
@@ -155,9 +154,9 @@ def play_poker():
     t = testtools.make_game_table(TABLE, GAME, OPPONENT, NAME)
 
     if GAME == "FIVE CARD DRAW":
-        g = draw5.Draw5Session(GAME, t, BLINDS)
+        g = sessions.Draw5Session(GAME, t, BLINDS)
     elif GAME == "FIVE CARD STUD":
-        g = stud.Stud5Session(GAME, t, BLINDS)
+        g = sessions.Stud5Session(GAME, t, BLINDS)
 
     playing = True
 

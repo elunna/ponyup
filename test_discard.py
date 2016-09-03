@@ -1,13 +1,10 @@
 import unittest
-import draw5
+import discard
 import hand
 import pokerhands
 
 
-class TestDraw5(unittest.TestCase):
-    #  def test_(self):
-        #  self.assertRaises(ValueError, )
-
+class TestDiscard(unittest.TestCase):
     """
     Tests for auto_discard(hand):
     """
@@ -16,7 +13,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('royalflush'))
         h.unhide()
         expected = []
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # Straight flush - no discards
@@ -24,7 +21,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('straightflush_high'))
         h.unhide()
         expected = []
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # Full house - no discards
@@ -32,7 +29,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('fullhouse_high'))
         h.unhide()
         expected = []
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # Flush - no discards
@@ -40,7 +37,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('flush_low'))
         h.unhide()
         expected = []
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # Straight - no discards
@@ -48,7 +45,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('straight_mid'))
         h.unhide()
         expected = []
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # Quads - discard the non quad card
@@ -57,7 +54,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('quads_high'))
         h.unhide()
         expected = ['Kc']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         #  result = sorted([repr(c) for c in draw5.auto_discard(h)])
         self.assertEqual(expected, result)
 
@@ -67,7 +64,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('trips_high'))
         h.unhide()
         expected = ['Qc', 'Kh']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # Pair - Discard the non-pair cards
@@ -76,7 +73,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('pair_high'))
         h.unhide()
         expected = ['Jc', 'Qh', 'Ks']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # Two-Pair - Discard the non-pair card
@@ -85,7 +82,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('twopair_high'))
         h.unhide()
         expected = ['Qc']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # OESFD - Discard the non-flush card
@@ -94,7 +91,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('OESFD'))
         h.unhide()
         expected = ['2d']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # GSSFD - Discard the non-flush card
@@ -103,7 +100,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('GSSFD'))
         h.unhide()
         expected = ['2d']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # Flush draw - Discard the non-flush card
@@ -112,7 +109,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('flushdrawA'))
         h.unhide()
         expected = ['2d']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # OESD - Discard the non-straight card
@@ -121,7 +118,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('OESD'))
         h.unhide()
         expected = ['2d']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # GSSD - Discard the non-straightcard
@@ -130,7 +127,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('GSSD'))
         h.unhide()
         expected = ['2d']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # Wheel draw - Discard the high card
@@ -139,7 +136,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('wheeldraw'))
         h.unhide()
         expected = ['Kh']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # BDFD(low cards) - Discard the non-flush cards
@@ -148,7 +145,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('BDFD1'))
         h.unhide()
         expected = ['2d', 'Kh']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # BDFD(with 2 high cards) - Discard the low cards
@@ -157,7 +154,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('BDFD2'))
         h.unhide()
         expected = ['4s', '5s', '7s']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # 3 High cards - Discard the 2 low cards
@@ -166,7 +163,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('highcards'))
         h.unhide()
         expected = ['4s', '7s']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # Ace high - Discard the non-pair card
@@ -175,7 +172,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('acehigh'))
         h.unhide()
         expected = ['4s', '5s', '7s', '9h']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # 0 gap BDSD - Discard the non-connected cards
@@ -184,7 +181,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('BDSD1'))
         h.unhide()
         expected = ['2d', 'Kh']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # 1 gap BDSD - Discard the non-connected cards
@@ -193,7 +190,7 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('BDSD2'))
         h.unhide()
         expected = ['2d', 'Kh']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
     # Medium cards/junk - Discard the 3 low cards
@@ -202,5 +199,5 @@ class TestDraw5(unittest.TestCase):
         h = hand.Hand(pokerhands.make('junk'))
         h.unhide()
         expected = ['2d', '3s', '6s']
-        result = [repr(c) for c in sorted(draw5.auto_discard(h))]
+        result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
