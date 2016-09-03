@@ -3,8 +3,6 @@ import deck
 import sessions
 import names
 import player
-import player_5card
-import player_5stud
 import pokerhands
 import table
 
@@ -145,9 +143,9 @@ def make_game_table(num, gametype, playertype, heroname):
     for i, s in enumerate(t.seats):
         if s is None:
             if gametype == "FIVE CARD DRAW":
-                t.add_player(i, player_5card.Player5Card(nameset.pop(), playertype))
+                t.add_player(i, player.Player5Card(nameset.pop(), playertype))
             elif gametype == "FIVE CARD STUD":
-                t.add_player(i, player_5stud.Player5Stud(nameset.pop(), playertype))
+                t.add_player(i, player.Player5Stud(nameset.pop(), playertype))
 
         else:
             nameset.pop()

@@ -1,5 +1,7 @@
 import hand
 import names
+import player_5draw
+import player_5stud
 
 TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
 
@@ -114,3 +116,35 @@ class Player():
         Returns True if the player has one or more cards in their hand, False otherwise.
         """
         return len(self._hand) > 0
+
+
+class Player5Card(Player):
+    def __init__(self, name, playertype=None):
+        self.set_name(name)
+        self._type = playertype
+        self.strategies = {}
+
+        if playertype is None:
+            # Default playertype is FISH
+            self.strategies = player_5draw.TYPES["FISH"]
+        else:
+            self.strategies = player_5draw.TYPES[playertype]
+
+        self.chips = 0
+        self._hand = hand.Hand()
+
+
+class Player5Stud(Player):
+    def __init__(self, name, playertype=None):
+        self.set_name(name)
+        self._type = playertype
+        self.strategies = {}
+
+        if playertype is None:
+            # Default playertype is FISH
+            self.strategies = player_5stud.TYPES["FISH"]
+        else:
+            self.strategies = player_5stud.TYPES[playertype]
+
+        self.chips = 0
+        self._hand = hand.Hand()

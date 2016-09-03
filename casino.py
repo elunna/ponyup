@@ -5,7 +5,6 @@ import colors
 import combos
 import blinds
 import player
-import poker
 import os
 import sessions
 import sys

@@ -1,8 +1,5 @@
 from collections import namedtuple
-import hand
-import player
 import pokerhands
-import random
 
 Ranges = namedtuple('Ranges', ['call1', 'call2', 'bet', 'raise1', 'raise2', 'bluff'])
 
@@ -154,21 +151,3 @@ TYPES = {
     'MOUSE': MOUSE,
     'LION': LION,
 }
-
-
-class Player5Stud(player.Player):
-    def __init__(self, name, playertype=None):
-        self.set_name(name)
-        self._type = playertype
-        self.strategies = {}
-
-        if playertype is None:
-            random_playertype = random.choice(list(TYPES.keys()))
-            self.strategies = TYPES[random_playertype]
-        elif playertype not in TYPES:
-            raise ValueError('type argument is not valid.')
-        else:
-            self.strategies = TYPES[playertype]
-
-        self.chips = 0
-        self._hand = hand.Hand()
