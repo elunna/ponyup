@@ -6,6 +6,7 @@ import combos
 import blinds
 import draw5
 import player
+import poker
 import os
 import sys
 import stud
@@ -23,6 +24,7 @@ options = {}
 options['c'] = ('(C)ombination counts', 'view_combos()')
 options['p'] = ('(P)lay Poker!', 'play_poker()')
 options['n'] = ('(N)ame change', 'pick_name()')
+options['g'] = ('(G)ame change', 'pick_game()')
 options['s'] = ('(S)takes', 'pick_limit(BLINDS)')
 options['t'] = ('(T)able size', 'pick_table()')
 options['m'] = ('(M)enu', 'menu()')
@@ -136,9 +138,9 @@ def pick_game():
 
     while True:
         choice = int(input(':> '))
-        if choice in list(1, range(len(gamelist) + 1)):
+        if choice in list(range(1, len(gamelist) + 1)):
             global GAME
-            GAME = gamelist[choice]
+            GAME = gamelist[choice - 1]
             print('You selected {}'.format(GAME))
             break
         else:
