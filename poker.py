@@ -28,8 +28,6 @@ class Session():
         self.gametype = gametype
         self.rounds = 1
         self._table = table
-        self._table.randomize_button()
-
         self.streets = GAMES[gametype]
         self.blinds = blinds
 
@@ -449,13 +447,10 @@ def highhand(table, gametype):
 
         if value > highvalue:
             highvalue, player = value, p
-            ties = []  # Reset any lower ties.
+            ties = [player]  # Reset any lower ties.
         elif value == highvalue:
             ties.append(p)
             if player not in ties:
                 ties.append(player)
 
-    if ties:
-        return sorted([table.get_index(p) for p in ties])
-    else:
-        return table.get_index(player)
+    return sorted([table.get_index(p) for p in ties])
