@@ -9,12 +9,12 @@ import testtools
 
 DISPLAYWIDTH = 70
 
-STREETS = {
-    'OMAHA': [1, 1, 2, 2],
-    'HOLDEM': [1, 1, 2, 2],
+GAMES = {
+    #  'OMAHA': [1, 1, 2, 2],
+    #  'HOLDEM': [1, 1, 2, 2],
     'FIVE CARD DRAW': [1, 2],
     'FIVE CARD STUD': [1, 1, 2, 2],
-    'SEVEN CARD STUD': [1, 1, 2, 2, 2],
+    #  'SEVEN CARD STUD': [1, 1, 2, 2, 2],
 }
 
 
@@ -32,7 +32,7 @@ class Session():
         self._table = testtools.make(tablesize, hero)
         self._table.randomize_button()
 
-        self.streets = STREETS[gametype]
+        self.streets = GAMES[gametype]
         if blinds is None:
             self.blinds = b.Blinds()
         else:
