@@ -54,7 +54,9 @@ def menu():
     print('{:>15}: {}'.format('Seats', TABLE))
     print('{:>15}: {}'.format('Opponent Type', OPPONENT))
     print('')
-    for o in options:
+
+    #  options = sorted(options.keys())
+    for o in sorted(options.keys()):
         print(options[o][0])
 
 
