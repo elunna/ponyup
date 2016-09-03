@@ -24,6 +24,7 @@ class Stud5Session(poker.Session):
             else:
                 r.deal_cards(1, faceup=True)
                 high = poker.highhand(r._table, r.gametype)
+
                 if len(high) > 1:
                     print('There is a tie for high hand, going with {}'.format(high[0]))
                 else:
