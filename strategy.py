@@ -12,36 +12,36 @@ To greatly simplify, we'll just start with cards and handvalue.
 """
 
 
-class strategiesegy():
-    def __init__(self):
-        self.pre_call = None
-        self.pre_raise = None
-        self.post_call = None
-        self.post_raise = None
-        self.bluff = None
-
-
-def makeplay(player, _round, options):
+def makeplay(player, options, street, betlevel):
     """
     Determines the appropriate play based on the street and handstrength.
     """
     handval = player._hand.value()
+    strat = player.strategies[street + 1]
 
-    if _round.street == 0:
-        if handval >= player.strategies['pre_raise']:
+    if betlevel == 0:
+        if handval >= strat.bet:
             return pick_raise(options)
-        elif handval >= player.strategies['pre_call']:
+        elif handval >= strat.call1:
             return pick_call(options)
         else:
-            return pick_other(options)
+            return pick_fold_or_check(options)
 
-    elif _round.street == 1:
-        if handval >= player.strategies['post_raise']:
+    elif betlevel == 1:
+        if handval >= strat.raise1:
             return pick_raise(options)
-        elif handval >= player.strategies['post_call']:
-            return pick_call(options)
+        elif handval >= strat.call2:
+            return pick_raise(options)
         else:
-            return pick_other(options)
+            return pick_fold_or_check(options)
+
+    elif betlevel > 1:
+        if handval >= strat.raise2:
+            return pick_raise(options)
+        elif handval >= strat.call2:
+            return pick_raise(options)
+        else:
+            return pick_fold_or_check(options)
 
 
 def pick_raise(options):
@@ -68,7 +68,7 @@ def pick_call(options):
         return options['c']
 
 
-def pick_other(options):
+def pick_fold_or_check(options):
     """
     Pick the passive option
     FOLD or check/call
