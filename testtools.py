@@ -127,3 +127,26 @@ def deal_stud(table, qty, matchingranks=0):
         raise Exception('bad matchingranks #, 0, 2, 3, or 4!')
 
     deallist(table, up, faceup=True)
+
+
+def make_game_table(num, gametype, playertype, heroname):
+    # The hero variable lets someone pass in a Human player name
+    # If they don't want any human players, just let it be None.
+
+    t = table.Table(num)
+
+    nameset = names.random_names(num)
+    # Add the hero to seat 0
+    t.add_player(0, player.Player(heroname, 'HUMAN'))
+
+    for i, s in enumerate(t.seats):
+        if s is None:
+            if gametype == "FIVE CARD DRAW":
+                t.add_player(i, player_5card.Player5Card(nameset.pop(), playertype))
+            elif gametype == "FIVE CARD STUD":
+                t.add_player(i, player_5card.Player5Card(nameset.pop(), playertype))
+
+        else:
+            nameset.pop()
+        t.seats[i].chips = STARTINGCHIPS
+    return t
