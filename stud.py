@@ -1,6 +1,4 @@
 from __future__ import print_function
-import card
-import evaluator
 import poker
 
 
@@ -21,11 +19,16 @@ class Stud5Session(poker.Session):
                 r.deal_cards(1, faceup=True)
 
                 # The bringin determines the first bettor.
-                utg = r.determine_bringin()
-                print('Bringin is {}'.format(bringin))
+                bring = self.r.bringin(r._table)
+                print('Bringin is {}'.format(bring))
 
             else:
                 r.deal_cards(1, faceup=True)
+                high = self.r.highhand(r._table)
+                if len(high) > 1:
+                    print('There is a tie for high hand, going with {}'.format(high[0]))
+                else:
+                    print('Seat {} has the high hand and will act first.')
 
             victor = r.betting_round()
             print(r)           # Display pot
@@ -41,57 +44,3 @@ class Stud5Session(poker.Session):
 
         r.cleanup()
         self.rounds += 1
-
-
-def bringin(table):
-    """
-    Finds which player has the lowest showing card and returns that player.
-    """
-    index = -1
-
-    # Start with the lowest as the highest possible card to beat.
-    lowcard = card.Card('Z', 's')
-    # Make sure
-    player = None
-    for p in table:
-        c = p._hand.cards[index]
-
-        if c.rank < lowcard.rank:
-            lowcard, player = c, p
-        elif c.rank == lowcard.rank:
-            if card.SUITVALUES[c.suit] < card.SUITVALUES[lowcard.suit]:
-                lowcard, player = c, p
-    return table.get_index(player)
-
-
-def highhand(table, gametype):
-    """
-    Finds which player has the highest showing hand and return their seat index.  For stud
-    games, after the first street, the high hand on board initiates the action (a tie is broken
-    by position, with the player who received cards first acting first).
-    """
-    if gametype == 'SEVEN CARD STUD':
-        up_start = 2
-    elif gametype == 'FIVE CARD STUD':
-        up_start = 1
-
-    highvalue = 0
-    player = None
-    ties = []
-
-    for p in table:
-        h = p._hand.cards[up_start:]
-        value = evaluator.get_value(h)
-
-        if value > highvalue:
-            highvalue, player = value, p
-            ties = []  # Reset any lower ties.
-        elif value == highvalue:
-            ties.append(p)
-            if player not in ties:
-                ties.append(player)
-
-    if ties:
-        return sorted([table.get_index(p) for p in ties])
-    else:
-        return table.get_index(player)

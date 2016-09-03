@@ -12,9 +12,12 @@ class BettingRound():
         Manages the betting info and activities. Takes in a Round object as r.
         """
         self.r = r
-
         self.BETCAP = 4
-        self.set_bettor_and_closer()
+        if self.r.gametype == "FIVE CARD DRAW":
+            self.set_bettors_w_blinds()
+        elif self.r.gametype in ["FIVE CARD STUD", "SEVEN CARD STUD"]:
+            self.set_bettors_w_antes()
+
         self.set_level()
         self.set_betsize()
         self.set_stacks()
@@ -120,7 +123,7 @@ class BettingRound():
 
         return option_dict
 
-    def set_bettor_and_closer(self):
+    def set_bettors_w_blinds(self):
         if self.r._table.TOKENS['D'] == -1:
             raise Exception('Cannot set bettor or closer in the if button isn\'t set!')
         if self.r.street == 0:
@@ -128,6 +131,14 @@ class BettingRound():
             self.bettor = self.r._table.next_player(self.closer)
         else:
             self.bettor = self.r._table.next_player(self.r._table.TOKENS['D'], hascards=True)
+            self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
+
+    def set_bettors_w_antes(self):
+        if self.r.street == 0:
+            self.bettor = self.r.bringin(self.r._table)
+            self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
+        else:
+            self.bettor = self.r.highhand(self.r._table)
             self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
 
     def set_level(self):
