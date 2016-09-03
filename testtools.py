@@ -16,7 +16,7 @@ HANDS = (pokerhands.make('royalflush'),
          )
 
 
-def make(num, hero=None, gametype="DRAW5"):
+def make(num, hero=None):
     # The hero variable lets someone pass in a Human player name
     # If they don't want any human players, just let it be None.
 
@@ -29,7 +29,7 @@ def make(num, hero=None, gametype="DRAW5"):
             t.add_player(0, player.Player(hero, 'HUMAN'))
 
         elif nameset[-1] is not None:
-            t.add_player(i, player_5card.Player5Card(nameset.pop()))
+            t.add_player(i, "CPU")
         else:
             nameset.pop()
         t.seats[i].chips = STARTINGCHIPS
