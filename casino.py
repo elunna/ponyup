@@ -67,7 +67,7 @@ def view_combos():
 
 
 def pick_limit(_blinds):
-    print('Please enter what limit you want to play:(default 2/4)')
+    print('Please enter what limit you want to play:')
     _blinds.levels()
 
     while True:
@@ -81,7 +81,7 @@ def pick_limit(_blinds):
 
 
 def pick_opp():
-    print('What type of opponent do you want to play:(default is FISH')
+    print('What type of opponent do you want to play:')
 
     for t in player.TYPES:
         print(t)
@@ -98,7 +98,7 @@ def pick_opp():
 
 
 def pick_table():
-    print('What size table do you want to play? (default is 2 seats)')
+    print('What size table do you want to play?')
     for l in table.VALID_SIZES:
         print('{}, '.format(l), end='')
 
@@ -123,6 +123,24 @@ def pick_name():
             break
     global NAME
     NAME = name
+
+
+def pick_game():
+    print('What game do you want to play?')
+    gamelist = sorted(poker.GAMES.keys())
+
+    for i, k in enumerate(gamelist):
+        print('{}: {}'.format(i + 1, k))
+
+    while True:
+        choice = int(input(':> '))
+        if choice in list(1, range(len(gamelist) + 1)):
+            global GAME
+            GAME = gamelist[choice]
+            print('You selected {}'.format(GAME))
+            break
+        else:
+            print('Selection not available, try again.')
 
 
 def play_poker():
