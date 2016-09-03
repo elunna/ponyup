@@ -57,7 +57,8 @@ class BettingRound():
         elif p.is_human():
             o = menu(options)
         else:
-            o = strategy.makeplay(p, options, self.r.street, self.level)
+            facing = cost / self.betsize
+            o = strategy.makeplay(p, options, self.r.street, self.level, facing)
 
         self.process_option(o)
         print(self.action_string(o))

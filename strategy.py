@@ -12,7 +12,7 @@ To greatly simplify, we'll just start with cards and handvalue.
 """
 
 
-def makeplay(player, options, street, betlevel):
+def makeplay(player, options, street, betlevel, facing):
     """
     Determines the appropriate play based on the street and handstrength.
     """
@@ -30,7 +30,7 @@ def makeplay(player, options, street, betlevel):
     elif betlevel == 1:
         if handval >= strat.raise1:
             return pick_raise(options)
-        elif handval >= strat.call2:
+        elif handval >= strat.call1:
             return pick_raise(options)
         else:
             return pick_fold_or_check(options)
@@ -38,8 +38,10 @@ def makeplay(player, options, street, betlevel):
     elif betlevel > 1:
         if handval >= strat.raise2:
             return pick_raise(options)
-        elif handval >= strat.call2:
-            return pick_raise(options)
+        elif facing == 2 and handval >= strat.call2:
+            return pick_call(options)
+        elif facing == 1 and handval >= strat.call1:
+            return pick_call(options)
         else:
             return pick_fold_or_check(options)
 
