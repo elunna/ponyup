@@ -11,7 +11,7 @@ import sys
 import table
 
 GAME = 'FIVE CARD DRAW'
-TABLE = 6
+TABLE = 2
 BLINDS = blinds.Blinds()
 NAME = 'Aorist'
 OPPONENT = 'FISH'
