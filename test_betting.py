@@ -1,6 +1,5 @@
 import unittest
 import betting
-import draw5
 import testtools
 
 
@@ -9,7 +8,7 @@ class TestBetting(unittest.TestCase):
     Setup a session and round, with a table filled with 6 players.
     """
     def setUp(self, seats=6):
-        g = draw5.Draw5Session('FIVE CARD DRAW', tablesize=6)
+        g = testtools.get_draw5_sesh_1_2_blinds()
         g._table = testtools.test_table(seats, cards=True)
         g._table.move_button()
         self.assertEqual(g._table.TOKENS['D'], 0)  # verify the button is 0

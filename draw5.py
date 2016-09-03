@@ -13,7 +13,6 @@ class Draw5Session(poker.Session):
         """
         r = self.new_round()
         r.check_integrity_pre()
-
         r.post_blinds()
         r.deal_cards(DEALT)
         r.sortcards()

@@ -28,6 +28,7 @@ class Session():
         self.gametype = gametype
         self.rounds = 1
         self._table = table
+        self._table.randomize_button()
         self.streets = GAMES[gametype]
         self.blinds = blinds
 

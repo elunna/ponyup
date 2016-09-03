@@ -1,13 +1,11 @@
 import unittest
 import blinds
 import card
-import draw5
 import evaluator
 import poker
 import pokerhands
 import testtools
 
-STAKES = blinds.Blinds()
 HANDS_3CARD = {
     0: pokerhands.convert_to_cards(['2s', 'As', 'Ah']),
     1: pokerhands.convert_to_cards(['2h', 'Ks', 'Kh']),
@@ -52,6 +50,9 @@ def get_dealt_table(hands):
     return t
 
 
+STAKES = blinds.Blinds()
+
+
 class TestPoker(unittest.TestCase):
     """
     poker.Session #############################################
@@ -65,8 +66,8 @@ class TestPoker(unittest.TestCase):
     Setup a session and round, with a table filled with 6 players.
     """
     def setUp(self):
-        self.g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6)
-        self.g._table = testtools.test_table(6)
+        # Make a 6 player table
+        self.g = testtools.get_draw5_sesh_1_2_blinds()
         self.r = poker.Round(self.g)
 
     def allin_table(self, seats, REVERSED_HANDS=False):
@@ -180,10 +181,11 @@ class TestPoker(unittest.TestCase):
     """
     # 6 players ante 1. Pot == 6.
     def test_postantes_6players_potequals60(self):
-        STAKES = blinds.Blinds(level=2)
-        g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
-        g._table = testtools.test_table(6)
-        self.r = poker.Round(g)
+        #  STAKES = blinds.Blinds(level=2)
+        #  g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
+        #  g._table = testtools.test_table(6)
+        #  self.r = poker.Round(g)
+        self.r.blinds = blinds.Blinds(level=2)
         self.r.post_antes()
         expected = 6
         result = self.r.pot
@@ -191,10 +193,10 @@ class TestPoker(unittest.TestCase):
 
     # Initial stacks=1000. Ante=1. After ante are 999.
     def test_postantes_6players_stacksequal999(self):
-        STAKES = blinds.Blinds(level=2)
-        g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
-        g._table = testtools.test_table(6)
-        self.r = poker.Round(g)
+        #  STAKES = blinds.Blinds(level=2)
+        #  g = draw5.Draw5Session('FIVE CARD DRAW', STAKES, 6, 'HUMAN')
+        #  g._table = testtools.test_table(6)
+        self.r.blinds = blinds.Blinds(level=2)
         self.r.post_antes()
         expected = 999
         for p in self.r._table:
@@ -206,6 +208,7 @@ class TestPoker(unittest.TestCase):
     """
     # If the button(and blinds haven't been set, raise an exception.)
     def test_postblinds_btnnotset_raiseException(self):
+        self.r._table.TOKENS['D'] = -1
         self.assertEqual(self.r._table.TOKENS['D'], -1, 'Button should be -1!')
         self.assertRaises(Exception, self.r.post_blinds)
 
@@ -213,6 +216,7 @@ class TestPoker(unittest.TestCase):
     def test_postblinds_2players_pot3(self):
         for i in [1, 2, 4, 5]:
             self.r._table.remove_player(i)
+        self.r._table.TOKENS['D'] = -1
         self.r._table.move_button()  # verify the button is 0
         self.assertEqual(self.r._table.TOKENS['D'], 0)
         self.r.post_blinds()
@@ -224,6 +228,8 @@ class TestPoker(unittest.TestCase):
     def test_postblinds_3players_pot3(self):
         for i in [1, 3, 5]:
             self.r._table.remove_player(i)
+
+        self.r._table.TOKENS['D'] = -1
         self.r._table.move_button()  # verify the button is 0
         self.assertEqual(self.r._table.TOKENS['D'], 0)
         self.r.post_blinds()
@@ -233,6 +239,7 @@ class TestPoker(unittest.TestCase):
 
     # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_6players_pot3(self):
+        self.r._table.TOKENS['D'] = -1
         self.r._table.move_button()
         self.assertEqual(self.r._table.TOKENS['D'], 0)  # verify the button is 0
         self.r.post_blinds()
@@ -242,6 +249,7 @@ class TestPoker(unittest.TestCase):
 
     # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_6players_returnsString(self):
+        self.r._table.TOKENS['D'] = -1
         self.r._table.move_button()
         self.assertEqual(self.r._table.TOKENS['D'], 0)  # verify the button is 0
         expected = 'bob1 posts $1\nbob2 posts $2\n'
@@ -269,12 +277,14 @@ class TestPoker(unittest.TestCase):
     """
     # No allins, returns empty list
     def test_getallins_none_returnsemptylist(self):
+        self.r.deal_cards(2)
         expected = []
         result = self.r.get_allins()
         self.assertEqual(expected, result)
 
     # 1 allin, returns list with 1 stack size.
     def test_getallins_1allin_returns1stack(self):
+        self.r.deal_cards(2)
         expected = [1000]
         self.r._table.seats[0].bet(1000)
         result = self.r.get_allins()
@@ -282,6 +292,7 @@ class TestPoker(unittest.TestCase):
 
     # 2 allins, returns list with 2 stack sizes.
     def test_getallins_2allin_returns2stacks(self):
+        self.r.deal_cards(2)
         expected = [1000, 1000]
         self.r._table.seats[0].bet(1000)
         self.r._table.seats[1].bet(1000)
@@ -554,7 +565,7 @@ class TestPoker(unittest.TestCase):
         t = testtools.test_table(6)
         testtools.deal_stud(t, 2, 0)
         expected = 5
-        result = self.r.bringin(t)
+        result = poker.bringin(t)
         self.assertEqual(expected, result)
 
     # Stud5 deal: 2 Tied ranks
@@ -562,7 +573,7 @@ class TestPoker(unittest.TestCase):
         t = testtools.test_table(6)
         testtools.deal_stud(t, 2, 2)
         expected = 1
-        result = self.r.bringin(t)
+        result = poker.bringin(t)
         self.assertEqual(expected, result)
 
     # Stud5 deal: 3 Tied ranks
@@ -570,7 +581,7 @@ class TestPoker(unittest.TestCase):
         t = testtools.test_table(6)
         testtools.deal_stud(t, 2, 3)
         expected = 1
-        result = self.r.bringin(t)
+        result = poker.bringin(t)
         self.assertEqual(expected, result)
 
     # Stud5 deal: 4 Tied ranks
@@ -578,7 +589,7 @@ class TestPoker(unittest.TestCase):
         t = testtools.test_table(6)
         testtools.deal_stud(t, 2, 4)
         expected = 1
-        result = self.r.bringin(t)
+        result = poker.bringin(t)
         self.assertEqual(expected, result)
 
     # Stud7 deal: seat 5 has lowest card, 9
@@ -586,7 +597,7 @@ class TestPoker(unittest.TestCase):
         t = testtools.test_table(6)
         testtools.deal_stud(t, 3, 0)
         expected = 5
-        result = self.r.bringin(t)
+        result = poker.bringin(t)
         self.assertEqual(expected, result)
 
     # Stud7 deal: 2 Tied ranks
@@ -594,7 +605,7 @@ class TestPoker(unittest.TestCase):
         t = testtools.test_table(6)
         testtools.deal_stud(t, 3, 2)
         expected = 1
-        result = self.r.bringin(t)
+        result = poker.bringin(t)
         self.assertEqual(expected, result)
 
     # Stud7 deal: 3 Tied ranks
@@ -602,7 +613,7 @@ class TestPoker(unittest.TestCase):
         t = testtools.test_table(6)
         testtools.deal_stud(t, 3, 3)
         expected = 1
-        result = self.r.bringin(t)
+        result = poker.bringin(t)
         self.assertEqual(expected, result)
 
     # Stud7 deal: 4 Tied ranks
@@ -610,7 +621,7 @@ class TestPoker(unittest.TestCase):
         t = testtools.test_table(6)
         testtools.deal_stud(t, 3, 4)
         expected = 1
-        result = self.r.bringin(t)
+        result = poker.bringin(t)
         self.assertEqual(expected, result)
 
     """
@@ -619,34 +630,34 @@ class TestPoker(unittest.TestCase):
     # Stud5:
     def test_highhand_3cards_pairAces_return0(self):
         t = get_dealt_table(HANDS_3CARD)
-        expected = 0
-        result = self.r.highhand(t, gametype="FIVE CARD STUD")
+        expected = [0]
+        result = poker.highhand(t, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
     # Stud5:
     def test_highhand_4cards_AceHigh_return0(self):
         t = get_dealt_table(HANDS_4CARD)
-        expected = 0
-        result = self.r.highhand(t, gametype="FIVE CARD STUD")
+        expected = [0]
+        result = poker.highhand(t, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
     # Stud5:
     def test_highhand_3cards_2tied_return02(self):
         t = get_dealt_table(HANDS_3CARD_2TIED)
         expected = [0, 2]
-        result = self.r.highhand(t, gametype="FIVE CARD STUD")
+        result = poker.highhand(t, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
     # Stud5:
     def test_highhand_4cards_2tied_return02(self):
         t = get_dealt_table(HANDS_4CARD_TIED)
         expected = [0, 2]
-        result = self.r.highhand(t, gametype="FIVE CARD STUD")
+        result = poker.highhand(t, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
     # Stud5:
     def test_highhand_3cards_3tied_return023(self):
         t = get_dealt_table(HANDS_3CARD_3TIED)
         expected = [0, 1, 2]
-        result = self.r.highhand(t, gametype="FIVE CARD STUD")
+        result = poker.highhand(t, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
