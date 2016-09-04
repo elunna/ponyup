@@ -300,12 +300,14 @@ class TestPoker(unittest.TestCase):
             p.chips = stacks.pop(0)
 
         self.r = poker.Round(self.g)
+        testtools.deal_random_cards(self.g._table)
         self.everybody_bet(300)
 
         expected = {100: 400, 225: 375}
         allins = self.r.get_allins()
         result = self.r.make_sidepots(allins)
         self.assertEqual(expected, result)
+
     """
     Tests for calc_sidepot(stacksize):
     """
