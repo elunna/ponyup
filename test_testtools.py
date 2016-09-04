@@ -22,7 +22,7 @@ class TestTestTools(unittest.TestCase):
     def test_bobtable_2seats_bob0_in_seat0(self):
         t = testtools.BobTable(2)
         expected = 'bob0'
-        result = str(t.seats[0])
+        result = t.seats[0].name
         self.assertEqual(expected, result)
 
     """
