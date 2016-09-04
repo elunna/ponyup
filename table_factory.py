@@ -10,6 +10,9 @@ STEP = 100
 
 
 class BobTable(table.Table):
+    """
+    Creates a table of bobs with the default chip stack.
+    """
     def __init__(self, seats):
         super().__init__(seats)
 
@@ -20,6 +23,10 @@ class BobTable(table.Table):
 
 
 class SteppedStackTable(table.Table):
+    """
+    Creates a table of bobs with stack sizes starting from 100 and increasing in 100's for
+    each seat.
+    """
     def __init__(self, seats):
         super().__init__(seats)
 
