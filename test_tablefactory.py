@@ -48,8 +48,21 @@ class TestTableFactory(unittest.TestCase):
         result = t.seats[0].name
         self.assertEqual(expected, result)
 
-    def test_herotable_seat1_isCPU(self):
+    def test_herotable_draw5_2seats_len2(self):
         t = table_factory.HeroTable(2, 'Hero', "FIVE CARD DRAW")
-        expected = 'CPU'
-        result = t.seats[1].playertype
+        expected = 2
+        result = len(t)
         self.assertEqual(expected, result)
+
+    """
+    Tests for get_player(name, game):
+    """
+    # Make a player named 'Hero', name should be 'Hero'
+    # Make a 5 card draw player.
+    # Make a 5 card stud player.
+
+    """
+    Tests for change_playertypes(table, playertype):
+    """
+    # Change a test table to 5 card draw players.
+    # Change a test table to 5 card stud players.
