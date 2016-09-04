@@ -139,12 +139,11 @@ class BettingRound():
         if self.r.street == 0:
             self.bettor = poker.bringin(self.r._table)
             self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
-            return
-
-        # Go with high-hand
-        # Default to lowest seat #, change this later.
-        self.bettor = poker.highhand(self.r._table, self.r.gametype)[0]
-        self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
+        else:
+            # Go with high-hand
+            # Default to lowest seat #, change this later.
+            self.bettor = poker.highhand(self.r._table, self.r.gametype)[0]
+            self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
 
     def set_level(self):
         if self.r.street == 0:
