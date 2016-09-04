@@ -22,7 +22,7 @@ def convert_to_cards(strings):
 
 
 def make(hand_name, hidden=False):
-    h = convert_to_cards(HANDS_5CARD[hand_name])
+    h = convert_to_cards(HANDS[hand_name])
     if not hidden:
         for c in h:
             c.hidden = False
@@ -47,7 +47,7 @@ TRIPS = 40000000000
 STRAIGHT = 40000000000
 FLUSH = 50000000000
 
-HANDS_5CARD = {
+HANDS = {
     'dupes': ['As', '3h', 'As', '4d', '5c'],
     'royalflush': ['As', 'Ks', 'Js', 'Ts', 'Qs'],
     'straightflush_high': ['9s', 'Ks', 'Qs', 'Js', 'Ts'],
@@ -81,10 +81,6 @@ HANDS_5CARD = {
     'BDSD1': ['2d', '7s', '8s', '9d', 'Kh'],
     'BDSD2': ['2d', '7s', '8s', 'Td', 'Kh'],
     'junk': ['2d', '3s', '6s', '8d', 'Th'],
-}
-
-
-HANDS_3CARDDICT = {
     'AA1': ['2s', 'As', 'Ah'],
     'AA2': ['2c', 'Ad', 'Ac'],
     'KK': ['2h', 'Ks', 'Kh'],
@@ -103,37 +99,37 @@ HANDS_3CARDDICT = {
 }
 
 HANDS_3CARD = {
-    0: HANDS_3CARDDICT['AA1'],
-    1: HANDS_3CARDDICT['KK'],
-    2: HANDS_3CARDDICT['QQ'],
+    0: HANDS['AA1'],
+    1: HANDS['KK'],
+    2: HANDS['QQ'],
 }
 
 HANDS_3CARD_2TIED = {
-    0: HANDS_3CARDDICT['AA1'],
-    1: HANDS_3CARDDICT['KK'],
-    2: HANDS_3CARDDICT['AA2'],
+    0: HANDS['AA1'],
+    1: HANDS['KK'],
+    2: HANDS['AA2'],
 }
 
 HANDS_3CARD_3TIED = {
-    0: HANDS_3CARDDICT['AK1'],
-    1: HANDS_3CARDDICT['AK2'],
-    2: HANDS_3CARDDICT['AK3'],
-    3: HANDS_3CARDDICT['low1'],
-    4: HANDS_3CARDDICT['low2'],
-    5: HANDS_3CARDDICT['low3']
+    0: HANDS['AK1'],
+    1: HANDS['AK2'],
+    2: HANDS['AK3'],
+    3: HANDS['low1'],
+    4: HANDS['low2'],
+    5: HANDS['low3']
 }
 
 
 HANDS_4CARD = {
-    0: HANDS_3CARDDICT['QKA'],
-    1: HANDS_3CARDDICT['JTQ'],
-    2: HANDS_3CARDDICT['89J'],
-    3: HANDS_3CARDDICT['567'],
+    0: HANDS['QKA'],
+    1: HANDS['JTQ'],
+    2: HANDS['89J'],
+    3: HANDS['567'],
 }
 
 HANDS_4CARD_TIED = {
-    0: HANDS_3CARDDICT['QKA'],
-    1: HANDS_3CARDDICT['JTQ'],
-    2: HANDS_3CARDDICT['QKA2'],
-    3: HANDS_3CARDDICT['567'],
+    0: HANDS['QKA'],
+    1: HANDS['JTQ'],
+    2: HANDS['QKA2'],
+    3: HANDS['567'],
 }
