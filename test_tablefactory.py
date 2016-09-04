@@ -24,3 +24,18 @@ class TestTableFactory(unittest.TestCase):
         expected = 'bob0'
         result = str(t.seats[0])
         self.assertEqual(expected, result)
+
+    """
+    Tests SteppedStackTable
+    """
+    def test_steppedstacktable_seat0_100chips(self):
+        t = table_factory.SteppedStackTable(2)
+        expected = 100
+        result = t.seats[0].chips
+        self.assertEqual(expected, result)
+
+    def test_steppedstacktable_seat1_200chips(self):
+        t = table_factory.SteppedStackTable(2)
+        expected = 200
+        result = t.seats[1].chips
+        self.assertEqual(expected, result)
