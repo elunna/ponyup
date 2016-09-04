@@ -162,5 +162,5 @@ def get_draw5_sesh_1_2_blinds():
 def get_dealt_table(hands):
     t = test_table(len(hands))
     for k, v in hands.items():
-        t.seats[k]._hand.cards = v
+        t.seats[k]._hand.cards = pokerhands.convert_to_cards(v)
     return t
