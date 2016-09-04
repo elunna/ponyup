@@ -48,3 +48,9 @@ class TestTestTools(unittest.TestCase):
         expected = 'Hero'
         result = t.seats[0].name
         self.assertEqual(expected, result)
+
+    def test_herotable_seat1_isCPU(self):
+        t = testtools.HeroTable(2, 'Hero')
+        expected = 'CPU'
+        result = t.seats[1]._type
+        self.assertEqual(expected, result)
