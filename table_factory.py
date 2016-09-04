@@ -1,10 +1,7 @@
 import player
 import table
+import names
 
-
-"""
-Table factory.
-"""
 STARTINGCHIPS = 1000
 STEP = 100
 
@@ -19,7 +16,6 @@ class BobTable(table.Table):
         for i, s in enumerate(self.seats):
             self.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
             self.seats[i].chips = STARTINGCHIPS
-            #  s.chips = STARTINGCHIPS
 
 
 class SteppedStackTable(table.Table):
@@ -33,3 +29,42 @@ class SteppedStackTable(table.Table):
         for i, s in enumerate(self.seats):
             self.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
             self.seats[i].chips = STEP * (i + 1)
+
+
+class HeroTable(table.Table):
+    """
+    Creates a table with the human hero player, and populates the table full of random named
+    players. Each player has the default starting stack size.
+    """
+    def __init__(self, seats, hero, game):
+        super().__init__(seats)
+
+        nameset = names.random_names(seats)
+        # Add the hero to seat 0
+        self.add_player(0, player.Player(hero, 'HUMAN'))
+
+        for i, s in enumerate(self.seats):
+            if s is None:
+                #  self.add_player(i, player.Player(nameset.pop(), "CPU"))
+                newplayer = get_player(nameset.pop(), game)
+                self.add_player(i, newplayer)
+            else:
+                nameset.pop()
+            self.seats[i].chips = STARTINGCHIPS
+
+
+def get_player(name, game):
+    if game == "FIVE CARD DRAW":
+        return player.Player5Card(name)
+    elif game == "FIVE CARD STUD":
+        return player.Player5Stud(name)
+    elif game is None:
+        return player.Player(name, "CPU")
+
+
+def change_playertypes(table, playertype):
+    for p in table:
+        if p._type == "HUMAN":
+            pass
+        else:
+            p._type = playertype

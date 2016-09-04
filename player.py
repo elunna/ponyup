@@ -1,5 +1,6 @@
 import hand
 import names
+import random
 import player_5draw
 import player_5stud
 
@@ -7,11 +8,17 @@ TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
 
 
 class Player():
-    def __init__(self, name, playertype="CPU"):
+    def __init__(self, name, playertype="None"):
         self.set_name(name)
-        self._type = playertype
         self.chips = 0
         self._hand = hand.Hand()
+
+        if playertype is None:
+            # Chooce random player type
+            rnd_type = random_type()
+            self.playertype = rnd_type
+        else:
+            self.playertype = playertype
 
     def __str__(self):
         """
@@ -103,7 +110,7 @@ class Player():
         """
         Returns True if the player is a HUMAN type, False otherwise.
         """
-        return self._type == 'HUMAN'
+        return self.playertype == 'HUMAN'
 
     def is_allin(self):
         """
@@ -118,25 +125,19 @@ class Player():
         return len(self._hand) > 0
 
 
+def random_type():
+    return random.choice(TYPES)
+
+
 class Player5Card(Player):
     def __init__(self, name, playertype=None):
         super().__init__(name, playertype)
         self.strategies = {}
-
-        if playertype is None:
-            # Default playertype is FISH
-            self.strategies = player_5draw.TYPES["FISH"]
-        else:
-            self.strategies = player_5draw.TYPES[playertype]
+        self.strategies = player_5draw.TYPES[self.playertype]
 
 
 class Player5Stud(Player):
     def __init__(self, name, playertype=None):
         super().__init__(name, playertype)
         self.strategies = {}
-
-        if playertype is None:
-            # Default playertype is FISH
-            self.strategies = player_5stud.TYPES["FISH"]
-        else:
-            self.strategies = player_5stud.TYPES[playertype]
+        self.strategies = player_5stud.TYPES[self.playertype]

@@ -3,6 +3,7 @@ import card
 import table
 import player
 import testtools
+import table_factory
 
 
 class TestTable(unittest.TestCase):
@@ -10,7 +11,7 @@ class TestTable(unittest.TestCase):
     Setup a table filled with 6 players for testing.
     """
     def setUp(self):
-        self.t = testtools.BobTable(6)
+        self.t = table_factory.BobTable(6)
 
     """
     Tests for __init__ and table construction
@@ -306,7 +307,7 @@ class TestTable(unittest.TestCase):
     # 2 player with cards. Button moved to 0. Returns the player
     # Since it's heads up, the sb/btn(0) should be first in the returned list
     def test_getplayers_withcards_btn0_seat0and1hascards_return0(self):
-        t = testtools.BobTable(2)
+        t = table_factory.BobTable(2)
         t.move_button()
         self.assertEqual(t.TOKENS['D'], 0)  # Make sure the btn is at 0
         self.assertEqual(t.TOKENS['SB'], 0)  # Make sure the sb is at 0.
@@ -319,7 +320,7 @@ class TestTable(unittest.TestCase):
     # 2 player with cards. Button moved to 0. Returns the player
     # Since it's heads up, the sb/btn(0) should be first in the returned list
     def test_getplayers_withcards_btn1_seat0and1hascards_return1(self):
-        t = testtools.BobTable(2)
+        t = table_factory.BobTable(2)
         t.move_button()
         t.move_button()
         # Make sure the btn is at 1
@@ -554,7 +555,7 @@ class TestTable(unittest.TestCase):
     # Randomize button on table size 2, button is in range 0-1
     def test_randomizebutton_2seats_inrange0to1(self):
         seats = 2
-        t = testtools.BobTable(seats)
+        t = table_factory.BobTable(seats)
         t.randomize_button()
         result = t.TOKENS['D'] >= 0 and t.TOKENS['D'] < seats
         self.assertTrue(result)
@@ -563,7 +564,7 @@ class TestTable(unittest.TestCase):
 
     def test_randomizebutton_6seats_inrange0to5(self):
         seats = 6
-        t = testtools.BobTable(seats)
+        t = table_factory.BobTable(seats)
         t.randomize_button()
         result = t.TOKENS['D'] >= 0 and t.TOKENS['D'] < seats
         self.assertTrue(result)
@@ -571,7 +572,7 @@ class TestTable(unittest.TestCase):
     # Randomize button on table size 9, button is in range 0-8
     def test_randomizebutton_9seats_inrange0to8(self):
         seats = 9
-        t = testtools.BobTable(seats)
+        t = table_factory.BobTable(seats)
         t.randomize_button()
         result = t.TOKENS['D'] >= 0 and t.TOKENS['D'] < seats
         self.assertTrue(result)

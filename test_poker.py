@@ -4,6 +4,7 @@ import card
 import evaluator
 import poker
 import pokerhands
+import table_factory
 import testtools
 
 
@@ -17,7 +18,7 @@ class TestPoker(unittest.TestCase):
         self.r = poker.Round(self.g)
 
     def setup_allins(self, seats):
-        self.g._table = testtools.SteppedStackTable(seats)
+        self.g._table = table_factory.SteppedStackTable(seats)
         self.r = poker.Round(self.g)
 
         # For make_sidepots, get_allins need players to have cards.
@@ -293,7 +294,7 @@ class TestPoker(unittest.TestCase):
     # 5 players, 2 allins, challenge stack sizes.
     def test_makesidepots_4plyr_2allin_returns2sidepot(self):
         # Setup a problem situation
-        self.g._table = testtools.BobTable(4)
+        self.g._table = table_factory.BobTable(4)
         stacks = [1000, 1000, 225, 100]
         for p in self.g._table:
             p.chips = stacks.pop(0)
@@ -523,7 +524,7 @@ class TestPoker(unittest.TestCase):
     """
     # Stud5 deal: seat 5 has lowest card, 9
     def test_bringin_stud5_no_ties_returns6(self):
-        t = testtools.BobTable(6)
+        t = table_factory.BobTable(6)
         testtools.deal_stud(t, 2, 0)
         expected = 5
         result = poker.bringin(t)
@@ -531,7 +532,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud5 deal: 2 Tied ranks
     def test_bringin_stud5_2tied_returns1(self):
-        t = testtools.BobTable(6)
+        t = table_factory.BobTable(6)
         testtools.deal_stud(t, 2, 2)
         expected = 1
         result = poker.bringin(t)
@@ -539,7 +540,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud5 deal: 3 Tied ranks
     def test_bringin_stud5_3tied_returns1(self):
-        t = testtools.BobTable(6)
+        t = table_factory.BobTable(6)
         testtools.deal_stud(t, 2, 3)
         expected = 1
         result = poker.bringin(t)
@@ -547,7 +548,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud5 deal: 4 Tied ranks
     def test_bringin_stud5_4tied_returns1(self):
-        t = testtools.BobTable(6)
+        t = table_factory.BobTable(6)
         testtools.deal_stud(t, 2, 4)
         expected = 1
         result = poker.bringin(t)
@@ -555,7 +556,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud7 deal: seat 5 has lowest card, 9
     def test_bringin_stud7_no_ties_returns6(self):
-        t = testtools.BobTable(6)
+        t = table_factory.BobTable(6)
         testtools.deal_stud(t, 3, 0)
         expected = 5
         result = poker.bringin(t)
@@ -563,7 +564,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud7 deal: 2 Tied ranks
     def test_bringin_stud7_2tied_returns1(self):
-        t = testtools.BobTable(6)
+        t = table_factory.BobTable(6)
         testtools.deal_stud(t, 3, 2)
         expected = 1
         result = poker.bringin(t)
@@ -571,7 +572,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud7 deal: 3 Tied ranks
     def test_bringin_stud7_3tied_returns1(self):
-        t = testtools.BobTable(6)
+        t = table_factory.BobTable(6)
         testtools.deal_stud(t, 3, 3)
         expected = 1
         result = poker.bringin(t)
@@ -579,7 +580,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud7 deal: 4 Tied ranks
     def test_bringin_stud7_4tied_returns1(self):
-        t = testtools.BobTable(6)
+        t = table_factory.BobTable(6)
         testtools.deal_stud(t, 3, 4)
         expected = 1
         result = poker.bringin(t)

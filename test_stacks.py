@@ -1,6 +1,6 @@
 import unittest
-import testtools
 import stacks
+import table_factory
 
 
 class TestStacks(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestStacks(unittest.TestCase):
     # For 4 players, 100, 200, 300, 400.
     def test_largest_4players_returns400(self):
         seats = 4
-        t = testtools.SteppedStackTable(seats)
+        t = table_factory.SteppedStackTable(seats)
         expected = 400
         result = stacks.largest(t)
         self.assertEqual(expected, result)
@@ -21,7 +21,7 @@ class TestStacks(unittest.TestCase):
     # For 4 players, 100, 200, 300, 400.
     def test_smallest_4players_returns400(self):
         seats = 4
-        t = testtools.SteppedStackTable(seats)
+        t = table_factory.SteppedStackTable(seats)
         expected = 100
         result = stacks.smallest(t)
         self.assertEqual(expected, result)
@@ -31,7 +31,7 @@ class TestStacks(unittest.TestCase):
     """
     def test_average_4players_returns400(self):
         seats = 4
-        t = testtools.SteppedStackTable(seats)
+        t = table_factory.SteppedStackTable(seats)
         expected = 250
         result = stacks.average(t)
         self.assertEqual(expected, result)
@@ -45,7 +45,7 @@ class TestStacks(unittest.TestCase):
     """
     def test_average_4players_returns4stacks(self):
         seats = 4
-        t = testtools.SteppedStackTable(seats)
+        t = table_factory.SteppedStackTable(seats)
         expected = [100, 200, 300, 400]
         result = stacks.stacklist(t)
         self.assertEqual(expected, result)

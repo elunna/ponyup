@@ -9,7 +9,7 @@ import os
 import sessions
 import sys
 import table
-import testtools
+import table_factory
 
 GAME = 'FIVE CARD DRAW'
 TABLE = 2
@@ -150,7 +150,8 @@ def play_poker():
 
     print('Initializing new game...\n')
 
-    t = testtools.HeroTable(TABLE, NAME, GAME, OPPONENT)
+    t = table_factory.HeroTable(TABLE, NAME, GAME)
+    table_factory.change_playertypes(t, OPPONENT)
 
     if GAME == "FIVE CARD DRAW":
         g = sessions.Draw5Session(GAME, t, BLINDS)
