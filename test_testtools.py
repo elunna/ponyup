@@ -39,3 +39,12 @@ class TestTestTools(unittest.TestCase):
         expected = 200
         result = t.seats[1].chips
         self.assertEqual(expected, result)
+
+    """
+    Tests Herotable
+    """
+    def test_herotable_seat0_ishero(self):
+        t = testtools.HeroTable(2, 'Hero')
+        expected = 'Hero'
+        result = t.seats[0].name
+        self.assertEqual(expected, result)

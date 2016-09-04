@@ -7,6 +7,7 @@ import pokerhands
 import table
 
 STARTINGCHIPS = 1000
+STEP = 100
 
 HANDS = (pokerhands.make('royalflush'),
          pokerhands.make('straightflush_high'),
@@ -15,26 +16,6 @@ HANDS = (pokerhands.make('royalflush'),
          pokerhands.make('straight_high'),
          pokerhands.make('trips_high')
          )
-
-
-def make(num, hero=None):
-    # The hero variable lets someone pass in a Human player name
-    # If they don't want any human players, just let it be None.
-
-    t = table.Table(num)
-    nameset = names.random_names(num)
-
-    for i, s in enumerate(t.seats):
-        # Always put hero in 0 seat.
-        if i == 0 and hero is not None:
-            t.add_player(0, player.Player(hero, 'HUMAN'))
-
-        elif nameset[-1] is not None:
-            t.add_player(i, "CPU")
-        else:
-            nameset.pop()
-        t.seats[i].chips = STARTINGCHIPS
-    return t
 
 
 def test_table(seats, cards=False, CHIPS=STARTINGCHIPS):
@@ -165,12 +146,6 @@ def get_dealt_table(hands):
         t.seats[k]._hand.cards = pokerhands.convert_to_cards(v)
     return t
 
-"""
-Table factory.
-"""
-STARTINGCHIPS = 1000
-STEP = 100
-
 
 class BobTable(table.Table):
     """
@@ -196,3 +171,42 @@ class SteppedStackTable(table.Table):
         for i, s in enumerate(self.seats):
             self.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
             self.seats[i].chips = STEP * (i + 1)
+
+
+class HeroTable(table.Table):
+    """
+    Creates a table of bobs with stack sizes starting from 100 and increasing in 100's for
+    each seat.
+    """
+    def __init__(self, seats, hero):
+        super().__init__(seats)
+
+        nameset = names.random_names(seats)
+        # Add the hero to seat 0
+        self.add_player(0, player.Player(hero, 'HUMAN'))
+
+        for i, s in enumerate(self.seats):
+            if s is None:
+                self.add_player(i, player.Player(nameset.pop(), "CPU"))
+            else:
+                nameset.pop()
+            self.seats[i].chips = STARTINGCHIPS
+
+
+def make(num, hero=None):
+    # The hero variable lets someone pass in a Human player name
+    # If they don't want any human players, just let it be None.
+    t = table.Table(num)
+    nameset = names.random_names(num)
+
+    for i, s in enumerate(t.seats):
+        # Always put hero in 0 seat.
+        if i == 0 and hero is not None:
+            t.add_player(0, player.Player(hero, 'HUMAN'))
+
+        elif nameset[-1] is not None:
+            t.add_player(i, "CPU")
+        else:
+            nameset.pop()
+        t.seats[i].chips = STARTINGCHIPS
+    return t
