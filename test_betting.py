@@ -20,8 +20,24 @@ class TestBetting(unittest.TestCase):
     """
 
     """
-    Tests for player_bets(p)
+    Tests for player_decision(p)
     """
+    # This module kind of depends on the strategy, but we can probably rely on the fact that
+    # they will fold/check absolute trash and raise incredibly strong hands(ie: royal flush).
+    # We'll assume that the street is 1 and the betlevel is 1.
+
+    # If a player is allin, return the Allin option
+    def test_playerdecision_allin_returnsAllinOption(self):
+        self.setUp(2)
+        self.br = betting.BettingRound(self.r)
+        bettor = self.br.get_bettor()
+        bettor.bet(bettor.chips)
+        expected = "ALLIN"
+        result = self.br.player_decision(bettor).name
+        self.assertEqual(expected, result)
+
+    # Holds a royal flush, raises.
+    # Holds junk hand, checks the BB.
 
     """
     Tests for process_option(option)
@@ -47,7 +63,6 @@ class TestBetting(unittest.TestCase):
     # 6 players. Predraw. BTN=0, SB=1, BB=2. closer=2, bettor=3
     def test_setbettorandcloser_6plyr_predraw(self):
         closer, bettor = 2, 3
-        self.setUp(6)
         self.br = betting.BettingRound(self.r)
         self.assertEqual(closer, self.br.closer)
         self.assertEqual(bettor, self.br.bettor)
@@ -55,7 +70,6 @@ class TestBetting(unittest.TestCase):
     # 6 players. Postdraw. BTN=0, SB=1, BB=2. closer=0, bettor=1
     def test_setbettorandcloser_6plyr_postdraw(self):
         closer, bettor = 0, 1
-        self.setUp(6)
         self.r.next_street()
         self.br = betting.BettingRound(self.r)
         self.assertEqual(closer, self.br.closer)
@@ -81,6 +95,7 @@ class TestBetting(unittest.TestCase):
     """
     Tests for set_level
     """
+
     """
     Tests for set_betsize(self):
     """
@@ -125,7 +140,6 @@ class TestBetting(unittest.TestCase):
     # 6 players, new table. Preflop. BTN=0, SB=1, BB=2. bettor should be 3.
     def test_getbettor_6plyr_predraw_returnsseat3(self):
         bettor = 3
-        self.setUp(6)
         self.br = betting.BettingRound(self.r)
         expected = self.r._table.seats[bettor]
         result = self.br.get_bettor()
@@ -134,7 +148,6 @@ class TestBetting(unittest.TestCase):
     # 6 players, new table. Postdraw. BTN=0, SB=1, BB=2. bettor should be 1.
     def test_getbettor_6plyr_postdraw_returnsseat1(self):
         bettor = 1
-        self.setUp(6)
         self.r.next_street()
         self.br = betting.BettingRound(self.r)
         expected = self.r._table.seats[bettor]
@@ -166,7 +179,6 @@ class TestBetting(unittest.TestCase):
     # 6 players, new table. Predraw. BTN=0, SB=1, BB=2. closer should be 2.
     def test_getcloser_6plyr_predraw_returnsseat2(self):
         closer = 2
-        self.setUp(6)
         self.br = betting.BettingRound(self.r)
         expected = self.r._table.seats[closer]
         result = self.br.get_closer()
@@ -175,7 +187,6 @@ class TestBetting(unittest.TestCase):
     # 6 players, new table. Postdraw. BTN=0, SB=1, BB=2. closer should be 0.
     def test_getcloser_6plyr_postdraw_returnsseat0(self):
         closer = 0
-        self.setUp(6)
         self.r.next_street()
         self.br = betting.BettingRound(self.r)
         expected = self.r._table.seats[closer]
@@ -219,7 +230,6 @@ class TestBetting(unittest.TestCase):
     """
     # Street 1: Bet = 2. Player hasn't put any money in. Cost = 2.
     def test_cost_UTG_predraw_callfor2_costs2(self):
-        self.setUp(6)
         self.br = betting.BettingRound(self.r)
         invested = self.br.invested(self.br.get_bettor())
         expected = 2
@@ -250,7 +260,6 @@ class TestBetting(unittest.TestCase):
     """
     # 6 players, street 1: Current bettor=3, next should be 4
     def test_nextbettor_6players_street1_returnsPlayer4(self):
-        self.setUp(6)
         self.br = betting.BettingRound(self.r)
         self.br.next_bettor()
         expected = 4
@@ -259,7 +268,6 @@ class TestBetting(unittest.TestCase):
 
     # 6 players, street 2: Current bettor=1, next should be 2
     def test_nextbettor_6players_street2_returnsPlayer2(self):
-        self.setUp(6)
         self.r.next_street()
         self.br = betting.BettingRound(self.r)
         self.br.next_bettor()
