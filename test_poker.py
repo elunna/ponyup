@@ -11,20 +11,26 @@ class TestPoker(unittest.TestCase):
     """
     Setup a session and round, with a table filled with 6 players.
     """
-    def setUp(self):
+    def setUp(self, level=1, players=6):
         # Make a 6 player table
-        self.g = testtools.get_draw5_sesh_1_2_blinds()
+        self.g = testtools.draw5_session(level, players)
         self.r = poker.Round(self.g)
 
-    def allin_table(self, seats, REVERSED_HANDS=False):
-        self.g._table = testtools.allin_table(seats, REVERSED_HANDS)
+    def setup_allins(self, seats):
+        self.g._table = testtools.SteppedStackTable(seats)
         self.r = poker.Round(self.g)
+
+        # For make_sidepots, get_allins need players to have cards.
+        testtools.deal_random_cards(self.g._table, 2)
 
     def everybody_bet(self, bet):
         for p in self.r._table:
             self.r.pot += p.bet(bet)
 
-    # New round - pot = 0
+    """
+    Tests for __init__()
+    """
+    # Round __init__(): Pot = 0
     def test_newround_potis0(self):
         expected = 0
         result = self.r.pot
@@ -250,7 +256,7 @@ class TestPoker(unittest.TestCase):
     """
     # 2 players, 1 allin
     def test_makesidepots_2plyr_1allin_returns1sidepot(self):
-        self.allin_table(2)
+        self.setup_allins(2)
         expected = {100: 200}
         self.everybody_bet(100)
         allins = self.r.get_allins()
@@ -259,7 +265,7 @@ class TestPoker(unittest.TestCase):
 
     # 3 players, 1 allin
     def test_makesidepots_3plyr_1allin_returns1sidepot(self):
-        self.allin_table(3)
+        self.setup_allins(3)
         expected = {100: 300}
         self.everybody_bet(100)
         allins = self.r.get_allins()
@@ -268,7 +274,7 @@ class TestPoker(unittest.TestCase):
 
     # 3 players, 2 allins
     def test_makesidepots_3plyr_2allin_returns2sidepot(self):
-        self.allin_table(3)
+        self.setup_allins(3)
         expected = {100: 300, 200: 200}
         self.everybody_bet(200)
         allins = self.r.get_allins()
@@ -277,7 +283,7 @@ class TestPoker(unittest.TestCase):
 
     # 4 players, 3 allins
     def test_makesidepots_4plyr_3allin_returns3sidepot(self):
-        self.allin_table(4)
+        self.setup_allins(4)
         expected = {100: 400, 200: 300, 300: 200}
         self.everybody_bet(300)
         allins = self.r.get_allins()
@@ -287,10 +293,11 @@ class TestPoker(unittest.TestCase):
     # 5 players, 2 allins, challenge stack sizes.
     def test_makesidepots_4plyr_2allin_returns2sidepot(self):
         # Setup a problem situation
-        self.g._table = testtools.test_table(4)
+        self.g._table = testtools.BobTable(4)
         stacks = [1000, 1000, 225, 100]
         for p in self.g._table:
             p.chips = stacks.pop(0)
+
         self.r = poker.Round(self.g)
         self.everybody_bet(300)
 
@@ -303,7 +310,7 @@ class TestPoker(unittest.TestCase):
     """
     # 2 players, 1 allin
     def test_calcsidepot_2plyr_allinfor100_returns200(self):
-        self.allin_table(2)
+        self.setup_allins(2)
         expected = 200
         self.everybody_bet(100)
         result = self.r.calc_sidepot(100)
@@ -311,7 +318,7 @@ class TestPoker(unittest.TestCase):
 
     # 3 players, 1 allin
     def test_calcsidepot_3plyr_allinfor100_returns300(self):
-        self.allin_table(3)
+        self.setup_allins(3)
         expected = 300
         self.everybody_bet(100)
         result = self.r.calc_sidepot(100)
@@ -319,7 +326,7 @@ class TestPoker(unittest.TestCase):
 
     # 3 players, 2 allin
     def test_calcsidepot_3plyr_allinfor200_returns500(self):
-        self.allin_table(3)
+        self.setup_allins(3)
         expected = 500
         self.everybody_bet(200)
         result = self.r.calc_sidepot(200)
@@ -329,23 +336,26 @@ class TestPoker(unittest.TestCase):
     Tests for process_sidepots(sidepots)
     """
     # 2 players, 2 allins.
-    def test_processsidepots_2plyr_besthand_biggeststack_getswholepot(self):
-        seats = 2
-        self.allin_table(seats)
-        p0, p1 = [p for p in self.r._table.seats]
-        expected = {200: [p0], 100: [p1]}
+    def test_processsidepots_2players(self):
+        self.setup_allins(2)
         self.everybody_bet(200)
+        p0, p1 = [p for p in self.r._table.seats]
         sidepots = self.r.make_sidepots(self.r.get_allins())
+
+        expected = {200: [p0], 100: [p1]}
         result = self.r.process_sidepots(sidepots)
         self.assertEqual(expected, result)
 
     # 3 players, 3 allins.
-    def test_processsidepots_3plyr_besthand_biggeststack_getswholepot(self):
-        seats = 3
-        self.allin_table(seats)
-        p0, p1, p2 = [p for p in self.r._table.seats]
+    def test_processsidepots_3players(self):
+        self.setup_allins(3)
         self.everybody_bet(300)
+        # seat 0 gets strongest hand, 1 gets middle, 2 gets lowest.
+        testtools.deal_ranked_hands(self.r._table)
+
+        p0, p1, p2 = [p for p in self.r._table.seats]
         sidepots = self.r.make_sidepots(self.r.get_allins())
+
         expected = {300: [p0], 200: [p1], 100: [p2]}
         result = self.r.process_sidepots(sidepots)
         self.assertEqual(expected, result)
@@ -354,33 +364,33 @@ class TestPoker(unittest.TestCase):
     Tests for eligible(self, stack_req):
     """
     def test_geteligible_3players_req100_returns3players(self):
-        required_stack = 100
         seats = 3
-        self.allin_table(seats)
+        self.setup_allins(seats)
+        required_stack = 100
         expected = 3
         result = len(self.r.get_eligible(required_stack))
         self.assertEqual(expected, result)
 
     def test_geteligible_3players_req200_returns2players(self):
-        required_stack = 200
         seats = 3
-        self.allin_table(seats)
+        self.setup_allins(seats)
+        required_stack = 200
         expected = 2
         result = len(self.r.get_eligible(required_stack))
         self.assertEqual(expected, result)
 
     def test_geteligible_3players_req300_returns1player(self):
-        required_stack = 300
         seats = 3
-        self.allin_table(seats)
+        self.setup_allins(seats)
+        required_stack = 300
         expected = 1
         result = len(self.r.get_eligible(required_stack))
         self.assertEqual(expected, result)
 
     def test_geteligible_3players_req300_correctplayer(self):
-        required_stack = 300
         seats = 3
-        self.allin_table(seats)
+        self.setup_allins(seats)
+        required_stack = 300
         expected = [self.r._table.seats[2]]
         result = self.r.get_eligible(required_stack)
         self.assertEqual(expected, result)
@@ -390,49 +400,54 @@ class TestPoker(unittest.TestCase):
     # Note we'll use the table with the hand values reversed,
     # so that 0 has the lowest hand, 1 has better, 2 beats 1, etc.
     """
-    # Out of 2 players, should have a straight
-    def test_besthandval_2players_straight(self):
-        seats = 2
-        self.allin_table(seats, REVERSED_HANDS=True)
+
+    # 2 players: should be pair_low
+    def test_besthandval_2players_lowpair(self):
+        self.setup_allins(2)
+        testtools.deal_ranked_hands(self.r._table, _rev=True)
         players = self.r._table.get_players(hascards=True)
+
+        expected = evaluator.get_value(pokerhands.make('pair_low'))
+        result = self.r.best_hand_val(players)
+        self.assertEqual(expected, result)
+
+    # 3 players: should be pair_high
+    def test_besthandval_3players_highpair(self):
+        self.setup_allins(3)
+        testtools.deal_ranked_hands(self.r._table, _rev=True)
+        players = self.r._table.get_players(hascards=True)
+
+        expected = evaluator.get_value(pokerhands.make('pair_high'))
+        result = self.r.best_hand_val(players)
+        self.assertEqual(expected, result)
+
+    # 4 players: should be two pair
+    def test_besthandval_4players_twopair(self):
+        self.setup_allins(4)
+        testtools.deal_ranked_hands(self.r._table, _rev=True)
+        players = self.r._table.get_players(hascards=True)
+
+        expected = evaluator.get_value(pokerhands.make('twopair_high'))
+        result = self.r.best_hand_val(players)
+        self.assertEqual(expected, result)
+
+    # 5 players: should be trips
+    def test_besthandval_5players_trips(self):
+        self.setup_allins(5)
+        testtools.deal_ranked_hands(self.r._table, _rev=True)
+        players = self.r._table.get_players(hascards=True)
+
+        expected = evaluator.get_value(pokerhands.make('trips_high'))
+        result = self.r.best_hand_val(players)
+        self.assertEqual(expected, result)
+
+    # 5 players: should be straight
+    def test_besthandval_6players_straight(self):
+        self.setup_allins(6)
+        testtools.deal_ranked_hands(self.r._table, _rev=True)
+        players = self.r._table.get_players(hascards=True)
+
         expected = evaluator.get_value(pokerhands.make('straight_high'))
-        result = self.r.best_hand_val(players)
-        self.assertEqual(expected, result)
-
-    # Out of 3 players, should have a flush
-
-    def test_besthandval_3players_flush(self):
-        seats = 3
-        self.allin_table(seats, REVERSED_HANDS=True)
-        players = self.r._table.get_players(hascards=True)
-        expected = evaluator.get_value(pokerhands.make('flush_high'))
-        result = self.r.best_hand_val(players)
-        self.assertEqual(expected, result)
-
-    # Out of 4 players, should have a boat
-    def test_besthandval_4players_fullhouse(self):
-        seats = 4
-        self.allin_table(seats, REVERSED_HANDS=True)
-        players = self.r._table.get_players(hascards=True)
-        expected = evaluator.get_value(pokerhands.make('fullhouse_high'))
-        result = self.r.best_hand_val(players)
-        self.assertEqual(expected, result)
-
-    # Out of 5 players, should have a straightflush
-    def test_besthandval_5players_straightflush(self):
-        seats = 5
-        self.allin_table(seats, REVERSED_HANDS=True)
-        players = self.r._table.get_players(hascards=True)
-        expected = evaluator.get_value(pokerhands.make('straightflush_high'))
-        result = self.r.best_hand_val(players)
-        self.assertEqual(expected, result)
-
-    # Out of 6 players, should have a royalflush
-    def test_besthandval_6players_royalflush(self):
-        seats = 6
-        self.allin_table(seats, REVERSED_HANDS=True)
-        players = self.r._table.get_players(hascards=True)
-        expected = evaluator.get_value(pokerhands.make('royalflush'))
         result = self.r.best_hand_val(players)
         self.assertEqual(expected, result)
 
@@ -508,7 +523,7 @@ class TestPoker(unittest.TestCase):
     """
     # Stud5 deal: seat 5 has lowest card, 9
     def test_bringin_stud5_no_ties_returns6(self):
-        t = testtools.test_table(6)
+        t = testtools.BobTable(6)
         testtools.deal_stud(t, 2, 0)
         expected = 5
         result = poker.bringin(t)
@@ -516,7 +531,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud5 deal: 2 Tied ranks
     def test_bringin_stud5_2tied_returns1(self):
-        t = testtools.test_table(6)
+        t = testtools.BobTable(6)
         testtools.deal_stud(t, 2, 2)
         expected = 1
         result = poker.bringin(t)
@@ -524,7 +539,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud5 deal: 3 Tied ranks
     def test_bringin_stud5_3tied_returns1(self):
-        t = testtools.test_table(6)
+        t = testtools.BobTable(6)
         testtools.deal_stud(t, 2, 3)
         expected = 1
         result = poker.bringin(t)
@@ -532,7 +547,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud5 deal: 4 Tied ranks
     def test_bringin_stud5_4tied_returns1(self):
-        t = testtools.test_table(6)
+        t = testtools.BobTable(6)
         testtools.deal_stud(t, 2, 4)
         expected = 1
         result = poker.bringin(t)
@@ -540,7 +555,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud7 deal: seat 5 has lowest card, 9
     def test_bringin_stud7_no_ties_returns6(self):
-        t = testtools.test_table(6)
+        t = testtools.BobTable(6)
         testtools.deal_stud(t, 3, 0)
         expected = 5
         result = poker.bringin(t)
@@ -548,7 +563,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud7 deal: 2 Tied ranks
     def test_bringin_stud7_2tied_returns1(self):
-        t = testtools.test_table(6)
+        t = testtools.BobTable(6)
         testtools.deal_stud(t, 3, 2)
         expected = 1
         result = poker.bringin(t)
@@ -556,7 +571,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud7 deal: 3 Tied ranks
     def test_bringin_stud7_3tied_returns1(self):
-        t = testtools.test_table(6)
+        t = testtools.BobTable(6)
         testtools.deal_stud(t, 3, 3)
         expected = 1
         result = poker.bringin(t)
@@ -564,7 +579,7 @@ class TestPoker(unittest.TestCase):
 
     # Stud7 deal: 4 Tied ranks
     def test_bringin_stud7_4tied_returns1(self):
-        t = testtools.test_table(6)
+        t = testtools.BobTable(6)
         testtools.deal_stud(t, 3, 4)
         expected = 1
         result = poker.bringin(t)
@@ -575,35 +590,35 @@ class TestPoker(unittest.TestCase):
     """
     # Stud5:
     def test_highhand_3cards_pairAces_return0(self):
-        t = testtools.get_dealt_table(pokerhands.HANDS_3CARD)
+        testtools.deal_hand_dict(self.r._table, pokerhands.HANDS_3CARD)
         expected = [0]
-        result = poker.highhand(t, gametype="FIVE CARD STUD")
+        result = poker.highhand(self.r._table, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
     # Stud5:
     def test_highhand_4cards_AceHigh_return0(self):
-        t = testtools.get_dealt_table(pokerhands.HANDS_4CARD)
+        testtools.deal_hand_dict(self.r._table, pokerhands.HANDS_4CARD)
         expected = [0]
-        result = poker.highhand(t, gametype="FIVE CARD STUD")
+        result = poker.highhand(self.r._table, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
     # Stud5:
     def test_highhand_3cards_2tied_return02(self):
-        t = testtools.get_dealt_table(pokerhands.HANDS_3CARD_2TIED)
+        testtools.deal_hand_dict(self.r._table, pokerhands.HANDS_3CARD_2TIED)
         expected = [0, 2]
-        result = poker.highhand(t, gametype="FIVE CARD STUD")
+        result = poker.highhand(self.r._table, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
     # Stud5:
     def test_highhand_4cards_2tied_return02(self):
-        t = testtools.get_dealt_table(pokerhands.HANDS_4CARD_TIED)
+        testtools.deal_hand_dict(self.r._table, pokerhands.HANDS_4CARD_TIED)
         expected = [0, 2]
-        result = poker.highhand(t, gametype="FIVE CARD STUD")
+        result = poker.highhand(self.r._table, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
     # Stud5:
     def test_highhand_3cards_3tied_return023(self):
-        t = testtools.get_dealt_table(pokerhands.HANDS_3CARD_3TIED)
+        testtools.deal_hand_dict(self.r._table, pokerhands.HANDS_3CARD_3TIED)
         expected = [0, 1, 2]
-        result = poker.highhand(t, gametype="FIVE CARD STUD")
+        result = poker.highhand(self.r._table, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)

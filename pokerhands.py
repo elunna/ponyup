@@ -98,38 +98,52 @@ HANDS = {
     '567': ['5c', '6s', '7s'],
 }
 
+RANKEDHANDS = {
+    0: make('royalflush'),
+    1: make('straightflush_high'),
+    2: make('fullhouse_high'),
+    3: make('flush_high'),
+    4: make('straight_high'),
+    5: make('trips_high'),
+    6: make('twopair_high'),
+    7: make('pair_high'),
+    8: make('pair_low'),
+    9: make('acehigh'),
+}
+
+
 HANDS_3CARD = {
-    0: HANDS['AA1'],
-    1: HANDS['KK'],
-    2: HANDS['QQ'],
+    0: make('AA1'),
+    1: make('KK'),
+    2: make('QQ'),
 }
 
 HANDS_3CARD_2TIED = {
-    0: HANDS['AA1'],
-    1: HANDS['KK'],
-    2: HANDS['AA2'],
+    0: make('AA1'),
+    1: make('KK'),
+    2: make('AA2'),
 }
 
 HANDS_3CARD_3TIED = {
-    0: HANDS['AK1'],
-    1: HANDS['AK2'],
-    2: HANDS['AK3'],
-    3: HANDS['low1'],
-    4: HANDS['low2'],
-    5: HANDS['low3']
+    0: make('AK1'),
+    1: make('AK2'),
+    2: make('AK3'),
+    3: make('low1'),
+    4: make('low2'),
+    5: make('low3')
 }
 
 
 HANDS_4CARD = {
-    0: HANDS['QKA'],
-    1: HANDS['JTQ'],
-    2: HANDS['89J'],
-    3: HANDS['567'],
+    0: make('QKA'),
+    1: make('JTQ'),
+    2: make('89J'),
+    3: make('567'),
 }
 
 HANDS_4CARD_TIED = {
-    0: HANDS['QKA'],
-    1: HANDS['JTQ'],
-    2: HANDS['QKA2'],
-    3: HANDS['567'],
+    0: make('QKA'),
+    1: make('JTQ'),
+    2: make('QKA2'),
+    3: make('567'),
 }

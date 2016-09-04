@@ -7,12 +7,12 @@ class TestBetting(unittest.TestCase):
     """
     Setup a session and round, with a table filled with 6 players.
     """
-    def setUp(self, seats=6):
-        g = testtools.get_draw5_sesh_1_2_blinds()
-        g._table = testtools.test_table(seats, cards=True)
+    def setUp(self, level=1, players=6):
+        g = testtools.draw5_session(level, players)
         g._table.move_button()
         self.assertEqual(g._table.TOKENS['D'], 0)  # verify the button is 0
         self.r = g.new_round()
+        self.r.deal_cards(5)
         self.r.post_blinds()
 
     """
@@ -28,7 +28,7 @@ class TestBetting(unittest.TestCase):
 
     # If a player is allin, return the Allin option
     def test_playerdecision_allin_returnsAllinOption(self):
-        self.setUp(2)
+        self.setUp(players=2)
         self.br = betting.BettingRound(self.r)
         bettor = self.br.get_bettor()
         bettor.bet(bettor.chips)
@@ -77,16 +77,16 @@ class TestBetting(unittest.TestCase):
 
     # 2 players. Predraw. BTN/SB=0, BB=1. closer=1, bettor=0
     def test_setbettorandcloser_2plyr_predraw(self):
+        self.setUp(players=2)
         closer, bettor = 1, 0
-        self.setUp(2)
         self.br = betting.BettingRound(self.r)
         self.assertEqual(closer, self.br.closer)
         self.assertEqual(bettor, self.br.bettor)
 
     # 2 players. Postdraw. BTN/SB=0, BB=1. closer=0, bettor=1
     def test_setbettorandcloser_2plyr_postdraw(self):
+        self.setUp(players=2)
         closer, bettor = 0, 1
-        self.setUp(2)
         self.r.next_street()
         self.br = betting.BettingRound(self.r)
         self.assertEqual(closer, self.br.closer)
@@ -101,7 +101,7 @@ class TestBetting(unittest.TestCase):
     """
     # FiveCardDraw: street 1, BB=2, betsize = 2
     def test_setbetsize_street1_betsize2(self):
-        self.setUp(2)
+        self.setUp()
         self.br = betting.BettingRound(self.r)
         expected = 2
         result = self.br.betsize
@@ -109,7 +109,7 @@ class TestBetting(unittest.TestCase):
 
     # FiveCardDraw: street 2, BB=2, betsize = 4
     def test_setbetsize_street2_betsize4(self):
-        self.setUp(2)
+        self.setUp()
         self.r.next_street()
         self.br = betting.BettingRound(self.r)
         expected = 4
@@ -120,14 +120,14 @@ class TestBetting(unittest.TestCase):
     Tests for set_stacks(self):
     """
     def test_setstacks_predraw_fullstacks(self):
-        self.setUp(2)
+        self.setUp(players=2)
         self.br = betting.BettingRound(self.r)
         expected = {'bob0': 1000, 'bob1': 1000}
         result = self.br.stacks
         self.assertEqual(expected, result)
 
     def test_setstacks_postdraw_stacksminusblinds(self):
-        self.setUp(2)
+        self.setUp(players=2)
         self.r.next_street()
         self.br = betting.BettingRound(self.r)
         expected = {'bob0': 999, 'bob1': 998}
@@ -156,8 +156,8 @@ class TestBetting(unittest.TestCase):
 
     # 2 players, new table. Predraw. BTN/SB=0, BB=1. bettor should be 0.
     def test_getbettor_2plyr_predraw_returnsseat0(self):
+        self.setUp(players=2)
         bettor = 0
-        self.setUp(2)
         self.br = betting.BettingRound(self.r)
         expected = self.r._table.seats[bettor]
         result = self.br.get_bettor()
@@ -165,8 +165,8 @@ class TestBetting(unittest.TestCase):
 
     # 2 players, new table. Postdraw. BTN/SB=0, BB=1. bettor should be 1.
     def test_getbettor_2plyr_postdraw_returnsseat1(self):
+        self.setUp(players=2)
         bettor = 1
-        self.setUp(2)
         self.r.next_street()
         self.br = betting.BettingRound(self.r)
         expected = self.r._table.seats[bettor]
@@ -195,8 +195,8 @@ class TestBetting(unittest.TestCase):
 
     # 2 players, new table. Predraw. BTN/SB=0, BB=1. closer should be 1.
     def test_getcloser_2plyr_predraw_returnsseat1(self):
+        self.setUp(players=2)
         closer = 1
-        self.setUp(2)
         self.br = betting.BettingRound(self.r)
         expected = self.r._table.seats[closer]
         result = self.br.get_closer()
@@ -204,8 +204,8 @@ class TestBetting(unittest.TestCase):
 
     # 2 players, new table. Postdraw. BTN/SB=0, BB=1. closer should be 0.
     def test_getcloser_2plyr_postdraw_returnsseat0(self):
+        self.setUp(players=2)
         closer = 0
-        self.setUp(2)
         self.r.next_street()
         self.br = betting.BettingRound(self.r)
         expected = self.r._table.seats[closer]
@@ -217,7 +217,7 @@ class TestBetting(unittest.TestCase):
     """
     # Player bet 100 during the round.
     def test_invested_playerbet100_returns100(self):
-        self.setUp(2)
+        self.setUp(players=2)
         self.br = betting.BettingRound(self.r)
         bettor = self.br.get_bettor()
         bettor.bet(99)
@@ -238,7 +238,7 @@ class TestBetting(unittest.TestCase):
 
     # Street 1: Bet = 2. Bettor is SB, put in 1. Cost = 1.
     def test_cost_SB_predraw_complete_costs1(self):
-        self.setUp(2)
+        self.setUp(players=2)
         self.br = betting.BettingRound(self.r)
         invested = self.br.invested(self.br.get_bettor())
         expected = 1
@@ -247,7 +247,7 @@ class TestBetting(unittest.TestCase):
 
     # Street 2: Bet = 2. Bettor is BB, Cost = 0.
     def test_cost_BB_openbetting_costs0(self):
-        self.setUp(2)
+        self.setUp(players=2)
         self.r.next_street()
         self.br = betting.BettingRound(self.r)
         invested = self.br.invested(self.br.get_bettor())
@@ -277,7 +277,7 @@ class TestBetting(unittest.TestCase):
 
     # 2 players, street 1: Current bettor=0, next should be 1
     def test_nextbettor_2players_street1_returnsPlayer1(self):
-        self.setUp(2)
+        self.setUp(players=2)
         self.br = betting.BettingRound(self.r)
         self.br.next_bettor()
         expected = 1
@@ -286,7 +286,7 @@ class TestBetting(unittest.TestCase):
 
     # 2 players, street2: Current bettor=1, next should be 0
     def test_nextbettor_2players_street2_returnsPlayer0(self):
-        self.setUp(2)
+        self.setUp(players=2)
         self.r.next_street()
         self.br = betting.BettingRound(self.r)
         self.br.next_bettor()
@@ -298,7 +298,7 @@ class TestBetting(unittest.TestCase):
     Tests for done()
     """
     def test_done_2playersacted_returnsTrue(self):
-        self.setUp(2)
+        self.setUp(players=2)
         self.br = betting.BettingRound(self.r)
         expected = True
         self.br.next_bettor()  # 0 -> 1
@@ -306,7 +306,7 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_done_BBnotacted_returnsFalse(self):
-        self.setUp(2)
+        self.setUp(players=2)
         self.br = betting.BettingRound(self.r)
         expected = False
         result = self.br.done()

@@ -150,7 +150,7 @@ def play_poker():
 
     print('Initializing new game...\n')
 
-    t = testtools.make_game_table(TABLE, GAME, OPPONENT, NAME)
+    t = testtools.HeroTable(TABLE,  NAME)
 
     if GAME == "FIVE CARD DRAW":
         g = sessions.Draw5Session(GAME, t, BLINDS)

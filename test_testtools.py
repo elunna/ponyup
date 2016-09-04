@@ -3,7 +3,6 @@ import testtools
 
 
 class TestTestTools(unittest.TestCase):
-
     """
     Tests BobTable
     """
@@ -53,4 +52,14 @@ class TestTestTools(unittest.TestCase):
         t = testtools.HeroTable(2, 'Hero')
         expected = 'CPU'
         result = t.seats[1]._type
+        self.assertEqual(expected, result)
+
+    """
+    Tests for deal_ranked_hands(table, reversed=False):
+    """
+    def test_dealrankedhands_seat0_hasRoyalFlush(self):
+        t = testtools.BobTable(2)
+        testtools.deal_ranked_hands(t)
+        expected = "ROYAL FLUSH"
+        result = t.seats[0]._hand.rank()
         self.assertEqual(expected, result)
