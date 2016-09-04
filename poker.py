@@ -237,14 +237,6 @@ class Round():
             award_dict[r_winner] += remainder
         return award_dict
 
-    def betting_round(self, utg=None):
-        """
-        Run through a round of betting. Returns a victor if it exists.
-        """
-        br = betting.BettingRound(self)
-        victor = br.play()
-        return victor
-
     def showdown(self):
         """
         Compare all the hands of players holding cards and determine the winner(s). Awards each

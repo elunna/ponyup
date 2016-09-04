@@ -1,3 +1,4 @@
+import betting
 import discard
 import poker
 
@@ -45,6 +46,14 @@ class Session():
         """
         print('Stub play function')
 
+    def betting_round(self, _round):
+        """
+        Run through a round of betting. Returns a victor if it exists.
+        """
+        br = betting.BettingRound(_round)
+        victor = br.play()
+        return victor
+
 
 class Stud5Session(Session):
     def play(self):
@@ -63,19 +72,20 @@ class Stud5Session(Session):
 
                 # The bringin determines the first bettor.
                 bring = poker.bringin(r._table)
-                print('Bringin is {}'.format(bring))
+                print('Bringin is {}'.format(r._table.seats[bring]))
 
             else:
                 r.deal_cards(1, faceup=True)
                 high = poker.highhand(r._table, r.gametype)
 
                 if len(high) > 1:
-                    print('There is a tie for high hand, going with {}'.format(high[0]))
+                    print('There is a tie for high hand, going with seat {}'.format(high[0]))
                 else:
-                    print('Seat {} has the high hand and will act first.')
+                    print('{} has high hand and will act first.'.format(
+                        r._table.seats[high[0]]))
 
             print(self._table)
-            victor = r.betting_round()
+            victor = self.betting_round(r)
             print(r)           # Display pot
 
             if victor is None:
@@ -113,7 +123,7 @@ class Draw5Session(Session):
                 # print table after discarding and drawing
                 print(self._table)
 
-            victor = r.betting_round()
+            victor = self.betting_round(r)
             print(r)           # Display pot
 
             if victor is None:
