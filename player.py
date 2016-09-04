@@ -120,8 +120,7 @@ class Player():
 
 class Player5Card(Player):
     def __init__(self, name, playertype=None):
-        self.set_name(name)
-        self._type = playertype
+        super().__init__(name, playertype)
         self.strategies = {}
 
         if playertype is None:
@@ -130,14 +129,10 @@ class Player5Card(Player):
         else:
             self.strategies = player_5draw.TYPES[playertype]
 
-        self.chips = 0
-        self._hand = hand.Hand()
-
 
 class Player5Stud(Player):
     def __init__(self, name, playertype=None):
-        self.set_name(name)
-        self._type = playertype
+        super().__init__(name, playertype)
         self.strategies = {}
 
         if playertype is None:
@@ -145,6 +140,3 @@ class Player5Stud(Player):
             self.strategies = player_5stud.TYPES["FISH"]
         else:
             self.strategies = player_5stud.TYPES[playertype]
-
-        self.chips = 0
-        self._hand = hand.Hand()

@@ -150,10 +150,11 @@ def play_poker():
 
     print('Initializing new game...\n')
 
-    t = testtools.HeroTable(TABLE,  NAME)
+    t = testtools.HeroTable(TABLE, NAME, GAME, OPPONENT)
 
     if GAME == "FIVE CARD DRAW":
         g = sessions.Draw5Session(GAME, t, BLINDS)
+        t.randomize_button()
     elif GAME == "FIVE CARD STUD":
         g = sessions.Stud5Session(GAME, t, BLINDS)
 
