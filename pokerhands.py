@@ -6,6 +6,29 @@ hands and also some variations on them. These are meant to be used for testing.
 from __future__ import print_function
 import card
 
+
+def to_card(string):
+    if len(string) != 2:
+        raise Exception('String must be exactly 2 characters to convert to a card!')
+    return card.Card(string[0], string[1])
+
+
+def convert_to_cards(strings):
+    # Unhide for testing purposes
+    cards = [to_card(x) for x in strings]
+    for c in cards:
+        c.hidden = False
+    return cards
+
+
+def make(hand_name, hidden=False):
+    h = convert_to_cards(HANDS_5CARD[hand_name])
+    if not hidden:
+        for c in h:
+            c.hidden = False
+    return h
+
+
 # These are constants to help with computer AI
 HI_KT = 1310000000
 HI_AQ = 1412000000
@@ -24,7 +47,7 @@ TRIPS = 40000000000
 STRAIGHT = 40000000000
 FLUSH = 50000000000
 
-POKERHANDS = {
+HANDS_5CARD = {
     'dupes': ['As', '3h', 'As', '4d', '5c'],
     'royalflush': ['As', 'Ks', 'Js', 'Ts', 'Qs'],
     'straightflush_high': ['9s', 'Ks', 'Qs', 'Js', 'Ts'],
@@ -57,63 +80,60 @@ POKERHANDS = {
     'acehigh': ['Ad', '4s', '5s', '7s', '9h'],
     'BDSD1': ['2d', '7s', '8s', '9d', 'Kh'],
     'BDSD2': ['2d', '7s', '8s', 'Td', 'Kh'],
-    'junk': ['2d', '3s', '6s', '8d', 'Th']
+    'junk': ['2d', '3s', '6s', '8d', 'Th'],
 }
 
 
-def to_card(string):
-    if len(string) != 2:
-        raise Exception('String must be exactly 2 characters to convert to a card!')
-    return card.Card(string[0], string[1])
-
-
-def convert_to_cards(strings):
-    # Unhide for testing purposes
-    cards = [to_card(x) for x in strings]
-    for c in cards:
-        c.hidden = False
-    return cards
-
-
-def make(hand_name, hidden=False):
-    h = convert_to_cards(POKERHANDS[hand_name])
-    if not hidden:
-        for c in h:
-            c.hidden = False
-    return h
+HANDS_3CARDDICT = {
+    'AA1': ['2s', 'As', 'Ah'],
+    'AA2': ['2c', 'Ad', 'Ac'],
+    'KK': ['2h', 'Ks', 'Kh'],
+    'QQ': ['2d', 'Qs', 'Qh'],
+    'AK1': ['3s', 'As', 'Ks'],
+    'AK2': ['3h', 'Ah', 'Kh'],
+    'AK3': ['3c', 'Ac', 'Kc'],
+    'low1': ['3s', '4s', '5s'],
+    'low2': ['3d', '4d', '5d'],
+    'low3': ['2c', '4c', '5c'],
+    'QKA': ['Qs', 'Kh', 'As'],
+    'QKA2': ['Qc', 'Ks', 'Ac'],
+    'JTQ': ['Jh', 'Ts', 'Qh'],
+    '89J': ['8c', '9s', 'Js'],
+    '567': ['5c', '6s', '7s'],
+}
 
 HANDS_3CARD = {
-    0: convert_to_cards(['2s', 'As', 'Ah']),
-    1: convert_to_cards(['2h', 'Ks', 'Kh']),
-    2: convert_to_cards(['2c', 'Qs', 'Qh']),
+    0: HANDS_3CARDDICT['AA1'],
+    1: HANDS_3CARDDICT['KK'],
+    2: HANDS_3CARDDICT['QQ'],
 }
 
 HANDS_3CARD_2TIED = {
-    0: convert_to_cards(['2s', 'As', 'Ah']),
-    1: convert_to_cards(['2h', 'Ks', 'Kh']),
-    2: convert_to_cards(['2c', 'Ad', 'Ac']),
+    0: HANDS_3CARDDICT['AA1'],
+    1: HANDS_3CARDDICT['KK'],
+    2: HANDS_3CARDDICT['AA2'],
 }
 
 HANDS_3CARD_3TIED = {
-    0: convert_to_cards(['2s', 'As', 'Ks']),
-    1: convert_to_cards(['2h', 'Ah', 'Kh']),
-    2: convert_to_cards(['2c', 'Ac', 'Kc']),
-    3: convert_to_cards(['3s', '4s', '5s']),
-    4: convert_to_cards(['3d', '4d', '5d']),
-    5: convert_to_cards(['2c', '4c', '5c']),
+    0: HANDS_3CARDDICT['AK1'],
+    1: HANDS_3CARDDICT['AK2'],
+    2: HANDS_3CARDDICT['AK3'],
+    3: HANDS_3CARDDICT['low1'],
+    4: HANDS_3CARDDICT['low2'],
+    5: HANDS_3CARDDICT['low3']
 }
 
 
 HANDS_4CARD = {
-    0: convert_to_cards(['Qs', 'Kh', 'As']),
-    1: convert_to_cards(['Jh', 'Ts', 'Qh']),
-    2: convert_to_cards(['8c', '9s', 'Js']),
-    2: convert_to_cards(['5c', '6s', '7s']),
+    0: HANDS_3CARDDICT['QKA'],
+    1: HANDS_3CARDDICT['JTQ'],
+    2: HANDS_3CARDDICT['89J'],
+    3: HANDS_3CARDDICT['567'],
 }
 
 HANDS_4CARD_TIED = {
-    0: convert_to_cards(['Qs', 'Kh', 'As']),
-    1: convert_to_cards(['Jh', 'Ts', 'Qh']),
-    2: convert_to_cards(['Qc', 'Ks', 'Ac']),
-    3: convert_to_cards(['5c', '6s', '7s']),
+    0: HANDS_3CARDDICT['QKA'],
+    1: HANDS_3CARDDICT['JTQ'],
+    2: HANDS_3CARDDICT['QKA2'],
+    3: HANDS_3CARDDICT['567'],
 }
