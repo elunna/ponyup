@@ -9,14 +9,6 @@ import testtools
 
 class TestPoker(unittest.TestCase):
     """
-    poker.Session #############################################
-    """
-
-    """
-    poker.Round   #############################################
-    """
-
-    """
     Setup a session and round, with a table filled with 6 players.
     """
     def setUp(self):
