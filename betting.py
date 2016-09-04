@@ -27,27 +27,21 @@ class BettingRound():
         """
         Performs a round of betting between all the players that have cards and chips.
         """
-        self.playing = True
-
-        while self.playing:
-            p = self.get_bettor()
-            o = self.player_decision(p)
-
-            self.process_option(o)
-            print(self.action_string(o))
+        while True:
+            yield self.get_bettor()
 
             winner = one_left(self.r._table)
             if winner:
                 oneleft = '{}Only one player left!'.format(spacing(self.level))
                 print(colors.color(oneleft, 'LIGHTBLUE'))
-                self.playing = False
-                return winner
+                #  self.playing = False
+                raise StopIteration()
 
             elif self.done():
                 # Reached the last bettor, betting is closed.
-                self.playing = False
+                raise StopIteration()
+
             else:
-                # Set next bettor
                 self.next_bettor()
 
     def player_decision(self, p):

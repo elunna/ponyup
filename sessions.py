@@ -51,8 +51,19 @@ class Session():
         Run through a round of betting. Returns a victor if it exists.
         """
         br = betting.BettingRound(_round)
-        victor = br.play()
-        return victor
+
+        for p in br.play():
+            o = br.player_decision(p)
+            br.process_option(o)
+            print(br.action_string(o))
+
+        print(_round)           # Display pot
+
+        victor = betting.one_left(_round._table)
+        if victor:
+            return victor
+        else:
+            return None
 
 
 class Stud5Session(Session):
@@ -123,7 +134,6 @@ class Draw5Session(Session):
                 print(self._table)
 
             victor = self.betting_round(r)
-            print(r)           # Display pot
 
             if victor is None:
                 r.next_street()
