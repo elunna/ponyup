@@ -31,7 +31,10 @@ class BettingRound():
 
         while self.playing:
             p = self.get_bettor()
-            self.player_bets(p)
+            o = self.player_decision(p)
+
+            self.process_option(o)
+            print(self.action_string(o))
 
             winner = one_left(self.r._table)
             if winner:
@@ -47,22 +50,19 @@ class BettingRound():
                 # Set next bettor
                 self.next_bettor()
 
-    def player_bets(self, p):
+    def player_decision(self, p):
         invested = self.invested(p)
         cost = (self.betsize * self.level) - invested
         options = self.get_options(cost, p.chips)
 
         if 'a' in options:
             # Player is allin
-            o = Action('ALLIN', 0, 0)
+            return Action('ALLIN', 0, 0)
         elif p.is_human():
-            o = menu(options)
+            return menu(options)
         else:
             facing = cost / self.betsize
-            o = strategy.makeplay(p, options, self.r.street, self.level, facing)
-
-        self.process_option(o)
-        print(self.action_string(o))
+            return strategy.makeplay(p, options, self.r.street, self.level, facing)
 
     def process_option(self, action):
         """
