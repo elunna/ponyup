@@ -3,7 +3,8 @@
 from __future__ import print_function
 import colors
 import combos
-import blinds
+import blinds_ante
+import blinds_noante
 import player
 import os
 import sessions
@@ -13,7 +14,8 @@ import table_factory
 
 GAME = 'FIVE CARD DRAW'
 TABLE = 2
-BLINDS = blinds.Blinds()
+BLINDS = blinds_noante.BlindsNoAnte()
+LEVEL = 10
 NAME = 'Aorist'
 OPPONENT = 'FISH'
 
@@ -52,7 +54,7 @@ def menu():
     print('-=- Settings -=-'.center(70))
     print('{:>15}: {}'.format('Playername', NAME))
     print('{:>15}: {}'.format('Game', GAME))
-    print('{:>15}: {}'.format('Stakes',  BLINDS))
+    print('{:>15}: {}'.format('Stakes',  BLINDS.stakes()))
     print('{:>15}: {}'.format('Seats', TABLE))
     print('{:>15}: {}'.format('Opponent Type', OPPONENT))
     print('')
@@ -69,14 +71,15 @@ def view_combos():
 
 
 def pick_limit(_blinds):
-    print('Please enter what limit you want to play:')
+    print('Please enter what stakes you want to play:')
     _blinds.levels()
 
     while True:
         choice = int(input(':> '))
         if choice in _blinds.blind_dict.keys():
             _blinds.set_level(choice)
-            print('You selected {}'.format(_blinds))
+            global LEVEL
+            LEVEL = choice
             break
         else:
             print('Selection not available, try again.')
@@ -154,9 +157,12 @@ def play_poker():
     table_factory.change_playertypes(t, OPPONENT)
 
     if GAME == "FIVE CARD DRAW":
+        BLINDS = blinds_noante.BlindsNoAnte(LEVEL)
         g = sessions.Draw5Session(GAME, t, BLINDS)
         t.randomize_button()
+
     elif GAME == "FIVE CARD STUD":
+        BLINDS = blinds_ante.BlindsAnte(LEVEL)
         g = sessions.Stud5Session(GAME, t, BLINDS)
 
     playing = True
@@ -178,7 +184,7 @@ def exitgracefully():
 
 
 if __name__ == "__main__":
-    BLINDS.set_level(10)
+    BLINDS.set_level(LEVEL)
 
     while True:
         os.system('clear')
