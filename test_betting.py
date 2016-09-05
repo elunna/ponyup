@@ -18,6 +18,33 @@ class TestBetting(unittest.TestCase):
     """
     Tests for play()
     """
+    # For a 6 player table: BTN=0, SB=1, BB=2
+    def test_play_1stplayer_returnsSeat3(self):
+        self.br = betting.BettingRound(self.r)
+        playgen = self.br.play()
+        player = next(playgen)
+        expected = 3
+        result = self.r._table.get_index(player)
+        self.assertEqual(expected, result)
+
+    def test_play_2ndplayer_returnsSeat4(self):
+        self.br = betting.BettingRound(self.r)
+        playgen = self.br.play()
+        next(playgen)
+        player = next(playgen)
+        expected = 4
+        result = self.r._table.get_index(player)
+        self.assertEqual(expected, result)
+
+    def test_play_3rdplayer_returnsSeat5(self):
+        self.br = betting.BettingRound(self.r)
+        playgen = self.br.play()
+        next(playgen)
+        next(playgen)
+        player = next(playgen)
+        expected = 5
+        result = self.r._table.get_index(player)
+        self.assertEqual(expected, result)
 
     """
     Tests for player_decision(p)
