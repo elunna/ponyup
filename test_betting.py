@@ -21,6 +21,20 @@ class TestBetting(unittest.TestCase):
         self.r.post_blinds()
         self.br = betting.BettingRound(self.r)
 
+    def setUp_studGame(self, level=1, players=6, street=1):
+        """
+        Setup a 5 card stud game for testing.
+        """
+        g = testtools.stud5_session(level, players)
+        self.r = g.new_round()
+
+        for i in range(street - 1):  # Adjust which street to test.
+            self.r.next_street()
+
+        self.r.deal_cards(5)
+        self.r.post_blinds()
+        self.br = betting.BettingRound(self.r)
+
     """
     Tests for play()
     """
