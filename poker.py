@@ -108,16 +108,17 @@ class Round():
         Gets the player who must post the bringin amount, adds their bet to the pot, and
         returns a string describing what the blinds posted.
         """
-        bi = bringin(self._table)
-        plyr = self._table.seats[bi]
+        bringin_index = bringin(self._table)
+        plyr = self._table.seats[bringin_index]
 
         # Set the BI token on the table.
-        self._table.TOKENS['BI'] = self._table.get_index(bi)
+        self._table.TOKENS['BI'] = self._table.get_index(bringin_index)
 
         # Bet the Bringin amount and add to the pot
-        self.pot += plyr.bet(self.blinds.BRINGIN)
+        bringin_cost = self.blinds.BRINGIN - self.invested(plyr)
+        self.pot += plyr.bet(bringin_cost)
         action = ''
-        action += '{} posts ${}\n'.format(plyr, self.blinds.BRINGIN)
+        action += '{} post bringin ${}\n'.format(plyr, self.blinds.BRINGIN)
         return action
 
     def invested(self, player):
