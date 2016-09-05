@@ -341,6 +341,7 @@ class TestPoker(unittest.TestCase):
     # 2 players, 2 allins.
     def test_processsidepots_2players(self):
         self.setup_allins(2)
+        testtools.deal_ranked_hands(self.r._table)
         self.everybody_bet(200)
         p0, p1 = [p for p in self.r._table.seats]
         sidepots = self.r.make_sidepots(self.r.get_allins())
@@ -352,9 +353,9 @@ class TestPoker(unittest.TestCase):
     # 3 players, 3 allins.
     def test_processsidepots_3players(self):
         self.setup_allins(3)
+        testtools.deal_ranked_hands(self.r._table)
         self.everybody_bet(300)
         # seat 0 gets strongest hand, 1 gets middle, 2 gets lowest.
-        testtools.deal_ranked_hands(self.r._table)
 
         p0, p1, p2 = [p for p in self.r._table.seats]
         sidepots = self.r.make_sidepots(self.r.get_allins())
@@ -362,6 +363,8 @@ class TestPoker(unittest.TestCase):
         expected = {300: [p0], 200: [p1], 100: [p2]}
         result = self.r.process_sidepots(sidepots)
         self.assertEqual(expected, result)
+
+    # If noone has cards, raise an exception.
 
     """
     Tests for eligible(self, stack_req):
