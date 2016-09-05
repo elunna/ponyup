@@ -25,22 +25,15 @@ class BettingRound():
 
     def play(self):
         """
-        Performs a round of betting between all the players that have cards and chips.
+        This is a generator which yields the next betting player on a betting round. When all
+        the bettors have been exhausted or everybody has folded except for one player, then
+        the generator stops.
         """
         while True:
             yield self.get_bettor()
 
-            winner = one_left(self.r._table)
-            if winner:
-                oneleft = '{}Only one player left!'.format(spacing(self.level))
-                print(colors.color(oneleft, 'LIGHTBLUE'))
-                #  self.playing = False
+            if one_left(self.r._table) or self.done():
                 raise StopIteration()
-
-            elif self.done():
-                # Reached the last bettor, betting is closed.
-                raise StopIteration()
-
             else:
                 self.next_bettor()
 
