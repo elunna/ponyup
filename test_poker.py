@@ -1,5 +1,4 @@
 import unittest
-import blinds_noante
 import blinds_ante
 import card
 import evaluator
@@ -13,7 +12,7 @@ class TestPoker(unittest.TestCase):
     """
     Setup a session and round, with a table filled with 6 players.
     """
-    def setUp(self, level=1, players=6):
+    def setUp(self, level=2, players=6):
         # Make a 6 player table
         self.g = testtools.draw5_session(level, players)
         self.r = poker.Round(self.g)
@@ -211,6 +210,7 @@ class TestPoker(unittest.TestCase):
 
     # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_6players_returnsString(self):
+        self.setUp(level=2)
         self.r._table.TOKENS['D'] = -1
         self.r._table.move_button()
         self.assertEqual(self.r._table.TOKENS['D'], 0)  # verify the button is 0

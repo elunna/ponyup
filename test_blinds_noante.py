@@ -9,17 +9,18 @@ class TestBlindsNoAnte(unittest.TestCase):
     """
     def setUp(self):
         # Setup the standard no-ante blind structure
-        self.b = blinds_noante.BlindsNoAnte()
+        self.b = blinds_noante.BlindsNoAnte(level=2)
 
     """
     Tests for __init__
     """
     def test_init_ante_defaultlevel1(self):
+        self.b = blinds_noante.BlindsNoAnte()
         self.assertEqual(self.b.level, 1)
     """
     Tests for __str__()
     """
-    # Assume level 1
+    # Assume level 2
     def test_str_showsBlinds(self):
         expected = 'SB: $1, BB: $2\n'
         result = str(self.b)
@@ -28,7 +29,7 @@ class TestBlindsNoAnte(unittest.TestCase):
     """
     Tests for stakes()
     """
-    # Assume level 1
+    # Assume level 2
     def test_stakes_lev1_returns1_2(self):
         expected = '$2/$4'
         result = self.b.stakes()
@@ -37,12 +38,12 @@ class TestBlindsNoAnte(unittest.TestCase):
     """
     Tests for set_level(level)
     """
-    def test_setlevel_lev1_hascorrectblinds(self):
+    def test_setlevel_lev2_hascorrectblinds(self):
         self.assertEqual(self.b.SB, 1)
         self.assertEqual(self.b.BB, 2)
         self.assertEqual(self.b.ANTE, 0)
 
-    def test_setlevel_lev1_noantes(self):
+    def test_setlevel_lev2_noantes(self):
         self.assertEqual(self.b.ANTE, 0)
         self.assertEqual(self.b.BRINGIN, 0)
 

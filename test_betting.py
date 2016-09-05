@@ -8,7 +8,7 @@ class TestBetting(unittest.TestCase):
     """
     Setup a session and round, with a table filled with 6 players.
     """
-    def setUp(self, level=1, players=6, street=1):
+    def setUp(self, level=2, players=6, street=1):
         g = testtools.draw5_session(level, players)
         g._table.move_button()
         self.assertEqual(g._table.TOKENS['D'], 0)  # verify the button is 0
@@ -21,7 +21,7 @@ class TestBetting(unittest.TestCase):
         self.r.post_blinds()
         self.br = betting.BettingRound(self.r)
 
-    def setUp_studGame(self, level=1, players=6, street=1):
+    def setUp_studGame(self, level=2, players=6, street=1):
         """
         Setup a 5 card stud game for testing.
         """
@@ -440,7 +440,6 @@ class TestBetting(unittest.TestCase):
         expected = 0
         result = self.br.current_bet()
         self.assertEqual(expected, result)
-
 
     """
     Tests for action_string(action)

@@ -59,7 +59,7 @@ class TestBlindsAnte(unittest.TestCase):
     # lev5: ante=1, SB=5
     def test_sbtoanteratio_lev5_returns5(self):
         self.b = blinds_ante.BlindsAnte(level=5)
-        expected = 5
+        expected = 4
         result = self.b.sb_to_ante_ratio()
         self.assertEqual(expected, result)
 
