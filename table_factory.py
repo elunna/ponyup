@@ -64,7 +64,7 @@ def get_player(name, game):
 
 def change_playertypes(table, playertype):
     for p in table:
-        if p._type == "HUMAN":
+        if p.playertype == "HUMAN":
             pass
         else:
-            p._type = playertype
+            p.playertype = playertype
