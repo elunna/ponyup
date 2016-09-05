@@ -98,20 +98,60 @@ class TestBetting(unittest.TestCase):
     Tests for process_option(option)
     """
     # CHECK - Players chips stay the same
-    def test_processoption_check_betlevel_stayssame(self):
+    def test_processoption_CHECK_playerchips_staysame(self):
         self.setUp(players=2, street=2)
         bettor = self.br.get_bettor()
         expected = bettor.chips
-
         self.br.process_option(betting.CHECK)
+
         result = bettor.chips
         self.assertEqual(expected, result)
 
     # CHECK - bet level is same
-    # CHECK - Raises an exception if the cost is more than 0.
+    def test_processoption_CHECK_betlevel_stayssame(self):
+        self.setUp(players=2, street=2)
+        expected = self.br.level
+        self.br.process_option(betting.CHECK)
+
+        result = self.br.level
+        self.assertEqual(expected, result)
+
+    # CHECK - Raises exception if the cost or level is more than 0.
+    # This doesn't really impact any yet tho. Deferred.
+    """
+    def test_processoption_CHECK_costandlevel1_raiseException(self):
+        self.setUp(players=2, street=2)
+        action = betting.Action('CHECK', 1, 1)
+        self.assertRaises(Exception, self.br.process_option, action)
+    """
 
     # FOLD - player doesn't have cards
+    def test_processoption_FOLD_playerhasnocards(self):
+        self.setUp(players=2, street=2)
+        bettor = self.br.get_bettor()
+        self.assertTrue(bettor.has_cards())
+        self.br.process_option(betting.FOLD)
+        self.assertFalse(bettor.has_cards())
+
     # FOLD - Players chips stay the same
+    def test_processoption_FOLD_playerchips_staysame(self):
+        self.setUp(players=2, street=2)
+        bettor = self.br.get_bettor()
+        expected = bettor.chips
+        self.br.process_option(betting.FOLD)
+
+        result = bettor.chips
+        self.assertEqual(expected, result)
+
+    # FOLD - Raises exception if the cost or level is more than 0.
+    # This doesn't really impact any yet tho. Deferred.
+    """
+    def test_processoption_FOLD_costandlevel1_raiseException(self):
+        self.setUp(players=2, street=2)
+        action = betting.Action('FOLD', 1, 1)
+        self.assertRaises(Exception, self.br.process_option, action)
+    """
+
     # BET - bet level is raised by one
     # BET - Players chips are diminished by the bet amount
     # RAISE - bet level is raised by one
