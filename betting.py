@@ -38,6 +38,16 @@ class BettingRound():
                 self.next_bettor()
 
     def player_decision(self, p):
+        """
+        Takes in a player p and calculates the cost of the current minimum bet amount for that
+        player, based on how much they have invested so far this round. It takes that cost and
+        passes it to get_options to determine what betting options the player has.
+
+        The next step depends on whether the player is human, or computer, or if they are all-
+        in then they don't have a decision and the betting passes to the next player. If human,
+        they are prompted for their decision. If CPU, they follow an algorithm for making a
+        play. The decision is returned as an Action object.
+        """
         invested = self.invested(p)
         cost = (self.betsize * self.level) - invested
         options = self.get_options(cost, p.chips)
