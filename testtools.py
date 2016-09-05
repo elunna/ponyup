@@ -5,7 +5,6 @@ import pokerhands
 import table_factory
 
 
-
 RANKEDHANDS = {
     0: pokerhands.make('royalflush'),
     1: pokerhands.make('straightflush_high'),
@@ -51,7 +50,7 @@ def draw5_session(level, players=6):
     """
     STAKES = blinds.Blinds()
     STAKES.set_level(level)
-    table = table_factory.BobTable(players)
+    table = table_factory.Draw5Table(players)
     return sessions.Draw5Session('FIVE CARD DRAW', table, STAKES)
 
 

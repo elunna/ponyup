@@ -8,7 +8,8 @@ STEP = 100
 
 class BobTable(table.Table):
     """
-    Creates a table of bobs with the default chip stack.
+    Creates a table of generic Player objects named bob0, bob1, bob2, etc... with the default
+    chip stack.
     """
     def __init__(self, seats):
         super().__init__(seats)
@@ -29,6 +30,18 @@ class SteppedStackTable(table.Table):
         for i, s in enumerate(self.seats):
             self.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
             self.seats[i].chips = STEP * (i + 1)
+
+
+class Draw5Table(table.Table):
+    """
+    Creates a table of bobs that are 5 Card Players, and with the default stack size.
+    """
+    def __init__(self, seats):
+        super().__init__(seats)
+
+        for i, s in enumerate(self.seats):
+            self.add_player(i, player.Player5Card('bob{}'.format(i), None))
+            self.seats[i].chips = STARTINGCHIPS
 
 
 class HeroTable(table.Table):
