@@ -1,17 +1,26 @@
 import unittest
 import blinds
+from blinds import Level
+import blind_structures
 
 
-class TestTable(unittest.TestCase):
+class TestBlinds(unittest.TestCase):
     """
     Setup a table filled with 6 players for testing.
     """
     def setUp(self):
-        self.b = blinds.Blinds()
+        # Setup the standard no-ante blind structure
+        self.b = blind_structures.BlindsNoAnte()
+
+    def setUp_ante(self):
+        # Setup the standard no-ante blind structure
+        pass
 
     """
     Tests for __init__
     """
+    def test_init_ante_defaultlevel1(self):
+        self.assertEqual(self.b.level, 1)
 
     """
     Tests for set_level(level)
@@ -67,4 +76,14 @@ class TestTable(unittest.TestCase):
         self.b.set_level(2)
         expected = '$3/$6, Ante: $1'
         result = self.b.__str__()
+        self.assertEqual(expected, result)
+
+    """
+    Tests for noante_level(sb, bb)
+    """
+    def test_noantelevel_BB2_SB1_returnsCorrectLevel(self):
+        self.b.set_level(2)
+        blind_tuple = (2, 1)
+        expected = Level(2, 1, 0, 0)
+        result = blinds.noante_level(*blind_tuple)
         self.assertEqual(expected, result)

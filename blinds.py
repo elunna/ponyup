@@ -1,16 +1,19 @@
-import blinds_house
+from collections import namedtuple
+
+Level = namedtuple('Level', ['BB', 'SB', 'ANTE', 'BRINGIN'])
 
 
 class Blinds():
-    def __init__(self, structure_dict=None, level=1):
+    def __init__(self, level=1, structure_dict=None):
         """
         Initialize the Blinds object with a given blind structure, or use the default house
         structure.
         """
         if structure_dict is None:
-            self.blind_dict = blinds_house.house_limits
+            raise ValueError("Need a blind structure!")
         else:
             self.blind_dict = structure_dict
+
         self.set_level(level)
 
     def __str__(self):
@@ -29,7 +32,12 @@ class Blinds():
         if level < 1 or level > len(self.blind_dict):
             raise ValueError('level is out of bounds!')
 
-        self.BB, self.SB, self.ANTE = self.blind_dict.get(level)
+        self.level = level
+
+        self.BB = self.blind_dict[level].BB
+        self.SB = self.blind_dict[level].SB
+        self.ANTE = self.blind_dict[level].ANTE
+        self.BRINGIN = self.blind_dict[level].BRINGIN
 
     def sb_to_ante_ratio(self):
         """
@@ -49,3 +57,7 @@ class Blinds():
             BB, SB, ante = self.blind_dict[k]
             blinds = '${}/${}'.format(BB, BB * 2)
             print('\tLevel {:3}: {:15} Ante ${}'.format(k, blinds, ante))
+
+
+def noante_level(sb, bb):
+    return Level(sb, bb, 0, 0)
