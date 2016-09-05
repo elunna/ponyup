@@ -87,6 +87,12 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # If they don't have cards - raise an Exception!
+    def test_playerdecision_nocards_raiseException(self):
+        self.setUp(players=2)
+        bettor = self.br.get_bettor()
+        bettor._hand.cards = None
+
+        self.assertRaises(Exception, self.br.player_decision, bettor)
 
     """
     Tests for process_option(option)
