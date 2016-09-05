@@ -103,8 +103,7 @@ class TestBetting(unittest.TestCase):
         bettor = self.br.get_bettor()
         expected = bettor.chips
 
-        action = betting.Action('CHECK', 0, 0)
-        self.br.process_option(action)
+        self.br.process_option(betting.CHECK)
         result = bettor.chips
         self.assertEqual(expected, result)
 

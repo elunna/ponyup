@@ -5,6 +5,9 @@ import strategy
 import poker
 
 Action = namedtuple('Action', ['name', 'cost', 'level'])
+ALLIN = Action('ALLIN', 0, 0)
+CHECK = Action('CHECK', 0, 0)
+FOLD = Action('FOLD', 0, 0)
 
 
 class BettingRound():
@@ -86,14 +89,14 @@ class BettingRound():
         #  completing = (self.betsize - cost) == self.r.blinds.SB
 
         if stack == 0:
-            option_dict['a'] = Action('ALLIN', 0, 0)
+            option_dict['a'] = ALLIN
             # Save some time
             return option_dict
 
         if cost == 0:
-            option_dict['c'] = Action('CHECK', 0, 0)
+            option_dict['c'] = CHECK
         elif cost > 0:
-            option_dict['f'] = Action('FOLD', 0, 0)
+            option_dict['f'] = FOLD
 
             if stack >= cost:
                 option_dict['c'] = Action('CALL', cost, 0)
