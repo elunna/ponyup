@@ -1,5 +1,6 @@
 import unittest
 import betting
+import pokerhands
 import testtools
 
 
@@ -65,7 +66,27 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # Holds a royal flush, raises.
+    def test_playerdecision_royalflush_returnsRaise(self):
+        self.setUp(players=2)
+        bettor = self.br.get_bettor()
+        bettor._hand.cards = pokerhands.make('royalflush')
+        expected = "RAISE"
+        result = self.br.player_decision(bettor).name
+        self.assertEqual(expected, result)
+
     # Holds junk hand, checks the BB.
+    def test_playerdecision_junk_returnsCheck(self):
+        self.setUp(players=2)
+        playgen = self.br.play()
+        next(playgen)  # SB
+        next(playgen)  # BB
+        bettor = self.br.get_bettor()
+        bettor._hand.cards = pokerhands.make('junk')
+        expected = "CHECK"
+        result = self.br.player_decision(bettor).name
+        self.assertEqual(expected, result)
+
+    # If they don't have cards - raise an Exception!
 
     """
     Tests for process_option(option)
