@@ -110,14 +110,14 @@ class Round():
         """
         bi = bringin(self._table)
         plyr = self._table.seats[bi]
-        amt = self.blinds.SB / 2
+
         # Set the BI token on the table.
         self._table.TOKENS['BI'] = self._table.get_index(bi)
 
         # Bet the Bringin amount and add to the pot
-        self.pot += plyr.bet(amt)
+        self.pot += plyr.bet(self.blinds.BRINGIN)
         action = ''
-        action += '{} posts ${}\n'.format(plyr, amt)
+        action += '{} posts ${}\n'.format(plyr, self.blinds.BRINGIN)
         return action
 
     def invested(self, player):
