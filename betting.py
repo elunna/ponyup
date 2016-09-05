@@ -26,6 +26,9 @@ class BettingRound():
         self.set_betsize()
         self.set_stacks()
 
+        # We cannot set the current_bet until stacks have been set!
+        self.bet = self.current_bet()
+
     def play(self):
         """
         This is a generator which yields the next betting player on a betting round. When all
@@ -220,6 +223,7 @@ class BettingRound():
             if i > bet:
                 bet = i
         return bet
+
 
 def calc_odds(bet, pot):
     """
