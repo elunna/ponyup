@@ -1,3 +1,4 @@
+import blinds_ante
 import blinds_noante
 import deck
 import sessions
@@ -52,6 +53,16 @@ def draw5_session(level, players=6):
     STAKES.set_level(level)
     table = table_factory.Draw5Table(players)
     return sessions.Draw5Session('FIVE CARD DRAW', table, STAKES)
+
+
+def stud5_session(level, players=6):
+    """
+    Create a table of 6 draw5 players with default starting stacks. Blinds are $1/$2.
+    """
+    STAKES = blinds_ante.BlindsAnte()
+    STAKES.set_level(level)
+    table = table_factory.Stud5Table(players)
+    return sessions.Stud5Session('FIVE CARD STUD', table, STAKES)
 
 
 def deal_hand_dict(table, hand_dict):
