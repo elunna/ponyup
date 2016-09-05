@@ -103,6 +103,23 @@ class Round():
         actions += '{} posts ${}\n'.format(bb, self.blinds.BB)
         return actions
 
+    def post_bringin(self):
+        """
+        Gets the player who must post the bringin amount, adds their bet to the pot, and
+        returns a string describing what the blinds posted.
+        """
+        bi = bringin(self._table)
+        plyr = self._table.seats[bi]
+        amt = self.blinds.SB / 2
+        # Set the BI token on the table.
+        self._table.TOKENS['BI'] = self._table.get_index(bi)
+
+        # Bet the Bringin amount and add to the pot
+        self.pot += plyr.bet(amt)
+        action = ''
+        action += '{} posts ${}\n'.format(plyr, amt)
+        return action
+
     def invested(self, player):
         """
         Return the difference between the players current stack-size and the amount at the

@@ -157,6 +157,20 @@ class TestPoker(unittest.TestCase):
             self.assertEqual(expected, result)
 
     """
+    Tests for post_bringin():
+    """
+    # Initial stacks=1000. smallbet = 1. Bringin = 0.50
+    def test_postbringin_seat0_has2chipsless(self):
+        self.r.blinds = blinds.Blinds(level=2)
+        testtools.deal_random_cards(self.g._table, 2)
+        player = self.r._table.seats[poker.bringin(self.r._table)]
+        chips = player.chips
+        self.r.post_bringin()
+        expected = .5
+        result = chips - player.chips
+        self.assertEqual(expected, result)
+
+    """
     Tests for post_blinds()
     """
     # If the button(and blinds haven't been set, raise an exception.)
