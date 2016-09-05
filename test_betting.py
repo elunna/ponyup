@@ -31,8 +31,8 @@ class TestBetting(unittest.TestCase):
         for i in range(street - 1):  # Adjust which street to test.
             self.r.next_street()
 
-        self.r.deal_cards(5)
-        self.r.post_blinds()
+        self.r.post_antes()
+        self.r.deal_cards(3)
         self.br = betting.BettingRound(self.r)
 
     """
@@ -438,6 +438,15 @@ class TestBetting(unittest.TestCase):
     def test_currentbet_HU_street2_returns0(self):
         self.setUp(players=2, street=2)
         expected = 0
+        result = self.br.current_bet()
+        self.assertEqual(expected, result)
+
+    # Stud: The bringin has posted. The next player needs to pay the current bet.
+    # Level 2, the ante is $0.50, and bringin is $1.
+    def test_currentbet_bringin_returns1(self):
+        self.setUp_studGame(level=2)
+        self.r.post_bringin()
+        expected = 1
         result = self.br.current_bet()
         self.assertEqual(expected, result)
 
