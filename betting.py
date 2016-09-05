@@ -213,6 +213,13 @@ class BettingRound():
         # It's a bet or raise, so we'll need to reset last better.
         return self.r._table.next_player(bettor, -1, hascards=True)
 
+    def current_bet(self):
+        bet = 0
+        for p in self.r._table:
+            i = self.invested(p)
+            if i > bet:
+                bet = i
+        return bet
 
 def calc_odds(bet, pot):
     """

@@ -426,6 +426,15 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for current_bet()
+    """
+    def test_currentbet_HU_street1_returns2(self):
+        self.setUp(players=2, street=1)
+        expected = 2
+        result = self.br.current_bet()
+        self.assertEqual(expected, result)
+
+    """
     Tests for action_string(action)
     """
     # Bet
