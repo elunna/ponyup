@@ -1,7 +1,7 @@
 import unittest
 import blinds
 from blinds import Level
-import blind_structures
+import blinds_noante
 
 
 class TestBlinds(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestBlinds(unittest.TestCase):
     """
     def setUp(self):
         # Setup the standard no-ante blind structure
-        self.b = blind_structures.BlindsNoAnte()
+        self.b = blinds_noante.BlindsNoAnte()
 
     def setUp_ante(self):
         # Setup the standard no-ante blind structure
