@@ -52,7 +52,8 @@ class BettingRound():
         play. The decision is returned as an Action object.
         """
         invested = self.invested(p)
-        cost = (self.betsize * self.level) - invested
+        cost = self.cost(invested)
+        #  cost = (self.betsize * self.level) - invested
         options = self.get_options(cost, p.chips)
 
         if 'a' in options:
