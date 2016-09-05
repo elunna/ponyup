@@ -1,5 +1,6 @@
 import unittest
 import blinds_noante
+import blinds_ante
 import card
 import evaluator
 import poker
@@ -134,7 +135,7 @@ class TestPoker(unittest.TestCase):
     """
     # 6 players ante 1. Pot == 6.
     def test_postantes_6players_potequals60(self):
-        self.r.blinds = blinds_noante.BlindsNoAnte(level=2)
+        self.r.blinds = blinds_ante.BlindsAnte(level=4)
         self.r.post_antes()
         expected = 6
         result = self.r.pot
@@ -142,7 +143,7 @@ class TestPoker(unittest.TestCase):
 
     # Initial stacks=1000. Ante=1. After ante are 999.
     def test_postantes_6players_stacksequal999(self):
-        self.r.blinds = blinds_noante.BlindsNoAnte(level=2)
+        self.r.blinds = blinds_ante.BlindsAnte(level=4)
         self.r.post_antes()
         expected = 999
         for p in self.r._table:
@@ -152,14 +153,15 @@ class TestPoker(unittest.TestCase):
     """
     Tests for post_bringin():
     """
-    # Initial stacks=1000. smallbet = 1. Bringin = 0.50
+    # Initial stacks=1000. smallbet = 2. Bringin = 1
+    # Seat 0
     def test_postbringin_seat0_has2chipsless(self):
-        self.r.blinds = blinds_noante.BlindsNoAnte(level=2)
-        testtools.deal_random_cards(self.g._table, 2)
+        self.r.blinds = blinds_ante.BlindsAnte(level=2)
+        testtools.deal_stud(self.r._table, 2, 0)
         player = self.r._table.seats[poker.bringin(self.r._table)]
         chips = player.chips
         self.r.post_bringin()
-        expected = .5
+        expected = 1
         result = chips - player.chips
         self.assertEqual(expected, result)
 
