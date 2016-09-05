@@ -434,6 +434,14 @@ class TestBetting(unittest.TestCase):
         result = self.br.current_bet()
         self.assertEqual(expected, result)
 
+    # No bets yet, current bet should be 0
+    def test_currentbet_HU_street2_returns0(self):
+        self.setUp(players=2, street=2)
+        expected = 0
+        result = self.br.current_bet()
+        self.assertEqual(expected, result)
+
+
     """
     Tests for action_string(action)
     """
