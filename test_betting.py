@@ -97,8 +97,20 @@ class TestBetting(unittest.TestCase):
     """
     Tests for process_option(option)
     """
-    # CHECK - bet level is same
     # CHECK - Players chips stay the same
+    def test_processoption_check_betlevel_stayssame(self):
+        self.setUp(players=2, street=2)
+        bettor = self.br.get_bettor()
+        expected = bettor.chips
+
+        action = betting.Action('CHECK', 0, 0)
+        self.br.process_option(action)
+        result = bettor.chips
+        self.assertEqual(expected, result)
+
+    # CHECK - bet level is same
+    # CHECK - Raises an exception if the cost is more than 0.
+
     # FOLD - player doesn't have cards
     # FOLD - Players chips stay the same
     # BET - bet level is raised by one
