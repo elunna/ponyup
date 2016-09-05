@@ -1,4 +1,5 @@
 import betting
+import colors
 import discard
 import poker
 
@@ -61,6 +62,8 @@ class Session():
 
         victor = betting.one_left(_round._table)
         if victor:
+            oneleft = '{}Only one player left!'.format(betting.spacing(br.level))
+            print(colors.color(oneleft, 'LIGHTBLUE'))
             return victor
         else:
             return None
