@@ -31,7 +31,7 @@ def makeplay(player, options, street, betlevel, facing):
         if handval >= strat.raise1:
             return pick_raise(options)
         elif handval >= strat.call1:
-            return pick_raise(options)
+            return pick_call(options)
         else:
             return pick_fold_or_check(options)
 
