@@ -19,11 +19,25 @@ class Blinds():
     def __str__(self):
         """
         Returns the stakes, as in the small bet/big bet amounts.
+        Note: For ante/bringin games, the small-bet is SB and the big-bet is BB.
         """
-        if self.ANTE > 0:
-            return '${}/${}, Ante: ${}'.format(self.BB, self.BB * 2, self.ANTE)
-        else:
-            return '${}/${}'.format(self.BB, self.BB * 2)
+        _str = ''
+        if self.ANTE:
+            _str += 'Ante: ${:.2f}\n'.format(self.ANTE)
+        if self.BRINGIN:
+            _str += 'Bringin: ${:.2f}\n'.format(self.BRINGIN)
+        if self.SB != self.BB:
+            _str += 'SB: ${}, BB: ${}\n'.format(self.SB, self.BB)
+
+        return _str
+
+    def stakes(self):
+        """
+        Returns the stakes, as in the small bet/big bet amounts. For games that only use blinds
+        (without antes), we calculate the amounts by using the Big Blind as the small bet, and
+        twice the Big Blind as the big bet.
+        """
+        return '${}/${}'.format(self.BB, self.BB * 2)
 
     def set_level(self, level):
         """
@@ -39,25 +53,9 @@ class Blinds():
         self.ANTE = self.blind_dict[level].ANTE
         self.BRINGIN = self.blind_dict[level].BRINGIN
 
-    def sb_to_ante_ratio(self):
-        """
-        Returns the SB-to-Ante ratio of the current small blind and ante.
-        """
-        # Use only one decimal place.
-        if self.ANTE > 0:
-            return round(self.SB / self.ANTE, 1)
-        else:
-            return 0
-
     def levels(self):
         """
         Returns a listing of all the available blind levels in the structure.
         """
-        for k in sorted(self.blind_dict.keys()):
-            BB, SB, ante = self.blind_dict[k]
-            blinds = '${}/${}'.format(BB, BB * 2)
-            print('\tLevel {:3}: {:15} Ante ${}'.format(k, blinds, ante))
-
-
-def noante_level(sb, bb):
-    return Level(sb, bb, 0, 0)
+        for k, v in sorted(self.blind_dict.items()):
+            print('\tLevel {:3}: ${}/${}'.format(k, v.BB, v.BB * 2))
