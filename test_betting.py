@@ -425,9 +425,8 @@ class TestBetting(unittest.TestCase):
         result = self.br.reopened_closer(bettor)
         self.assertEqual(expected, result)
 
-
     """
-    Tests for action_stright(action)
+    Tests for action_string(action)
     """
     # Bet
     # Raise
