@@ -399,6 +399,25 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for reopened_closer(self, bettor):
+    """
+    # Ex: Heads up, seat 0 is bettor, closer = seat 1
+    def test_reopenedcloser_HU_seat0reopens_returns1(self):
+        self.setUp(players=2, street=1)
+        bettor = 0
+        expected = 1
+        result = self.br.reopened_closer(bettor)
+        self.assertEqual(expected, result)
+
+    # Ex: Heads up, seat 1 is current bettor, closer seat 0
+    def test_reopenedcloser_HU_seat1reopens_returns0(self):
+        self.setUp(players=2, street=1)
+        bettor = 0
+        expected = 1
+        result = self.br.reopened_closer(bettor)
+        self.assertEqual(expected, result)
+
+    """
     Tests for action_stright(action)
     """
     # Bet

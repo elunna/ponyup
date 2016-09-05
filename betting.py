@@ -209,6 +209,10 @@ class BettingRound():
         else:
             raise Exception('Error processing the action!')
 
+    def reopened_closer(self, bettor):
+        # It's a bet or raise, so we'll need to reset last better.
+        return self.r._table.next_player(bettor, -1, hascards=True)
+
 
 def calc_odds(bet, pot):
     """
