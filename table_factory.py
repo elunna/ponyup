@@ -44,6 +44,18 @@ class Draw5Table(table.Table):
             self.seats[i].chips = STARTINGCHIPS
 
 
+class Stud5Table(table.Table):
+    """
+    Creates a table of bobs that are 5 Card Players, and with the default stack size.
+    """
+    def __init__(self, seats):
+        super().__init__(seats)
+
+        for i, s in enumerate(self.seats):
+            self.add_player(i, player.Player5Stud('bob{}'.format(i), None))
+            self.seats[i].chips = STARTINGCHIPS
+
+
 class HeroTable(table.Table):
     """
     Creates a table with the human hero player, and populates the table full of random named
