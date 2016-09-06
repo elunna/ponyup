@@ -130,15 +130,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.bet
         self.assertEqual(expected, result)
 
-    # CHECK - Raises exception if the cost or level is more than 0.
-    # This doesn't really impact any yet tho. Deferred.
-    """
-    def test_processoption_CHECK_costandlevel1_raiseException(self):
-        self.setUp(players=2, street=2)
-        action = betting.Action('CHECK', 1, 1)
-        self.assertRaises(Exception, self.br.process_option, action)
-    """
-
     # FOLD - player doesn't have cards
     def test_processoption_FOLD_playerhasnocards(self):
         self.setUp(players=2, street=2)
@@ -166,11 +157,46 @@ class TestBetting(unittest.TestCase):
         result = self.br.bet
         self.assertEqual(expected, result)
 
-    # BET - bet level is raised by one
+    # BET - full bet, bet amount equals the bet size.
+    def test_processoption_BET_betequals_betsize(self):
+        self.setUp(players=2, street=2)
+        self.br.process_option(betting.Action('BET', cost=self.br.betsize))
+        expected = self.br.betsize
+        result = self.br.bet
+        self.assertEqual(expected, result)
+
     # BET - Players chips are diminished by the bet amount
+    def test_processoption_BET_playerchips_decreasebybetsize(self):
+        self.setUp(players=2, street=2)
+        p_chips = self.br.get_bettor().chips
+        self.br.process_option(betting.Action('BET', cost=self.br.betsize))
+        expected = self.br.betsize
+        result = p_chips - self.br.get_bettor().chips
+        self.assertEqual(expected, result)
+
+    # If seat 2 makes a BET, closer resets to 0.
+    def test_processoption_BET_1resetsCloserTo0(self):
+        self.setUp(players=6, street=2)
+        # Verify bettor position
+        self.assertTrue(self.br.bettor == 1)
+        self.br.process_option(betting.Action('BET', cost=self.br.betsize))
+        expected = 0
+        result = self.br.closer
+        self.assertEqual(expected, result)
+
+    # If seat 1 makes a BET, closer resets to 0.
+    def test_processoption_BET_2resetsCloserTo1(self):
+        self.setUp(players=6, street=2)
+        # Verify bettor position
+        self.br.bettor = 2
+        self.br.process_option(betting.Action('BET', cost=self.br.betsize))
+        expected = 1
+        result = self.br.closer
+        self.assertEqual(expected, result)
+
+
     # RAISE - bet level is raised by one
     # RAISE - Players chips are diminished by the raiseamount
-    # CHECK - bet level is same
     # COMPLETE - Players chips are diminished by the bet amount
 
     """
