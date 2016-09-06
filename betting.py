@@ -28,7 +28,10 @@ class BettingRound():
         # We cannot set the current_bet until stacks have been set!
         self.bet = self.get_bet()
 
-    def play(self):
+        # Create the generator
+        self.play_generator = self.__iter__()
+
+    def __iter__(self):
         """
         This is a generator which yields the next betting player on a betting round. When all
         the bettors have been exhausted or everybody has folded except for one player, then
@@ -41,6 +44,9 @@ class BettingRound():
                 raise StopIteration()
             else:
                 self.next_bettor()
+
+    def __next__(self):
+        return next(self.play_generator)
 
     def player_decision(self, p):
         """

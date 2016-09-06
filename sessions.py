@@ -53,7 +53,7 @@ class Session():
         """
         br = betting.BettingRound(_round)
 
-        for p in br.play():
+        for p in br:
             o = br.player_decision(p)
             br.process_option(o)
             print(br.action_string(o))
@@ -63,7 +63,7 @@ class Session():
 
         victor = betting.one_left(_round._table)
         if victor:
-            oneleft = '{}Only one player left!'.format(betting.spacing(br.level))
+            oneleft = '{}Only one player left!'.format(betting.spacing(br.get_betlevel()))
             print(colors.color(oneleft, 'LIGHTBLUE'))
             return victor
         else:
