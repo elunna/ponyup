@@ -274,6 +274,24 @@ class TestBetting(unittest.TestCase):
     """
     Tests for get_options(cost)
     """
+    # These tests are all $2/$4(blinds $1/$2). Assume full stacks for both players.
+    # HU Preflop: SB can FOLD, CALL $1, RAISE $3
+    def test_getoptions_HU_preflop_SB_FOLDCALLRAISE(self):
+        self.setUp(players=2, street=1)
+        p = next(self.br)  # Seat 3
+        invested = self.br.invested(p)
+        cost = self.br.cost(invested)
+        expected = ['c', 'f', 'r']
+        result = sorted(list(self.br.get_options(cost, p.chips).keys()))
+        self.assertEqual(expected, result)
+
+    # HU Preflop: BB can CHECK, RAISE $2 (when SB completes)
+    # HU Preflop: BB can FOLD, CALL $2, RAISE $4 (when SB raises)
+    # HU Preflop: SB can FOLD, CALL $2, RAISE $4 (when BB 3-bets)
+    # HU Preflop: BB can FOLD, CALL $2 (when SB 4-bets - and caps)
+    #
+    # HU Postflop: SB can CHECK or BET $4
+    # HU Postflop: BB can FOLD, CALL $2, RAISE $4 (when SB bets)
 
     """
     Tests for action_string(action)
