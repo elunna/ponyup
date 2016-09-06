@@ -510,8 +510,11 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # Stud5: Ante posting
-
-    # Stud5: Bringin posting
+    def test_setstacks_stud_street1_samestacks(self):
+        self.setUp_studGame(players=2, level=4, street=1)
+        expected = {'bob0': 1000, 'bob1': 1000}
+        result = self.br.stacks
+        self.assertEqual(expected, result)
 
     ################################################################################
     """
