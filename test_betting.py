@@ -7,6 +7,7 @@ import testtools
 class TestBetting(unittest.TestCase):
     """
     Setup a session and round, with a table filled with 6 players.
+    Default level is $2/$4.
     """
     def setUp(self, level=2, players=6, street=1):
         g = testtools.draw5_session(level, players)
@@ -19,6 +20,20 @@ class TestBetting(unittest.TestCase):
 
         self.r.deal_cards(5)
         self.r.post_blinds()
+        self.br = betting.BettingRound(self.r)
+
+    def setUp_shorty(self, shortstack, level=2, players=6, street=1):
+        g = testtools.draw5_session(level, players)
+        # Sets seat 1 to the short stack amount for easy testing.
+        g._table.seats[1].chips = shortstack
+        g._table.move_button()
+        self.assertEqual(g._table.TOKENS['D'], 0)  # verify the button is 0
+        self.r = g.new_round()
+
+        for i in range(street - 1):  # Adjust which street to test.
+            self.r.next_street()
+        # We'll skip posting and dealing cards
+        self.r.deal_cards(2)
         self.br = betting.BettingRound(self.r)
 
     def setUp_studGame(self, level=2, players=6, street=1):
@@ -158,12 +173,29 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # BET - full bet, bet amount equals the bet size.
-    def test_processoption_BET_betequals_betsize(self):
+    def test_processoption_BET_fullbet_equalsbetsize(self):
         self.setUp(players=2, street=2)
         self.br.process_option(betting.Action('BET', cost=self.br.betsize))
         expected = self.br.betsize
         result = self.br.bet
         self.assertEqual(expected, result)
+
+    # BET - Partial allin bet. Bet equals the allin amount.
+    def test_processoption_BET_partialbet_equalsAllin(self):
+        self.setUp_shorty(shortstack=3, street=2)
+        self.assertTrue(self.br.bettor == 1)
+        stack = self.br.get_bettor().chips
+        self.br.process_option(betting.Action('BET', stack))
+        result = self.br.bet
+        self.assertEqual(stack, result)
+
+    # BET - Cannot bet more than betsize, if betlevel = 0
+    def test_processoption_BET_exceedsopenamount_raiseException(self):
+        self.setUp_shorty(shortstack=5, street=2)
+        self.assertTrue(self.br.bettor == 1)
+        stack = self.br.get_bettor().chips
+        action = betting.Action('BET', stack)
+        self.assertRaises(Exception, self.br.process_option, action)
 
     # BET - Players chips are diminished by the bet amount
     def test_processoption_BET_playerchips_decreasebybetsize(self):
@@ -193,7 +225,6 @@ class TestBetting(unittest.TestCase):
         expected = 1
         result = self.br.closer
         self.assertEqual(expected, result)
-
 
     # RAISE - bet level is raised by one
     # RAISE - Players chips are diminished by the raiseamount
