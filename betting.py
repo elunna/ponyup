@@ -179,6 +179,9 @@ class BettingRound():
         """
         return self.r._table.seats[self.closer]
 
+    def get_betlevel(self):
+        return self.bet / self.betsize
+
     def invested(self, player):
         return self.stacks[player.name] - player.chips
 

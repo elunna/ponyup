@@ -311,6 +311,32 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for get_betlevel
+    """
+    def test_getbetlevel_0bet_returns0(self):
+        self.setUp(players=2, street=2)
+        expected = 0
+        result = self.br.get_betlevel()
+        self.assertEqual(expected, result)
+
+    def test_getbetlevel_preflopBB_returns1(self):
+        self.setUp(players=2, street=1)
+        expected = 1
+        result = self.br.get_betlevel()
+        self.assertEqual(expected, result)
+
+    # If bet=10 and betsize=4, betlevel should be 5.
+    def test_getbetlevel_bet10_betsize2_returns5(self):
+        self.setUp(street=2)
+        # 2/4, betsize = 4
+        # Current bet should be 0 before this.
+        self.assertTrue(self.br.bet == 0)
+        self.br.bet += 12
+        expected = 3
+        result = self.br.get_betlevel()
+        self.assertEqual(expected, result)
+
+    """
     Tests for invested(player)
     """
     # Player bet 100 during the round.
