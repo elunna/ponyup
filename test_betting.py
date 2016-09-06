@@ -246,6 +246,19 @@ class TestBetting(unittest.TestCase):
         result = self.br.bet
         self.assertEqual(expected, result)
 
+    def test_processoption_RAISE_3bet_equals3betsize(self):
+        self.setUp(players=6, street=2)
+        bet = 4
+        next(self.br)  # Seat 3
+        self.br.process_option(betting.Action('BET', bet))
+        next(self.br)  # Seat 4
+        self.br.process_option(betting.Action('RAISE', bet * 2))
+        next(self.br)  # Seat 5
+        self.br.process_option(betting.Action('RAISE', bet * 3))
+        expected = bet * 3
+        result = self.br.bet
+        self.assertEqual(expected, result)
+
     # Seat 3 bets, seat 4 raises. Closer is 3.
     def test_processoption_RAISE_resetsCloser(self):
         self.setUp(players=6, street=2)
