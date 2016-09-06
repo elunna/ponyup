@@ -32,7 +32,7 @@ class TestBetting(unittest.TestCase):
             self.r.next_street()
 
         self.r.post_antes()
-        self.r.deal_cards(3)
+        testtools.deal_5stud_test_hands(self.r._table)
         self.br = betting.BettingRound(self.r)
 
     """
@@ -273,6 +273,11 @@ class TestBetting(unittest.TestCase):
     """
     Tests for set_bettors_w_antes()
     """
+    def test_setbettorswantes_seat5islow_bettor5_closer4(self):
+        self.setUp_studGame()
+        closer, bettor = 4, 5
+        self.assertEqual(closer, self.br.closer)
+        self.assertEqual(bettor, self.br.bettor)
 
     """
     Tests for set_level
@@ -296,7 +301,6 @@ class TestBetting(unittest.TestCase):
 
     # Stud: level 2, street 1 should be the small bet: 2
     # Stud: level 2, street 3 should be the big bet: 2
-
 
     """
     Tests for current_bet()
