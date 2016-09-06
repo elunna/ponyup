@@ -537,7 +537,7 @@ class TestPoker(unittest.TestCase):
     Tests for bring(table, gametype):
     """
     # Stud5 deal: seat 5 has lowest card, 9
-    def test_bringin_stud5_no_ties_returns6(self):
+    def test_bringin_stud5_no_ties_returns5(self):
         t = table_factory.BobTable(6)
         testtools.deal_stud(t, 2, 0)
         expected = 5
