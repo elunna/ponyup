@@ -51,29 +51,27 @@ class TestBetting(unittest.TestCase):
         self.br = betting.BettingRound(self.r)
 
     """
-    Tests for play()
+    Tests for __iter__()
     """
-    # For a 6 player table: BTN=0, SB=1, BB=2
-    def test_play_1stplayer_returnsSeat3(self):
-        playgen = self.br.play()
-        player = next(playgen)
+    # 6 player table: BTN=0, SB=1, BB=2
+    def test_iter_1stplayer_returnsSeat3(self):
+        player = next(self.br)
         expected = 3
         result = self.r._table.get_index(player)
         self.assertEqual(expected, result)
 
+    # 6 player table: BTN=0, SB=1, BB=2
     def test_play_2ndplayer_returnsSeat4(self):
-        playgen = self.br.play()
-        next(playgen)
-        player = next(playgen)
+        next(self.br)
+        player = next(self.br)
         expected = 4
         result = self.r._table.get_index(player)
         self.assertEqual(expected, result)
 
     def test_play_3rdplayer_returnsSeat5(self):
-        playgen = self.br.play()
-        next(playgen)
-        next(playgen)
-        player = next(playgen)
+        next(self.br)
+        next(self.br)
+        player = next(self.br)
         expected = 5
         result = self.r._table.get_index(player)
         self.assertEqual(expected, result)
@@ -106,9 +104,8 @@ class TestBetting(unittest.TestCase):
     # Holds junk hand, checks the BB.
     def test_playerdecision_junk_returnsCheck(self):
         self.setUp(players=2)
-        playgen = self.br.play()
-        next(playgen)  # SB
-        next(playgen)  # BB
+        next(self.br)  # SB
+        next(self.br)  # BB
         bettor = self.br.get_bettor()
         bettor._hand.cards = pokerhands.make('junk')
         expected = "CHECK"
@@ -206,7 +203,7 @@ class TestBetting(unittest.TestCase):
         result = p_chips - self.br.get_bettor().chips
         self.assertEqual(expected, result)
 
-    # If seat 2 makes a BET, closer resets to 0.
+    # If seat 1 makes a BET, closer resets to 0.
     def test_processoption_BET_1resetsCloserTo0(self):
         self.setUp(players=6, street=2)
         # Verify bettor position
@@ -216,7 +213,7 @@ class TestBetting(unittest.TestCase):
         result = self.br.closer
         self.assertEqual(expected, result)
 
-    # If seat 1 makes a BET, closer resets to 0.
+    # If seat 2 makes a BET, closer resets to 1.
     def test_processoption_BET_2resetsCloserTo1(self):
         self.setUp(players=6, street=2)
         # Verify bettor position
@@ -226,8 +223,52 @@ class TestBetting(unittest.TestCase):
         result = self.br.closer
         self.assertEqual(expected, result)
 
-    # RAISE - bet level is raised by one
-    # RAISE - Players chips are diminished by the raiseamount
+    # If seat 2 makes a partial BET, closer resets to 1.
+    def test_processoption_BET_partial_2resetsCloserTo1(self):
+        self.setUp(players=6, street=2)
+        bet = 1
+        self.br.bettor = 2
+        self.br.process_option(betting.Action('BET', bet))
+        expected = 1
+        result = self.br.closer
+        self.assertEqual(expected, result)
+
+    # RAISE - Full raise: bet amount raised by one betsize
+    # Seat 3 bets, seat 4 raises.
+    def test_processoption_RAISE_full_equals2betsize(self):
+        self.setUp(players=6, street=2)
+        bet = 4
+        next(self.br)  # Seat 3
+        self.br.process_option(betting.Action('BET', bet))
+        next(self.br)  # Seat 4
+        self.br.process_option(betting.Action('RAISE', bet * 2))
+        expected = bet * 2
+        result = self.br.bet
+        self.assertEqual(expected, result)
+
+    # Seat 3 bets, seat 4 raises. Closer is 3.
+    def test_processoption_RAISE_resetsCloser(self):
+        self.setUp(players=6, street=2)
+        bet = 4
+        next(self.br)  # Seat 3
+        self.br.process_option(betting.Action('BET', bet))
+        next(self.br)  # Seat 4
+        self.br.process_option(betting.Action('RAISE', bet * 2))
+        expected = self.br.closer
+        result = self.br.closer
+        self.assertEqual(expected, result)
+
+    def test_processoption_RAISE_partial(self):
+        self.setUp(players=6, street=2)
+        bet = 4
+        next(self.br)  # Seat 3
+        self.br.process_option(betting.Action('BET', bet))
+        next(self.br)  # Seat 4
+        self.br.process_option(betting.Action('RAISE', bet * 2))
+        expected = self.br.closer
+        result = self.br.closer
+        self.assertEqual(expected, result)
+
     # COMPLETE - Players chips are diminished by the bet amount
 
     """
