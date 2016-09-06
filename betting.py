@@ -130,10 +130,10 @@ class BettingRound():
                 option_dict['c'] = Action('CALL', stack)
 
         minimum_raise = (self.betsize * self.get_betlevel()) + (self.betsize / 2)
-        raise_cost = (self.betsize * self.get_betlevel()) + self.betsize
+        raise_cost = ((self.betsize * self.get_betlevel()) + self.betsize) - self.invested(p)
 
         #  minimum_bet = self.betsize / 2
-
+        # Set BET size
         if self.get_betlevel() == 0:
             # Player doesn't have enough for the full bet amount
             if stack >= self.betsize:
@@ -141,6 +141,7 @@ class BettingRound():
             else:
                 option_dict['b'] = Action('BET', stack)
 
+        # Set RAISE size
         if self.get_betlevel() >= 1 and self.get_betlevel() < self.BETCAP:
 
             if stack < self.betsize:
@@ -149,8 +150,8 @@ class BettingRound():
             elif stack >= self.betsize * self.get_betlevel() and stack < minimum_raise:
                 # They don't qualify for a full raise - it's a bet instead.
                 option_dict['b'] = Action('BET', stack)
-
             elif stack >= raise_cost:
+                # They can cover the full cost of the raise.
                 option_dict['r'] = Action('RAISE', raise_cost)
             else:
                 # Player doesn't have enough for a full raise, but enough for a partial raise.

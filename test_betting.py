@@ -280,8 +280,11 @@ class TestBetting(unittest.TestCase):
         self.setUp(players=2, street=1)
         p = next(self.br)  # Seat 0
         expected = ['c', 'f', 'r']
-        result = sorted(list(self.br.get_options(p).keys()))
+        options = self.br.get_options(p)
+        result = sorted(list(options.keys()))
         self.assertEqual(expected, result)
+        # Verify that the SB's cost to raise reflects the blind posted
+        self.assertEqual(options['r'].cost, 3)
 
     # Helper method: HU situation where SB completes vs BB
     def sb_completes(self):
@@ -302,16 +305,22 @@ class TestBetting(unittest.TestCase):
         self.sb_completes()
         p = self.br.get_bettor()
         expected = ['c', 'r']
-        result = sorted(list(self.br.get_options(p).keys()))
+        options = self.br.get_options(p)
+        result = sorted(list(options.keys()))
         self.assertEqual(expected, result)
+        # Verify that the SB's cost to raise reflects the blind posted
+        self.assertEqual(options['r'].cost, 2)
 
     # HU Preflop: BB can FOLD, CALL $2, RAISE $4 (when SB raises)
     def test_getoptions_HU_BBpreflop_SBraises_CALLFOLDRAISE(self):
         self.sb_raises()
         p = self.br.get_bettor()
         expected = ['c', 'f', 'r']
-        result = sorted(list(self.br.get_options(p).keys()))
+        options = self.br.get_options(p)
+        result = sorted(list(options.keys()))
         self.assertEqual(expected, result)
+        # Verify that the SB's cost to raise reflects the blind posted
+        self.assertEqual(options['r'].cost, 4)
 
     # HU Preflop: SB can FOLD, CALL $2, RAISE $4 (when BB 3-bets)
     def test_getoptions_HU_SBpreflop_BB3bets_CALLFOLDRAISE(self):
@@ -320,7 +329,8 @@ class TestBetting(unittest.TestCase):
         next(self.br)  # Seat 0
         p = self.br.get_bettor()
         expected = ['c', 'f', 'r']
-        result = sorted(list(self.br.get_options(p).keys()))
+        options = self.br.get_options(p)
+        result = sorted(list(options.keys()))
         self.assertEqual(expected, result)
 
     # HU Preflop: BB can FOLD, CALL $2 (when SB 4-bets - and caps)
@@ -332,7 +342,8 @@ class TestBetting(unittest.TestCase):
         next(self.br)  # Seat 1
         p = self.br.get_bettor()
         expected = ['c', 'f']
-        result = sorted(list(self.br.get_options(p).keys()))
+        options = self.br.get_options(p)
+        result = sorted(list(options.keys()))
         self.assertEqual(expected, result)
 
     # HU Postflop: SB can CHECK or BET $4
@@ -340,7 +351,8 @@ class TestBetting(unittest.TestCase):
         self.setUp(players=2, street=2)
         p = self.br.get_bettor()
         expected = ['b', 'c']
-        result = sorted(list(self.br.get_options(p).keys()))
+        options = self.br.get_options(p)
+        result = sorted(list(options.keys()))
         self.assertEqual(expected, result)
 
     # HU Postflop: BB can FOLD, CALL $2, RAISE $4 (when SB bets)
@@ -350,7 +362,9 @@ class TestBetting(unittest.TestCase):
         self.br.process_option(betting.Action('BET', 4))  # SB 4-bet caps
         p = next(self.br)  # Seat 0
         expected = ['c', 'f', 'r']
-        result = sorted(list(self.br.get_options(p).keys()))
+
+        options = self.br.get_options(p)
+        result = sorted(list(options.keys()))
         self.assertEqual(expected, result)
 
     """
