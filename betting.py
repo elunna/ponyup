@@ -85,6 +85,11 @@ class BettingRound():
             # A player can also "complete" an incomplete bet or raise, and this would reopen the
             # betting as well.
 
+            # Double check amount:
+            if self.get_betlevel() == 0 and action.cost > self.betsize:
+                raise Exception('Bet amount is more than the opening size! {} vs {}'.format(
+                    action.cost, self.betsize))
+
             minimum_bet = self.betsize / 2
             if action.cost >= minimum_bet:
                 self.closer = self.reopened_closer(self.bettor)
