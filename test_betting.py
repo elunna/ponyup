@@ -241,9 +241,21 @@ class TestBetting(unittest.TestCase):
         next(self.br)  # Seat 3
         self.br.process_option(betting.Action('BET', bet))
         next(self.br)  # Seat 4
-        self.br.process_option(betting.Action('BET', bet * 2))
+        self.br.process_option(betting.Action('RAISE', bet * 2))
         expected = bet * 2
         result = self.br.bet
+        self.assertEqual(expected, result)
+
+    # Seat 3 bets, seat 4 raises. Closer is 3.
+    def test_processoption_RAISE_resetsCloser(self):
+        self.setUp(players=2, street=2)
+        bet = 4
+        next(self.br)  # Seat 3
+        self.br.process_option(betting.Action('BET', bet))
+        next(self.br)  # Seat 4
+        self.br.process_option(betting.Action('RAISE', bet * 2))
+        expected = self.br.closer
+        result = self.br.closer
         self.assertEqual(expected, result)
 
     # RAISE - Players chips are diminished by the raiseamount
