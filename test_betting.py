@@ -234,10 +234,15 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # RAISE - Full raise: bet amount raised by one betsize
+    # Seat 3 bets, seat 4 raises.
     def test_processoption_RAISE_full_equals2betsize(self):
         self.setUp(players=2, street=2)
-        self.br.process_option(betting.Action('BET', cost=self.br.betsize))
-        expected = self.br.betsize
+        bet = 4
+        next(self.br)  # Seat 3
+        self.br.process_option(betting.Action('BET', bet))
+        next(self.br)  # Seat 4
+        self.br.process_option(betting.Action('BET', bet * 2))
+        expected = bet * 2
         result = self.br.bet
         self.assertEqual(expected, result)
 
