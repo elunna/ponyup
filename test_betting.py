@@ -157,14 +157,14 @@ class TestBetting(unittest.TestCase):
         result = bettor.chips
         self.assertEqual(expected, result)
 
-    # FOLD - Raises exception if the cost or level is more than 0.
-    # This doesn't really impact any yet tho. Deferred.
-    """
-    def test_processoption_FOLD_costandlevel1_raiseException(self):
+    # FOLD - Bet stays the same
+    def test_processoption_FOLD_bet_staysame(self):
         self.setUp(players=2, street=2)
-        action = betting.Action('FOLD', 1, 1)
-        self.assertRaises(Exception, self.br.process_option, action)
-    """
+        expected = self.br.bet
+        self.br.process_option(betting.FOLD)
+
+        result = self.br.bet
+        self.assertEqual(expected, result)
 
     # BET - bet level is raised by one
     # BET - Players chips are diminished by the bet amount
