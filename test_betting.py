@@ -236,7 +236,7 @@ class TestBetting(unittest.TestCase):
     # RAISE - Full raise: bet amount raised by one betsize
     # Seat 3 bets, seat 4 raises.
     def test_processoption_RAISE_full_equals2betsize(self):
-        self.setUp(players=2, street=2)
+        self.setUp(players=6, street=2)
         bet = 4
         next(self.br)  # Seat 3
         self.br.process_option(betting.Action('BET', bet))
@@ -248,7 +248,7 @@ class TestBetting(unittest.TestCase):
 
     # Seat 3 bets, seat 4 raises. Closer is 3.
     def test_processoption_RAISE_resetsCloser(self):
-        self.setUp(players=2, street=2)
+        self.setUp(players=6, street=2)
         bet = 4
         next(self.br)  # Seat 3
         self.br.process_option(betting.Action('BET', bet))
@@ -258,7 +258,17 @@ class TestBetting(unittest.TestCase):
         result = self.br.closer
         self.assertEqual(expected, result)
 
-    # RAISE - Players chips are diminished by the raiseamount
+    def test_processoption_RAISE_partial(self):
+        self.setUp(players=6, street=2)
+        bet = 4
+        next(self.br)  # Seat 3
+        self.br.process_option(betting.Action('BET', bet))
+        next(self.br)  # Seat 4
+        self.br.process_option(betting.Action('RAISE', bet * 2))
+        expected = self.br.closer
+        result = self.br.closer
+        self.assertEqual(expected, result)
+
     # COMPLETE - Players chips are diminished by the bet amount
 
     """
