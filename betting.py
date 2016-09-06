@@ -53,10 +53,7 @@ class BettingRound():
         they are prompted for their decision. If CPU, they follow an algorithm for making a
         play. The decision is returned as an Action object.
         """
-        invested = self.invested(p)
-        cost = self.cost(invested)
-        #  cost = (self.betsize * self.level) - invested
-        options = self.get_options(cost, p.chips)
+        options = self.get_options(p)
 
         if 'a' in options:
             # Player is allin
@@ -64,7 +61,7 @@ class BettingRound():
         elif p.is_human():
             return menu(options)
         else:
-            facing = cost / self.betsize
+            facing = self.cost(p) / self.betsize
             return strategy.makeplay(p, options, self.r.street, self.get_betlevel(), facing)
 
     def process_option(self, action):
@@ -107,10 +104,12 @@ class BettingRound():
         # Add the bet/raise amount to the pot
         self.r.pot += p.bet(action.cost)
 
-    def get_options(self, cost, stack):
+    def get_options(self, p):
         """
         Shows the options available to the current bettor.
         """
+        cost = self.cost(p)
+        stack = p.chips
         option_dict = {}
         #  completing = (self.betsize - cost) == self.r.blinds.SB
 
@@ -182,8 +181,8 @@ class BettingRound():
     def invested(self, player):
         return self.stacks[player.name] - player.chips
 
-    def cost(self, amt_invested):
-        return (self.betsize * self.get_betlevel()) - amt_invested
+    def cost(self, p):
+        return (self.betsize * self.get_betlevel()) - self.invested(p)
 
     def done(self):
         return self.bettor == self.closer

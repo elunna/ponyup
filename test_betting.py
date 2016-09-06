@@ -233,6 +233,22 @@ class TestBetting(unittest.TestCase):
     """
     Tests for get_options(cost)
     """
+    # These tests are all $2/$4(blinds $1/$2). Assume full stacks for both players.
+    # HU Preflop: SB can FOLD, CALL $1, RAISE $3
+    def test_getoptions_HU_preflop_SB_FOLDCALLRAISE(self):
+        self.setUp(players=2, street=1)
+        p = next(self.br)  # Seat 3
+        expected = ['c', 'f', 'r']
+        result = sorted(list(self.br.get_options(p).keys()))
+        self.assertEqual(expected, result)
+
+    # HU Preflop: BB can CHECK, RAISE $2 (when SB completes)
+    # HU Preflop: BB can FOLD, CALL $2, RAISE $4 (when SB raises)
+    # HU Preflop: SB can FOLD, CALL $2, RAISE $4 (when BB 3-bets)
+    # HU Preflop: BB can FOLD, CALL $2 (when SB 4-bets - and caps)
+    #
+    # HU Postflop: SB can CHECK or BET $4
+    # HU Postflop: BB can FOLD, CALL $2, RAISE $4 (when SB bets)
 
     """
     Tests for action_string(action)
@@ -260,25 +276,22 @@ class TestBetting(unittest.TestCase):
     """
     # Street 1: Bet = 2. Player hasn't put any money in. Cost = 2.
     def test_cost_UTG_predraw_callfor2_costs2(self):
-        invested = self.br.invested(self.br.get_bettor())
         expected = 2
-        result = self.br.cost(invested)
+        result = self.br.cost(self.br.get_bettor())
         self.assertEqual(expected, result)
 
     # Street 1: Bet = 2. Bettor is SB, put in 1. Cost = 1.
     def test_cost_SB_predraw_complete_costs1(self):
         self.setUp(players=2)
-        invested = self.br.invested(self.br.get_bettor())
         expected = 1
-        result = self.br.cost(invested)
+        result = self.br.cost(self.br.get_bettor())
         self.assertEqual(expected, result)
 
     # Street 2: Bet = 2. Bettor is BB, Cost = 0.
     def test_cost_BB_openbetting_costs0(self):
         self.setUp(players=2, street=2)
-        invested = self.br.invested(self.br.get_bettor())
         expected = 0
-        result = self.br.cost(invested)
+        result = self.br.cost(self.br.get_bettor())
         self.assertEqual(expected, result)
 
     """
