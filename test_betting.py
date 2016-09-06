@@ -336,7 +336,22 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # HU Postflop: SB can CHECK or BET $4
+    def test_getoptions_HU_SBpost_CHECKBET(self):
+        self.setUp(players=2, street=2)
+        p = self.br.get_bettor()
+        expected = ['b', 'c']
+        result = sorted(list(self.br.get_options(p).keys()))
+        self.assertEqual(expected, result)
+
     # HU Postflop: BB can FOLD, CALL $2, RAISE $4 (when SB bets)
+    def test_getoptions_HU_BBpost_SBbets_CALLFOLDRAISE(self):
+        self.setUp(players=2, street=2)
+        next(self.br)  # Seat 1
+        self.br.process_option(betting.Action('BET', 4))  # SB 4-bet caps
+        p = next(self.br)  # Seat 0
+        expected = ['c', 'f', 'r']
+        result = sorted(list(self.br.get_options(p).keys()))
+        self.assertEqual(expected, result)
 
     """
     Tests for action_string(action)
