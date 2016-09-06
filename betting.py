@@ -4,10 +4,10 @@ import colors
 import strategy
 import poker
 
-Action = namedtuple('Action', ['name', 'cost', 'level'])
-ALLIN = Action('ALLIN', 0, 0)
-CHECK = Action('CHECK', 0, 0)
-FOLD = Action('FOLD', 0, 0)
+Action = namedtuple('Action', ['name', 'cost'])
+ALLIN = Action('ALLIN', 0)
+CHECK = Action('CHECK', 0)
+FOLD = Action('FOLD', 0)
 
 
 class BettingRound():
@@ -61,12 +61,12 @@ class BettingRound():
 
         if 'a' in options:
             # Player is allin
-            return Action('ALLIN', 0, 0)
+            return Action('ALLIN', 0)
         elif p.is_human():
             return menu(options)
         else:
             facing = cost / self.betsize
-            return strategy.makeplay(p, options, self.r.street, self.level, facing)
+            return strategy.makeplay(p, options, self.r.street, self.get_betlevel(), facing)
 
     def process_option(self, action):
         """
@@ -76,14 +76,32 @@ class BettingRound():
 
         if action.name == 'FOLD':
             self.r.muck.extend(p.fold())
+            return
         elif action.name in ['CHECK', 'ALLIN']:
             return
-        elif action.level > 0:
-            # It's a bet or raise, so we'll need to reset last better.
-            self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
+        elif action.name == 'BET':
+            # We follow the half-bet rule: If an allin bet or raise is equal to or larger than
+            # half the minimum bet amount, it does constitute a real raise and reopens the
+            # betting.
+            # A player can also "complete" an incomplete bet or raise, and this would reopen the
+            # betting as well.
 
+            minimum_bet = self.betsize / 2
+            if action.cost >= minimum_bet:
+                self.closer = self.reopened_closer(self.bettor)
+
+        elif action.name == 'RAISE':
+            minimum_raise = (self.betsize * self.get_betlevel()) + (self.betsize / 2)
+            if action.cost >= minimum_raise:
+                self.closer = self.reopened_closer(self.bettor)
+
+        # If the bet amount is over the ongoing bet amount - reset the bet amount.
+        player_bet = action.cost + self.invested(p)
+        if player_bet > self.bet:
+            self.bet = player_bet
+
+        # Add the bet/raise amount to the pot
         self.r.pot += p.bet(action.cost)
-        self.level += action.level
 
     def get_options(self, cost, stack):
         """
@@ -94,45 +112,51 @@ class BettingRound():
 
         if stack == 0:
             option_dict['a'] = ALLIN
-            # Save some time
             return option_dict
 
         if cost == 0:
             option_dict['c'] = CHECK
+
         elif cost > 0:
             option_dict['f'] = FOLD
 
             if stack >= cost:
-                option_dict['c'] = Action('CALL', cost, 0)
+                option_dict['c'] = Action('CALL', cost)
             else:
                 # Player doesn't have enough for the full call amount
-                option_dict['c'] = Action('CALL', stack, 0)
+                option_dict['c'] = Action('CALL', stack)
 
-        if self.level == 0:
+        minimum_raise = (self.betsize * self.get_betlevel()) + (self.betsize / 2)
+        raise_cost = (self.betsize * self.get_betlevel()) + self.betsize
+
+        if self.get_betlevel() == 0:
             # Player doesn't have enough for the full bet amount
             if stack >= self.betsize:
-                option_dict['b'] = Action('BET', self.betsize, 1)
+                option_dict['b'] = Action('BET', self.betsize)
             else:
-                option_dict['b'] = Action('BET', stack, 1)
+                option_dict['b'] = Action('BET', stack)
 
-        if self.level >= 1 and self.level < self.BETCAP:
-            raise_cost = cost + self.betsize
+        if self.get_betlevel() >= 1 and self.get_betlevel() < self.BETCAP:
 
             if stack < self.betsize:
                 # Player does not have enough chips for a raise.
                 pass
+            elif stack >= self.betsize * self.get_betlevel() and stack < minimum_raise:
+                # They don't qualify for a full raise - it's a bet instead.
+                option_dict['b'] = Action('BET', stack)
+
             elif stack >= raise_cost:
-                option_dict['r'] = Action('RAISE', raise_cost, 1)
+                option_dict['r'] = Action('RAISE', raise_cost)
             else:
                 # Player doesn't have enough for a full raise, but enough for a partial raise.
-                option_dict['r'] = Action('RAISE', stack, 1)
+                option_dict['r'] = Action('RAISE', stack)
 
         return option_dict
 
     def action_string(self, action):
         p = self.get_bettor()
         act_str = ''
-        act_str += spacing(self.level)
+        act_str += spacing(self.get_betlevel())
         act_str += '{} {}s'.format(p, action.name.lower())
 
         amt = colors.color(' $' + str(action.cost), 'yellow')
@@ -146,7 +170,8 @@ class BettingRound():
         elif action.name == 'CHECK':
             return colors.color(act_str, 'white')
         elif action.name == 'ALLIN':
-            return colors.color('{}{} is all in.'.format(spacing(self.level), p), 'gray')
+            return colors.color(
+                '{}{} is all in.'.format(spacing(self.get_betlevel()), p), 'gray')
         else:
             raise Exception('Error processing the action!')
 
@@ -154,7 +179,7 @@ class BettingRound():
         return self.stacks[player.name] - player.chips
 
     def cost(self, amt_invested):
-        return (self.betsize * self.level) - amt_invested
+        return (self.betsize * self.get_betlevel()) - amt_invested
 
     def done(self):
         return self.bettor == self.closer
@@ -200,7 +225,7 @@ class BettingRound():
         return bet
 
     def get_betlevel(self):
-        return self.bet / self.betsize
+        return self.bet // self.betsize
 
     def get_bettor(self):
         """
