@@ -283,12 +283,24 @@ class TestBetting(unittest.TestCase):
         result = sorted(list(self.br.get_options(p).keys()))
         self.assertEqual(expected, result)
 
+    # Helper method: HU situation where SB completes vs BB
+    def sb_completes(self):
+        self.setUp(players=2, street=1)
+        next(self.br)  # Seat 0
+        self.br.process_option(betting.Action('CALL', 1))
+        next(self.br)  # Seat 1
+
+    # Helper method: HU situation where SB raises vs BB
+    def sb_raises(self):
+        self.setUp(players=2, street=1)
+        next(self.br)  # Seat 0
+        self.br.process_option(betting.Action('RAISE', 3))
+        next(self.br)  # Seat 1
+
     # HU Preflop: BB can CHECK, RAISE $2 (when SB completes)
     def test_getoptions_HU_preflop_BB_CHECKRAISE(self):
-        self.setUp(players=2, street=1)
-        p = next(self.br)  # Seat 0
-        self.br.process_option(betting.Action('CALL', 1))
-        p = next(self.br)  # Seat 1
+        self.sb_completes()
+        p = self.br.get_bettor()
         expected = ['c', 'r']
         result = sorted(list(self.br.get_options(p).keys()))
         self.assertEqual(expected, result)
