@@ -20,9 +20,21 @@ RANKEDHANDS = {
 }
 
 
+def deal_5stud_test_hands(table):
+    hands = []
+    hands.append(pokerhands.convert_to_cards(['As', 'Ah']))
+    hands.append(pokerhands.convert_to_cards(['Ks', 'Kh']))
+    hands.append(pokerhands.convert_to_cards(['Qs', 'Qh']))
+    hands.append(pokerhands.convert_to_cards(['Js', 'Jh']))
+    hands.append(pokerhands.convert_to_cards(['Ts', 'Th']))
+    hands.append(pokerhands.convert_to_cards(['9s', '9h']))
+    for p in table:
+        p._hand.cards = hands.pop(0)
+
+
 def deal_stud(table, qty, matchingranks=0):
-    down = pokerhands.convert_to_cards(['As', 'Ks', 'Qs', 'Js', 'Ts', '9s',
-                                        '2d', '3d', '4d', '2s', '3s', '4s'])
+    down = pokerhands.convert_to_cards(['As', 'Ks', 'Qs', 'Js', 'Ts', '9s', '2d', '3d', '4d',
+                                        '2s', '3s', '4s'])
     if qty == 2:
         deal_list_to_table(table, down)
     elif qty == 3:
