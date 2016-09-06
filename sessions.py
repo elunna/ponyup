@@ -57,6 +57,7 @@ class Session():
             o = br.player_decision(p)
             br.process_option(o)
             print(br.action_string(o))
+            print('Bet: {} Betlevel: {}'.format(br.bet, br.get_betlevel()))
 
         print(_round)           # Display pot
 
