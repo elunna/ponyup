@@ -18,13 +18,13 @@ class TestBetting(unittest.TestCase):
         for i in range(street - 1):  # Adjust which street to test.
             self.r.next_street()
 
-        self.r.deal_cards(5)
         self.r.post_blinds()
+        self.r.deal_cards(5)
         self.br = betting.BettingRound(self.r)
 
     def setUp_shorty(self, shortstack, level=2, players=6, street=1):
         g = testtools.draw5_session(level, players)
-        # Sets seat 1 to the short stack amount for easy testing.
+        # Sets seat 1(we'll use as the SB) as the short stack amount for easy testing.
         g._table.seats[1].chips = shortstack
         g._table.move_button()
         self.assertEqual(g._table.TOKENS['D'], 0)  # verify the button is 0
@@ -32,7 +32,7 @@ class TestBetting(unittest.TestCase):
 
         for i in range(street - 1):  # Adjust which street to test.
             self.r.next_street()
-        # We'll skip posting and dealing cards
+        self.r.post_blinds()
         self.r.deal_cards(2)
         self.br = betting.BettingRound(self.r)
 
@@ -188,7 +188,7 @@ class TestBetting(unittest.TestCase):
 
     # BET - Cannot bet more than betsize, if betlevel = 0
     def test_processoption_BET_exceedsopenamount_raiseException(self):
-        self.setUp_shorty(shortstack=5, street=2)
+        self.setUp_shorty(shortstack=8, street=2)
         self.assertTrue(self.br.bettor == 1)
         stack = self.br.get_bettor().chips
         action = betting.Action('BET', stack)
@@ -376,6 +376,19 @@ class TestBetting(unittest.TestCase):
         p = next(self.br)  # Seat 0
         expected = ['c', 'f', 'r']
 
+        options = self.br.get_options(p)
+        result = sorted(list(options.keys()))
+        self.assertEqual(expected, result)
+
+    # Tests for allins and partial bets and raises.
+    # HU Preflop: SB can FOLD, CALL $1, RAISE $3
+    def test_getoptions_allinBB_ALLIN(self):
+        self.setUp_shorty(players=2, shortstack=1, street=1)
+        next(self.br)
+        self.br.process_option(betting.Action('CALL', 1))
+        p = next(self.br)
+        self.assertEqual(self.br.bettor, 1)
+        expected = ['a']
         options = self.br.get_options(p)
         result = sorted(list(options.keys()))
         self.assertEqual(expected, result)
