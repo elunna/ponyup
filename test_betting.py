@@ -122,12 +122,12 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # CHECK - bet level is same
-    def test_processoption_CHECK_betlevel_stayssame(self):
+    def test_processoption_CHECK_bet_stayssame(self):
         self.setUp(players=2, street=2)
-        expected = self.br.level
+        expected = self.br.bet
         self.br.process_option(betting.CHECK)
 
-        result = self.br.level
+        result = self.br.bet
         self.assertEqual(expected, result)
 
     # CHECK - Raises exception if the cost or level is more than 0.
@@ -278,10 +278,6 @@ class TestBetting(unittest.TestCase):
         closer, bettor = 4, 5
         self.assertEqual(closer, self.br.closer)
         self.assertEqual(bettor, self.br.bettor)
-
-    """
-    Tests for set_level
-    """
 
     """
     Tests for set_betsize(self):

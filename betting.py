@@ -22,7 +22,6 @@ class BettingRound():
         elif self.r.gametype in ["FIVE CARD STUD", "SEVEN CARD STUD"]:
             self.set_bettors_w_antes()
 
-        self.set_level()
         self.set_betsize()
         self.set_stacks()
 
@@ -203,12 +202,6 @@ class BettingRound():
             # Default to lowest seat #, change this later.
             self.bettor = poker.highhand(self.r._table, self.r.gametype)[0]
             self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
-
-    def set_level(self):
-        if self.r.street == 0:
-            self.level = 1
-        else:
-            self.level = 0
 
     def set_betsize(self):
         if self.r.street > len(self.r.streets):
