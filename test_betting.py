@@ -298,7 +298,7 @@ class TestBetting(unittest.TestCase):
         next(self.br)  # Seat 1
 
     # HU Preflop: BB can CHECK, RAISE $2 (when SB completes)
-    def test_getoptions_HU_preflop_BB_CHECKRAISE(self):
+    def test_getoptions_HU_BBpreflop_SBcompletes_CHECKRAISE(self):
         self.sb_completes()
         p = self.br.get_bettor()
         expected = ['c', 'r']
@@ -306,7 +306,23 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # HU Preflop: BB can FOLD, CALL $2, RAISE $4 (when SB raises)
+    def test_getoptions_HU_BBpreflop_SBraises_CALLFOLDRAISE(self):
+        self.sb_raises()
+        p = self.br.get_bettor()
+        expected = ['c', 'f', 'r']
+        result = sorted(list(self.br.get_options(p).keys()))
+        self.assertEqual(expected, result)
+
     # HU Preflop: SB can FOLD, CALL $2, RAISE $4 (when BB 3-bets)
+    def test_getoptions_HU_SBpreflop_BB3bets_CALLFOLDRAISE(self):
+        self.sb_raises()
+        self.br.process_option(betting.Action('RAISE', 4))  # BB reraises
+        next(self.br)  # Seat 0
+        p = self.br.get_bettor()
+        expected = ['c', 'f', 'r']
+        result = sorted(list(self.br.get_options(p).keys()))
+        self.assertEqual(expected, result)
+
     # HU Preflop: BB can FOLD, CALL $2 (when SB 4-bets - and caps)
     #
     # HU Postflop: SB can CHECK or BET $4
