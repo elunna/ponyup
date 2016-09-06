@@ -206,7 +206,7 @@ class TestBetting(unittest.TestCase):
         result = p_chips - self.br.get_bettor().chips
         self.assertEqual(expected, result)
 
-    # If seat 2 makes a BET, closer resets to 0.
+    # If seat 1 makes a BET, closer resets to 0.
     def test_processoption_BET_1resetsCloserTo0(self):
         self.setUp(players=6, street=2)
         # Verify bettor position
@@ -216,12 +216,22 @@ class TestBetting(unittest.TestCase):
         result = self.br.closer
         self.assertEqual(expected, result)
 
-    # If seat 1 makes a BET, closer resets to 0.
+    # If seat 2 makes a BET, closer resets to 1.
     def test_processoption_BET_2resetsCloserTo1(self):
         self.setUp(players=6, street=2)
         # Verify bettor position
         self.br.bettor = 2
         self.br.process_option(betting.Action('BET', cost=self.br.betsize))
+        expected = 1
+        result = self.br.closer
+        self.assertEqual(expected, result)
+
+    # If seat 2 makes a partial BET, closer resets to 1.
+    def test_processoption_BET_partial_2resetsCloserTo1(self):
+        self.setUp(players=6, street=2)
+        bet = 1
+        self.br.bettor = 2
+        self.br.process_option(betting.Action('BET', bet))
         expected = 1
         result = self.br.closer
         self.assertEqual(expected, result)

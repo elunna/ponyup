@@ -78,7 +78,7 @@ class BettingRound():
             return
         elif action.name in ['CHECK', 'ALLIN']:
             return
-        elif action.name == 'BET':
+        elif action.name in ['BET', 'RAISE']:
             # We follow the half-bet rule: If an allin bet or raise is equal to or larger than
             # half the minimum bet amount, it does constitute a real raise and reopens the
             # betting.
@@ -90,14 +90,8 @@ class BettingRound():
                 raise Exception('Bet amount is more than the opening size! {} vs {}'.format(
                     action.cost, self.betsize))
 
-            minimum_bet = self.betsize / 2
-            if action.cost >= minimum_bet:
-                self.closer = self.reopened_closer(self.bettor)
-
-        elif action.name == 'RAISE':
-            minimum_raise = (self.betsize * self.get_betlevel()) + (self.betsize / 2)
-            if action.cost >= minimum_raise:
-                self.closer = self.reopened_closer(self.bettor)
+            # Reset the closer anytime the betting is reopened.
+            self.closer = self.reopened_closer(self.bettor)
 
         # If the bet amount is over the ongoing bet amount - reset the bet amount.
         player_bet = action.cost + self.invested(p)
@@ -132,6 +126,8 @@ class BettingRound():
 
         minimum_raise = (self.betsize * self.get_betlevel()) + (self.betsize / 2)
         raise_cost = (self.betsize * self.get_betlevel()) + self.betsize
+
+        #  minimum_bet = self.betsize / 2
 
         if self.get_betlevel() == 0:
             # Player doesn't have enough for the full bet amount
