@@ -354,13 +354,23 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # If bet=10 and betsize=4, betlevel should be 5.
-    def test_getbetlevel_bet10_betsize2_returns5(self):
+    def test_getbetlevel_bet12_betsize4_returns3(self):
         self.setUp(street=2)
         # 2/4, betsize = 4
         # Current bet should be 0 before this.
         self.assertTrue(self.br.bet == 0)
         self.br.bet += 12
         expected = 3
+        result = self.br.get_betlevel()
+        self.assertEqual(expected, result)
+
+    def test_getbetlevel_bet10_betsize4_returns2(self):
+        self.setUp(street=2)
+        # 2/4, betsize = 4
+        # Current bet should be 0 before this.
+        self.assertTrue(self.br.bet == 0)
+        self.br.bet += 10
+        expected = 2
         result = self.br.get_betlevel()
         self.assertEqual(expected, result)
 
