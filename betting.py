@@ -27,7 +27,7 @@ class BettingRound():
         self.set_stacks()
 
         # We cannot set the current_bet until stacks have been set!
-        self.bet = self.current_bet()
+        self.bet = self.get_bet()
 
     def play(self):
         """
@@ -129,6 +129,36 @@ class BettingRound():
 
         return option_dict
 
+    def action_string(self, action):
+        p = self.get_bettor()
+        act_str = ''
+        act_str += spacing(self.level)
+        act_str += '{} {}s'.format(p, action.name.lower())
+
+        amt = colors.color(' $' + str(action.cost), 'yellow')
+
+        if action.name in ['BET', 'RAISE']:
+            return colors.color(act_str, 'red') + amt
+        elif action.name == 'CALL':
+            return colors.color(act_str, 'white') + amt
+        elif action.name == 'FOLD':
+            return colors.color(act_str, 'purple')
+        elif action.name == 'CHECK':
+            return colors.color(act_str, 'white')
+        elif action.name == 'ALLIN':
+            return colors.color('{}{} is all in.'.format(spacing(self.level), p), 'gray')
+        else:
+            raise Exception('Error processing the action!')
+
+    def invested(self, player):
+        return self.stacks[player.name] - player.chips
+
+    def cost(self, amt_invested):
+        return (self.betsize * self.level) - amt_invested
+
+    def done(self):
+        return self.bettor == self.closer
+
     def set_bettors_w_blinds(self):
         if self.r._table.TOKENS['D'] == -1:
             raise Exception('Cannot set bettor or closer in the if button isn\'t set!')
@@ -161,11 +191,16 @@ class BettingRound():
         else:
             self.betsize = self.r.streets[self.r.street] * self.r.blinds.BB
 
-    def set_stacks(self):
-        if self.r.street == 0:
-            self.stacks = self.r.starting_stacks
-        elif self.r.street > 0:
-            self.stacks = self.r._table.stackdict()
+    def get_bet(self):
+        bet = 0
+        for p in self.r._table:
+            i = self.invested(p)
+            if i > bet:
+                bet = i
+        return bet
+
+    def get_betlevel(self):
+        return self.bet / self.betsize
 
     def get_bettor(self):
         """
@@ -173,59 +208,24 @@ class BettingRound():
         """
         return self.r._table.seats[self.bettor]
 
+    def next_bettor(self):
+        self.bettor = self.r._table.next_player(self.bettor, hascards=True)
+
     def get_closer(self):
         """
         Returns the player who will close the betting.
         """
         return self.r._table.seats[self.closer]
 
-    def get_betlevel(self):
-        return self.bet / self.betsize
-
-    def invested(self, player):
-        return self.stacks[player.name] - player.chips
-
-    def cost(self, amt_invested):
-        return (self.betsize * self.level) - amt_invested
-
-    def next_bettor(self):
-        self.bettor = self.r._table.next_player(self.bettor, hascards=True)
-
-    def done(self):
-        return self.bettor == self.closer
-
-    def action_string(self, action):
-        p = self.get_bettor()
-        act_str = ''
-        act_str += spacing(self.level)
-        act_str += '{} {}s'.format(p, action.name.lower())
-
-        amt = colors.color(' $' + str(action.cost), 'yellow')
-
-        if action.name in ['BET', 'RAISE']:
-            return colors.color(act_str, 'red') + amt
-        elif action.name == 'CALL':
-            return colors.color(act_str, 'white') + amt
-        elif action.name == 'FOLD':
-            return colors.color(act_str, 'purple')
-        elif action.name == 'CHECK':
-            return colors.color(act_str, 'white')
-        elif action.name == 'ALLIN':
-            return colors.color('{}{} is all in.'.format(spacing(self.level), p), 'gray')
-        else:
-            raise Exception('Error processing the action!')
-
     def reopened_closer(self, bettor):
         # It's a bet or raise, so we'll need to reset last better.
         return self.r._table.next_player(bettor, -1, hascards=True)
 
-    def current_bet(self):
-        bet = 0
-        for p in self.r._table:
-            i = self.invested(p)
-            if i > bet:
-                bet = i
-        return bet
+    def set_stacks(self):
+        if self.r.street == 0:
+            self.stacks = self.r.starting_stacks
+        elif self.r.street > 0:
+            self.stacks = self.r._table.stackdict()
 
 
 def calc_odds(bet, pot):
