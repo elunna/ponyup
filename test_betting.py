@@ -300,7 +300,18 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # Stud: level 2, street 1 should be the small bet: 2
+    def test_setbetsize_stud_street1_betsize2(self):
+        self.setUp_studGame(level=2, street=1)
+        expected = 2
+        result = self.br.betsize
+        self.assertEqual(expected, result)
+
     # Stud: level 2, street 3 should be the big bet: 2
+    def test_setbetsize_stud_street3_betsize4(self):
+        self.setUp_studGame(level=2, street=3)
+        expected = 4
+        result = self.br.betsize
+        self.assertEqual(expected, result)
 
     """
     Tests for current_bet()
