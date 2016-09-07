@@ -1,0 +1,8 @@
+"""
+Project Glossary
+"""
+
+SB = Small Blind
+BB = Big Blind
+UTG = Under the Gun, or the first bettor in a given round.
+
