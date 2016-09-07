@@ -32,12 +32,7 @@ class Blinds():
         return _str
 
     def stakes(self):
-        """
-        Returns the stakes, as in the small bet/big bet amounts. For games that only use blinds
-        (without antes), we calculate the amounts by using the Big Blind as the small bet, and
-        twice the Big Blind as the big bet.
-        """
-        return '${}/${}'.format(self.BB, self.BB * 2)
+        return show_stakes(self.blind_dict[self.level])
 
     def set_level(self, level):
         """
@@ -59,3 +54,12 @@ class Blinds():
         """
         for k, v in sorted(self.blind_dict.items()):
             print('\tLevel {:3}: ${}/${}'.format(k, v.BB, v.BB * 2))
+
+
+def show_stakes(lev):
+    """
+    Returns the stakes, as in the small bet/big bet amounts. For games that only use blinds
+    (without antes), we calculate the amounts by using the Big Blind as the small bet, and
+    twice the Big Blind as the big bet.
+    """
+    return '${}/${}'.format(lev.BB, lev.BB * 2)
