@@ -166,6 +166,11 @@ class TestTable(unittest.TestCase):
         self.t.set_bringin(5)
         self.assertEqual(self.t.TOKENS['D'], 4)
 
+    # Passed 5 in a table of 2 players. Exception
+    def test_setbringin_index5_2players_raiseException(self):
+        self.setUp(players=2, setblinds=False)
+        self.assertRaises(ValueError, self.t.set_bringin, 5)
+
     """
     Tests for add_player()
     """
