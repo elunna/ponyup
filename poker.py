@@ -1,5 +1,4 @@
 from __future__ import print_function
-import betting
 import card
 import colors
 import deck
