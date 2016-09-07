@@ -2,6 +2,7 @@ import betting
 import colors
 import discard
 import poker
+import options
 
 DISPLAYWIDTH = 70
 GAMES = {
@@ -27,6 +28,7 @@ class Session():
         self._table = table
         self.streets = GAMES[gametype]
         self.blinds = blinds
+        self.options = options.OPTIONS
 
     def __str__(self):
         """
@@ -57,7 +59,8 @@ class Session():
             o = br.player_decision(p)
             br.process_option(o)
             print(br.action_string(o))
-            print('Bet: {} Betlevel: {}'.format(br.bet, br.get_betlevel()))
+            if self.options['debug']:
+                print('Bet: {} Betlevel: {}'.format(br.bet, br.get_betlevel()))
 
         print(_round)           # Display pot
 
@@ -123,7 +126,6 @@ class Draw5Session(Session):
         DEALT = 5
         r = self.new_round()
         r.check_integrity_pre()
-
         r._table.move_button()
         r._table.set_blinds()
         r.post_blinds()
