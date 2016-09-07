@@ -582,26 +582,27 @@ class TestTable(unittest.TestCase):
         self.assertRaises(Exception, t.randomize_button)
 
     """
-    Tests for remove_broke_players()
+    Tests for get_broke_players()
     """
     # 6 players, all with chips, returns empty list
-    def test_removebrokeplayers_6playerswithchips_returnemptylist(self):
+    def test_getbrokeplayers_6playerswithchips_returnemptylist(self):
         expected = []
-        result = self.t.remove_broke()
+        result = self.t.get_broke_players()
         self.assertEqual(expected, result)
 
     # 1 broke player, returns the player in a list
-    def test_removebrokeplayers_1brokeplayer_returnsplayer(self):
+    def test_getbrokeplayers_1brokeplayer_returnsplayer(self):
         p = self.t.seats[0]
         p.chips = 0
         expected = [p]
-        result = self.t.remove_broke()
+        result = self.t.get_broke_players()
         self.assertEqual(expected, result)
 
-    # 6 players, all broke, table is empty.
-    def test_removebrokeplayers_allbroke_returnsallplayers(self):
-        for p in self.t:
-            p.chips = 0
-        expected = self.t.seats[:]
-        result = self.t.remove_broke()
+    # 2 broke player, returns the player in a list
+    def test_getbrokeplayers_2broke_returnsboth(self):
+        p1, p2 = self.t.seats[0], self.t.seats[1]
+        p1.chips = 0
+        p2.chips = 0
+        expected = [p1, p2]
+        result = self.t.get_broke_players()
         self.assertEqual(expected, result)

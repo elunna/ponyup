@@ -181,16 +181,11 @@ class Table():
         # This will also set the blinds...
         self.move_button()
 
-    def remove_broke(self):
+    def get_broke_players(self):
         """
         Remove players with no chips from the table and return them in a list.
         """
-        players = []
-        for p in self:
-            if p.chips == 0:
-                i = self.get_index(p)
-                players.append(self.remove_player(i))
-        return players
+        return [p for p in self if p.chips == 0]
 
     def get_players(self, hascards=False, haschips=False):
         """
