@@ -10,7 +10,7 @@ class Table():
         if size not in VALID_SIZES:
             raise ValueError('Not a valid table size!')
 
-        self.TOKENS = {'D': -1, 'SB': -1, 'BB': -1}
+        self.TOKENS = {'D': -1, 'SB': -1, 'BB': -1, 'BI': -1}
         self.seats = []
         for i in range(size):
             self.seats.append(None)
@@ -165,7 +165,8 @@ class Table():
             raise ValueError('Not enough players at the table!')
 
     def set_bringin(self, index):
-        pass
+        self.TOKENS['BI'] = index
+        self.TOKENS['D'] = self.next_player(self.TOKENS['BI'], -1)
 
     def randomize_button(self):
         """

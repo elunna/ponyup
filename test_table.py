@@ -119,7 +119,7 @@ class TestTable(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for add_player()
+    Tests for set_blinds()
     """
     # New table: Button at 0, sb should be at 1
     def test_setblinds_setUpTable_SBat1(self):
@@ -150,6 +150,21 @@ class TestTable(unittest.TestCase):
         expected = 3
         result = self.t.TOKENS['BB']
         self.assertEqual(expected, result)
+
+    """
+    Tests for set_bringin(index)
+    """
+    # Passed 5, BI token should be 5.
+    def test_setbringin_index5_BItokenis5(self):
+        self.setUp(players=6, setblinds=False)
+        self.t.set_bringin(5)
+        self.assertEqual(self.t.TOKENS['BI'], 5)
+
+    # Passed 5, D token should be 4.
+    def test_setbringin_index5_Dtokenis4(self):
+        self.setUp(players=6, setblinds=False)
+        self.t.set_bringin(5)
+        self.assertEqual(self.t.TOKENS['D'], 4)
 
     """
     Tests for add_player()
