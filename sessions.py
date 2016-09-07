@@ -88,8 +88,9 @@ class Stud5Session(Session):
                 r.deal_cards(1, faceup=True)
 
                 # The bringin determines the first bettor.
-                bring = poker.bringin(r._table)
-                print('Bringin is {}'.format(r._table.seats[bring]))
+                print(r.post_bringin())
+                #  bring = poker.bringin(r._table)
+                #  print('Bringin is {}'.format(r._table.seats[bring]))
             else:
                 r.deal_cards(1, faceup=True)
                 high = poker.highhand(r._table, r.gametype)
