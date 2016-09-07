@@ -110,10 +110,11 @@ class Round():
         returns a string describing what the blinds posted.
         """
         bringin_index = bringin(self._table)
+        self._table.set_bringin(bringin_index)
         plyr = self._table.seats[bringin_index]
 
         # Set the BI token on the table.
-        self._table.TOKENS['BI'] = self._table.get_index(bringin_index)
+        #  self._table.TOKENS['BI'] = self._table.get_index(bringin_index)
 
         # Bet the Bringin amount and add to the pot
         bringin_cost = self.blinds.BRINGIN - self.invested(plyr)

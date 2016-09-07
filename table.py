@@ -41,6 +41,8 @@ class Table():
                 _str += colors.color('{:7}'.format('[SB]'), 'lightblue')
             elif self.TOKENS['BB'] == i:
                 _str += colors.color('{:7}'.format('[BB]'), 'blue')
+            elif self.TOKENS['BI'] == i:
+                _str += colors.color('{:7}'.format('[BI]'), 'lightblue')
             else:
                 _str += ' '*7
 
