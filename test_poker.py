@@ -46,7 +46,7 @@ class TestPoker(unittest.TestCase):
     Tests for deal_cards(qty, faceup=False)
     """
     # 6 players, deal 1 - should be 6 cardholders
-    def test_dealcards_deal1to6players_6cardholders(self):
+    def test_dealcards_deal1_6cardholders(self):
         self.r._table.move_button()
         self.r._table.set_blinds()
         self.r.deal_cards(1)
@@ -55,14 +55,14 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # 6 players, deal 1 - decksize == 48
-    def test_dealcards_deal1to6players_decksize48(self):
+    def test_dealcards_deal1_decksize48(self):
         self.r.deal_cards(1)
         expected = 46
         result = len(self.r.d)
         self.assertEqual(expected, result)
 
     # 6 players, deal 1 (no keyword arg) - cards are hidden
-    def test_dealcards_deal1to6players_cardsarehidden(self):
+    def test_dealcards_deal1_cardsarehidden(self):
         self.r.deal_cards(1)
         for s in self.r._table:
             expected = 0
@@ -70,10 +70,17 @@ class TestPoker(unittest.TestCase):
             self.assertEqual(expected, result)
 
     # 6 players, deal 1 (faceup=True) - cards are faceup
-    def test_dealcards_deal1to6players_faceup_cardsarenothidden(self):
+    def test_dealcards_deal1_faceup_cardsarenothidden(self):
         self.r.deal_cards(1, faceup=True)
         for s in self.r._table:
             self.assertFalse(s._hand.cards[0].hidden)
+
+    # 5 players have cards, deal only to those that still have cards
+    def test_dealcards_deal6deal5toands_deckis41cards(self):
+        self.r.deal_cards(1)  # Deal 6 cards
+        self.r._table.seats[0].fold()
+        self.r.deal_cards(1, handreq=True)  # Deal 5 cards
+        self.assertEqual(len(self.r.d), 41)
 
     """
     Tests show_cards()

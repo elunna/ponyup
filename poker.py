@@ -34,13 +34,15 @@ class Round():
         _str += colors.color('${}'.format(self.pot), 'yellow')
         return _str.rjust(84)
 
-    def deal_cards(self, qty, faceup=False):
+    def deal_cards(self, qty, faceup=False, handreq=False):
         """
         Deal the specified quantity of cards to each player. If faceup is True, the cards are
         dealt face-up, otherwise they are face-down.
         """
         for i in range(qty):
             for p in self._table:
+                if handreq and not p.has_cards():
+                    continue
                 c = self.d.deal()
                 if faceup is True:
                     c.hidden = False
