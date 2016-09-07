@@ -123,6 +123,9 @@ class Draw5Session(Session):
         DEALT = 5
         r = self.new_round()
         r.check_integrity_pre()
+
+        r._table.move_button()
+        r._table.set_blinds()
         r.post_blinds()
         r.deal_cards(DEALT)
         r.sortcards()
@@ -149,5 +152,4 @@ class Draw5Session(Session):
             r.showdown()
 
         r.cleanup()
-        self._table.move_button()
         self.rounds += 1

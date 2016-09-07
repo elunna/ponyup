@@ -48,6 +48,7 @@ class TestPoker(unittest.TestCase):
     # 6 players, deal 1 - should be 6 cardholders
     def test_dealcards_deal1to6players_6cardholders(self):
         self.r._table.move_button()
+        self.r._table.set_blinds()
         self.r.deal_cards(1)
         expected = 6
         result = len(self.r._table.get_players(hascards=True))
@@ -98,6 +99,7 @@ class TestPoker(unittest.TestCase):
     # 6 players, deal 1 - no cardholders after running
     def test_muckallcards_cardsmucked_nocardholders(self):
         self.r._table.move_button()
+        self.r._table.set_blinds()
         self.r.deal_cards(1)
         self.r.muck_all_cards()
         expected = 0
@@ -107,6 +109,7 @@ class TestPoker(unittest.TestCase):
     # 6 players, deal 1 - verify_muck is True after running
     def test_muckallcards_cardsmucked_verifymuckreturnsTrue(self):
         self.r._table.move_button()
+        self.r._table.set_blinds()
         self.r.deal_cards(1)
         self.r.muck_all_cards()
         expected = True
@@ -179,6 +182,7 @@ class TestPoker(unittest.TestCase):
             self.r._table.remove_player(i)
         self.r._table.TOKENS['D'] = -1
         self.r._table.move_button()  # verify the button is 0
+        self.r._table.set_blinds()
         self.assertEqual(self.r._table.TOKENS['D'], 0)
         self.r.post_blinds()
         self.assertEqual(self.r._table.seats[0].chips, 999)
@@ -192,6 +196,7 @@ class TestPoker(unittest.TestCase):
 
         self.r._table.TOKENS['D'] = -1
         self.r._table.move_button()  # verify the button is 0
+        self.r._table.set_blinds()
         self.assertEqual(self.r._table.TOKENS['D'], 0)
         self.r.post_blinds()
         self.assertEqual(self.r._table.seats[2].chips, 999)
@@ -202,6 +207,7 @@ class TestPoker(unittest.TestCase):
     def test_postblinds_6players_pot3(self):
         self.r._table.TOKENS['D'] = -1
         self.r._table.move_button()
+        self.r._table.set_blinds()
         self.assertEqual(self.r._table.TOKENS['D'], 0)  # verify the button is 0
         self.r.post_blinds()
         self.assertEqual(self.r._table.seats[1].chips, 999)
@@ -213,6 +219,7 @@ class TestPoker(unittest.TestCase):
         self.setUp(level=2)
         self.r._table.TOKENS['D'] = -1
         self.r._table.move_button()
+        self.r._table.set_blinds()
         self.assertEqual(self.r._table.TOKENS['D'], 0)  # verify the button is 0
         expected = 'bob1 posts $1\nbob2 posts $2\n'
         result = self.r.post_blinds()
@@ -513,6 +520,7 @@ class TestPoker(unittest.TestCase):
     # All cards mucked, but 1 player w cards, returns False
     def test_checkintegritypost_1playerwithcards_returnsFalse(self):
         self.r._table.move_button()
+        self.r._table.set_blinds()
         self.r.muck_all_cards()
         c = card.Card('A', 's')
         self.r._table.seats[0].add_card(c)

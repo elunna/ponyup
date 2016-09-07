@@ -12,6 +12,7 @@ class TestBetting(unittest.TestCase):
     def setUp(self, level=2, players=6, street=1):
         g = testtools.draw5_session(level, players)
         g._table.move_button()
+        g._table.set_blinds()
         self.assertEqual(g._table.TOKENS['D'], 0)  # verify the button is 0
         self.r = g.new_round()
 
@@ -27,6 +28,7 @@ class TestBetting(unittest.TestCase):
         # Sets seat 1(we'll use as the SB) as the short stack amount for easy testing.
         g._table.seats[1].chips = shortstack
         g._table.move_button()
+        g._table.set_blinds()
         self.assertEqual(g._table.TOKENS['D'], 0)  # verify the button is 0
         self.r = g.new_round()
 

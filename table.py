@@ -154,6 +154,7 @@ class Table():
         """
         self.TOKENS['D'] = self.next_player(self.TOKENS['D'])
 
+    def set_blinds(self):
         if len(self.get_players()) == 2:
             self.TOKENS['SB'] = self.TOKENS['D']
             self.TOKENS['BB'] = self.next_player(self.TOKENS['D'])
@@ -162,6 +163,9 @@ class Table():
             self.TOKENS['BB'] = self.next_player(self.TOKENS['SB'])
         else:
             raise ValueError('Not enough players at the table!')
+
+    def set_bringin(self, index):
+        pass
 
     def randomize_button(self):
         """

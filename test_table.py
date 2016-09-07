@@ -10,8 +10,18 @@ class TestTable(unittest.TestCase):
     """
     Setup a table filled with 6 players for testing.
     """
-    def setUp(self):
-        self.t = table_factory.BobTable(6)
+    def setUp(self, players=6, removed=None, btn_moved=1, setblinds=False):
+        self.t = table_factory.BobTable(players)
+
+        if removed is not None:
+            self.t.remove_player(removed)
+            self.assertEqual(self.t.seats[removed], None)
+
+        for i in range(btn_moved):
+            self.t.move_button()
+
+        if setblinds:
+            self.t.set_blinds()
 
     """
     Tests for __init__ and table construction
@@ -24,21 +34,36 @@ class TestTable(unittest.TestCase):
     def test_init_invalidtablesize11_throwException(self):
         self.assertRaises(ValueError, table.Table, '11')
 
-    # initialized with valid seat count
-    def test_init_validtablesize_validSize(self):
-        t = table.Table(6)
-        expected = 6
-        result = len(t)
+    def test_Dtoken_newTable_returnsNeg1(self):
+        t = table_factory.BobTable(6)
+        expected = -1
+        result = t.TOKENS['D']
+        self.assertEqual(expected, result)
+
+    def test_SBtoken_newTable_returnsNeg1(self):
+        expected = -1
+        result = self.t.TOKENS['SB']
+        self.assertEqual(expected, result)
+
+    def test_BBtoken_newTable_returnsNeg1(self):
+        expected = -1
+        result = self.t.TOKENS['BB']
+        self.assertEqual(expected, result)
+
+    def check_btn(self, b):
+        self.t.move_button()
+        expected = b
+        result = self.t.TOKENS['D']
         self.assertEqual(expected, result)
 
     """
     Tests for __len__()
     """
-    # Also tested in the init and add/remove player tests.
-    def test_len_lenOfSetupTable_returns6(self):
+    def test_len_newTable_returns6(self):
         expected = 6
         result = len(self.t)
         self.assertEqual(expected, result)
+
     """
     Tests for __str__()
     """
@@ -49,14 +74,14 @@ class TestTable(unittest.TestCase):
     Tests for __iter__(), __next__() # needed?
     """
     # Test that the table iterates through few players in order, full table
-    def test_next_setUpTable_getsseat0(self):
+    def test_next_newTable_getsseat0(self):
         expected = 'bob0'
         iterator = self.t.__iter__()
         result = str(iterator.__next__())
         self.assertEqual(expected, result)
 
     # Test that it goes to the next player.
-    def test_next2_setUpTable_getsseat1(self):
+    def test_next2_newTable_getsseat1(self):
         expected = 'bob1'
         iterator = self.t.__iter__()
         iterator.__next__()
@@ -65,77 +90,62 @@ class TestTable(unittest.TestCase):
 
     # Iter should skip over an empty seat
     def test_next_removedseat0_getsseat1(self):
-        self.t.remove_player(0)
+        self.setUp(removed=0)
         expected = 'bob1'
         iterator = self.t.__iter__()
         result = str(iterator.__next__())
         self.assertEqual(expected, result)
 
     """
-    Tests for btn(), move_button()
+    Tests for move_button()
     """
-    # A new table should have the button set to -1
-    def test_btn_setUpTable_returnsNeg1(self):
-        expected = -1
-        result = self.t.TOKENS['D']
-        self.assertEqual(expected, result)
-
     # New table, moving button once should go from -1 to 0.
-    def test_movebutton_setUpTable_returns0(self):
+    def test_movebutton_newTable_returns0(self):
         expected = 0
-        self.t.move_button()
         result = self.t.TOKENS['D']
         self.assertEqual(expected, result)
 
     # New table(without seat 0), moving button once should go from -1 to 1
     def test_movebutton_seat0removed_returns1(self):
+        self.setUp(removed=0)
         expected = 1
-        self.t.remove_player(0)
-        self.t.move_button()
         result = self.t.TOKENS['D']
         self.assertEqual(expected, result)
 
-    def test_movebutton_fulltableof6(self):
-        tablesize = len(self.t)
-        # Note: I wanted to use a generator to make the test cases here, but didn't work yet.
-        for i in range(tablesize):
-            self.check_btn(i)
-
-    def check_btn(self, b):
-        self.t.move_button()
-        expected = b
+    def test_movebutton_2x_returns1(self):
+        self.setUp(btn_moved=2)
+        expected = 1
         result = self.t.TOKENS['D']
         self.assertEqual(expected, result)
 
+    """
+    Tests for add_player()
+    """
     # New table: Button at 0, sb should be at 1
-    def test_movebutton_setUpTable_SBat1(self):
+    def test_setblinds_setUpTable_SBat1(self):
+        self.setUp(btn_moved=1, setblinds=True)
         expected = 1
-        self.t.move_button()
         result = self.t.TOKENS['SB']
         self.assertEqual(expected, result)
 
     # New table(seat 1 removed): Button at 0, sb should be at 2
-    def test_movebutton_seat1removed_SBat2(self):
+    def test_setblinds_seat1removed_SBat2(self):
+        self.setUp(removed=1, btn_moved=1, setblinds=True)
+        self.t.set_blinds()
         expected = 2
-        self.t.remove_player(1)
-        self.t.move_button()
         result = self.t.TOKENS['SB']
         self.assertEqual(expected, result)
 
     # New table: Button at 0, bb should be at 2
-    def test_movebutton_setUpTable_BBat2(self):
-        self.t.move_button()
-        # Confirm btn is at 0
-        self.assertEqual(self.t.TOKENS['D'], 0, "button ain't right")
+    def test_setblinds_setUpTable_BBat2(self):
+        self.setUp(setblinds=True)
         expected = 2
         result = self.t.TOKENS['BB']
         self.assertEqual(expected, result)
 
     # New table(seat 2 removed): Button at 0, bb should be at 3
-    def test_movebutton_seat2removed_BBat3(self):
-        self.t.remove_player(2)
-        self.t.move_button()
-        # Confirm btn is at 0
+    def test_setblinds_seat2removed_BBat3(self):
+        self.setUp(removed=2, setblinds=True)
         self.assertEqual(self.t.TOKENS['D'], 0, "button ain't right")
         expected = 3
         result = self.t.TOKENS['BB']
@@ -288,14 +298,14 @@ class TestTable(unittest.TestCase):
     """
     # 1 player with cards. Button is -1. Raises Exception
     def test_getplayers_withcards_seat0hascards_raiseException(self):
+        self.setUp(setblinds=True)
         c = card.Card('A', 's')
         self.t.seats[0].add_card(c)
         self.assertRaises(Exception, self.t.get_players(hascards=True))
 
     # 1 player with cards. Button moved to 0. Returns the player
     def test_getplayers_withcards_btn0_seat0hascards_returnsPlayer(self):
-        self.t.move_button()
-        # Make sure the btn is at 0
+        self.setUp(setblinds=True)
         self.assertTrue(self.t.TOKENS['D'] == 0)
 
         c = card.Card('A', 's')
@@ -307,38 +317,31 @@ class TestTable(unittest.TestCase):
     # 2 player with cards. Button moved to 0. Returns the player
     # Since it's heads up, the sb/btn(0) should be first in the returned list
     def test_getplayers_withcards_btn0_seat0and1hascards_return0(self):
-        t = table_factory.BobTable(2)
-        t.move_button()
-        self.assertEqual(t.TOKENS['D'], 0)  # Make sure the btn is at 0
-        self.assertEqual(t.TOKENS['SB'], 0)  # Make sure the sb is at 0.
+        self.setUp(players=2, setblinds=True)
+        self.assertEqual(self.t.TOKENS['D'], 0)  # Make sure the btn is at 0
+        self.assertEqual(self.t.TOKENS['SB'], 0)  # Make sure the sb is at 0.
 
-        testtools.deal_random_cards(t)
-        expected = t.seats[0]
-        result = t.get_players(hascards=True)[0]
+        testtools.deal_random_cards(self.t)
+        expected = self.t.seats[0]
+        result = self.t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
 
     # 2 player with cards. Button moved to 0. Returns the player
     # Since it's heads up, the sb/btn(0) should be first in the returned list
     def test_getplayers_withcards_btn1_seat0and1hascards_return1(self):
-        t = table_factory.BobTable(2)
-        t.move_button()
-        t.move_button()
-        # Make sure the btn is at 1
-        self.assertEqual(t.TOKENS['D'], 1)
-        # Make sure the sb is at 1.
-        self.assertEqual(t.TOKENS['SB'], 1)
-        testtools.deal_random_cards(t)
+        self.setUp(players=2, btn_moved=2, setblinds=True)
+        self.assertEqual(self.t.TOKENS['D'], 1)
+        self.assertEqual(self.t.TOKENS['SB'], 1)
+        testtools.deal_random_cards(self.t)
 
-        expected = t.seats[1]
-        result = t.get_players(hascards=True)[0]
+        expected = self.t.seats[1]
+        result = self.t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
 
     # 6 players with cards, Button at 0. Returns list with seat 1 first.
     def test_getplayers_withcards_6havecards_btn0_seat1first(self):
-        self.t.move_button()
-        # Make sure the btn is at 0
+        self.setUp(setblinds=True)
         self.assertEqual(self.t.TOKENS['D'], 0)
-
         testtools.deal_random_cards(self.t)
 
         expected = self.t.seats[1]
@@ -347,19 +350,18 @@ class TestTable(unittest.TestCase):
 
     # 6 players with cards, Button at 5. Returns list with seat 0 first.
     def test_getplayers_withcards_6havecards_btn5_seat0first(self):
-        self.t.TOKENS['BTN'] = 4
-        self.t.move_button()
-        # Make sure the btn is at 0
-        self.assertEqual(self.t.TOKENS['D'], 0)
+        self.setUp()
+        self.t.TOKENS['D'] = 5
+        self.t.set_blinds()
 
         testtools.deal_random_cards(self.t)
-        expected = self.t.seats[1]
+        expected = self.t.seats[0]
         result = self.t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
 
     # 6 players with cards, Button at 0. Returns list that's size 6.
     def test_getplayers_withcards_6havecards_lengthis6(self):
-        self.t.move_button()
+        self.setUp(setblinds=True)
         testtools.deal_random_cards(self.t)
         expected = 6
         result = len(self.t.get_players(hascards=True))
@@ -387,8 +389,8 @@ class TestTable(unittest.TestCase):
 
     # Empty seat between 0 and 2, returns 1
     def test_nextplayer_from0_seat1empty_return2(self):
+        self.setUp(removed=1)
         seat = 0
-        self.t.remove_player(1)
         expected = 2
         result = self.t.next_player(seat)
         self.assertEqual(expected, result)
@@ -402,8 +404,8 @@ class TestTable(unittest.TestCase):
 
     # Empty seat between 4 and 0, returns 5
     def test_nextplayer_negativestep_seat5empty_from0_returnSeat5(self):
+        self.setUp(removed=5)
         seat = 0
-        self.t.remove_player(5)
         expected = 4
         result = self.t.next_player(seat, -1)
         self.assertEqual(expected, result)
@@ -461,18 +463,20 @@ class TestTable(unittest.TestCase):
     """
     # 6 seat table, seat 0 has cards - from 0, returns 0
     def test_nextplayer_withcards_from0_seat0hascards_return0(self):
-        t = table.Table(6)
         c = card.Card('A', 's')
         self.t.seats[0].add_card(c)
-        seat = 0
-        self.assertRaises(Exception, t.next_player, seat)
+        from_seat = 0
+        expected = 0
+        result = self.t.next_player(from_seat, hascards=True)
+        self.assertEqual(expected, result)
 
     # 6 seat table, seat 0 has cards - from 1, returns 0
     def test_nextplayer_withcards_from1_seat0hascards_return0(self):
         c = card.Card('A', 's')
         self.t.seats[0].add_card(c)
+        from_seat = 1
         expected = 0
-        result = self.t.next_player(1, hascards=True)
+        result = self.t.next_player(from_seat, hascards=True)
         self.assertEqual(expected, result)
 
     # 6 seat table, no cards - raise exception
@@ -482,9 +486,7 @@ class TestTable(unittest.TestCase):
 
     # Full table - all w cards. btn at 0. From 0 returns 1.
     def test_nextplayer_withcards_fulltable_from0_return1(self):
-        # Button should be at -1 for self.t
-        self.t.move_button()
-        # Button should be at 0 after move.
+        self.assertEqual(self.t.TOKENS['D'], 0)
         testtools.deal_random_cards(self.t, qty=1)
         from_seat = 0
         expected = 1
@@ -493,7 +495,6 @@ class TestTable(unittest.TestCase):
 
     # Full table - seat 3 has cards. btn at 0. From 0 returns 3.
     def test_nextplayer_withcards_seat3hascards_from0_return3(self):
-        self.t.move_button()
         c = card.Card('A', 's')
         self.t.seats[3].add_card(c)
         from_seat = 0
@@ -503,10 +504,7 @@ class TestTable(unittest.TestCase):
 
     # Full table - all w cards. btn at 0. From 0 returns 5. Negative step
     def test_nextplayer_withcards_fulltable_negstep_from0_return5(self):
-        # Button should be at -1 for self.t
-        self.t.move_button()
-        # Button should be at 0 after move.
-
+        self.assertEqual(self.t.TOKENS['D'], 0)
         # Give everyone cards
         testtools.deal_random_cards(self.t, qty=1)
         from_seat = 0
@@ -516,7 +514,6 @@ class TestTable(unittest.TestCase):
 
     # Full table - seat 3 has cards. btn at 0. negative step. From 0 returns 4.
     def test_nextplayer_withcards_seat4hascards_negstep_from0_return4(self):
-        self.t.move_button()
         c = card.Card('A', 's')
         self.t.seats[4].add_card(c)
         from_seat = 0
@@ -555,26 +552,27 @@ class TestTable(unittest.TestCase):
     # Randomize button on table size 2, button is in range 0-1
     def test_randomizebutton_2seats_inrange0to1(self):
         seats = 2
-        t = table_factory.BobTable(seats)
-        t.randomize_button()
-        result = t.TOKENS['D'] >= 0 and t.TOKENS['D'] < seats
+        self.setUp(players=seats)
+        self.t.randomize_button()
+        btn = self.t.TOKENS['D']
+        result = (btn >= 0) and (btn < seats)
         self.assertTrue(result)
 
     # Randomize button on table size 6, button is in range 0-5
 
     def test_randomizebutton_6seats_inrange0to5(self):
         seats = 6
-        t = table_factory.BobTable(seats)
-        t.randomize_button()
-        result = t.TOKENS['D'] >= 0 and t.TOKENS['D'] < seats
+        self.setUp(players=seats)
+        self.t.randomize_button()
+        result = self.t.TOKENS['D'] >= 0 and self.t.TOKENS['D'] < seats
         self.assertTrue(result)
 
     # Randomize button on table size 9, button is in range 0-8
     def test_randomizebutton_9seats_inrange0to8(self):
         seats = 9
-        t = table_factory.BobTable(seats)
-        t.randomize_button()
-        result = t.TOKENS['D'] >= 0 and t.TOKENS['D'] < seats
+        self.setUp(players=seats)
+        self.t.randomize_button()
+        result = self.t.TOKENS['D'] >= 0 and self.t.TOKENS['D'] < seats
         self.assertTrue(result)
 
     # Randomize button on table size 9, but no players
