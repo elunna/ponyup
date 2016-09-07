@@ -226,7 +226,7 @@ class BettingRound():
         return bet
 
     def get_betlevel(self):
-        return self.bet // self.betsize
+        return int(self.bet // self.betsize)
 
     def get_bettor(self):
         """
