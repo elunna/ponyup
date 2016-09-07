@@ -589,8 +589,17 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # Stud: The bringin has posted. The next player needs to pay the current bet.
+
+    # Level 1, the ante is $0.25, and bringin is $0.50.
+    def test_getbet_lev1bringin_returns50c(self):
+        self.setUp_studGame(level=1)
+        self.r.post_bringin()
+        expected = 0.50
+        result = self.br.get_bet()
+        self.assertEqual(expected, result)
+
     # Level 2, the ante is $0.50, and bringin is $1.
-    def test_getbet_bringin_returns1(self):
+    def test_getbet_lev2bringin_returns1(self):
         self.setUp_studGame(level=2)
         self.r.post_bringin()
         expected = 1

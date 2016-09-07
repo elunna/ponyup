@@ -81,8 +81,11 @@ class Round():
         """
         All players bet the ante amount and it's added to the pot.
         """
+        actions = ''
         for p in self._table:
+            actions += '{} posts a {} ante.'.format(p, self.blinds.ANTE)
             self.pot += p.bet(self.blinds.ANTE)
+        return actions
 
     def post_blinds(self):
         """
@@ -119,8 +122,7 @@ class Round():
         #  self._table.TOKENS['BI'] = self._table.get_index(bringin_index)
 
         # Bet the Bringin amount and add to the pot
-        bringin_cost = self.blinds.BRINGIN - self.invested(plyr)
-        self.pot += plyr.bet(bringin_cost)
+        self.pot += plyr.bet(self.blinds.BRINGIN)
         action = ''
         action += '{} brings it in for ${}\n'.format(plyr, self.blinds.BRINGIN)
         return action

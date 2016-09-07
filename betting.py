@@ -134,10 +134,13 @@ class BettingRound():
 
         raise_amt = (self.betsize * self.get_betlevel() + self.betsize)
         raise_cost = raise_amt - self.invested(p)
-        #  minimum_bet = self.betsize / 2
+        bet_cost = self.betsize - self.invested(p)
 
         if self.get_betlevel() == 0:
-            if stack >= self.betsize:
+            if bet_cost > 0:
+                # "Completing" the bringin
+                option_dict['b'] = Action('BET', bet_cost)
+            elif stack >= self.betsize:
                 option_dict['b'] = Action('BET', self.betsize)
             else:
                 option_dict['b'] = Action('BET', stack)  # Allin bet
@@ -183,7 +186,14 @@ class BettingRound():
             raise Exception('Error processing the action!')
 
     def invested(self, player):
-        return self.stacks[player.name] - player.chips
+        # Adjust for antes posted. Antes should NOT be counted in the bet amounts.
+        # This only counts for the 1st street, when antes are posted.
+        if self.r.street == 0:
+            return (self.stacks[player.name] - player.chips) - self.r.blinds.ANTE
+        else:
+            return self.stacks[player.name] - player.chips
+
+        #  return self.stacks[player.name] - player.chips
 
     def cost(self, p):
         return self.bet - self.invested(p)
@@ -223,6 +233,9 @@ class BettingRound():
             i = self.invested(p)
             if i > bet:
                 bet = i
+        # Adjust for ante.
+        #  if self.r.street == 0:
+            #  bet - self.r.blinds.ANTE
         return bet
 
     def get_betlevel(self):
