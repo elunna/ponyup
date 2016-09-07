@@ -25,6 +25,8 @@ class Round():
         #  Remember starting stacks of all players
         self.starting_stacks = self._table.stackdict()
 
+        self.check_integrity_pre()
+
     def __str__(self):
         """
         Return info about the current round.

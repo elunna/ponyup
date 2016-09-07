@@ -79,7 +79,6 @@ class Stud5Session(Session):
         Play a round of Five Card Draw.
         """
         r = self.new_round()
-        r.check_integrity_pre()
         r.post_antes()
 
         for s in self.streets:
@@ -125,7 +124,6 @@ class Draw5Session(Session):
         """
         DEALT = 5
         r = self.new_round()
-        r.check_integrity_pre()
         r._table.move_button()
         r._table.set_blinds()
         r.post_blinds()
