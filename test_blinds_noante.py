@@ -1,6 +1,6 @@
 import unittest
 from blinds import Level
-import blinds_noante
+import blinds
 
 
 class TestBlindsNoAnte(unittest.TestCase):
@@ -9,13 +9,13 @@ class TestBlindsNoAnte(unittest.TestCase):
     """
     def setUp(self):
         # Setup the standard no-ante blind structure
-        self.b = blinds_noante.BlindsNoAnte(level=2)
+        self.b = blinds.BlindsNoAnte(level=2)
 
     """
     Tests for __init__
     """
     def test_init_ante_defaultlevel1(self):
-        self.b = blinds_noante.BlindsNoAnte()
+        self.b = blinds.BlindsNoAnte()
         self.assertEqual(self.b.level, 1)
     """
     Tests for __str__()
@@ -54,9 +54,9 @@ class TestBlindsNoAnte(unittest.TestCase):
         self.b.set_level(2)
         blind_tuple = (2, 1)
         expected = Level(2, 1, 0, 0)
-        result = blinds_noante.noante_level(*blind_tuple)
+        result = blinds.noante_level(*blind_tuple)
         self.assertEqual(expected, result)
 
     def test_blind_sizes(self):
-        for level in blinds_noante.no_ante.values():
+        for level in blinds.no_ante.values():
             self.assertTrue(level.SB < level.BB)

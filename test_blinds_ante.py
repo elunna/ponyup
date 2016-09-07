@@ -1,5 +1,5 @@
 import unittest
-import blinds_ante
+import blinds
 
 
 class TestBlindsAnte(unittest.TestCase):
@@ -8,7 +8,7 @@ class TestBlindsAnte(unittest.TestCase):
     """
     def setUp(self):
         # Setup the standard no-ante blind structure
-        self.b = blinds_ante.BlindsAnte()
+        self.b = blinds.BlindsAnte()
 
     """
     Tests for __init__
@@ -51,27 +51,27 @@ class TestBlindsAnte(unittest.TestCase):
     """
     # lev1: ante=0.25, SB=1
     def test_sbtoanteratio_lev1_returns4(self):
-        self.b = blinds_ante.BlindsAnte(level=1)
+        self.b = blinds.BlindsAnte(level=1)
         expected = 4
         result = self.b.sb_to_ante_ratio()
         self.assertEqual(expected, result)
 
     # lev5: ante=1, SB=5
     def test_sbtoanteratio_lev5_returns5(self):
-        self.b = blinds_ante.BlindsAnte(level=5)
+        self.b = blinds.BlindsAnte(level=5)
         expected = 4
         result = self.b.sb_to_ante_ratio()
         self.assertEqual(expected, result)
 
     def test_ante_sizes(self):
-        for level in blinds_ante.ante.values():
+        for level in blinds.ante.values():
             self.assertTrue(level.ANTE < level.BRINGIN)
 
     def test_bringin_sizes(self):
-        for level in blinds_ante.ante.values():
+        for level in blinds.ante.values():
             self.assertTrue(level.BRINGIN < level.SB)
 
     def test_blind_sizes(self):
         # These should be equal and should just represent the "Small Bet" Size.
-        for level in blinds_ante.ante.values():
+        for level in blinds.ante.values():
             self.assertTrue(level.BB == level.BB)

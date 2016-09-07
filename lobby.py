@@ -1,8 +1,6 @@
 from collections import namedtuple
 import table_factory
 import blinds
-import blinds_noante
-import blinds_ante
 import sessions
 
 Game = namedtuple('Game', ['name', 'seats', 'level', 'game'])
@@ -29,9 +27,9 @@ def get_games(L, game):
 
 def stakes(game, lev):
     if game == "FIVE CARD STUD":
-        return blinds.show_stakes(blinds_ante.ante[lev])
+        return blinds.show_stakes(blinds.ante[lev])
     elif game == "FIVE CARD DRAW":
-        return blinds.show_stakes(blinds_noante.no_ante[lev])
+        return blinds.show_stakes(blinds.no_ante[lev])
 
 
 def display_numbered_list(L):
@@ -50,13 +48,13 @@ def session_factory(gametuple, name):
 
     if gametuple.game == "FIVE CARD DRAW":
 
-        NOANTE = blinds_noante.BlindsNoAnte()
+        NOANTE = blinds.BlindsNoAnte()
         g = sessions.Draw5Session(gametuple.game, t, NOANTE)
         t.randomize_button()
         return g
 
     elif gametuple.game == "FIVE CARD STUD":
-        ANTE = blinds_ante.BlindsAnte()
+        ANTE = blinds.BlindsAnte()
         return sessions.Stud5Session(gametuple.game, t, ANTE)
 
 
