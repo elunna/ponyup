@@ -48,13 +48,13 @@ def session_factory(gametuple, name):
 
     if gametuple.game == "FIVE CARD DRAW":
 
-        NOANTE = blinds.BlindsNoAnte()
+        NOANTE = blinds.BlindsNoAnte(gametuple.level)
         g = sessions.Draw5Session(gametuple.game, t, NOANTE)
         t.randomize_button()
         return g
 
     elif gametuple.game == "FIVE CARD STUD":
-        ANTE = blinds.BlindsAnte()
+        ANTE = blinds.BlindsAnte(gametuple.level)
         return sessions.Stud5Session(gametuple.game, t, ANTE)
 
 
