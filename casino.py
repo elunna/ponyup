@@ -55,6 +55,8 @@ def view_combos():
     for i in range(1, 52):
         print('{} card: {} combos '.format(i, combos.n_choose_k(52, i)))
 
+    input('Press any key to continue...')
+
 
 def pick_name():
     print('Please enter your username.')
@@ -100,7 +102,7 @@ def play_poker():
         if choice.lower() == 'n' or choice == 0:
             playing = False
 
-    exit()
+    return
 
 
 def exitgracefully():
@@ -119,6 +121,6 @@ if __name__ == "__main__":
 
         if choice in options:
             exec(options[choice][1])
-            input('Press any key to continue...')
         else:
             print('Not a valid option!')
+            input('Press any key to continue...')
