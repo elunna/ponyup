@@ -373,6 +373,13 @@ class Round():
         if not self.check_integrity_post():
             raise Exception('Integrity of game could not be verified after round was complete!')
 
+    def one_left(self):
+        cardholders = self._table.get_players(hascards=True)
+        if len(cardholders) == 1:
+            return cardholders.pop()
+        else:
+            return None
+
 
 def bringin(table):
     """

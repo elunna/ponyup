@@ -810,11 +810,3 @@ class TestBetting(unittest.TestCase):
     """
     Tests for spacing()
     """
-
-    """
-    Tests for one_left()
-    """
-    def test_oneleft_allhavecards_returnsNone(self):
-        expected = None
-        result = betting.one_left(self.r._table)
-        self.assertEqual(expected, result)

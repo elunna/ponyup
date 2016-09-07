@@ -588,6 +588,30 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for one_left()
+    """
+    def test_oneleft_allhavecards_returnsNone(self):
+        self.setUp(players=2)
+        self.r.deal_cards(1)
+        expected = None
+        result = self.r.one_left()
+        self.assertEqual(expected, result)
+
+    def test_oneleft_1withcards_returnsvictor(self):
+        self.setUp(players=2)
+        self.r.deal_cards(1)
+        self.r._table.remove_player(0)
+        victor = self.r._table.seats[1]
+        expected = victor
+        result = self.r.one_left()
+        self.assertEqual(expected, result)
+
+    """
+    Tests for chk_victor()
+    """
+    # One player left. They get the pot.
+
+    """
     Tests for bring(table, gametype):
     """
     # Stud5 deal: seat 5 has lowest card, 9

@@ -40,7 +40,7 @@ class BettingRound():
         while True:
             yield self.get_bettor()
 
-            if one_left(self.r._table) or self.done():
+            if self.r.one_left() or self.done():
                 raise StopIteration()
             else:
                 self.next_bettor()
@@ -290,11 +290,3 @@ def spacing(level):
     Spaces the player actions by the current bet level.
     """
     return '  ' * level
-
-
-def one_left(table):
-    cardholders = table.get_players(hascards=True)
-    if len(cardholders) == 1:
-        return cardholders.pop()
-    else:
-        return None

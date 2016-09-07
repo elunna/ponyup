@@ -62,15 +62,17 @@ class Session():
             if self.options['debug']:
                 print('Bet: {} Betlevel: {}'.format(br.bet, br.get_betlevel()))
 
-        print(_round)           # Display pot
-
-        victor = betting.one_left(_round._table)
-        if victor:
-            oneleft = '{}Only one player left!'.format(betting.spacing(br.get_betlevel()))
-            print(colors.color(oneleft, 'LIGHTBLUE'))
-            return victor
+    def found_winner(self, _round):
+        victor = _round.one_left()
+        if victor is None:
+            _round.next_street()
+            return False
         else:
-            return None
+            # One player left, award them the pot!
+            oneleft = 'Only one player left!'.rjust(70)
+            print(colors.color(oneleft, 'LIGHTBLUE'))
+            _round.award_pot(victor, _round.pot)
+            return True
 
 
 class Stud5Session(Session):
@@ -89,8 +91,6 @@ class Stud5Session(Session):
 
                 # The bringin determines the first bettor.
                 print(r.post_bringin())
-                #  bring = poker.bringin(r._table)
-                #  print('Bringin is {}'.format(r._table.seats[bring]))
             else:
                 r.deal_cards(1, faceup=True)
                 high = poker.highhand(r._table, r.gametype)
@@ -102,14 +102,10 @@ class Stud5Session(Session):
                         r._table.seats[high[0]]))
 
             print(self._table)
-            victor = self.betting_round(r)
+            self.betting_round(r)
             print(r)           # Display pot
 
-            if victor is None:
-                r.next_street()
-            else:
-                # One player left, award them the pot!
-                r.award_pot(victor, r.pot)
+            if self.found_winner(r):
                 break
         else:
             r.showdown()
@@ -141,13 +137,9 @@ class Draw5Session(Session):
                 # print table after discarding and drawing
                 print(self._table)
 
-            victor = self.betting_round(r)
+            self.betting_round(r)
 
-            if victor is None:
-                r.next_street()
-            else:
-                # One player left, award them the pot!
-                r.award_pot(victor, r.pot)
+            if self.found_winner(r):
                 break
         else:
             r.showdown()
