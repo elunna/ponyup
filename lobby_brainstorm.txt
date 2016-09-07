@@ -1,0 +1,72 @@
+
+
+# Meh
+'Foal Mountain'
+'Tall Tale'
+'Smokey Mountains'
+'Flame Geyser Swamp'
+
+Game('Canterlot High School')
+Game('Train Station', ),
+Game('Town Hall', ),
+Game('Cafe Hay', ),
+Game('Bookshop', ),
+Game('Bowling Alley', ),
+Game('Joke Shop', ),
+Game('The Pie Farm', ),
+Game('Hay\'s Hardware', ),
+Game('Castle of the Two Sisters', ),
+Game('Castle of Friendship', ),
+Game('Crystal Palace', ),
+Game('Ponyville Day Spa', ),
+'Aquastria'
+'Abyssinia'
+'Celestial Sea'
+'Guto River'
+'Horseshoe Bay'
+'Luna Bay'
+'Luna Ocean'
+'Ursa Major'
+'Ursa Minor'
+'Canis Major'
+'Canis Minor'
+'Horsehead Nebula'
+'Frozen North'
+'Macintosh Hills"
+'Badlands'
+'Hayseed Swamps'
+
+
+# I'll save the city names for hold'em
+Game('San Franciscolt', ),
+Game('Seaddle', ),
+Game('Trottingham', ),
+Game('Applewood')
+Game('Winneapolis', ),
+Game('Vanhoover', ),
+Game('Saddle Arabia', ),
+Game('Mustangia', ),
+Game('Neighagra Falls', ),
+Game('Manehattan', ),
+Game('Foaledo', ),
+Game('Hoofington', ),
+Game('Manechester', ),
+Game('Las Pegasus', ),
+Game('Baltimare', ),
+Game('Griffonstone', ),
+Game('Yakyakistan', ),
+Game('Cloudsdale', ),
+Game('Ponyville', ),
+Game('Crystal Empire', ),
+Game('Our Town', ),
+Game('Canterlot', ),
+Game('Appleloosa', ),
+Game('Fillydelphia', ),
+Game('Chaosville',
+     'Maretonia'
+     'Hoof City'
+     'Pinto Creek'
+     'Flash Freeze Lake'
+     'Puerto Caballo'
+    'Canterine'
+"""
