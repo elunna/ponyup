@@ -127,7 +127,7 @@ class Draw5Session(Session):
         r = self.new_round()
         r._table.move_button()
         r._table.set_blinds()
-        r.post_blinds()
+        print(r.post_blinds())
         r.deal_cards(DEALT)
         r.sortcards()
 
