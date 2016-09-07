@@ -1,4 +1,8 @@
 from collections import namedtuple
+import table_factory
+import blinds_noante
+import blinds_ante
+import sessions
 
 Game = namedtuple('Game', ['name', 'seats', 'level', 'game'])
 
@@ -6,6 +10,8 @@ Game = namedtuple('Game', ['name', 'seats', 'level', 'game'])
 This lobby listing is a list of all the available cash tables a pony can play
 at. Each has: Table name, seats, stakes level, game type.
 """
+
+# 'CMC Clubhouse' in [n.name for n in l]
 
 
 def sort_by_name(L):
@@ -19,8 +25,32 @@ def sort_by_level(L):
 def get_games(L, game):
     return [x for x in L if x.game == game]
 
+
+def display_numbered_list(L):
+    _str = ''
+    fmt_str = '{:4}: {:25} {:9} {:6} {}\n'
+    print(fmt_str.format('', 'Table Name', 'Stakes', 'Seats', 'Game'))
+    for i, k in enumerate(L):
+        _str += (fmt_str.format(i, k.name, k.level, k.seats, k.game))
+    return _str
+
+
+def session_factory(gametuple, name):
+    t = table_factory.HeroTable(gametuple.seats, name, gametuple.game)
+
+    if gametuple.game == "FIVE CARD DRAW":
+        BLINDS = blinds_noante.BlindsNoAnte(gametuple.level)
+        g = sessions.Draw5Session(gametuple.game, t, BLINDS)
+        t.randomize_button()
+        return g
+
+    elif gametuple.game == "FIVE CARD STUD":
+        BLINDS = blinds_ante.BlindsAnte(gametuple.level)
+        return sessions.Stud5Session(gametuple.game, t, BLINDS)
+
+
 # TABLENAME | TABLE SIZE | STAKES | GAME
-lobby = (
+tables = (
     # Headsup
     Game('Twilight\'s Balloon', seats=2, level=1, game="FIVE CARD DRAW"),
     Game('Rainbow Dash\'s House', seats=2, level=2, game="FIVE CARD DRAW"),

@@ -3,21 +3,12 @@
 from __future__ import print_function
 import colors
 import combos
-import blinds_ante
-import blinds_noante
-import player
+import lobby
 import os
-import sessions
 import sys
-import table
-import table_factory
 
-GAME = 'FIVE CARD DRAW'
-TABLE = 2
-BLINDS = blinds_noante.BlindsNoAnte()
-LEVEL = 10
-NAME = 'Aorist'
-OPPONENT = 'FISH'
+NAME = 'Loose Canon'
+GAME = lobby.tables[0]
 
 # Define menu opions
 options = {}
@@ -25,10 +16,6 @@ options['c'] = ('(C)ombination counts', 'view_combos()')
 options['p'] = ('(P)lay Poker!', 'play_poker()')
 options['n'] = ('(N)ame change', 'pick_name()')
 options['g'] = ('(G)ame change', 'pick_game()')
-options['s'] = ('(S)takes', 'pick_limit(BLINDS)')
-options['t'] = ('(T)able size', 'pick_table()')
-options['m'] = ('(M)enu', 'menu()')
-options['o'] = ('(O)pponent type', 'pick_opp()')
 options['q'] = ('(Q)uit', 'exitgracefully()')
 
 
@@ -53,69 +40,20 @@ def menu():
     print('')
     print('-=- Settings -=-'.center(70))
     print('{:>15}: {}'.format('Playername', NAME))
-    print('{:>15}: {}'.format('Game', GAME))
-    print('{:>15}: {}'.format('Stakes',  BLINDS.stakes()))
-    print('{:>15}: {}'.format('Seats', TABLE))
-    print('{:>15}: {}'.format('Opponent Type', OPPONENT))
+    print('{:>15}: {}'.format('Table Name', GAME.name))
+    print('{:>15}: {}'.format('Game', GAME.game))
+    print('{:>15}: {}'.format('Stakes',  GAME.level))
+    print('{:>15}: {}'.format('Seats', GAME.seats))
     print('')
 
-    #  options = sorted(options.keys())
     for o in sorted(options.keys()):
         print(options[o][0])
 
 
 def view_combos():
-    for i in range(1, 8):
-        print("There are {} combos of {} cards in a standard 52 card deck.".format(
-            combos.n_choose_k(52, i), i))
-
-
-def pick_limit(_blinds):
-    print('Please enter what stakes you want to play:')
-    _blinds.levels()
-
-    while True:
-        choice = int(input(':> '))
-        if choice in _blinds.blind_dict.keys():
-            _blinds.set_level(choice)
-            global LEVEL
-            LEVEL = choice
-            break
-        else:
-            print('Selection not available, try again.')
-
-
-def pick_opp():
-    print('What type of opponent do you want to play:')
-
-    for t in player.TYPES:
-        print(t)
-
-    while True:
-        choice = input(':> ')
-        if choice.upper() in player.TYPES:
-            global OPPONENT
-            OPPONENT = choice.upper()
-            print('You selected {}'.format(OPPONENT))
-            break
-        else:
-            print('Selection not available, try again.')
-
-
-def pick_table():
-    print('What size table do you want to play?')
-    for l in table.VALID_SIZES:
-        print('{}, '.format(l), end='')
-
-    while True:
-        choice = int(input(':> '))
-        if choice in table.VALID_SIZES:
-            print('You selected {}'.format(choice))
-            global TABLE
-            TABLE = int(choice)
-            break
-        else:
-            print('Selection not available, try again.')
+    print("Calculating different possibilities for combinations in a standard 52-card deck:")
+    for i in range(1, 52):
+        print('{} card: {} combos '.format(i, combos.n_choose_k(52, i)))
 
 
 def pick_name():
@@ -132,16 +70,14 @@ def pick_name():
 
 def pick_game():
     print('What game do you want to play?')
-    gamelist = sorted(sessions.GAMES.keys())
-
-    for i, k in enumerate(gamelist):
-        print('{}: {}'.format(i + 1, k))
+    tables = lobby.sort_by_level(lobby.tables)
+    print(lobby.display_numbered_list(tables))
 
     while True:
         choice = int(input(':> '))
-        if choice in list(range(1, len(gamelist) + 1)):
+        if choice in list(range(len(tables))):
             global GAME
-            GAME = gamelist[choice - 1]
+            GAME = tables[choice]
             print('You selected {}'.format(GAME))
             break
         else:
@@ -153,18 +89,7 @@ def play_poker():
 
     print('Initializing new game...\n')
 
-    t = table_factory.HeroTable(TABLE, NAME, GAME)
-    table_factory.change_playertypes(t, OPPONENT)
-
-    if GAME == "FIVE CARD DRAW":
-        BLINDS = blinds_noante.BlindsNoAnte(LEVEL)
-        g = sessions.Draw5Session(GAME, t, BLINDS)
-        t.randomize_button()
-
-    elif GAME == "FIVE CARD STUD":
-        BLINDS = blinds_ante.BlindsAnte(LEVEL)
-        g = sessions.Stud5Session(GAME, t, BLINDS)
-
+    g = lobby.session_factory(GAME, NAME)
     playing = True
 
     while playing:
@@ -184,7 +109,6 @@ def exitgracefully():
 
 
 if __name__ == "__main__":
-    BLINDS.set_level(LEVEL)
 
     while True:
         os.system('clear')
