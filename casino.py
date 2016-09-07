@@ -42,7 +42,7 @@ def menu():
     print('{:>15}: {}'.format('Playername', NAME))
     print('{:>15}: {}'.format('Table Name', GAME.name))
     print('{:>15}: {}'.format('Game', GAME.game))
-    print('{:>15}: {}'.format('Stakes',  GAME.level))
+    print('{:>15}: {}'.format('Stakes',  lobby.stakes(GAME)))
     print('{:>15}: {}'.format('Seats', GAME.seats))
     print('')
 

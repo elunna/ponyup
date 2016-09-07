@@ -25,11 +25,11 @@ def get_games(L, game):
     return [x for x in L if x.game == game]
 
 
-def stakes(game, lev):
-    if game == "FIVE CARD STUD":
-        return blinds.show_stakes(blinds.ante[lev])
-    elif game == "FIVE CARD DRAW":
-        return blinds.show_stakes(blinds.no_ante[lev])
+def stakes(gametuple):
+    if gametuple.game == "FIVE CARD STUD":
+        return blinds.show_stakes(blinds.ante[gametuple.level])
+    elif gametuple.game == "FIVE CARD DRAW":
+        return blinds.show_stakes(blinds.no_ante[gametuple.level])
 
 
 def display_numbered_list(L):
@@ -38,7 +38,7 @@ def display_numbered_list(L):
     print(fmt_str.format('', 'Table Name', 'Stakes', 'Seats', 'Game'))
     for i, k in enumerate(L):
 
-        _stakes = stakes(k.game, k.level)
+        _stakes = stakes(k)
         _str += (fmt_str.format(i, k.name, _stakes, k.seats, k.game))
     return _str
 
