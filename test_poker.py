@@ -537,9 +537,48 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for clear_broke_players()
+    """
+    def test_clearbrokeplayers(self):
+        p = self.r._table.seats[0]
+        p.chips = 0
+        expected = []
+        self.r.clear_broke_players()
+        result = self.r._table.get_broke_players()
+        self.assertEqual(expected, result)
+
+    """
     Tests for cleanup()
     """
     # After cleanup, there should be no broke players.
+    """
+    def test_cleanup(self):
+        self.r.muck_all_cards()
+        expected = False
+        result = self.r.check_integrity_post()
+        self.assertEqual(expected, result)
+    """
+
+    # After cleanup, no players should have cards
+    def test_cleanup_noplayershavecards(self):
+        self.r.muck_all_cards()
+        expected = []
+        result = self.r._table.get_players(hascards=True)
+        self.assertEqual(expected, result)
+
+    # After cleanup, there should be no cards in the deck
+    def test_cleanup_deckisempty(self):
+        self.r.muck_all_cards()
+        expected = True
+        result = self.r.d.is_empty()
+        self.assertEqual(expected, result)
+
+    # After cleanup, the muck size should equal the starting deck size
+    def test_cleanup_muck_deck_sizesequal(self):
+        self.r.muck_all_cards()
+        expected = self.r.DECKSIZE
+        result = len(self.r.muck)
+        self.assertEqual(expected, result)
 
     """
     Tests for bring(table, gametype):

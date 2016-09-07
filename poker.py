@@ -360,15 +360,17 @@ class Round():
 
         return True
 
+    def clear_broke_players(self):
+        broke_players = self._table.get_broke_players()
+        for p in broke_players:
+            self._table.seats.remove(p)
+            print('{} left the table with no money!'.format(p))
+
     def cleanup(self):
         self.muck_all_cards()
-        self.check_integrity_post()
-
-        # Remove broke players
-        broke_players = self._table.remove_broke()
-        if broke_players:
-            for p in broke_players:
-                print('{} left the table with no money!'.format(p))
+        self.clear_broke_players()
+        if not self.check_integrity_post():
+            raise Exception('Integrity of game could not be verified after round was complete!')
 
 
 def bringin(table):
