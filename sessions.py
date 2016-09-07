@@ -34,9 +34,9 @@ class Session():
         """
         Returns the Session info.
         """
-        _str = 'Round: {:<5}\n'.format(self.rounds)
-        stakes = 'Stakes: {}'.format(self.blinds)
-        _str += stakes.rjust(DISPLAYWIDTH)
+        _str = '{} {}'.format(self.blinds.stakes(), self.gametype)
+        rnd_str = 'Round: {:<5}\n'.format(self.rounds)
+        _str += rnd_str.rjust(DISPLAYWIDTH - len(_str))
 
         return _str
 
