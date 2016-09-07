@@ -393,6 +393,54 @@ class TestBetting(unittest.TestCase):
         result = sorted(list(options.keys()))
         self.assertEqual(expected, result)
 
+    # SB is shorty, but only has $2.50, not enough for a real raise.
+    # SB can only BET, not RAISE
+    def test_getoptions_3max_shortSB_cannotRaise(self):
+        self.setUp_shorty(players=3, shortstack=2.50, street=1)
+        next(self.br)  # Button seat 0
+        self.br.process_option(betting.Action('CALL', 2))
+        p = next(self.br)  # SB Seat 1
+        self.assertEqual(self.br.bettor, 1)
+        expected = ['b', 'c', 'f']
+        options = self.br.get_options(p)
+        result = sorted(list(options.keys()))
+        self.assertEqual(expected, result)
+        # Should cost the SB exactly 1.50.
+        self.assertEqual(options['b'].cost, 1.50)
+
+    # SB is shorty, but only has $3.50, just enough for a real raise.
+    def test_getoptions_3max_shortSB_CALLFOLDRAISE(self):
+        self.setUp_shorty(players=3, shortstack=3.50, street=1)
+        next(self.br)  # Button seat 0
+        self.br.process_option(betting.Action('CALL', 2))
+        p = next(self.br)  # SB Seat 1
+        self.assertEqual(self.br.bettor, 1)
+        expected = ['c', 'f', 'r']
+        options = self.br.get_options(p)
+        result = sorted(list(options.keys()))
+        self.assertEqual(expected, result)
+        # Should cost the SB exactly 2.50.
+        self.assertEqual(options['r'].cost, 2.50)
+
+    # SB is shorty, doesn't have enough for a real raise.
+    # Players behind cannot reraise.
+    def test_getoptions_3max_shortSB_BBcannotRaise(self):
+        self.setUp_shorty(players=3, shortstack=2.50, street=1)
+        next(self.br)  # Button seat 0
+        self.br.process_option(betting.Action('CALL', 2))
+        p = next(self.br)  # SB Seat 1
+        self.br.process_option(betting.Action('BET', 1.50))
+        p = next(self.br)  # SB Seat 2
+        self.assertEqual(self.br.bettor, 2)
+        self.assertEqual(self.br.bet, 2.5)
+
+        expected = ['c', 'f', 'r']
+        options = self.br.get_options(p)
+        result = sorted(list(options.keys()))
+        self.assertEqual(expected, result)
+        # Should cost the BB $2 to raise
+        self.assertEqual(options['r'].cost, 2)
+
     """
     Tests for action_string(action)
     """

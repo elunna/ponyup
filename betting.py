@@ -129,27 +129,28 @@ class BettingRound():
                 # Player doesn't have enough for the full call amount
                 option_dict['c'] = Action('CALL', stack)
 
-        minimum_raise = (self.betsize * self.get_betlevel()) + (self.betsize / 2)
-        raise_cost = ((self.betsize * self.get_betlevel()) + self.betsize) - self.invested(p)
+        minraise_amt = self.betsize * self.get_betlevel() + (self.betsize / 2)
+        minraise_cost = minraise_amt - self.invested(p)
 
+        raise_amt = (self.betsize * self.get_betlevel() + self.betsize)
+        raise_cost = raise_amt - self.invested(p)
         #  minimum_bet = self.betsize / 2
-        # Set BET size
+
         if self.get_betlevel() == 0:
-            # Player doesn't have enough for the full bet amount
             if stack >= self.betsize:
                 option_dict['b'] = Action('BET', self.betsize)
             else:
-                option_dict['b'] = Action('BET', stack)
+                option_dict['b'] = Action('BET', stack)  # Allin bet
 
-        # Set RAISE size
         if self.get_betlevel() >= 1 and self.get_betlevel() < self.BETCAP:
-
-            if stack < self.betsize:
-                # Player does not have enough chips for a raise.
-                pass
-            elif stack >= self.betsize * self.get_betlevel() and stack < minimum_raise:
+            if stack < minraise_cost:
                 # They don't qualify for a full raise - it's a bet instead.
-                option_dict['b'] = Action('BET', stack)
+                option_dict['b'] = Action('BET', stack)  # Allin bet
+
+            #  elif self.bet < minraise_amt and stack >= raise_cost:
+                # The current bet cannot be raised, it can be completed with a BET.
+                #  option_dict['b'] = Action('BET', raise_cost)
+
             elif stack >= raise_cost:
                 # They can cover the full cost of the raise.
                 option_dict['r'] = Action('RAISE', raise_cost)
@@ -185,7 +186,7 @@ class BettingRound():
         return self.stacks[player.name] - player.chips
 
     def cost(self, p):
-        return (self.betsize * self.get_betlevel()) - self.invested(p)
+        return self.bet - self.invested(p)
 
     def done(self):
         return self.bettor == self.closer
