@@ -119,7 +119,7 @@ class Round():
         bringin_cost = self.blinds.BRINGIN - self.invested(plyr)
         self.pot += plyr.bet(bringin_cost)
         action = ''
-        action += '{} post bringin ${}\n'.format(plyr, self.blinds.BRINGIN)
+        action += '{} brings it in for ${}\n'.format(plyr, self.blinds.BRINGIN)
         return action
 
     def invested(self, player):

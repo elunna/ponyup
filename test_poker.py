@@ -157,7 +157,7 @@ class TestPoker(unittest.TestCase):
     """
     # Initial stacks=1000. smallbet = 2. Bringin = 1
     # Seat 0
-    def test_postbringin_seat0_has2chipsless(self):
+    def test_postbringin_seat5_has2chipsless(self):
         self.r.blinds = blinds.BlindsAnte(level=2)
         testtools.deal_stud(self.r._table, 2, 0)
         player = self.r._table.seats[poker.bringin(self.r._table)]
@@ -165,6 +165,13 @@ class TestPoker(unittest.TestCase):
         self.r.post_bringin()
         expected = 1
         result = chips - player.chips
+        self.assertEqual(expected, result)
+
+    def test_postbringin_seat5_returnsString(self):
+        self.r.blinds = blinds.BlindsAnte(level=2)
+        testtools.deal_stud(self.r._table, 2, 0)
+        expected = 'bob5 brings it in for $1\n'
+        result = self.r.post_bringin()
         self.assertEqual(expected, result)
 
     """
