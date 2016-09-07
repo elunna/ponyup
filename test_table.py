@@ -342,7 +342,7 @@ class TestTable(unittest.TestCase):
         self.assertEqual(self.t.TOKENS['SB'], 0)  # Make sure the sb is at 0.
 
         testtools.deal_random_cards(self.t)
-        expected = self.t.seats[0]
+        expected = self.t.seats[1]  # SB should be first
         result = self.t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
 
@@ -354,7 +354,7 @@ class TestTable(unittest.TestCase):
         self.assertEqual(self.t.TOKENS['SB'], 1)
         testtools.deal_random_cards(self.t)
 
-        expected = self.t.seats[1]
+        expected = self.t.seats[0]  # BB will act first and be first in the list
         result = self.t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
 

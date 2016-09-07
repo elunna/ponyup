@@ -192,15 +192,17 @@ class Table():
 
     def get_players(self, hascards=False, haschips=False):
         """
-        Returns a list of players at the table. If the SB is set, it is ordered from SB first
-        to Button Last. Can specify if players have cards and/or chips.
+        Returns a list of players at the table. If the button is set, it is ordered from first
+        after button, to Button Last. Can specify if players have cards and/or chips.
         """
-        if self.TOKENS['SB'] == -1:
-            sb = 0
+        if self.TOKENS['D'] == -1:
+            btn = 0
         else:
-            sb = self.TOKENS['SB']
+            btn = self.TOKENS['D']
 
-        seats = list(range(sb, len(self))) + list(range(sb))
+        length = len(self)
+        first = (btn + 1) % length
+        seats = list(range(first, length)) + list(range(first))
 
         players = [self.seats[s] for s in seats if self.seats[s] is not None]
 
