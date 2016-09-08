@@ -65,10 +65,12 @@ class BettingRound():
             # Player is allin
             return Action('ALLIN', 0)
         elif p.is_human():
+            #  amt = colors.color('${}'.format(self.bet), 'YELLOW')
+            #  print('Bet to you is {}'.format(amt))
             return menu(options)
         else:
             facing = self.cost(p) / self.betsize
-            return strategy.makeplay(p, options, self.r.street, self.get_betlevel(), facing)
+            return strategy.makeplay(p, options, self.r.street, self.level(), facing)
 
     def process_option(self, action):
         """
@@ -89,7 +91,7 @@ class BettingRound():
             # betting as well.
 
             # Double check amount:
-            if self.get_betlevel() == 0 and action.cost > self.betsize:
+            if self.level() == 0 and action.cost > self.betsize:
                 raise Exception('Bet amount is more than the opening size! {} vs {}'.format(
                     action.cost, self.betsize))
 
@@ -129,14 +131,14 @@ class BettingRound():
                 # Player doesn't have enough for the full call amount
                 option_dict['c'] = Action('CALL', stack)
 
-        minraise_amt = self.betsize * self.get_betlevel() + (self.betsize / 2)
+        minraise_amt = self.betsize * self.level() + (self.betsize / 2)
         minraise_cost = minraise_amt - self.invested(p)
 
-        raise_amt = (self.betsize * self.get_betlevel() + self.betsize)
+        raise_amt = (self.betsize * self.level() + self.betsize)
         raise_cost = raise_amt - self.invested(p)
         bet_cost = self.betsize - self.invested(p)
 
-        if self.get_betlevel() == 0:
+        if self.level() == 0:
             if bet_cost > 0:
                 # "Completing" the bringin
                 option_dict['b'] = Action('BET', bet_cost)
@@ -145,7 +147,7 @@ class BettingRound():
             else:
                 option_dict['b'] = Action('BET', stack)  # Allin bet
 
-        if self.get_betlevel() >= 1 and self.get_betlevel() < self.BETCAP:
+        if self.level() >= 1 and self.level() < self.BETCAP:
             if stack < minraise_cost:
                 # They don't qualify for a full raise - it's a bet instead.
                 option_dict['b'] = Action('BET', stack)  # Allin bet
@@ -166,7 +168,7 @@ class BettingRound():
     def action_string(self, action):
         p = self.get_bettor()
         act_str = ''
-        act_str += spacing(self.get_betlevel())
+        act_str += spacing(self.level())
         act_str += '{} {}s'.format(p, action.name.lower())
 
         amt = colors.color(' $' + str(action.cost), 'yellow')
@@ -181,7 +183,7 @@ class BettingRound():
             return colors.color(act_str, 'white')
         elif action.name == 'ALLIN':
             return colors.color(
-                '{}{} is all in.'.format(spacing(self.get_betlevel()), p), 'gray')
+                '{}{} is all in.'.format(spacing(self.level()), p), 'gray')
         else:
             raise Exception('Error processing the action!')
 
@@ -238,7 +240,7 @@ class BettingRound():
             #  bet - self.r.blinds.ANTE
         return bet
 
-    def get_betlevel(self):
+    def level(self):
         return int(self.bet // self.betsize)
 
     def get_bettor(self):
@@ -277,7 +279,7 @@ def calc_odds(bet, pot):
     return odds
 
 
-def menu(options=None):
+def menu(options):
     """
     Display a list of betting options for the current player.
     """

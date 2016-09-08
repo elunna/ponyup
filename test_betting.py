@@ -607,39 +607,39 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for get_betlevel
+    Tests for level()
     """
-    def test_getbetlevel_0bet_returns0(self):
+    def test_level_0bet_returns0(self):
         self.setUp(players=2, street=2)
         expected = 0
-        result = self.br.get_betlevel()
+        result = self.br.level()
         self.assertEqual(expected, result)
 
-    def test_getbetlevel_preflopBB_returns1(self):
+    def test_level_preflopBB_returns1(self):
         self.setUp(players=2, street=1)
         expected = 1
-        result = self.br.get_betlevel()
+        result = self.br.level()
         self.assertEqual(expected, result)
 
     # If bet=10 and betsize=4, betlevel should be 5.
-    def test_getbetlevel_bet12_betsize4_returns3(self):
+    def test_level_bet12_betsize4_returns3(self):
         self.setUp(street=2)
         # 2/4, betsize = 4
         # Current bet should be 0 before this.
         self.assertTrue(self.br.bet == 0)
         self.br.bet += 12
         expected = 3
-        result = self.br.get_betlevel()
+        result = self.br.level()
         self.assertEqual(expected, result)
 
-    def test_getbetlevel_bet10_betsize4_returns2(self):
+    def test_level_bet10_betsize4_returns2(self):
         self.setUp(street=2)
         # 2/4, betsize = 4
         # Current bet should be 0 before this.
         self.assertTrue(self.br.bet == 0)
         self.br.bet += 10
         expected = 2
-        result = self.br.get_betlevel()
+        result = self.br.level()
         self.assertEqual(expected, result)
 
     """

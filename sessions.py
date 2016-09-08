@@ -61,7 +61,7 @@ class Session():
             br.process_option(o)
             print(br.action_string(o))
             if self.options['debug']:
-                print('Bet: {} Betlevel: {}'.format(br.bet, br.get_betlevel()))
+                print('Bet: {} Betlevel: {}'.format(br.bet, br.level()))
 
         print(_round)           # Display pot
 
