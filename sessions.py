@@ -53,6 +53,7 @@ class Session():
         """
         Run through a round of betting. Returns a victor if it exists.
         """
+        print(self._table)
         br = betting.BettingRound(_round)
 
         for p in br:
@@ -61,6 +62,8 @@ class Session():
             print(br.action_string(o))
             if self.options['debug']:
                 print('Bet: {} Betlevel: {}'.format(br.bet, br.get_betlevel()))
+
+        print(_round)           # Display pot
 
     def found_winner(self, _round):
         victor = _round.one_left()
@@ -97,9 +100,8 @@ class Stud5Session(Session):
 
                 print('{} has high hand and will act first.'.format(r._table.seats[high]))
 
-            print(self._table)
-            self.betting_round(r)
-            print(r)           # Display pot
+            if not self.r.betting_over():
+                self.betting_round(r)
 
             if self.found_winner(r):
                 break
@@ -124,16 +126,15 @@ class Draw5Session(Session):
         r.sortcards()
 
         for s in self.streets:
-            print(self._table)
             if r.street == 1:
                 # Discard phase
                 discards = discard.discard_phase(self._table, r.d)
                 r.muck.extend(discards)
                 r.sortcards()
                 # print table after discarding and drawing
-                print(self._table)
 
-            self.betting_round(r)
+            if not r.betting_over():
+                self.betting_round(r)
 
             if self.found_winner(r):
                 break
