@@ -39,7 +39,7 @@ def pick_name():
     while True:
         name = input(':> ')
         if not names.is_validname(name):
-            print('Name is too long! Must be between {} and {} characters long.'.format(
+            print('Name must be between {} and {} characters long.'.format(
                 names.MIN_LEN, names.MAX_LEN))
         elif names.has_surr_char(name):
             print('Name cannot have any of these characters: {}'.format(
