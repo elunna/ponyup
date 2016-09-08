@@ -16,14 +16,6 @@ class TestPlayer(unittest.TestCase):
         result = p.name
         self.assertEqual(expected, result)
 
-    # name too short - raise ex
-    def test_init_nametooshort_raiseException_(self):
-        self.assertRaises(ValueError, player.Player, 'ab')
-
-    # name too long - raise ex
-    def test_init_nametoolong_raiseException_(self):
-        self.assertRaises(ValueError, player.Player, 'EEEErrrriiiikkkk')
-
     # new player - chips == 0
     def test_init_validname_has0chips(self):
         p = player.Player('Erik')

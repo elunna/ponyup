@@ -29,8 +29,15 @@ class TestNames(unittest.TestCase):
         result = names.is_validname(name)
         self.assertEqual(expected, result)
 
-    def test_isvalidname_20char_returnsFalse(self):
+    def test_isvalidname_20char_returnsTrue(self):
         name = 'qzqzqzqzqzqzqzqzqzqz'
+        expected = True
+        result = names.is_validname(name)
+        self.assertEqual(expected, result)
+
+    def test_isvalidname_21char_returnsFalse(self):
+        name = 'qzqzqzqzqzqzqzqzqzqzz'
+        self.assertTrue(len(name) == 21)
         expected = False
         result = names.is_validname(name)
         self.assertEqual(expected, result)
@@ -80,9 +87,9 @@ class TestNames(unittest.TestCase):
         result = names.has_surr_char(name)
         self.assertEqual(expected, result)
 
-    def test_hassurrchar_tilde_returnsTrue(self):
+    def test_hassurrchar_tilde_returnsFalse(self):
         name = '~eriktheguy'
-        expected = True
+        expected = False
         result = names.has_surr_char(name)
         self.assertEqual(expected, result)
 
@@ -92,9 +99,9 @@ class TestNames(unittest.TestCase):
         result = names.has_surr_char(name)
         self.assertEqual(expected, result)
 
-    def test_hassurrchar_caret_returnsTrue(self):
+    def test_hassurrchar_caret_returnsFalse(self):
         name = '^eriktheguy'
-        expected = True
+        expected = False
         result = names.has_surr_char(name)
         self.assertEqual(expected, result)
 
