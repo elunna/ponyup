@@ -1,6 +1,6 @@
+import colors
 import lobby
 import names
-import numbers
 
 """
 Provides tools for interacting with the user at the text-based console.
@@ -9,13 +9,14 @@ Provides tools for interacting with the user at the text-based console.
 
 def is_integer(num):
     """
-    Determines if the variable is an integer.
+    Returns True if the num argument is an integer, and False if it is not.
     """
     try:
-        num = int(num)
+        num = float(num)
     except:
         return False
-    return isinstance(num, numbers.Integral)
+
+    return num.is_integer()
 
 
 def pick_game():
@@ -45,3 +46,24 @@ def pick_name():
                 names.INVALID_CHARACTERS))
         else:
             return name
+
+
+def menu(options):
+    """
+    Display a list of betting options, and get input from the player to pick a valid option.
+    """
+    nice_opts = ['[' + colors.color(v.name[0], 'white', STYLE='BOLD') + ']' +
+                 v.name[1:].lower()
+                 for k, v in sorted(options.items())]
+    choices = '/'.join(nice_opts)
+
+    print('')
+    while True:
+        choice = input('{}? :> '.format(choices))
+
+        if choice == 'q':
+            exit()
+        elif choice.lower() in options:
+            return options[choice]
+        else:
+            print('Invalid choice, try again.')

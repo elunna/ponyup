@@ -521,27 +521,6 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for is_integer(num)
-    """
-    # Pass an integer 10. Returns True.
-    def test_isinteger_10_returnsTrue(self):
-        expected = True
-        result = evaluator.is_integer(10)
-        self.assertEqual(expected, result)
-
-    # Pass a string. Returns False.
-    def test_isinteger_string_returnsFalse(self):
-        expected = False
-        result = evaluator.is_integer('string')
-        self.assertEqual(expected, result)
-
-    # Pass a float 10.5. Returns False.
-    def test_isinteger_float_returnsFalse(self):
-        expected = False
-        result = evaluator.is_integer(10.5)
-        self.assertEqual(expected, result)
-
-    """
     Tests for chk_straight_draw(cards, qty, gap):
     """
     def test_straightdrawchk_2card_0gap_275Q6K_returnsQK(self):
