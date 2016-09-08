@@ -225,41 +225,6 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for get_upcards()
-    """
-    # 1 card hand that is hidden - return empty list
-    def test_getupcards_1downcard_returnsEmptyList(self):
-        p = player.Player('Erik')
-        c = card.Card('A', 's')
-        p.add_card(c)
-        expected = []
-        result = p.get_upcards()
-        self.assertEqual(expected, result)
-
-    # 1 card hand that is up - return card
-    def test_getupcards_1upcard_returnsUpCard(self):
-        p = player.Player('Erik')
-        c = card.Card('A', 's')
-        c.hidden = False
-        p.add_card(c)
-        expected = [c]
-        result = p.get_upcards()
-        self.assertEqual(expected, result)
-
-    # 2 card hand - 1 up, 1 down - returns the up card
-    def test_getupcards_1up1down_returns1up(self):
-        p = player.Player('Erik')
-        c1 = card.Card('A', 's')
-        c2 = card.Card('K', 's')
-        c1.hidden = False
-        p.add_card(c1)
-        p.add_card(c2)
-
-        expected = 1
-        result = len(p.get_upcards())
-        self.assertEqual(expected, result)
-
-    """
     Tests for makeplay(options, street)
     """
     # Where to start with this?

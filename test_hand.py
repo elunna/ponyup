@@ -174,3 +174,34 @@ class TestHand(unittest.TestCase):
     """
     Tests for desc()
     """
+
+    """
+    Tests for get_upcards()
+    """
+    # 1 card hand that is hidden - return empty list
+    def test_getupcards_1downcard_returnsEmptyList(self):
+        c = card.Card('A', 's')
+        h = hand.Hand([c])
+        expected = []
+        result = h.get_upcards()
+        self.assertEqual(expected, result)
+
+    # 1 card hand that is up - return card
+    def test_getupcards_1upcard_returnsUpCard(self):
+        c = card.Card('A', 's')
+        c.hidden = False
+        h = hand.Hand([c])
+        expected = [c]
+        result = h.get_upcards()
+        self.assertEqual(expected, result)
+
+    # 2 card hand - 1 up, 1 down - returns the up card
+    def test_getupcards_1up1down_returns1up(self):
+        c1 = card.Card('A', 's')
+        c2 = card.Card('K', 's')
+        c1.hidden = False
+        h = hand.Hand([c1, c2])
+
+        expected = 1
+        result = len(h.get_upcards())
+        self.assertEqual(expected, result)

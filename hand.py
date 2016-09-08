@@ -60,3 +60,9 @@ class Hand():
 
     def desc(self):
         return evaluator.get_description(self.value(), self.cards)
+
+    def get_upcards(self):
+        """
+        Returns a list of all the face-up cards the player has.
+        """
+        return [c for c in self.cards if c.hidden is False]

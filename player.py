@@ -100,12 +100,6 @@ class Player():
         else:
             return self._hand.discard(card)
 
-    def get_upcards(self):
-        """
-        Returns a list of all the face-up cards the player has.
-        """
-        return [c for c in self._hand.cards if c.hidden is False]
-
     def is_human(self):
         """
         Returns True if the player is a HUMAN type, False otherwise.
