@@ -1,6 +1,7 @@
 from __future__ import print_function
 from collections import namedtuple
 import colors
+import console
 import strategy
 import poker
 
@@ -67,7 +68,7 @@ class BettingRound():
         elif p.is_human():
             #  amt = colors.color('${}'.format(self.bet), 'YELLOW')
             #  print('Bet to you is {}'.format(amt))
-            return menu(options)
+            return console.menu(options)
         else:
             facing = self.cost(p) / self.betsize
             return strategy.makeplay(p, options, self.r.street, self.level(), facing)
@@ -277,27 +278,6 @@ def calc_odds(bet, pot):
         raise ValueError('bet or pot must be positive!')
     odds = pot / bet
     return odds
-
-
-def menu(options):
-    """
-    Display a list of betting options for the current player.
-    """
-    nice_opts = ['[' + colors.color(v.name[0], 'white', STYLE='BOLD') + ']' +
-                 v.name[1:].lower()
-                 for k, v in sorted(options.items())]
-    choices = '/'.join(nice_opts)
-
-    print('')
-    while True:
-        choice = input('{}? :> '.format(choices))
-
-        if choice == 'q':
-            exit()
-        elif choice.lower() in options:
-            return options[choice]
-        else:
-            print('Invalid choice, try again.')
 
 
 def spacing(level):
