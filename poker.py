@@ -393,8 +393,8 @@ def bringin(table):
 
     # Start with the lowest as the highest possible card to beat.
     lowcard = card.Card('Z', 's')
-    # Make sure
     player = None
+
     for p in table:
         c = p._hand.cards[index]
 
@@ -421,7 +421,7 @@ def highhand(table, gametype):
     player = None
     ties = []
 
-    for p in table:
+    for p in table.get_players(hascards=True):
         h = p._hand.cards[up_start:]
         value = evaluator.get_value(h)
 
@@ -433,4 +433,11 @@ def highhand(table, gametype):
             if player not in ties:
                 ties.append(player)
 
-    return sorted([table.get_index(p) for p in ties])
+    # Return the seat index of the first-to-act.
+    if len(ties) > 1:
+        # Process ties, get the player who was dealt first.
+        for p in table.get_players(hascards=True):
+            if p in ties:
+                return table.get_index(p)
+    else:
+        return table.get_index(player)

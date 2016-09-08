@@ -81,19 +81,19 @@ HANDS = {
     'BDSD1': ['2d', '7s', '8s', '9d', 'Kh'],
     'BDSD2': ['2d', '7s', '8s', 'Td', 'Kh'],
     'junk': ['2d', '3s', '6s', '8d', 'Th'],
-    'AA1': ['2s', 'As', 'Ah'],
-    'AA2': ['2c', 'Ad', 'Ac'],
-    'KK': ['2h', 'Ks', 'Kh'],
-    'QQ': ['2d', 'Qs', 'Qh'],
-    'AK1': ['3s', 'As', 'Ks'],
-    'AK2': ['3h', 'Ah', 'Kh'],
-    'AK3': ['3c', 'Ac', 'Kc'],
-    'low1': ['3s', '4s', '5s'],
-    'low2': ['3d', '4d', '5d'],
-    'low3': ['2c', '4c', '5c'],
-    'QKA': ['Qs', 'Kh', 'As'],
-    'QKA2': ['Qc', 'Ks', 'Ac'],
+    '2AA_v1': ['2s', 'As', 'Ah'],
+    '2AA_v2': ['2c', 'Ad', 'Ac'],
+    '2KK': ['2h', 'Ks', 'Kh'],
+    '2QQ': ['2d', 'Qs', 'Qh'],
+    '3AK_v1': ['3s', 'As', 'Ks'],
+    '3AK_v2': ['3h', 'Ah', 'Kh'],
+    '3AK_v3': ['3c', 'Ac', 'Kc'],
+    'QKA_v1': ['Qs', 'Kh', 'As'],
+    'QKA_v2': ['Qc', 'Ks', 'Ac'],
     'JTQ': ['Jh', 'Ts', 'Qh'],
+    '234': ['3s', '4s', '5s'],
+    '345': ['3d', '4d', '5d'],
+    '245': ['2c', '4c', '5c'],
     '89J': ['8c', '9s', 'Js'],
     '567': ['5c', '6s', '7s'],
 }
@@ -109,41 +109,4 @@ RANKEDHANDS = {
     7: make('pair_high'),
     8: make('pair_low'),
     9: make('acehigh'),
-}
-
-
-HANDS_3CARD = {
-    0: make('AA1'),
-    1: make('KK'),
-    2: make('QQ'),
-}
-
-HANDS_3CARD_2TIED = {
-    0: make('AA1'),
-    1: make('KK'),
-    2: make('AA2'),
-}
-
-HANDS_3CARD_3TIED = {
-    0: make('AK1'),
-    1: make('AK2'),
-    2: make('AK3'),
-    3: make('low1'),
-    4: make('low2'),
-    5: make('low3')
-}
-
-
-HANDS_4CARD = {
-    0: make('QKA'),
-    1: make('JTQ'),
-    2: make('89J'),
-    3: make('567'),
-}
-
-HANDS_4CARD_TIED = {
-    0: make('QKA'),
-    1: make('JTQ'),
-    2: make('QKA2'),
-    3: make('567'),
 }

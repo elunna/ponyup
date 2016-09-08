@@ -17,6 +17,12 @@ class TestPoker(unittest.TestCase):
         self.g = testtools.draw5_session(level, players)
         self.r = poker.Round(self.g)
 
+    def setUp_stud(self, level=2, players=3):
+        # Make a 6 player table
+        self.g = testtools.stud5_session(level, players)
+        self.r = poker.Round(self.g)
+        #  self.r.post_bringin()
+
     def setup_allins(self, seats):
         self.g._table = table_factory.SteppedStackTable(seats)
         self.r = poker.Round(self.g)
@@ -66,7 +72,7 @@ class TestPoker(unittest.TestCase):
         self.r.deal_cards(1)
         for s in self.r._table:
             expected = 0
-            result = len(s.get_upcards())
+            result = len(s._hand.get_upcards())
             self.assertEqual(expected, result)
 
     # 6 players, deal 1 (faceup=True) - cards are faceup
@@ -685,40 +691,73 @@ class TestPoker(unittest.TestCase):
         result = poker.bringin(t)
         self.assertEqual(expected, result)
 
+    def givehand(self, seat, hand):
+        self.r._table.seats[seat]._hand.cards = pokerhands.make(hand)
+        # Hide the 1st card
+        self.r._table.seats[seat]._hand.cards[0].hidden = True
+
     """
     Tests for highhand(table)
     """
+    # Throw in an empty seat for testing.
+    # Throw in a player without cards for testing.
+
     # Stud5:
     def test_highhand_3cards_pairAces_return0(self):
-        testtools.deal_hand_dict(self.r._table, pokerhands.HANDS_3CARD)
-        expected = [0]
+        self.setUp_stud(players=3)
+        self.givehand(0, '2AA_v1')
+        self.givehand(1, '2KK')
+        self.givehand(2, '2QQ')
+        self.r._table.set_bringin(2)
+        expected = 0
         result = poker.highhand(self.r._table, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
     # Stud5:
     def test_highhand_4cards_AceHigh_return0(self):
-        testtools.deal_hand_dict(self.r._table, pokerhands.HANDS_4CARD)
-        expected = [0]
+        self.setUp_stud(players=4)
+        self.givehand(0, 'QKA_v1')
+        self.givehand(1, 'JTQ')
+        self.givehand(2, '89J')
+        self.givehand(3, '567')
+        self.r._table.set_bringin(3)
+        expected = 0
         result = poker.highhand(self.r._table, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
     # Stud5:
     def test_highhand_3cards_2tied_return02(self):
-        testtools.deal_hand_dict(self.r._table, pokerhands.HANDS_3CARD_2TIED)
-        expected = [0, 2]
+        self.setUp_stud(players=3)
+        self.givehand(0, '2AA_v1')
+        self.givehand(1, '2KK')
+        self.givehand(2, '2AA_v2')  # Ad is bringin; dealt first
+        self.r._table.set_bringin(2)
+        expected = 2
         result = poker.highhand(self.r._table, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
     # Stud5:
     def test_highhand_4cards_2tied_return02(self):
-        testtools.deal_hand_dict(self.r._table, pokerhands.HANDS_4CARD_TIED)
-        expected = [0, 2]
+        self.setUp_stud(players=4)
+        self.givehand(0, 'QKA_v1')  # Dealt first on 4th street
+        self.givehand(1, 'JTQ')
+        self.givehand(2, 'QKA_v2')
+        self.givehand(3, '567')     # Bringin
+        self.r._table.set_bringin(3)
+        expected = 0
         result = poker.highhand(self.r._table, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)
 
     # Stud5:
     def test_highhand_3cards_3tied_return023(self):
-        testtools.deal_hand_dict(self.r._table, pokerhands.HANDS_3CARD_3TIED)
-        expected = [0, 1, 2]
+        self.setUp_stud(players=6)
+        self.givehand(0, '3AK_v1')  # Dealt first on 4th street
+        self.givehand(1, '3AK_v2')
+        self.givehand(2, '3AK_v3')
+        self.givehand(3, '345')
+        self.givehand(4, '234')     # Bringin
+        self.givehand(5, '245')
+        self.r._table.set_bringin(4)
+        expected = 0
         result = poker.highhand(self.r._table, gametype="FIVE CARD STUD")
         self.assertEqual(expected, result)

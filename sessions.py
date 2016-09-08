@@ -95,11 +95,7 @@ class Stud5Session(Session):
                 r.deal_cards(1, faceup=True, handreq=True)
                 high = poker.highhand(r._table, r.gametype)
 
-                if len(high) > 1:
-                    print('There is a tie for high hand, going with seat {}'.format(high[0]))
-                else:
-                    print('{} has high hand and will act first.'.format(
-                        r._table.seats[high[0]]))
+                print('{} has high hand and will act first.'.format(r._table.seats[high]))
 
             print(self._table)
             self.betting_round(r)

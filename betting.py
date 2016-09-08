@@ -218,7 +218,7 @@ class BettingRound():
         else:
             # Go with high-hand
             # Default to lowest seat #, change this later.
-            self.bettor = poker.highhand(self.r._table, self.r.gametype)[0]
+            self.bettor = poker.highhand(self.r._table, self.r.gametype)
             self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
 
     def set_betsize(self):
