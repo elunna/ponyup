@@ -34,6 +34,11 @@ class TestPoker(unittest.TestCase):
         for p in self.r._table:
             self.r.pot += p.bet(bet)
 
+    def givehand(self, seat, hand):
+        self.r._table.seats[seat]._hand.cards = pokerhands.make(hand)
+        # Hide the 1st card
+        self.r._table.seats[seat]._hand.cards[0].hidden = True
+
     """
     Tests for __init__()
     """
@@ -620,9 +625,23 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for chk_victor()
+    Tests for betting_over()
     """
-    # One player left. They get the pot.
+    def test_bettingover_2hands1broke_returnsTrue(self):
+        self.setUp(players=2)
+        self.r.deal_cards(1)
+        self.r._table.seats[0].chips = 0
+        expected = True
+        result = self.r.betting_over()
+        self.assertEqual(expected, result)
+
+    def test_bettingover_3hands1broke_returnsFalse(self):
+        self.setUp(players=3)
+        self.r.deal_cards(1)
+        self.r._table.seats[0].chips = 0
+        expected = False
+        result = self.r.betting_over()
+        self.assertEqual(expected, result)
 
     """
     Tests for bring(table, gametype):
@@ -690,11 +709,6 @@ class TestPoker(unittest.TestCase):
         expected = 1
         result = poker.bringin(t)
         self.assertEqual(expected, result)
-
-    def givehand(self, seat, hand):
-        self.r._table.seats[seat]._hand.cards = pokerhands.make(hand)
-        # Hide the 1st card
-        self.r._table.seats[seat]._hand.cards[0].hidden = True
 
     """
     Tests for highhand(table)

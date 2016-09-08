@@ -384,6 +384,19 @@ class Round():
         else:
             return None
 
+    def betting_over(self):
+        """
+        Checks the players and sees if any valid bettors are left to duke it out. If no more
+        than 1 is left, the betting is over. Returns True if there is no more betting, False
+        otherwise.
+        """
+        hands = len(self._table.get_players(hascards=True))
+        broke = len(self._table.get_broke_players())
+        if hands - broke <= 1:
+            return True
+        else:
+            return False
+
 
 def bringin(table):
     """
