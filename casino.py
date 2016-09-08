@@ -3,9 +3,9 @@
 from __future__ import print_function
 import colors
 import combos
+import console
 import lobby
 import os
-import sys
 
 NAME = 'Loose Canon'
 GAME = lobby.tables[0]
@@ -17,6 +17,16 @@ options['p'] = ('(P)lay Poker!', 'play_poker()')
 options['n'] = ('(N)ame change', 'pick_name()')
 options['g'] = ('(G)ame change', 'pick_game()')
 options['q'] = ('(Q)uit', 'exitgracefully()')
+
+
+def pick_name():
+    global NAME
+    NAME = console.pick_name()
+
+
+def pick_game():
+    global GAME
+    GAME = console.pick_game()
 
 
 def print_logo():
@@ -58,34 +68,6 @@ def view_combos():
     input('Press any key to continue...')
 
 
-def pick_name():
-    print('Please enter your username.')
-    while True:
-        name = input(':> ')
-        if len(name) > 15:
-            print('Name is too long! Must be less than 15 characters.')
-        else:
-            break
-    global NAME
-    NAME = name
-
-
-def pick_game():
-    print('What game do you want to play?')
-    tables = lobby.sort_by_level(lobby.tables)
-    print(lobby.display_numbered_list(tables))
-
-    while True:
-        choice = int(input(':> '))
-        if choice in list(range(len(tables))):
-            global GAME
-            GAME = tables[choice]
-            print('You selected {}'.format(GAME))
-            break
-        else:
-            print('Selection not available, try again.')
-
-
 def play_poker():
     print('Alright, let\'s play some poker!')
 
@@ -107,11 +89,10 @@ def play_poker():
 
 def exitgracefully():
     print('Bye!')
-    sys.exit()
+    exit()
 
 
 if __name__ == "__main__":
-
     while True:
         os.system('clear')
         print_logo()

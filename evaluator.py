@@ -5,7 +5,6 @@ from __future__ import print_function
 from collections import namedtuple
 import card
 import hand
-import numbers
 import itertools
 
 Ranklist = namedtuple('Ranklist', ['quantity', 'rank'])
@@ -373,13 +372,6 @@ def strip_suits(cards, suits):
     There can only be one suit passed.
     """
     return [c for c in cards if c.suit not in suits]
-
-
-def is_integer(num):
-    """
-    Determines if the variable is an integer.
-    """
-    return isinstance(num, numbers.Integral)
 
 
 def chk_wheel(cards):

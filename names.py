@@ -10,6 +10,7 @@ Rules for player names:
 # Maximum name length
 MAX_LEN = 20
 MIN_LEN = 3
+INVALID_CHARACTERS = r"[<>()/{}[\]`'\\]"
 
 names = ['Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'Mortensen',
          'Antonius', 'Harman', 'Ungar', 'Dwan', 'Greenstein', 'Chan', 'Moss', 'Ivey', 'Brunson',
@@ -42,8 +43,6 @@ def is_validname(name):
     """
     if len(name) < MIN_LEN or len(name) > MAX_LEN:
         return False
-    elif has_surr_char(name):
-        return False
     else:
         return True
 
@@ -53,8 +52,7 @@ def has_surr_char(string):
     Returns True if the given string contains any 'surround' characters, False otherwise.
     These characters many cause bugs in programs if used.
     """
-
-    re1 = re.compile(r"[<>()/{}[\]`'\\]")
+    re1 = re.compile(INVALID_CHARACTERS)
     if re1.search(string):
         #  print ("RE1: Invalid char detected.")
         return True
