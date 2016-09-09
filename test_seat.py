@@ -110,6 +110,31 @@ class TestSeat(unittest.TestCase):
     """
     Tests for buy_chips(self, amount):
     """
+    def test_buychips_emptyseat_raiseException(self):
+        self.assertRaises(Exception, self.s.buy_chips)
+
+    def test_buychips_negamount_raiseException(self):
+        self.s.sitdown(self.p)
+        self.assertRaises(ValueError, self.s.buy_chips, -1)
+
+    def test_buychips_exceedsplayerbank_raiseException(self):
+        self.s.sitdown(self.p)
+        self.assertRaises(ValueError, self.s.buy_chips, 100000000)
+
+    def test_buychips_100_returns100(self):
+        self.s.sitdown(self.p)
+        self.s.buy_chips(100)
+        expected = 100
+        result = self.s.chips
+        self.assertEqual(expected, result)
+
+    def test_buychips_buy100twice_returns200(self):
+        self.s.sitdown(self.p)
+        self.s.buy_chips(100)
+        self.s.buy_chips(100)
+        expected = 200
+        result = self.s.chips
+        self.assertEqual(expected, result)
 
     """
     Tests for bet(self, amount):

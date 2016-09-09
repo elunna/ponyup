@@ -46,6 +46,8 @@ class Seat():
         return self.chips > 0
 
     def buy_chips(self, amount):
+        if amount > self.player.chips:
+            raise ValueError('Player cannot buy more chips than they can afford!')
         self.chips += self.player.bet(amount)
 
     def bet(self, amount):
