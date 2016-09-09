@@ -23,6 +23,33 @@ class TestDeck(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for __str__
+    """
+
+    """
+    Tests for __len__
+    """
+
+    """
+    Tests for contains(card)
+    """
+    def test_contains_AceSpadesinStandardDeck_returnsTrue(self):
+        d = deck.Deck()
+        c = card.Card('A', 's')
+        expected = True
+        #  result = d.contains(c)
+        result = c in d
+        self.assertEqual(expected, result)
+
+    def test_contains_JokerinStandardDeck_returnsFalse(self):
+        d = deck.Deck()
+        c = card.Card('Z', 's')
+        expected = False
+        #  result = d.contains(c)
+        result = c in d
+        self.assertEqual(expected, result)
+
+    """
     Tests for shuffle()
     """
 
@@ -62,6 +89,7 @@ class TestDeck(unittest.TestCase):
 
     def test_deal_emptydeck_raiseException(self):
         d = deck.Deck([])
+        self.assertEqual(len(d), 0)
         self.assertRaises(Exception, d.deal)
 
     """
@@ -98,55 +126,5 @@ class TestDeck(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for contains(card)
+    Tests for unhide()
     """
-    def test_contains_AceSpadesinStandardDeck_returnsTrue(self):
-        d = deck.Deck()
-        c = card.Card('A', 's')
-        expected = True
-        result = d.contains(c)
-        self.assertEqual(expected, result)
-
-    def test_contains_JokerinStandardDeck_returnsFalse(self):
-        d = deck.Deck()
-        c = card.Card('Z', 's')
-        expected = False
-        result = d.contains(c)
-        self.assertEqual(expected, result)
-
-    """
-    Tests for __str__
-    """
-
-    """
-    Tests for subclasses
-    """
-    def test_init_Deck1Joker_size53(self):
-        d = deck.Deck1Joker()
-        expected = 53
-        result = len(d)
-        self.assertEqual(expected, result)
-
-    def test_init_Deck1Joker_containsZs(self):
-        d = deck.Deck1Joker()
-        joker = card.Card('Z', 's')
-        expected = True
-        result = d.contains(joker)
-        self.assertEqual(expected, result)
-
-    def test_init_Deck2Joker_size54(self):
-        d = deck.Deck2Joker()
-        expected = 54
-        result = len(d)
-        self.assertEqual(expected, result)
-
-    def test_init_Deck2Joker_containsZsZc(self):
-        d = deck.Deck2Joker()
-        joker1 = card.Card('Z', 's')
-        joker2 = card.Card('Z', 'c')
-        expected = True
-        result = d.contains(joker1) and d.contains(joker2)
-        self.assertEqual(expected, result)
-
-if __name__ == "__main__":
-    unittest.main()

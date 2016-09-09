@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from __future__ import print_function
-import deck
+import deck2joker
 import random
 import sys
 import time
@@ -34,7 +34,7 @@ def get_players():
     Creates 2 players and deals a deck evenly between them.
     """
     players = [[], []]
-    d = deck.Deck2Joker()
+    d = deck2joker.Deck2Joker()
     d.shuffle(10)
 
     while len(d) > 0:
