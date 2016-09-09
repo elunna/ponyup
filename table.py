@@ -12,7 +12,7 @@ class Table():
             raise ValueError('Not a valid table size!')
 
         self.TOKENS = {'D': -1, 'SB': -1, 'BB': -1, 'BI': -1}
-        self.seats = (seat.Seat() for i in range(size))
+        self.seats = tuple([seat.Seat() for i in range(size)])
 
     def __len__(self):
         """
