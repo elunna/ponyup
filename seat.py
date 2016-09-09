@@ -35,9 +35,6 @@ class Seat():
         else:
             return len(self.hand) > 0
 
-    def show_hand(self):
-        pass
-
     def has_chips(self):
         if self.player is None:
             raise Exception('There is no player sitting at this seat!')

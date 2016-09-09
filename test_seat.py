@@ -85,10 +85,6 @@ class TestSeat(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for show_hand(self):
-    """
-
-    """
     Tests for has_chips(self):
     """
     def test_haschips_emptyseat_raiseException(self):
