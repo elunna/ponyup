@@ -66,16 +66,16 @@ class Table():
         Creates an iterator for the table.
         """
         self.counter = 0
-        self.players = [p for p in self.seats if p is not None]
+        self.seat_tup = (s for s in self.seats if s.is_empty() is not True)
         return self
 
     def __next__(self):
         """
-        Move to the next item in the iterator.
+        Move to the next seat in the iterator.
         """
-        if self.counter > len(self.players) - 1:
+        if self.counter > len(self.seat_tup) - 1:
             raise StopIteration
-        p = self.players[self.counter]
+        p = self.seat_tup[self.counter]
         self.counter += 1
         return p
 
