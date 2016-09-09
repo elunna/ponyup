@@ -138,6 +138,23 @@ class TestSeat(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for win(amount):
+    """
+    def test_win_emptyseat_raiseException(self):
+        self.assertRaises(Exception, self.s.win, 100)
+
+    def test_win_negamount_raiseException(self):
+        self.s.sitdown(self.p)
+        self.assertRaises(ValueError, self.s.win, -1)
+
+    def test_win_100_stackis100(self):
+        self.s.sitdown(self.p)
+        expected = 100
+        self.s.win(100)
+        result = self.s.stack
+        self.assertEqual(expected, result)
+
+    """
     Tests for bet(self, amount):
     """
     def test_bet_stack100_bets10_returns10(self):

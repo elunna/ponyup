@@ -46,6 +46,13 @@ class Seat():
             raise ValueError('Player cannot buy more chips than they can afford!')
         self.stack += self.player.withdraw(amount)
 
+    def win(self, amount):
+        if self.player is None:
+            raise Exception('There is no player sitting at this seat!')
+        if amount <= 0:
+            raise ValueError('Win amount must be a positive number!')
+        self.stack += amount
+
     def bet(self, amount):
         if amount > self.stack:
             raise ValueError('Cannot bet more than stack size!')
