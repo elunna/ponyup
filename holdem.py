@@ -1,5 +1,15 @@
-def card2text(cards):
+
+def valid_holecards(cards):
     if len(cards) != 2:
+        return False
+    elif cards[0] == cards[1]:
+        return False
+    else:
+        return True
+
+
+def card2text(cards):
+    if not valid_holecards(cards):
         raise ValueError('Only accepts a list of exactly 2 cards!')
 
     rankhi = cards[0].rank
