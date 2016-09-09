@@ -31,13 +31,13 @@ class TestPoker(unittest.TestCase):
         testtools.deal_random_cards(self.g._table, 2)
 
     def everybody_bet(self, bet):
-        for p in self.r._table:
-            self.r.pot += p.bet(bet)
+        for s in self.r._table:
+            self.r.pot += s.bet(bet)
 
     def givehand(self, seat, hand):
-        self.r._table.seats[seat]._hand.cards = pokerhands.make(hand)
+        self.r._table.seats[seat].hand.cards = pokerhands.make(hand)
         # Hide the 1st card
-        self.r._table.seats[seat]._hand.cards[0].hidden = True
+        self.r._table.seats[seat].hand.cards[0].hidden = True
 
     """
     Tests for __init__()
@@ -77,14 +77,14 @@ class TestPoker(unittest.TestCase):
         self.r.deal_cards(1)
         for s in self.r._table:
             expected = 0
-            result = len(s._hand.get_upcards())
+            result = len(s.hand.get_upcards())
             self.assertEqual(expected, result)
 
     # 6 players, deal 1 (faceup=True) - cards are faceup
     def test_dealcards_deal1_faceup_cardsarenothidden(self):
         self.r.deal_cards(1, faceup=True)
         for s in self.r._table:
-            self.assertFalse(s._hand.cards[0].hidden)
+            self.assertFalse(s.hand.cards[0].hidden)
 
     # 5 players have cards, deal only to those that still have cards
     def test_dealcards_deal6deal5toands_deckis41cards(self):
@@ -105,10 +105,10 @@ class TestPoker(unittest.TestCase):
     #  h = [('A', 'd'), ('4', 's'), ('Q', 's'), ('7', 's'), ('K', 'h')]
     def test_sortcards_humandealt_sorted(self):
         h = pokerhands.make('highcards')
-        self.r._table.seats[0]._hand.cards = h[:]
+        self.r._table.seats[0].hand.cards = h[:]
         expected = sorted(h)
         self.r.sortcards()
-        result = self.r._table.seats[0]._hand.cards
+        result = self.r._table.seats[0].hand.cards
         self.assertEqual(expected, result)
 
     """
@@ -166,8 +166,8 @@ class TestPoker(unittest.TestCase):
         self.r.blinds = blinds.BlindsAnte(level=4)
         self.r.post_antes()
         expected = 999
-        for p in self.r._table:
-            result = p.chips
+        for s in self.r._table:
+            result = s.stack
             self.assertEqual(expected, result)
 
     """
@@ -179,10 +179,10 @@ class TestPoker(unittest.TestCase):
         self.r.blinds = blinds.BlindsAnte(level=2)
         testtools.deal_stud5(self.r._table, matchingranks=0)
         player = self.r._table.seats[poker.bringin(self.r._table)]
-        chips = player.chips
+        chips = player.stack
         self.r.post_bringin()
         expected = 1
-        result = chips - player.chips
+        result = chips - player.stack
         self.assertEqual(expected, result)
 
     def test_postbringin_seat5_returnsString(self):
@@ -204,28 +204,28 @@ class TestPoker(unittest.TestCase):
     # 2 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_2players_pot3(self):
         for i in [1, 2, 4, 5]:
-            self.r._table.remove_player(i)
+            self.r._table.pop(i)
         self.r._table.TOKENS['D'] = -1
         self.r._table.move_button()  # verify the button is 0
         self.r._table.set_blinds()
         self.assertEqual(self.r._table.TOKENS['D'], 0)
         self.r.post_blinds()
-        self.assertEqual(self.r._table.seats[0].chips, 999)
-        self.assertEqual(self.r._table.seats[3].chips, 998)
+        self.assertEqual(self.r._table.seats[0].stack, 999)
+        self.assertEqual(self.r._table.seats[3].stack, 998)
         self.assertEqual(self.r.pot, 3)
 
     # 3 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_3players_pot3(self):
         for i in [1, 3, 5]:
-            self.r._table.remove_player(i)
+            self.r._table.pop(i)
 
         self.r._table.TOKENS['D'] = -1
         self.r._table.move_button()  # verify the button is 0
         self.r._table.set_blinds()
         self.assertEqual(self.r._table.TOKENS['D'], 0)
         self.r.post_blinds()
-        self.assertEqual(self.r._table.seats[2].chips, 999)
-        self.assertEqual(self.r._table.seats[4].chips, 998)
+        self.assertEqual(self.r._table.seats[2].stack, 999)
+        self.assertEqual(self.r._table.seats[4].stack, 998)
         self.assertEqual(self.r.pot, 3)
 
     # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
@@ -235,8 +235,8 @@ class TestPoker(unittest.TestCase):
         self.r._table.set_blinds()
         self.assertEqual(self.r._table.TOKENS['D'], 0)  # verify the button is 0
         self.r.post_blinds()
-        self.assertEqual(self.r._table.seats[1].chips, 999)
-        self.assertEqual(self.r._table.seats[2].chips, 998)
+        self.assertEqual(self.r._table.seats[1].stack, 999)
+        self.assertEqual(self.r._table.seats[2].stack, 998)
         self.assertEqual(self.r.pot, 3)
 
     # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
@@ -338,7 +338,7 @@ class TestPoker(unittest.TestCase):
         self.g._table = table_factory.BobTable(4)
         stacks = [1000, 1000, 225, 100]
         for p in self.g._table:
-            p.chips = stacks.pop(0)
+            p.stack = stacks.pop(0)
 
         self.r = poker.Round(self.g)
         testtools.deal_random_cards(self.g._table)
@@ -384,10 +384,9 @@ class TestPoker(unittest.TestCase):
         self.setup_allins(2)
         testtools.deal_ranked_hands(self.r._table)
         self.everybody_bet(200)
-        p0, p1 = [p for p in self.r._table.seats]
         sidepots = self.r.make_sidepots(self.r.get_allins())
 
-        expected = {200: [p0], 100: [p1]}
+        expected = {200: [0], 100: [1]}
         result = self.r.process_sidepots(sidepots)
         self.assertEqual(expected, result)
 
@@ -398,10 +397,9 @@ class TestPoker(unittest.TestCase):
         self.everybody_bet(300)
         # seat 0 gets strongest hand, 1 gets middle, 2 gets lowest.
 
-        p0, p1, p2 = [p for p in self.r._table.seats]
         sidepots = self.r.make_sidepots(self.r.get_allins())
 
-        expected = {300: [p0], 200: [p1], 100: [p2]}
+        expected = {300: [0], 200: [1], 100: [2]}
         result = self.r.process_sidepots(sidepots)
         self.assertEqual(expected, result)
 
@@ -548,7 +546,7 @@ class TestPoker(unittest.TestCase):
         self.r._table.set_blinds()
         self.r.muck_all_cards()
         c = card.Card('A', 's')
-        self.r._table.seats[0].add_card(c)
+        self.r._table.seats[0].hand.add(c)
         expected = False
         result = self.r.check_integrity_post()
         self.assertEqual(expected, result)
@@ -566,7 +564,7 @@ class TestPoker(unittest.TestCase):
     """
     def test_clearbrokeplayers(self):
         p = self.r._table.seats[0]
-        p.chips = 0
+        p.stack = 0
         expected = []
         self.r.clear_broke_players()
         result = self.r._table.get_broke_players()
@@ -618,7 +616,7 @@ class TestPoker(unittest.TestCase):
     def test_oneleft_1withcards_returnsvictor(self):
         self.setUp(players=2)
         self.r.deal_cards(1)
-        self.r._table.remove_player(0)
+        self.r._table.pop(0)
         victor = self.r._table.seats[1]
         expected = victor
         result = self.r.one_left()
@@ -630,7 +628,7 @@ class TestPoker(unittest.TestCase):
     def test_bettingover_2hands1broke_returnsTrue(self):
         self.setUp(players=2)
         self.r.deal_cards(1)
-        self.r._table.seats[0].chips = 0
+        self.r._table.seats[0].stack = 0
         expected = True
         result = self.r.betting_over()
         self.assertEqual(expected, result)
@@ -638,7 +636,7 @@ class TestPoker(unittest.TestCase):
     def test_bettingover_3hands1broke_returnsFalse(self):
         self.setUp(players=3)
         self.r.deal_cards(1)
-        self.r._table.seats[0].chips = 0
+        self.r._table.seats[0].stack = 0
         expected = False
         result = self.r.betting_over()
         self.assertEqual(expected, result)

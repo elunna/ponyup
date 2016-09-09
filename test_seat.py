@@ -177,10 +177,12 @@ class TestSeat(unittest.TestCase):
         result = self.s.bet(100)
         self.assertEqual(expected, result)
 
-    def test_bet_overstack_raiseException(self):
+    def test_bet_overstack_returnsStack(self):
         self.s.sitdown(self.p)
         self.s.buy_chips(100)
-        self.assertRaises(ValueError, self.s.bet, 1000)
+        expected = 100
+        result = self.s.bet(1000)
+        self.assertEqual(expected, result)
 
     def test_bet_stack100_bets0_raiseException(self):
         self.s.sitdown(self.p)

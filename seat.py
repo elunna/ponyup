@@ -55,7 +55,7 @@ class Seat():
     def bet(self, amt):
         self.check_amount(amt)
         if amt > self.stack:
-            raise ValueError('Cannot bet more than stack size!')
+            amt = self.stack
         self.stack -= amt
         return amt
 

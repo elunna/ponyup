@@ -41,22 +41,22 @@ class Round():
         dealt face-up, otherwise they are face-down.
         """
         for i in range(qty):
-            for p in self._table:
-                if handreq and not p.has_cards():
+            for s in self._table:
+                if handreq and not s.has_hand():
                     continue
                 c = self.d.deal()
                 if faceup is True:
                     c.hidden = False
-                p.add_card(c)
+                s.hand.add(c)
 
     def show_cards(self):
         """
         Unhides all player hands and returns a string that shows all the player hands.
         """
         _str = ''
-        for p in self._table.get_players(hascards=True):
-            p.showhand()
-            line = '\t\t\t\t {:>15} shows {:10}\n'.format(str(p), str(p._hand))
+        for s in self._table.get_players(hascards=True):
+            s.hand.unhide()
+            line = '\t\t\t\t {:>15} shows {:10}\n'.format(str(s), str(s.hand))
             _str += line
         return _str
 
@@ -64,16 +64,16 @@ class Round():
         """
         Sort all cards in all players hands.
         """
-        for p in self._table:
-            p._hand.sort()
+        for s in self._table:
+            s.hand.sort()
 
     def muck_all_cards(self):
         """
         Muck all player hands, and muck the contents of the deck.
         """
         # Clear hands
-        for p in self._table:
-            self.muck.extend(p.fold())
+        for s in self._table:
+            self.muck.extend(s.fold())
         # Add the remainder of the deck
         while len(self.d) > 0:
             self.muck.append(self.d.deal())
@@ -83,9 +83,9 @@ class Round():
         All players bet the ante amount and it's added to the pot.
         """
         actions = ''
-        for p in self._table:
-            actions += '{} posts a {} ante.'.format(p, self.blinds.ANTE)
-            self.pot += p.bet(self.blinds.ANTE)
+        for s in self._table:
+            actions += '{} posts a {} ante.'.format(s, self.blinds.ANTE)
+            self.pot += s.bet(self.blinds.ANTE)
         return actions
 
     def post_blinds(self):
@@ -117,30 +117,30 @@ class Round():
         """
         bringin_index = bringin(self._table)
         self._table.set_bringin(bringin_index)
-        plyr = self._table.seats[bringin_index]
+        seat = self._table.seats[bringin_index]
 
         # Set the BI token on the table.
         #  self._table.TOKENS['BI'] = self._table.get_index(bringin_index)
 
         # Bet the Bringin amount and add to the pot
-        self.pot += plyr.bet(self.blinds.BRINGIN)
+        self.pot += seat.bet(self.blinds.BRINGIN)
         action = ''
-        action += '{} brings it in for ${}\n'.format(plyr, self.blinds.BRINGIN)
+        action += '{} brings it in for ${}\n'.format(seat.player, self.blinds.BRINGIN)
         return action
 
-    def invested(self, player):
+    def invested(self, seat):
         """
         Return the difference between the players current stack-size and the amount at the
         start of the round.
         """
-        return self.starting_stacks[player.name] - player.chips
+        return self.starting_stacks[seat.NUM] - seat.stack
 
     def get_allins(self):
         """
         Returns a list of all stack sizes that went all-in this round.
         """
-        return [self.starting_stacks[p.name] for p in self._table.get_players(hascards=True)
-                if p.is_allin()]
+
+        return [self.starting_stacks[s.NUM] for s in self._table if s.has_chips() is False]
 
     def make_sidepots(self, allins):
         """
@@ -169,9 +169,9 @@ class Round():
         Calculates the maximum value a stacksize can win from the current pot.
         """
         sidepot = 0
-        for p in self._table:
+        for s in self._table:
             # Get the players total invested amount over the round
-            i = self.invested(p)
+            i = self.invested(s)
 
             # If stacksize is less than invested, they can only win the stacksize.
             if stacksize <= i:
@@ -213,6 +213,13 @@ class Round():
             shares[leftovers] = self.eligible_for_pot(required_stack)
         return shares
 
+    def get_eligible(self, stack_req):
+        """
+        Returns a list of seats that have the minimum starting stack size.
+        """
+        cardholders = self._table.get_players(hascards=True)
+        return [s for s in cardholders if self.starting_stacks[s.NUM] >= stack_req]
+
     def eligible_for_pot(self, stack_required):
         """
         Makes a list of the players who qualify the given stack size and who have (or tie) the
@@ -220,24 +227,17 @@ class Round():
         """
         eligible_players = self.get_eligible(stack_required)
         best_hand = self.best_hand_val(eligible_players)
-        return [p for p in eligible_players if p._hand.value() == best_hand]
+        return [s.NUM for s in eligible_players if s.hand.value() == best_hand]
 
-    def best_hand_val(self, players):
+    def best_hand_val(self, seats):
         """
         Determine the best handvalue within the given player group.
         """
         best = 0
-        for p in players:
-            if p._hand.value() > best:
-                best = p._hand.value()
+        for s in seats:
+            if s.hand.value() > best:
+                best = s.hand.value()
         return best
-
-    def get_eligible(self, stack_req):
-        """
-        Returns a list of players who had the minimum starting stack size.
-        """
-        cardholders = self._table.get_players(hascards=True)
-        return [p for p in cardholders if self.starting_stacks[p.name] >= stack_req]
 
     def split_pot(self, winners, amt):
         """
@@ -258,8 +258,8 @@ class Round():
 
         if remainder > 0:
             first_after_btn = self._table.next_player(self._table.btn)
-            r_winner = self._table.seats[first_after_btn]
-            award_dict[r_winner] += remainder
+            #  r_winner = self._table.seats[first_after_btn].NUM
+            award_dict[first_after_btn] += remainder
         return award_dict
 
     def showdown(self):
@@ -288,25 +288,25 @@ class Round():
         split pot to correctly split up ties.
         """
         for sidepot, winners in award_dict.items():
-            for p, s in self.split_pot(winners, sidepot).items():
+            for s, amt in self.split_pot(winners, sidepot).items():
 
                 h_txt = '{:>15} wins with a {}: {}'.format(
-                    str(p),
-                    str(p._hand.rank()),
-                    str(p._hand.desc())
+                    str(s.player),
+                    str(s.hand.rank()),
+                    str(s.hand.desc())
                 )
                 print(h_txt.strip().rjust(70))
-                self.award_pot(p, s)
+                self.award_pot(s, amt)
 
-    def award_pot(self, player, amt):
+    def award_pot(self, seat, amt):
         """
         Adds the specified amount to a players stack.
         """
         chips = colors.color('${}'.format(amt), 'yellow')
-        w_txt = '{:>15} wins {}'.format(str(player), chips)
+        w_txt = '{:>15} wins {}'.format(str(seat.player), chips)
         txt = w_txt.strip().rjust(84)
         print(txt)
-        player.add_chips(amt)
+        seat.win(amt)
 
     def next_street(self):
         """
@@ -369,9 +369,10 @@ class Round():
     def clear_broke_players(self):
         broke_players = self._table.get_broke_players()
         _str = ''
-        for p in broke_players:
-            self._table.seats.remove(p)
-            _str += '{} left the table with no money!\n'.format(p)
+        for seat in broke_players:
+            #  self._table.seats.remove(seat)
+            seat.standup()
+            _str += '{} left the table with no money!\n'.format(seat.player)
 
     def cleanup(self):
         self.muck_all_cards()
@@ -408,17 +409,17 @@ def bringin(table):
 
     # Start with the lowest as the highest possible card to beat.
     lowcard = card.Card('Z', 's')
-    player = None
+    seat = None
 
-    for p in table:
-        c = p._hand.cards[index]
+    for s in table:
+        c = s.hand.cards[index]
 
         if c.rank < lowcard.rank:
-            lowcard, player = c, p
+            lowcard, seat = c, s
         elif c.rank == lowcard.rank:
             if card.SUITVALUES[c.suit] < card.SUITVALUES[lowcard.suit]:
-                lowcard, player = c, p
-    return table.get_index(player)
+                lowcard, seat = c, s
+    return seat.NUM
 
 
 def highhand(table, gametype):
@@ -433,26 +434,26 @@ def highhand(table, gametype):
         up_start = 1
 
     highvalue = 0
-    player = None
+    seat = None
     ties = []
 
-    for p in table.get_players(hascards=True):
-        h = p._hand.cards[up_start:]
+    for s in table.get_players(hascards=True):
+        h = s.hand.cards[up_start:]
         value = evaluator.get_value(h)
 
         if value > highvalue:
-            highvalue, player = value, p
-            ties = [player]  # Reset any lower ties.
+            highvalue, seat = value, s
+            ties = [seat]  # Reset any lower ties.
         elif value == highvalue:
-            ties.append(p)
-            if player not in ties:
-                ties.append(player)
+            ties.append(s)
+            if seat not in ties:
+                ties.append(seat)
 
     # Return the seat index of the first-to-act.
     if len(ties) > 1:
         # Process ties, get the player who was dealt first.
-        for p in table.get_players(hascards=True):
-            if p in ties:
-                return table.get_index(p)
+        for s in table.get_players(hascards=True):
+            if s in ties:
+                return s.NUM
     else:
-        return table.get_index(player)
+        return seat.NUM
