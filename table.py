@@ -51,13 +51,13 @@ class Table():
             else:
                 _str += ' '*7
 
-            _str += '{:20}'.format(s.name)
+            _str += '{:20}'.format(str(s.player))
 
             _str += colors.color('${:<16}'.format(s.stack), 'yellow')
 
             # Display hand if available
-            if s._hand is not None:
-                _str += '{:16}'.format(str(s._hand))
+            if s.hand is not None:
+                _str += '{:16}'.format(str(s.hand))
             _str += '\n'
 
         return _str
