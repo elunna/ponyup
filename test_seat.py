@@ -1,12 +1,14 @@
 import unittest
 import player
 import seat
+import table
 
 
 class TestSeat(unittest.TestCase):
 
     def setUp(self):
-        self.s = seat.Seat()
+        t = table.Table(6)
+        self.s = seat.Seat(t)
         self.p = player.Player("Erik")
 
     """
@@ -31,6 +33,9 @@ class TestSeat(unittest.TestCase):
         expected = self.p
         result = self.s.player
         self.assertEqual(expected, result)
+
+    def test_sitdown_dupeplayer_attable_raiseException(self):
+        pass
 
     """
     Tests for standup(self, player):
