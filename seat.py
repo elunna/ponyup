@@ -21,7 +21,7 @@ class Seat():
             raise Exception('There is no player to stand up from this seat!')
 
         # Give their chips back
-        self.player.add_chips(self.chips)
+        self.player.deposit(self.chips)
         self.chips = 0
         # Remove the player
         self.player = None
@@ -43,7 +43,7 @@ class Seat():
     def buy_chips(self, amount):
         if amount > self.player.chips:
             raise ValueError('Player cannot buy more chips than they can afford!')
-        self.chips += self.player.bet(amount)
+        self.chips += self.player.withdraw(amount)
 
     def bet(self, amount):
         if amount > self.chips:
