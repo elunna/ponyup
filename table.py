@@ -12,7 +12,8 @@ class Table():
             raise ValueError('Not a valid table size!')
 
         self.TOKENS = {'D': -1, 'SB': -1, 'BB': -1, 'BI': -1}
-        self.seats = tuple([seat.Seat() for i in range(size)])
+        #  self.seats = tuple([seat.Seat() for i in range(size)])  # Gen expr?
+        self.seats = [seat.Seat() for i in range(size)]
 
     def __len__(self):
         """
@@ -66,7 +67,7 @@ class Table():
         Creates an iterator for the table.
         """
         self.counter = 0
-        self.seat_tup = (s for s in self.seats if s.is_empty() is not True)
+        self.seat_tup = tuple(s for s in self.seats if s.is_empty() is not True)
         return self
 
     def __next__(self):
@@ -224,7 +225,7 @@ class Table():
         """
         players = {}
         for i, s in enumerate(self.seats):
-            if s is not None:
+            if not s.is_empty():
                 players[i] = s.player
         return players
 
