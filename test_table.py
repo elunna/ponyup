@@ -246,7 +246,7 @@ class TestTable(unittest.TestCase):
     Tests for pop()
     """
     # Pop player 0, table doesn't contain the player at seat 0.
-    def test_pop_seat0_doesntcontainseat0(self):
+    def test_pop_seat0_playernotattable(self):
         p = player.Player('bob0', 'CPU')
         self.t.pop(0)
         expected = False
@@ -254,10 +254,10 @@ class TestTable(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # Pop player 0, seat 0 is None
-    def test_pop_seat0_seat0isNone(self):
+    def test_pop_seat0_seat0isEmpty(self):
         self.t.pop(0)
         expected = True
-        result = self.t.seats[0] is None
+        result = self.t.seats[0].is_empty()
         self.assertEqual(expected, result)
 
     def test_pop_seat0_returnsPlayer(self):
@@ -267,7 +267,7 @@ class TestTable(unittest.TestCase):
 
     def test_pop_emptyseat_raisesException(self):
         self.t.pop(0)
-        self.assertTrue(self.t.seats[0] is None)
+        self.assertTrue(self.t.seats[0].is_empty())
         self.assertRaises(ValueError, self.t.pop, 0)
 
     """
