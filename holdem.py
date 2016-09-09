@@ -6,6 +6,12 @@ def card2text(cards):
     ranklo = cards[1].rank
     suited = cards[0].suit == cards[1].suit
 
-    # Check for pair
-    # Check for suited
-    # Offsuit
+    if rankhi == ranklo:
+        # Check for pair
+        return str(rankhi) * 2
+    elif suited:
+        # Check for suited
+        return rankhi + ranklo + 's'
+    else:
+        # Offsuit
+        return rankhi + ranklo + 'o'

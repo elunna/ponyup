@@ -10,7 +10,6 @@ class TestHoldem(unittest.TestCase):
 
     # 1 card - raises exception
     def test_cards2text_As_raiseException(self):
-
         cards = pokerhands.make('A')
         self.assertRaises(ValueError, holdem.card2text, cards)
 
@@ -21,12 +20,21 @@ class TestHoldem(unittest.TestCase):
 
     # AsKd - returns AKo
     def test_cards2text_AsKd_returnsAKo(self):
-        pass
+        cards = pokerhands.make('AKo')
+        expected = 'AKo'
+        result = holdem.card2text(cards)
+        self.assertEqual(expected, result)
 
     # AsKs - returns AKs
     def test_cards2text_AcKc_returnsAKs(self):
-        pass
+        cards = pokerhands.make('AKs')
+        expected = 'AKs'
+        result = holdem.card2text(cards)
+        self.assertEqual(expected, result)
 
     # AsAc - returns AA
     def test_cards2text_AcAh_returnsAA(self):
-        pass
+        cards = pokerhands.make('AA')
+        expected = 'AA'
+        result = holdem.card2text(cards)
+        self.assertEqual(expected, result)
