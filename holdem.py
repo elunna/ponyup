@@ -1,3 +1,6 @@
+import card
+import itertools
+
 
 def valid_holecards(cards):
     if len(cards) != 2:
@@ -25,3 +28,16 @@ def card2text(cards):
     else:
         # Offsuit
         return rankhi + ranklo + 'o'
+
+
+def text2cards(string):
+    if len(string) > 3:
+        # Something's wrong.
+        pass
+
+    if string[0] == string[1]:
+        # Pair
+        cards = [card.Card(string[0], s) for s in card.SUITS]
+        for c in cards:
+            c.hidden = False
+        return list(itertools.combinations(cards, 2))

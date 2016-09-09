@@ -66,3 +66,14 @@ class TestHoldem(unittest.TestCase):
         expected = 'AA'
         result = holdem.card2text(cards)
         self.assertEqual(expected, result)
+
+    # AA - returns AsAc, AsAd, AsAh, AcAh, AcAd, AdAh
+    def test_text2cards_AA_returns6combos(self):
+        Ac, Ad, Ah, As = pokerhands.convert_to_cards(['Ac', 'Ad', 'Ah', 'As'])
+        #  Ac = card.Card('A', 'c')
+        #  Ad = card.Card('A', 'd')
+        #  Ah = card.Card('A', 'h')
+        #  As = card.Card('A', 's')
+        expected = [(Ac, Ad), (Ac, Ah), (Ac, As), (Ad, Ah), (Ad, As), (Ah, As)]
+        result = holdem.text2cards('AA')
+        self.assertEqual(expected, result)
