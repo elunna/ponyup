@@ -59,10 +59,11 @@ class TestSeat(unittest.TestCase):
         result = self.s.chips
         self.assertEqual(expected, result)
 
-
     """
     Tests for is_empty(self):
     """
+    def test_isempty_emptyseat_returnsTrue(self):
+        self.assertTrue(self.s.is_empty())
 
     """
     Tests for has_hand(self):
