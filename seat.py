@@ -1,3 +1,6 @@
+import hand
+
+
 class Seat():
     def __init__(self, table):
         self.table = table
@@ -10,6 +13,9 @@ class Seat():
 
         # Set the player
         self.player = player
+
+        # Set the hand to a new empty Hand
+        self.hand = hand.Hand()
 
     def standup(self):
         # If no player is sitting, raise an exception

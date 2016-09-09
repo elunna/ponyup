@@ -1,4 +1,5 @@
 import unittest
+import card
 import player
 import seat
 import table
@@ -76,6 +77,12 @@ class TestSeat(unittest.TestCase):
         self.s.sitdown(self.p)
         self.assertFalse(self.s.has_hand())
 
+    def test_hashand_1card_returnsTrue(self):
+        self.s.sitdown(self.p)
+        self.s.hand.add(card.Card('A', 's'))
+        expected = True
+        result = self.s.has_hand()
+        self.assertEqual(expected, result)
 
     """
     Tests for show_hand(self):
