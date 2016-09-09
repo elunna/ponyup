@@ -121,11 +121,11 @@ class Table():
         Removes and returns a player from a given seat index. If the seat is empty, raises a
         ValueError exception.
         """
-        p = self.seats[index]
+        p = self.seats[index].player
         if p is None:
             raise ValueError('The seat is already empty!')
         else:
-            self.seats[index] = None
+            self.seats[index].standup()
             return p
 
     def next_player(self, from_seat, step=1, hascards=False):
@@ -143,11 +143,11 @@ class Table():
         length = len(self)
         for i in range(1, length + 1):
             seat = (from_seat + (i * step)) % length
-            p = self.seats[seat]
+            s = self.seats[seat]
 
-            if p is None:
+            if s.is_empty():
                 continue
-            elif hascards and not p.has_cards():
+            elif hascards and not s.has_hand():
                 continue
             return seat
 
@@ -190,14 +190,14 @@ class Table():
 
     def get_broke_players(self):
         """
-        Remove players with no chips from the table and return them in a list.
+        Returns a list of all the seats that have no chips in front of them.
         """
-        return [p for p in self if p.chips == 0]
+        return [s for s in self if s.has_chips()]
 
     def get_players(self, hascards=False, haschips=False):
         """
-        Returns a list of players at the table. If the button is set, it is ordered from first
-        after button, to Button Last. Can specify if players have cards and/or chips.
+        Returns a list of seats at the table. If the button is set, it is ordered from first
+        after button, to Button Last. Can specify if seats have cards and/or chips.
         """
         if self.TOKENS['D'] == -1:
             btn = 0
@@ -208,24 +208,24 @@ class Table():
         first = (btn + 1) % length
         seats = list(range(first, length)) + list(range(first))
 
-        players = [self.seats[s] for s in seats if self.seats[s] is not None]
+        seatlist = [self.seats[s] for s in seats if self.seats[s] is not None]
 
         if hascards is True:
-            players = list(filter((lambda x: x.has_cards() == True), players))
+            seatlist = list(filter((lambda x: x.has_hand() == True), seatlist))
 
         if haschips is True:
-            players = list(filter((lambda x: not x.is_allin() == True), players))
+            seatlist = list(filter((lambda x: x.has_chips() == True), seatlist))
 
-        return players
+        return seatlist
 
     def get_playerdict(self):
         """
-        Returns a dictionary of seat indexes and player names.
+        Returns a dictionary of seat indexes and players.
         """
         players = {}
         for i, s in enumerate(self.seats):
             if s is not None:
-                players[i] = s
+                players[i] = s.player
         return players
 
     def stackdict(self):
@@ -233,6 +233,6 @@ class Table():
         Returns a name/stacksize dictionary for each player at the table.
         """
         stacks = {}
-        for p in self:
-            stacks[p.name] = p.chips
+        for s in self:
+            stacks[str(s.player)] = s.chips
         return stacks
