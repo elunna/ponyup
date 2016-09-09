@@ -84,8 +84,8 @@ class Table():
         Adds a player p to the table at seat s. Returns True if successful, False otherwise.
         """
         # Check if the player is already sitting.
-        for seat in self:
-            if p.name == seat.name:
+        for _seat in self:
+            if p.name == _seat.name:
                 return False
 
         if self.seats[s] is None:
