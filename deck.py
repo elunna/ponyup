@@ -13,15 +13,13 @@ class Deck():
             self.cards = make_deck()
         else:
             self.cards = cards
-        # Give it a good shuffle.
-        for i in range(10):
-            self.shuffle()
 
-    def shuffle(self):
+    def shuffle(self, x):
         """
         Shuffles the deck of cards once.
         """
-        random.shuffle(self.cards)
+        for i in range(x):
+            random.shuffle(self.cards)
 
     def sort(self):
         """

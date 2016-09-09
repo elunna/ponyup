@@ -35,7 +35,7 @@ def get_players():
     """
     players = [[], []]
     d = deck.Deck2Joker()
-    d.shuffle()
+    d.shuffle(10)
 
     while len(d) > 0:
         players[0].append(d.deal())

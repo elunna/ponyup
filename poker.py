@@ -19,6 +19,7 @@ class Round():
 
         self.muck = []
         self.d = deck.Deck()
+        self.d.shuffle(17)  # Shuffle 17 times for good measure.
         self.DECKSIZE = len(self.d)
 
         #  Remember starting stacks of all players
