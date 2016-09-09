@@ -41,7 +41,9 @@ class Seat():
         pass
 
     def has_chips(self):
-        pass
+        if self.player is None:
+            raise Exception('There is no player sitting at this seat!')
+        return self.chips > 0
 
     def buy_chips(self, amount):
         self.chips += self.player.bet(amount)

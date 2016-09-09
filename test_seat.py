@@ -91,6 +91,21 @@ class TestSeat(unittest.TestCase):
     """
     Tests for has_chips(self):
     """
+    def test_haschips_emptyseat_raiseException(self):
+        self.assertRaises(Exception, self.s.has_chips)
+
+    def test_haschips_playerboughtchips_returnsTrue(self):
+        self.s.sitdown(self.p)
+        self.s.buy_chips(100)
+        expected = True
+        result = self.s.has_chips()
+        self.assertEqual(expected, result)
+
+    def test_haschips_playerdidnotbuychips_returnsFalse(self):
+        self.s.sitdown(self.p)
+        expected = False
+        result = self.s.has_chips()
+        self.assertEqual(expected, result)
 
     """
     Tests for buy_chips(self, amount):
