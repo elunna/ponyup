@@ -95,13 +95,13 @@ class Table():
         else:
             return False
 
-    def get_index(self, plyr):
+    def get_index(self, player):
         """
         Tries to find the player in the table and returns it's index. Returns -1 if it can't
         find the player.
         """
         for i, s in enumerate(self.seats):
-            if s == plyr:
+            if s.player == player:
                 return i
         else:
             return -1
