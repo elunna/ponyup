@@ -79,17 +79,18 @@ class Table():
         self.counter += 1
         return p
 
-    def add_player(self, s, p):
+    def add_player(self, index, player):
         """
-        Adds a player p to the table at seat s. Returns True if successful, False otherwise.
+        Adds the player to the seat at the index.
+        Returns True if successful, False otherwise.
         """
         # Check if the player is already sitting.
-        for _seat in self:
-            if p.name == _seat.name:
+        for s in self:
+            if player == s.player:
                 return False
 
-        if self.seats[s] is None:
-            self.seats[s] = p
+        if self.seats[index].is_empty():
+            self.seats[index].sitdown(player)
             return True
         else:
             return False
