@@ -5,7 +5,8 @@ class Seat():
     def __init__(self, table):
         self.table = table
         self.player = None
-        self.hand = None
+        # Set the hand to a new empty Hand
+        self.hand = hand.Hand()
         self.chips = 0
 
     def sitdown(self, player):
@@ -13,9 +14,6 @@ class Seat():
 
         # Set the player
         self.player = player
-
-        # Set the hand to a new empty Hand
-        self.hand = hand.Hand()
 
     def standup(self):
         # If no player is sitting, raise an exception
@@ -59,5 +57,10 @@ class Seat():
             self.chips -= amount
             return amount
 
-    def fold(self, c):
-        pass
+    def fold(self):
+        """
+        Removes all the cards in the hand and returns them as a list.
+        """
+        copy = self.hand.cards[:]
+        self.hand.cards = []
+        return copy

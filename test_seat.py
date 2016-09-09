@@ -183,3 +183,27 @@ class TestSeat(unittest.TestCase):
     """
     Tests for fold(self, c):
     """
+    # Folding 1 card. Player has no cards
+    def test_fold_1card_handisempty(self):
+        c = card.Card('A', 's')
+        self.s.hand.add(c)
+        self.s.fold()
+        expected = 0
+        result = len(self.s.hand)
+        self.assertEqual(expected, result)
+
+    # Folding 1 card. Returns 1 card.
+    def test_fold_1card_return1card(self):
+        c = card.Card('A', 's')
+        self.s.hand.add(c)
+        h = self.s.fold()
+        expected = 1
+        result = len(h)
+        self.assertEqual(expected, result)
+
+    # Folding 0 cards, Returns empty list.
+    def test_fold_0cards_returnEmptyList(self):
+        h = self.s.fold()
+        expected = 0
+        result = len(h)
+        self.assertEqual(expected, result)
