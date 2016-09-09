@@ -68,56 +68,11 @@ class Player():
         else:
             self.chips += amt
 
-    def showhand(self):
-        """
-        Unhides all cards in the player hand.
-        """
-        self._hand.unhide()
-
-    def fold(self):
-        """
-        Removes all the cards in the player's hand and returns them as a list.
-        """
-        copy = self._hand.cards[:]
-        self._hand.cards = []
-        return copy
-
-    def add_card(self, card):
-        """
-        Takes a card and adds it to the player hand. If the player is human, we unhide it so
-        we can see it.
-        """
-        if self.is_human():
-            card.hidden = False
-        self._hand.add(card)
-
-    def discard(self, card):
-        """
-        Removes and returns a specific card from the player's hand. If the card is not in the
-        hand, raises an Exception.
-        """
-        if card not in self._hand.cards:
-            raise ValueError('Card not in players hand!')
-        else:
-            return self._hand.discard(card)
-
     def is_human(self):
         """
         Returns True if the player is a HUMAN type, False otherwise.
         """
         return self.playertype == 'HUMAN'
-
-    def is_allin(self):
-        """
-        Returns True if the player has 0 chips in their stack, False otherwise.
-        """
-        return self.chips == 0
-
-    def has_cards(self):
-        """
-        Returns True if the player has one or more cards in their hand, False otherwise.
-        """
-        return len(self._hand) > 0
 
 
 def random_type():
