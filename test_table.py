@@ -14,7 +14,7 @@ class TestTable(unittest.TestCase):
         self.t = table_factory.BobTable(players)
 
         if removed is not None:
-            self.t.remove_player(removed)
+            self.t.pop(removed)
             self.assertTrue(self.t.seats[removed].is_empty())
 
         for i in range(btn_moved):
@@ -243,32 +243,32 @@ class TestTable(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for remove_player()
+    Tests for pop()
     """
-    # Remove player 0, table doesn't contain the player at seat 0.
-    def test_removeplayer_removeseat0_doesntcontainseat0(self):
+    # Pop player 0, table doesn't contain the player at seat 0.
+    def test_pop_seat0_doesntcontainseat0(self):
         p = player.Player('bob0', 'CPU')
-        self.t.remove_player(0)
+        self.t.pop(0)
         expected = False
         result = p in self.t
         self.assertEqual(expected, result)
 
-    # Remove player 0, seat 0 is None
-    def test_removeplayer_removeseat0_seat0isNone(self):
-        self.t.remove_player(0)
+    # Pop player 0, seat 0 is None
+    def test_pop_seat0_seat0isNone(self):
+        self.t.pop(0)
         expected = True
         result = self.t.seats[0] is None
         self.assertEqual(expected, result)
 
-    def test_removeplayer_removeseat0_returnsPlayer(self):
+    def test_pop_seat0_returnsPlayer(self):
         expected = self.t.seats[0]
-        result = self.t.remove_player(0)
+        result = self.t.pop(0)
         self.assertEqual(expected, result)
 
-    def test_removeplayer_emptyseat_raisesException(self):
-        self.t.remove_player(0)
+    def test_pop_emptyseat_raisesException(self):
+        self.t.pop(0)
         self.assertTrue(self.t.seats[0] is None)
-        self.assertRaises(ValueError, self.t.remove_player, 0)
+        self.assertRaises(ValueError, self.t.pop, 0)
 
     """
     Tests for get_players()

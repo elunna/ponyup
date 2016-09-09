@@ -116,7 +116,7 @@ class Table():
         else:
             return False
 
-    def remove_player(self, index):
+    def pop(self, index):
         """
         Removes and returns a player from a given seat index. If the seat is empty, raises a
         ValueError exception.
