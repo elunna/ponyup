@@ -51,10 +51,13 @@ class Seat():
         self.chips += self.player.bet(amount)
 
     def bet(self, amount):
-        pass
-
-    def is_allin(self):
-        pass
+        if amount > self.chips:
+            raise ValueError('Cannot bet more than stack size!')
+        elif amount <= 0:
+            raise ValueError('Bet must be a positive number!')
+        else:
+            self.chips -= amount
+            return amount
 
     def fold(self, c):
         pass

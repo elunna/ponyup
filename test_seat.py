@@ -139,10 +139,46 @@ class TestSeat(unittest.TestCase):
     """
     Tests for bet(self, amount):
     """
+    def test_bet_stack100_bets10_returns10(self):
+        self.s.sitdown(self.p)
+        self.s.buy_chips(100)
+        expected = 10
+        result = self.s.bet(10)
+        self.assertEqual(expected, result)
 
-    """
-    Tests for is_allin():
-    """
+    def test_bet_stack100_bets10_stack90(self):
+        self.s.sitdown(self.p)
+        self.s.buy_chips(100)
+        expected = 90
+        self.s.bet(10)
+        result = self.s.chips
+        self.assertEqual(expected, result)
+
+    def test_bet_broke_raiseException(self):
+        self.s.sitdown(self.p)
+        self.assertRaises(ValueError, self.s.bet, 10)
+
+    def test_bet_stack100_bets100_return100(self):
+        self.s.sitdown(self.p)
+        self.s.buy_chips(100)
+        expected = 100
+        result = self.s.bet(100)
+        self.assertEqual(expected, result)
+
+    def test_bet_overstack_raiseException(self):
+        self.s.sitdown(self.p)
+        self.s.buy_chips(100)
+        self.assertRaises(ValueError, self.s.bet, 1000)
+
+    def test_bet_stack100_bets0_raiseException(self):
+        self.s.sitdown(self.p)
+        self.s.buy_chips(100)
+        self.assertRaises(ValueError, self.s.bet, 0)
+
+    def test_bet_stack100_betsNegative_raiseException(self):
+        self.s.sitdown(self.p)
+        self.s.buy_chips(100)
+        self.assertRaises(ValueError, self.s.bet, -1)
 
     """
     Tests for fold(self, c):
