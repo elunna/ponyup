@@ -11,8 +11,16 @@ class Seat():
         # Set the player
         self.player = player
 
-    def standup(self, player):
-        pass
+    def standup(self):
+        # If no player is sitting, raise an exception
+        if self.player is None:
+            raise Exception('There is no player to stand up from this seat!')
+
+        # Give their chips back
+        self.player.add_chips(self.chips)
+        self.chips = 0
+        # Remove the player
+        self.player = None
 
     def is_empty(self):
         return self.player is None
@@ -27,7 +35,7 @@ class Seat():
         pass
 
     def buy_chips(self, amount):
-        pass
+        self.chips += self.player.bet(amount)
 
     def bet(self, amount):
         pass

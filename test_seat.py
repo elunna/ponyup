@@ -10,6 +10,7 @@ class TestSeat(unittest.TestCase):
         t = table.Table(6)
         self.s = seat.Seat(t)
         self.p = player.Player("Erik")
+        self.p.chips = 1000
 
     """
     Tests for __init__()
@@ -40,6 +41,24 @@ class TestSeat(unittest.TestCase):
     """
     Tests for standup(self, player):
     """
+    def test_standup_existingplayer_isempty(self):
+        self.s.sitdown(self.p)
+        self.s.standup()
+        expected = True
+        result = self.s.is_empty()
+        self.assertEqual(expected, result)
+
+    def test_standup_empty_raisesException(self):
+        self.assertRaises(Exception, self.s.standup)
+
+    def test_standup_playerwithchips_0chips(self):
+        self.s.sitdown(self.p)
+        self.s.buy_chips(100)
+        self.s.standup()
+        expected = 0
+        result = self.s.chips
+        self.assertEqual(expected, result)
+
 
     """
     Tests for is_empty(self):
