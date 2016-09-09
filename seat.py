@@ -2,7 +2,8 @@ import hand
 
 
 class Seat():
-    def __init__(self):
+    def __init__(self, num):
+        self.NUM = num  # Need to set the seat number in the table.
         self.player = None
         # Set the hand to a new empty Hand
         self.hand = hand.Hand()

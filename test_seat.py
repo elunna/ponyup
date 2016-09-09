@@ -7,7 +7,7 @@ import seat
 class TestSeat(unittest.TestCase):
 
     def setUp(self):
-        self.s = seat.Seat()
+        self.s = seat.Seat(1)
         self.p = player.Player("Erik")
         self.p.bank = 1000
 
