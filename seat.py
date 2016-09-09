@@ -14,7 +14,10 @@ class Seat():
 
     def sitdown(self, player):
         # Set the player
-        self.player = player
+        if not self.is_empty():
+            raise Exception('The seat is currently occupised!')
+        else:
+            self.player = player
 
     def standup(self):
         # If no player is sitting, raise an exception
@@ -38,8 +41,6 @@ class Seat():
             return len(self.hand) > 0
 
     def has_chips(self):
-        if self.player is None:
-            raise Exception('There is no player sitting at this seat!')
         return self.stack > 0
 
     def buy_chips(self, amount):
@@ -48,20 +49,15 @@ class Seat():
         self.stack += self.player.withdraw(amount)
 
     def win(self, amount):
-        if self.player is None:
-            raise Exception('There is no player sitting at this seat!')
-        if amount <= 0:
-            raise ValueError('Win amount must be a positive number!')
+        self.check_amount(amount)
         self.stack += amount
 
-    def bet(self, amount):
-        if amount > self.stack:
+    def bet(self, amt):
+        self.check_amount(amt)
+        if amt > self.stack:
             raise ValueError('Cannot bet more than stack size!')
-        elif amount <= 0:
-            raise ValueError('Bet must be a positive number!')
-        else:
-            self.stack -= amount
-            return amount
+        self.stack -= amt
+        return amt
 
     def fold(self):
         """
@@ -70,3 +66,7 @@ class Seat():
         copy = self.hand.cards[:]
         self.hand.cards = []
         return copy
+
+    def check_amount(self, amt):
+        if amt <= 0:
+            raise ValueError('Win amount must be a positive number!')

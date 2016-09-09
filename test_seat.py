@@ -92,9 +92,6 @@ class TestSeat(unittest.TestCase):
     """
     Tests for has_chips(self):
     """
-    def test_haschips_emptyseat_raiseException(self):
-        self.assertRaises(Exception, self.s.has_chips)
-
     def test_haschips_playerboughtchips_returnsTrue(self):
         self.s.sitdown(self.p)
         self.s.buy_chips(100)
@@ -140,9 +137,6 @@ class TestSeat(unittest.TestCase):
     """
     Tests for win(amount):
     """
-    def test_win_emptyseat_raiseException(self):
-        self.assertRaises(Exception, self.s.win, 100)
-
     def test_win_negamount_raiseException(self):
         self.s.sitdown(self.p)
         self.assertRaises(ValueError, self.s.win, -1)
