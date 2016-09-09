@@ -26,7 +26,10 @@ class Seat():
         return self.player is None
 
     def has_hand(self):
-        pass
+        if self.hand is None:
+            return False
+        else:
+            return len(self.hand) > 0
 
     def show_hand(self):
         pass

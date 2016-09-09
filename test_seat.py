@@ -68,6 +68,14 @@ class TestSeat(unittest.TestCase):
     """
     Tests for has_hand(self):
     """
+    def test_hashand_emptyseat_returnsFalse(self):
+        self.assertFalse(self.s.has_hand())
+
+    def test_hashand_filledseat_returnsFalse(self):
+        # Has a player, but still no hand
+        self.s.sitdown(self.p)
+        self.assertFalse(self.s.has_hand())
+
 
     """
     Tests for show_hand(self):
