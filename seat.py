@@ -8,6 +8,9 @@ class Seat():
         self.hand = hand.Hand()
         self.chips = 0
 
+    def __str__(self):
+        return str(self.player)
+
     def sitdown(self, player):
         # Set the player
         self.player = player
