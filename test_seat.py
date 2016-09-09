@@ -58,6 +58,13 @@ class TestSeat(unittest.TestCase):
         result = self.s.chips
         self.assertEqual(expected, result)
 
+    def test_standup_playersitting_returnsPlayer(self):
+        self.s.sitdown(self.p)
+        self.s.buy_chips(100)
+        expected = self.p
+        result = self.s.standup()
+        self.assertEqual(expected, result)
+
     """
     Tests for is_empty(self):
     """

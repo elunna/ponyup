@@ -23,8 +23,9 @@ class Seat():
         # Give their chips back
         self.player.deposit(self.chips)
         self.chips = 0
-        # Remove the player
+        p = self.player
         self.player = None
+        return p
 
     def is_empty(self):
         return self.player is None
