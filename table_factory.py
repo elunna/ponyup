@@ -15,8 +15,8 @@ class BobTable(table.Table):
         super().__init__(seats)
 
         for i, s in enumerate(self.seats):
-            self.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
-            self.seats[i].chips = STARTINGCHIPS
+            s.sitdown(player.Player('bob{}'.format(i), 'CPU'))
+            s.buy_chips(STARTINGCHIPS)
 
 
 class SteppedStackTable(table.Table):
@@ -28,8 +28,8 @@ class SteppedStackTable(table.Table):
         super().__init__(seats)
 
         for i, s in enumerate(self.seats):
-            self.add_player(i, player.Player('bob{}'.format(i), 'CPU'))
-            self.seats[i].chips = STEP * (i + 1)
+            s.sitdown(player.Player('bob{}'.format(i), 'CPU'))
+            s.buy_chips(STEP * (i + 1))
 
 
 class Draw5Table(table.Table):
@@ -40,8 +40,8 @@ class Draw5Table(table.Table):
         super().__init__(seats)
 
         for i, s in enumerate(self.seats):
-            self.add_player(i, player.Player5Card('bob{}'.format(i), None))
-            self.seats[i].chips = STARTINGCHIPS
+            s.sitdown(player.Player5Card('bob{}'.format(i), None))
+            s.buy_chips(STARTINGCHIPS)
 
 
 class Stud5Table(table.Table):
@@ -72,10 +72,11 @@ class HeroTable(table.Table):
             if s is None:
                 #  self.add_player(i, player.Player(nameset.pop(), "CPU"))
                 newplayer = get_player(nameset.pop(), game)
-                self.add_player(i, newplayer)
+                s.sitdown(newplayer)
             else:
                 nameset.pop()
-            self.seats[i].chips = STARTINGCHIPS
+
+            s.buy_chips(STARTINGCHIPS)
 
 
 def get_player(name, game):
