@@ -193,7 +193,7 @@ class Table():
         """
         Returns a list of all the seats that have no chips in front of them.
         """
-        return [s.player for s in self if s.has_chips() is False]
+        return [s for s in self if s.has_chips() is False]
 
     def get_players(self, hascards=False, haschips=False):
         """
