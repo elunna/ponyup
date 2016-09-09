@@ -1,6 +1,7 @@
 from __future__ import print_function
 import colors
 import random
+import seat
 
 VALID_SIZES = list(range(1, 10))
 
@@ -11,9 +12,7 @@ class Table():
             raise ValueError('Not a valid table size!')
 
         self.TOKENS = {'D': -1, 'SB': -1, 'BB': -1, 'BI': -1}
-        self.seats = []
-        for i in range(size):
-            self.seats.append(None)
+        self.seats = (seat.Seat() for i in range(size))
 
     def __len__(self):
         """
