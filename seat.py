@@ -5,15 +5,18 @@ class Seat():
         self.chips = 0
 
     def sitdown(self, player):
-        pass
+        self.player = player
 
     def standup(self, player):
         pass
 
     def is_empty(self):
-        pass
+        return self.player is None
 
     def has_hand(self):
+        pass
+
+    def show_hand(self):
         pass
 
     def has_chips(self):
@@ -25,10 +28,7 @@ class Seat():
     def bet(self, amount):
         pass
 
-    def add_card(self, c):
-        pass
-
-    def remove_card(self, c):
+    def is_allin(self):
         pass
 
     def fold(self, c):

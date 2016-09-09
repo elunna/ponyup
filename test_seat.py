@@ -1,4 +1,5 @@
 import unittest
+import player
 import seat
 
 
@@ -15,6 +16,21 @@ class TestSeat(unittest.TestCase):
     """
     Tests for sitdown(self, player):
     """
+    def test_sitdown_player_isnotEmpty(self):
+        p = player.Player("Erik")
+        s = seat.Seat()
+        s.sitdown(p)
+        expected = False
+        result = s.is_empty()
+        self.assertEqual(expected, result)
+
+    def test_sitdown_player_matchesSeatPlayer(self):
+        p = player.Player("Erik")
+        s = seat.Seat()
+        s.sitdown(p)
+        expected = p
+        result = s.player
+        self.assertEqual(expected, result)
 
     """
     Tests for standup(self, player):
@@ -26,6 +42,10 @@ class TestSeat(unittest.TestCase):
 
     """
     Tests for has_hand(self):
+    """
+
+    """
+    Tests for show_hand(self):
     """
 
     """
@@ -41,11 +61,7 @@ class TestSeat(unittest.TestCase):
     """
 
     """
-    Tests for add_card(self, c):
-    """
-
-    """
-    Tests for remove_card(self, c):
+    Tests for is_allin():
     """
 
     """
