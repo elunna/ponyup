@@ -110,7 +110,11 @@ class Table():
         """
         Returns True if the player is occupying a seat at the table, False otherwise.
         """
-        return plyr in self.seats
+        for s in self:
+            if s.player == plyr:
+                return True
+        else:
+            return False
 
     def remove_player(self, index):
         """
