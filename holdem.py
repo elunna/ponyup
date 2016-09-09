@@ -41,3 +41,11 @@ def text2cards(string):
         for c in cards:
             c.hidden = False
         return list(itertools.combinations(cards, 2))
+
+    elif string[2] == 's':
+        # Suited cards - only have 4 combos
+        combos = []
+        for s in card.SUITS:
+            combos.append((card.Card(string[0], s), card.Card(string[1], s)))
+
+        return combos
