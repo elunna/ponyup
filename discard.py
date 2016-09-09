@@ -108,35 +108,35 @@ def discard_phase(table, deck):
     holdingcards = table.get_players(hascards=True)
     muckpile = []
 
-    for p in holdingcards:
+    for s in holdingcards:
         max_discards = (5 if len(deck) >= 5 else len(deck))
         if max_discards == 0:
             print('Deck has been depleted!')
             break
-        if p.is_human():
-            discards = human_discard(p._hand, max_discards)
+        if s.player.is_human():
+            discards = human_discard(s.hand, max_discards)
         else:
-            discards = auto_discard(p._hand, max_discards)
+            discards = auto_discard(s.hand, max_discards)
 
         if discards:
-            print('{} discards {}'.format(str(p), discards).rjust(70))
+            print('{} discards {}'.format(str(s), discards).rjust(70))
         else:
-            print('{} stands pat.'.format(str(p)).rjust(70))
+            print('{} stands pat.'.format(str(s)).rjust(70))
 
         # Redraw!
         human_draw = []
         for c in discards:
-            muckpile.append(p.discard(c))
+            muckpile.append(s.hand.discard(c))
             draw = deck.deal()
 
-            if p.is_human():
+            if s.player.is_human():
                 draw.hidden = False
                 human_draw.append(draw)
 
-            p.add_card(draw)
+            s.hand.add(draw)
 
-        if p.is_human():
-            print('{} draws {}'.format(str(p), human_draw).rjust(70))
+        if s.player.is_human():
+            print('{} draws {}'.format(str(s), human_draw).rjust(70))
 
     print('')
 

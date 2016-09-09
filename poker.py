@@ -257,9 +257,9 @@ class Round():
             award_dict[w] = share
 
         if remainder > 0:
-            first_after_btn = self._table.next_player(self._table.btn)
-            #  r_winner = self._table.seats[first_after_btn].NUM
-            award_dict[first_after_btn] += remainder
+            first_after_btn = self._table.next_player(self._table.btn, hascards=True)
+            r_winner = self._table.seats[first_after_btn].NUM
+            award_dict[r_winner] += remainder
         return award_dict
 
     def showdown(self):
@@ -273,6 +273,7 @@ class Round():
         allins = self.get_allins()
         stack_shares = self.make_sidepots(allins)
         sidepots = self.process_sidepots(stack_shares)
+
         if not self.valid_sidepots(sidepots):
             raise Exception('Sidepots are not valid - they do not total the pot amount!')
 
@@ -284,19 +285,19 @@ class Round():
 
     def process_awards(self, award_dict):
         """
-        Takes in the dictionary of awards/players and awards each player their share. Uses
+        Takes in the dictionary of awards/seats and awards each player their share. Uses
         split pot to correctly split up ties.
         """
         for sidepot, winners in award_dict.items():
-            for s, amt in self.split_pot(winners, sidepot).items():
-
+            for i, amt in self.split_pot(winners, sidepot).items():
+                seat = self._table.seats[i]
                 h_txt = '{:>15} wins with a {}: {}'.format(
-                    str(s.player),
-                    str(s.hand.rank()),
-                    str(s.hand.desc())
+                    str(seat.player),
+                    str(seat.hand.rank()),
+                    str(seat.hand.desc())
                 )
                 print(h_txt.strip().rjust(70))
-                self.award_pot(s, amt)
+                self.award_pot(seat, amt)
 
     def award_pot(self, seat, amt):
         """

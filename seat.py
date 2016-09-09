@@ -18,6 +18,7 @@ class Seat():
             raise Exception('The seat is currently occupised!')
         else:
             self.player = player
+            self.hand = hand.Hand(p=player)
 
     def standup(self):
         # If no player is sitting, raise an exception
