@@ -4,32 +4,32 @@ import seat
 
 
 class TestSeat(unittest.TestCase):
+
+    def setUp(self):
+        self.s = seat.Seat()
+        self.p = player.Player("Erik")
+
     """
     Tests for __init__()
     """
     def test_init_newseat_playerNone(self):
-        s = seat.Seat()
         expected = None
-        result = s.player
+        result = self.s.player
         self.assertEqual(expected, result)
 
     """
     Tests for sitdown(self, player):
     """
     def test_sitdown_player_isnotEmpty(self):
-        p = player.Player("Erik")
-        s = seat.Seat()
-        s.sitdown(p)
+        self.s.sitdown(self.p)
         expected = False
-        result = s.is_empty()
+        result = self.s.is_empty()
         self.assertEqual(expected, result)
 
     def test_sitdown_player_matchesSeatPlayer(self):
-        p = player.Player("Erik")
-        s = seat.Seat()
-        s.sitdown(p)
-        expected = p
-        result = s.player
+        self.s.sitdown(self.p)
+        expected = self.p
+        result = self.s.player
         self.assertEqual(expected, result)
 
     """
