@@ -209,7 +209,7 @@ class Table():
         first = (btn + 1) % length
         seats = list(range(first, length)) + list(range(first))
 
-        seatlist = [self.seats[s] for s in seats if self.seats[s] is not None]
+        seatlist = [self.seats[s] for s in seats if self.seats[s].is_empty() is False]
 
         if hascards is True:
             seatlist = list(filter((lambda x: x.has_hand() == True), seatlist))
@@ -217,7 +217,7 @@ class Table():
         if haschips is True:
             seatlist = list(filter((lambda x: x.has_chips() == True), seatlist))
 
-        return seatlist
+        return [s.player for s in seatlist]
 
     def get_playerdict(self):
         """
