@@ -15,7 +15,7 @@ class TestTable(unittest.TestCase):
 
         if removed is not None:
             self.t.remove_player(removed)
-            self.assertEqual(self.t.seats[removed], None)
+            self.assertTrue(self.t.seats[removed].is_empty())
 
         for i in range(btn_moved):
             self.t.move_button()

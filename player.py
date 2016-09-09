@@ -5,7 +5,7 @@ import player_5draw
 import player_5stud
 
 TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
-BANKDEFAULT = 1000
+BANKDEFAULT = 0
 
 
 class Player():
@@ -82,6 +82,7 @@ def random_type():
 class Player5Card(Player):
     def __init__(self, name, playertype=None):
         super().__init__(name, playertype)
+        self.chips = BANKDEFAULT
         self.strategies = {}
         self.strategies = player_5draw.TYPES[self.playertype]
 
@@ -89,5 +90,6 @@ class Player5Card(Player):
 class Player5Stud(Player):
     def __init__(self, name, playertype=None):
         super().__init__(name, playertype)
+        self.chips = BANKDEFAULT
         self.strategies = {}
         self.strategies = player_5stud.TYPES[self.playertype]
