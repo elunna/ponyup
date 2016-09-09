@@ -9,9 +9,9 @@ BANKDEFAULT = 10000
 
 
 class Player():
-    def __init__(self, name, playertype="None"):
+    def __init__(self, name, playertype="None", chips=0):
         self.set_name(name)
-        self.chips = 0
+        self.chips = chips
         self._hand = hand.Hand()
 
         if playertype is None:
@@ -82,7 +82,6 @@ def random_type():
 class Player5Card(Player):
     def __init__(self, name, playertype=None):
         super().__init__(name, playertype)
-        self.chips = BANKDEFAULT
         self.strategies = {}
         self.strategies = player_5draw.TYPES[self.playertype]
 
@@ -90,6 +89,5 @@ class Player5Card(Player):
 class Player5Stud(Player):
     def __init__(self, name, playertype=None):
         super().__init__(name, playertype)
-        self.chips = BANKDEFAULT
         self.strategies = {}
         self.strategies = player_5stud.TYPES[self.playertype]
