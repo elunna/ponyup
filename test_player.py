@@ -1,7 +1,5 @@
 import unittest
-import card
 import player
-import pokerhands
 
 
 class TestPlayer(unittest.TestCase):
@@ -16,18 +14,18 @@ class TestPlayer(unittest.TestCase):
         result = p.name
         self.assertEqual(expected, result)
 
-    # new player - chips == 0
+    # new player - bank == 0
     def test_init_validname_has0chips(self):
         p = player.Player('Erik')
         expected = 0
-        result = p.chips
+        result = p.bank
         self.assertEqual(expected, result)
 
     # new player - hand is empty
     def test_init_validname_emptyhand(self):
         p = player.Player('Erik')
         expected = 0
-        result = len(p._hand)
+        result = len(p.hand)
         self.assertEqual(expected, result)
 
     def test_init__(self):
@@ -54,24 +52,24 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for bet(amt)
+    Tests for withdraw(amt)
     """
     # If a player has 0 and bets 0, it returns 0
-    def test_bet_has0chipsbets0_returns0(self):
+    def test_withdraw_has0chipsbets0_returns0(self):
         p = player.Player('Erik')
         expected = 0
         result = p.withdraw(0)
         self.assertEqual(expected, result)
 
     # If a player has 0 and bets 1, it returns 0
-    def test_bet_has0chipsbets1_returns0(self):
+    def test_withdraw_has0chipsbets1_returns0(self):
         p = player.Player('Erik')
         expected = 0
         result = p.withdraw(1)
         self.assertEqual(expected, result)
 
     # If a player has 1 and bets 1, it returns 1
-    def test_bet_has1chipbets1_returns1(self):
+    def test_withdraw_has1chipbets1_returns1(self):
         p = player.Player('Erik')
         p.deposit(1)
         expected = 1
@@ -79,41 +77,41 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # If a player has 1 and bets 1, they have 0 chips.
-    def test_bet_has1chipbets1_has0chips(self):
+    def test_withdraw_has1chipbets1_has0chips(self):
         p = player.Player('Erik')
         p.deposit(1)
         p.withdraw(1)
         expected = 0
-        result = p.chips
+        result = p.bank
         self.assertEqual(expected, result)
 
     # If a player has 1 and bets 1, they have 0 chips.
-    def test_bet_negativebet_raisesException(self):
+    def test_withdraw_negativebet_raisesException(self):
         p = player.Player('Erik')
         p.deposit(1)
         self.assertRaises(ValueError, p.withdraw, -1)
 
     """
-    Tests for add_chips(amt)
+    Tests for deposit(amt)
     """
     # Adding 1 chip results in their stack being 1. Starting with 1.
-    def test_addchips_newplayer_add1chip_has1chip(self):
+    def test_deposit_newplayer_add1chip_has1chip(self):
         p = player.Player('Erik')
         p.deposit(1)
         expected = 1
-        result = p.chips
+        result = p.bank
         self.assertEqual(expected, result)
 
     # Adding 0 chips results in no chips added.
-    def test_addchips_newplayer_add0chips_has0chip(self):
+    def test_deposit_newplayer_add0chips_has0chip(self):
         p = player.Player('Erik')
         p.deposit(0)
         expected = 0
-        result = p.chips
+        result = p.bank
         self.assertEqual(expected, result)
 
     # Cannot add negative chips!
-    def test_addchips_negativechips_raisesException(self):
+    def test_deposit_negativechips_raisesException(self):
         p = player.Player('Erik')
         self.assertRaises(Exception, p.deposit, -100)
 

@@ -44,6 +44,7 @@ class Draw5Table(table.Table):
 
         for i, s in enumerate(self.seats):
             s.sitdown(player.Player5Card('bob{}'.format(i), None))
+            s.player.deposit(DEPOSIT)
             s.buy_chips(STARTINGCHIPS)
 
 
@@ -55,8 +56,9 @@ class Stud5Table(table.Table):
         super().__init__(seats)
 
         for i, s in enumerate(self.seats):
-            self.add_player(i, player.Player5Stud('bob{}'.format(i), None))
-            self.seats[i].chips = STARTINGCHIPS
+            s.sitdown(player.Player5Stud('bob{}'.format(i), None))
+            s.player.deposit(DEPOSIT)
+            s.buy_chips(STARTINGCHIPS)
 
 
 class HeroTable(table.Table):
@@ -73,12 +75,13 @@ class HeroTable(table.Table):
         self.seats[0].player.deposit(DEPOSIT)
 
         for i, s in enumerate(self.seats):
-            if s is None:
-                newplayer = player_factory(nameset.pop(), game)
+            if s.is_empty():
+                newplayer = player_factory(game, nameset.pop())
                 s.sitdown(newplayer)
             else:
                 nameset.pop()
 
+            s.player.deposit(DEPOSIT)
             s.buy_chips(STARTINGCHIPS)
 
 
@@ -90,11 +93,12 @@ def change_playertypes(table, playertype):
             p.playertype = playertype
 
 
-def player_factory(game, name, chips=DEPOSIT, playertype=None):
+def player_factory(game, name, playertype=None):
     if game == "FIVE CARD DRAW":
-        p = player.Player5Card(name, chips)
+        p = player.Player5Card(name, playertype)
     elif game == "FIVE CARD STUD":
-        p = player.Player5Stud(name, chips)
+        p = player.Player5Stud(name, playertype)
     elif game is None:
-        p = player.Player(name, chips, playertype="CPU")
+        p = player.Player(name, playertype="CPU")
+
     return p

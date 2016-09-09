@@ -1,4 +1,3 @@
-import hand
 import names
 import random
 import player_5draw
@@ -9,10 +8,9 @@ BANKDEFAULT = 10000
 
 
 class Player():
-    def __init__(self, name, playertype="None", chips=0):
+    def __init__(self, name, playertype="None"):
         self.set_name(name)
-        self.chips = chips
-        self._hand = hand.Hand()
+        self.bank = 0
 
         if playertype is None:
             # Choose random player type
@@ -50,13 +48,13 @@ class Player():
         """
         if amt < 0:
             raise ValueError('Player cannot bet a negative amount!')
-        if amt > self.chips:
+        if amt > self.bank:
             # Put the player all-in
-            amt = self.chips
-            self.chips = 0
+            amt = self.bank
+            self.bank = 0
             return amt
         else:
-            self.chips -= amt
+            self.bank -= amt
             return amt
 
     def deposit(self, amt):
@@ -66,7 +64,7 @@ class Player():
         if amt < 0:
             raise Exception('Cannot add negative chips!')
         else:
-            self.chips += amt
+            self.bank += amt
 
     def is_human(self):
         """

@@ -9,7 +9,7 @@ class TestSeat(unittest.TestCase):
     def setUp(self):
         self.s = seat.Seat()
         self.p = player.Player("Erik")
-        self.p.chips = 1000
+        self.p.bank = 1000
 
     """
     Tests for __init__()
@@ -55,7 +55,7 @@ class TestSeat(unittest.TestCase):
         self.s.buy_chips(100)
         self.s.standup()
         expected = 0
-        result = self.s.chips
+        result = self.s.stack
         self.assertEqual(expected, result)
 
     def test_standup_playersitting_returnsPlayer(self):
@@ -126,7 +126,7 @@ class TestSeat(unittest.TestCase):
         self.s.sitdown(self.p)
         self.s.buy_chips(100)
         expected = 100
-        result = self.s.chips
+        result = self.s.stack
         self.assertEqual(expected, result)
 
     def test_buychips_buy100twice_returns200(self):
@@ -134,7 +134,7 @@ class TestSeat(unittest.TestCase):
         self.s.buy_chips(100)
         self.s.buy_chips(100)
         expected = 200
-        result = self.s.chips
+        result = self.s.stack
         self.assertEqual(expected, result)
 
     """
@@ -152,7 +152,7 @@ class TestSeat(unittest.TestCase):
         self.s.buy_chips(100)
         expected = 90
         self.s.bet(10)
-        result = self.s.chips
+        result = self.s.stack
         self.assertEqual(expected, result)
 
     def test_bet_broke_raiseException(self):

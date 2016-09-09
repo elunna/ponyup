@@ -613,7 +613,7 @@ class TestTable(unittest.TestCase):
     # 1 broke player, returns the player in a list
     def test_getbrokeplayers_1brokeplayer_returnsplayer(self):
         s = self.t.seats[0]
-        s.chips = 0
+        s.stack = 0
         expected = [s.player]
         result = self.t.get_broke_players()
         self.assertEqual(expected, result)
@@ -621,8 +621,8 @@ class TestTable(unittest.TestCase):
     # 2 broke player, returns the player in a list
     def test_getbrokeplayers_2broke_returnsboth(self):
         s1, s2 = self.t.seats[0], self.t.seats[1]
-        s1.chips = 0
-        s2.chips = 0
+        s1.stack = 0
+        s2.stack = 0
         expected = [s1.player, s2.player]
         result = self.t.get_broke_players()
         self.assertEqual(expected, result)

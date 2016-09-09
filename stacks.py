@@ -34,4 +34,4 @@ def stacklist(table):
     """
     Returns a list of all the stack sizes.
     """
-    return [p.chips for p in table]
+    return [s.stack for s in table]

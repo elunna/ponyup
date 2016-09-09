@@ -15,13 +15,13 @@ class TestTableFactory(unittest.TestCase):
     def test_bobtable_2seats_1000chips(self):
         t = table_factory.BobTable(2)
         expected = 1000
-        result = t.seats[0].chips
+        result = t.seats[0].stack
         self.assertEqual(expected, result)
 
     def test_bobtable_2seats_bob0_in_seat0(self):
         t = table_factory.BobTable(2)
         expected = 'bob0'
-        result = t.seats[0].name
+        result = t.seats[0].player.name
         self.assertEqual(expected, result)
 
     """
@@ -30,13 +30,13 @@ class TestTableFactory(unittest.TestCase):
     def test_steppedstacktable_seat0_100chips(self):
         t = table_factory.SteppedStackTable(2)
         expected = 100
-        result = t.seats[0].chips
+        result = t.seats[0].stack
         self.assertEqual(expected, result)
 
     def test_steppedstacktable_seat1_200chips(self):
         t = table_factory.SteppedStackTable(2)
         expected = 200
-        result = t.seats[1].chips
+        result = t.seats[1].stack
         self.assertEqual(expected, result)
 
     """
@@ -45,7 +45,7 @@ class TestTableFactory(unittest.TestCase):
     def test_herotable_seat0_ishero(self):
         t = table_factory.HeroTable(2, 'Hero', "FIVE CARD DRAW")
         expected = 'Hero'
-        result = t.seats[0].name
+        result = t.seats[0].player.name
         self.assertEqual(expected, result)
 
     def test_herotable_draw5_2seats_len2(self):

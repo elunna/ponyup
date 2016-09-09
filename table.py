@@ -53,7 +53,7 @@ class Table():
 
             _str += '{:20}'.format(s.name)
 
-            _str += colors.color('${:<16}'.format(s.chips), 'yellow')
+            _str += colors.color('${:<16}'.format(s.stack), 'yellow')
 
             # Display hand if available
             if s._hand is not None:

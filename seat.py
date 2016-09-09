@@ -6,7 +6,7 @@ class Seat():
         self.player = None
         # Set the hand to a new empty Hand
         self.hand = hand.Hand()
-        self.chips = 0
+        self.stack = 0
 
     def __str__(self):
         return str(self.player)
@@ -21,8 +21,8 @@ class Seat():
             raise Exception('There is no player to stand up from this seat!')
 
         # Give their chips back
-        self.player.deposit(self.chips)
-        self.chips = 0
+        self.player.deposit(self.stack)
+        self.stack = 0
         p = self.player
         self.player = None
         return p
@@ -39,20 +39,20 @@ class Seat():
     def has_chips(self):
         if self.player is None:
             raise Exception('There is no player sitting at this seat!')
-        return self.chips > 0
+        return self.stack > 0
 
     def buy_chips(self, amount):
-        if amount > self.player.chips:
+        if amount > self.player.bank:
             raise ValueError('Player cannot buy more chips than they can afford!')
-        self.chips += self.player.withdraw(amount)
+        self.stack += self.player.withdraw(amount)
 
     def bet(self, amount):
-        if amount > self.chips:
+        if amount > self.stack:
             raise ValueError('Cannot bet more than stack size!')
         elif amount <= 0:
             raise ValueError('Bet must be a positive number!')
         else:
-            self.chips -= amount
+            self.stack -= amount
             return amount
 
     def fold(self):
