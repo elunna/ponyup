@@ -74,21 +74,12 @@ class HeroTable(table.Table):
 
         for i, s in enumerate(self.seats):
             if s is None:
-                newplayer = get_player(nameset.pop(), game)
+                newplayer = player_factory(nameset.pop(), game)
                 s.sitdown(newplayer)
             else:
                 nameset.pop()
 
             s.buy_chips(STARTINGCHIPS)
-
-
-def get_player(name, game):
-    if game == "FIVE CARD DRAW":
-        return player.Player5Card(name)
-    elif game == "FIVE CARD STUD":
-        return player.Player5Stud(name)
-    elif game is None:
-        return player.Player(name, "CPU")
 
 
 def change_playertypes(table, playertype):
@@ -97,3 +88,13 @@ def change_playertypes(table, playertype):
             pass
         else:
             p.playertype = playertype
+
+
+def player_factory(game, name, chips=DEPOSIT, playertype=None):
+    if game == "FIVE CARD DRAW":
+        p = player.Player5Card(name, chips)
+    elif game == "FIVE CARD STUD":
+        p = player.Player5Stud(name, chips)
+    elif game is None:
+        p = player.Player(name, chips, playertype="CPU")
+    return p
