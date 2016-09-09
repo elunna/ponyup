@@ -235,5 +235,5 @@ class Table():
         """
         stacks = {}
         for s in self:
-            stacks[str(s.player)] = s.chips
+            stacks[str(s.player)] = s.stack
         return stacks
