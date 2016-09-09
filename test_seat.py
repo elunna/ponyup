@@ -2,14 +2,12 @@ import unittest
 import card
 import player
 import seat
-import table
 
 
 class TestSeat(unittest.TestCase):
 
     def setUp(self):
-        t = table.Table(6)
-        self.s = seat.Seat(t)
+        self.s = seat.Seat()
         self.p = player.Player("Erik")
         self.p.chips = 1000
 

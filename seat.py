@@ -2,16 +2,13 @@ import hand
 
 
 class Seat():
-    def __init__(self, table):
-        self.table = table
+    def __init__(self):
         self.player = None
         # Set the hand to a new empty Hand
         self.hand = hand.Hand()
         self.chips = 0
 
     def sitdown(self, player):
-        # Check that this player isn't already at the table.
-
         # Set the player
         self.player = player
 
