@@ -368,9 +368,10 @@ class Round():
 
     def clear_broke_players(self):
         broke_players = self._table.get_broke_players()
+        _str = ''
         for p in broke_players:
             self._table.seats.remove(p)
-            print('{} left the table with no money!'.format(p))
+            _str += '{} left the table with no money!\n'.format(p)
 
     def cleanup(self):
         self.muck_all_cards()
