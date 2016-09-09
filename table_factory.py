@@ -2,6 +2,7 @@ import player
 import table
 import names
 
+DEPOSIT = 10000
 STARTINGCHIPS = 1000
 STEP = 100
 
@@ -16,6 +17,7 @@ class BobTable(table.Table):
 
         for i, s in enumerate(self.seats):
             s.sitdown(player.Player('bob{}'.format(i), 'CPU'))
+            s.player.deposit(DEPOSIT)
             s.buy_chips(STARTINGCHIPS)
 
 
@@ -29,6 +31,7 @@ class SteppedStackTable(table.Table):
 
         for i, s in enumerate(self.seats):
             s.sitdown(player.Player('bob{}'.format(i), 'CPU'))
+            s.player.deposit(DEPOSIT)
             s.buy_chips(STEP * (i + 1))
 
 
@@ -66,11 +69,11 @@ class HeroTable(table.Table):
 
         nameset = names.random_names(seats)
         # Add the hero to seat 0
-        self.add_player(0, player.Player(hero, 'HUMAN'))
+        self.seats[0].sitdown(player.Player(hero, 'HUMAN'))
+        self.seats[0].player.deposit(DEPOSIT)
 
         for i, s in enumerate(self.seats):
             if s is None:
-                #  self.add_player(i, player.Player(nameset.pop(), "CPU"))
                 newplayer = get_player(nameset.pop(), game)
                 s.sitdown(newplayer)
             else:

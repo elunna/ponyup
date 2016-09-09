@@ -5,13 +5,13 @@ import player_5draw
 import player_5stud
 
 TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
-BANKDEFAULT = 0
+BANKDEFAULT = 10000
 
 
 class Player():
     def __init__(self, name, playertype="None"):
         self.set_name(name)
-        self.chips = BANKDEFAULT
+        self.chips = 0
         self._hand = hand.Hand()
 
         if playertype is None:
