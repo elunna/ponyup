@@ -121,11 +121,11 @@ class Table():
         Removes and returns a player from a given seat index. If the seat is empty, raises a
         ValueError exception.
         """
-        p = self.seats[index].player
-        if p is None:
+        s = self.seats[index]
+        if s.is_empty():
             raise ValueError('The seat is already empty!')
         else:
-            self.seats[index].standup()
+            p = s.standup()
             return p
 
     def next_player(self, from_seat, step=1, hascards=False):

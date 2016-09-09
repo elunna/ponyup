@@ -261,7 +261,7 @@ class TestTable(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_pop_seat0_returnsPlayer(self):
-        expected = self.t.seats[0]
+        expected = self.t.seats[0].player
         result = self.t.pop(0)
         self.assertEqual(expected, result)
 
