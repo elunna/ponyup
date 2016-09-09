@@ -21,13 +21,6 @@ class TestPlayer(unittest.TestCase):
         result = p.bank
         self.assertEqual(expected, result)
 
-    # new player - hand is empty
-    def test_init_validname_emptyhand(self):
-        p = player.Player('Erik')
-        expected = 0
-        result = len(p.hand)
-        self.assertEqual(expected, result)
-
     def test_init__(self):
         self.assertRaises(ValueError, player.Player, 'ab')
 

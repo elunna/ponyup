@@ -57,25 +57,25 @@ class TestBetting(unittest.TestCase):
     """
     # 6 player table: BTN=0, SB=1, BB=2
     def test_iter_1stplayer_returnsSeat3(self):
-        player = next(self.br)
+        seat = next(self.br)
         expected = 3
-        result = self.r._table.get_index(player)
+        result = seat.NUM
         self.assertEqual(expected, result)
 
     # 6 player table: BTN=0, SB=1, BB=2
     def test_play_2ndplayer_returnsSeat4(self):
         next(self.br)
-        player = next(self.br)
+        seat = next(self.br)
         expected = 4
-        result = self.r._table.get_index(player)
+        result = seat.NUM
         self.assertEqual(expected, result)
 
-    def test_play_3rdplayer_returnsSeat5(self):
+    def test_play_3rdseat_hasNUM5(self):
         next(self.br)
         next(self.br)
-        player = next(self.br)
+        seat = next(self.br)
         expected = 5
-        result = self.r._table.get_index(player)
+        result = seat.NUM
         self.assertEqual(expected, result)
 
     """
@@ -89,7 +89,7 @@ class TestBetting(unittest.TestCase):
     def test_playerdecision_allin_returnsAllinOption(self):
         self.setUp(players=2)
         bettor = self.br.get_bettor()
-        bettor.bet(bettor.chips)
+        bettor.bet(bettor.stack)
         expected = "ALLIN"
         result = self.br.player_decision(bettor).name
         self.assertEqual(expected, result)
@@ -98,7 +98,7 @@ class TestBetting(unittest.TestCase):
     def test_playerdecision_royalflush_returnsRaise(self):
         self.setUp(players=2)
         bettor = self.br.get_bettor()
-        bettor._hand.cards = pokerhands.make('royalflush')
+        bettor.hand.cards = pokerhands.make('royalflush')
         expected = "RAISE"
         result = self.br.player_decision(bettor).name
         self.assertEqual(expected, result)
@@ -109,7 +109,7 @@ class TestBetting(unittest.TestCase):
         next(self.br)  # SB
         next(self.br)  # BB
         bettor = self.br.get_bettor()
-        bettor._hand.cards = pokerhands.make('junk')
+        bettor.hand.cards = pokerhands.make('junk')
         expected = "CHECK"
         result = self.br.player_decision(bettor).name
         self.assertEqual(expected, result)
@@ -118,7 +118,7 @@ class TestBetting(unittest.TestCase):
     def test_playerdecision_nocards_raiseException(self):
         self.setUp(players=2)
         bettor = self.br.get_bettor()
-        bettor._hand.cards = None
+        bettor.hand.cards = None
 
         self.assertRaises(Exception, self.br.player_decision, bettor)
 
@@ -129,10 +129,10 @@ class TestBetting(unittest.TestCase):
     def test_processoption_CHECK_playerchips_staysame(self):
         self.setUp(players=2, street=2)
         bettor = self.br.get_bettor()
-        expected = bettor.chips
+        expected = bettor.stack
         self.br.process_option(betting.CHECK)
 
-        result = bettor.chips
+        result = bettor.stack
         self.assertEqual(expected, result)
 
     # CHECK - bet level is same
@@ -148,18 +148,18 @@ class TestBetting(unittest.TestCase):
     def test_processoption_FOLD_playerhasnocards(self):
         self.setUp(players=2, street=2)
         bettor = self.br.get_bettor()
-        self.assertTrue(bettor.has_cards())
+        self.assertTrue(bettor.has_hand())
         self.br.process_option(betting.FOLD)
-        self.assertFalse(bettor.has_cards())
+        self.assertFalse(bettor.has_hand())
 
     # FOLD - Players chips stay the same
     def test_processoption_FOLD_playerchips_staysame(self):
         self.setUp(players=2, street=2)
         bettor = self.br.get_bettor()
-        expected = bettor.chips
+        expected = bettor.stack
         self.br.process_option(betting.FOLD)
 
-        result = bettor.chips
+        result = bettor.stack
         self.assertEqual(expected, result)
 
     # FOLD - Bet stays the same
@@ -183,7 +183,7 @@ class TestBetting(unittest.TestCase):
     def test_processoption_BET_partialbet_equalsAllin(self):
         self.setUp_shorty(shortstack=3, street=2)
         self.assertTrue(self.br.bettor == 1)
-        stack = self.br.get_bettor().chips
+        stack = self.br.get_bettor().stack
         self.br.process_option(betting.Action('BET', stack))
         result = self.br.bet
         self.assertEqual(stack, result)
@@ -192,17 +192,17 @@ class TestBetting(unittest.TestCase):
     def test_processoption_BET_exceedsopenamount_raiseException(self):
         self.setUp_shorty(shortstack=8, street=2)
         self.assertTrue(self.br.bettor == 1)
-        stack = self.br.get_bettor().chips
+        stack = self.br.get_bettor().stack
         action = betting.Action('BET', stack)
         self.assertRaises(Exception, self.br.process_option, action)
 
     # BET - Players chips are diminished by the bet amount
     def test_processoption_BET_playerchips_decreasebybetsize(self):
         self.setUp(players=2, street=2)
-        p_chips = self.br.get_bettor().chips
+        p_chips = self.br.get_bettor().stack
         self.br.process_option(betting.Action('BET', cost=self.br.betsize))
         expected = self.br.betsize
-        result = p_chips - self.br.get_bettor().chips
+        result = p_chips - self.br.get_bettor().stack
         self.assertEqual(expected, result)
 
     # If seat 1 makes a BET, closer resets to 0.
@@ -777,20 +777,20 @@ class TestBetting(unittest.TestCase):
     # Draw5: Blind posting
     def test_setstacks_predraw_fullstacks(self):
         self.setUp(players=2)
-        expected = {'bob0': 1000, 'bob1': 1000}
+        expected = {0: 1000, 1: 1000}
         result = self.br.stacks
         self.assertEqual(expected, result)
 
     def test_setstacks_postdraw_stacksminusblinds(self):
         self.setUp(players=2, street=2)
-        expected = {'bob0': 999, 'bob1': 998}
+        expected = {0: 999, 1: 998}
         result = self.br.stacks
         self.assertEqual(expected, result)
 
     # Stud5: Ante posting
     def test_setstacks_stud_street1_samestacks(self):
         self.setUp_studGame(players=2, level=4, street=1)
-        expected = {'bob0': 1000, 'bob1': 1000}
+        expected = {0: 1000, 1: 1000}
         result = self.br.stacks
         self.assertEqual(expected, result)
 

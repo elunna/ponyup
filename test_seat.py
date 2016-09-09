@@ -166,9 +166,9 @@ class TestSeat(unittest.TestCase):
         result = self.s.stack
         self.assertEqual(expected, result)
 
-    def test_bet_broke_raiseException(self):
-        self.s.sitdown(self.p)
-        self.assertRaises(ValueError, self.s.bet, 10)
+    #  def test_bet_broke_raiseException(self):
+        #  self.s.sitdown(self.p)
+        #  self.assertRaises(ValueError, self.s.bet, 10)
 
     def test_bet_stack100_bets100_return100(self):
         self.s.sitdown(self.p)

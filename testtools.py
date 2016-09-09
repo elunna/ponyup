@@ -28,7 +28,7 @@ def deal_5stud_test_hands(table):
     hands.append(pokerhands.convert_to_cards(['Ts', 'Th']))
     hands.append(pokerhands.convert_to_cards(['9s', '9h']))
     for p in table:
-        p._hand.cards = hands.pop(0)
+        p.hand.cards = hands.pop(0)
 
 
 def deal_list_to_table(table, cards, faceup=False):

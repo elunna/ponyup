@@ -49,7 +49,7 @@ class BettingRound():
     def __next__(self):
         return next(self.play_generator)
 
-    def player_decision(self, p):
+    def player_decision(self, s):
         """
         Takes in a player p and calculates the cost of the current minimum bet amount for that
         player, based on how much they have invested so far this round. It takes that cost and
@@ -60,27 +60,27 @@ class BettingRound():
         they are prompted for their decision. If CPU, they follow an algorithm for making a
         play. The decision is returned as an Action object.
         """
-        options = self.get_options(p)
+        options = self.get_options(s)
 
         if 'a' in options:
             # Player is allin
             return Action('ALLIN', 0)
-        elif p.is_human():
+        elif s.player.is_human():
             #  amt = colors.color('${}'.format(self.bet), 'YELLOW')
             #  print('Bet to you is {}'.format(amt))
             return console.menu(options)
         else:
-            facing = self.cost(p) / self.betsize
-            return strategy.makeplay(p, options, self.r.street, self.level(), facing)
+            facing = self.cost(s) / self.betsize
+            return strategy.makeplay(s, options, self.r.street, self.level(), facing)
 
     def process_option(self, action):
         """
         Performs the option picked by a player.
         """
-        p = self.get_bettor()
+        s = self.get_bettor()
 
         if action.name == 'FOLD':
-            self.r.muck.extend(p.fold())
+            self.r.muck.extend(s.fold())
             return
         elif action.name in ['CHECK', 'ALLIN']:
             return
@@ -100,19 +100,19 @@ class BettingRound():
             self.closer = self.reopened_closer(self.bettor)
 
         # If the bet amount is over the ongoing bet amount - reset the bet amount.
-        player_bet = action.cost + self.invested(p)
+        player_bet = action.cost + self.invested(s)
         if player_bet > self.bet:
             self.bet = player_bet
 
         # Add the bet/raise amount to the pot
-        self.r.pot += p.bet(action.cost)
+        self.r.pot += s.bet(action.cost)
 
-    def get_options(self, p):
+    def get_options(self, s):
         """
         Shows the options available to the current bettor.
         """
-        cost = self.cost(p)
-        stack = p.chips
+        cost = self.cost(s)
+        stack = s.stack
         option_dict = {}
         #  completing = (self.betsize - cost) == self.r.blinds.SB
 
@@ -133,11 +133,11 @@ class BettingRound():
                 option_dict['c'] = Action('CALL', stack)
 
         minraise_amt = self.betsize * self.level() + (self.betsize / 2)
-        minraise_cost = minraise_amt - self.invested(p)
+        minraise_cost = minraise_amt - self.invested(s)
 
         raise_amt = (self.betsize * self.level() + self.betsize)
-        raise_cost = raise_amt - self.invested(p)
-        bet_cost = self.betsize - self.invested(p)
+        raise_cost = raise_amt - self.invested(s)
+        bet_cost = self.betsize - self.invested(s)
 
         if self.level() == 0:
             if bet_cost > 0:
@@ -167,10 +167,10 @@ class BettingRound():
         return option_dict
 
     def action_string(self, action):
-        p = self.get_bettor()
+        s = self.get_bettor()
         act_str = ''
         act_str += spacing(self.level())
-        act_str += '{} {}s'.format(p, action.name.lower())
+        act_str += '{} {}s'.format(s.player, action.name.lower())
 
         amt = colors.color(' $' + str(action.cost), 'yellow')
 
@@ -184,17 +184,17 @@ class BettingRound():
             return colors.color(act_str, 'white')
         elif action.name == 'ALLIN':
             return colors.color(
-                '{}{} is all in.'.format(spacing(self.level()), p), 'gray')
+                '{}{} is all in.'.format(spacing(self.level()), s.player), 'gray')
         else:
             raise Exception('Error processing the action!')
 
-    def invested(self, player):
+    def invested(self, seat):
         # Adjust for antes posted. Antes should NOT be counted in the bet amounts.
         # This only counts for the 1st street, when antes are posted.
         if self.r.street == 0:
-            return (self.stacks[player.name] - player.chips) - self.r.blinds.ANTE
+            return (self.stacks[seat.NUM] - seat.stack) - self.r.blinds.ANTE
         else:
-            return self.stacks[player.name] - player.chips
+            return self.stacks[seat.NUM] - seat.stack
 
         #  return self.stacks[player.name] - player.chips
 
@@ -232,8 +232,8 @@ class BettingRound():
 
     def get_bet(self):
         bet = 0
-        for p in self.r._table:
-            i = self.invested(p)
+        for s in self.r._table:
+            i = self.invested(s)
             if i > bet:
                 bet = i
         # Adjust for ante.

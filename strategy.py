@@ -12,12 +12,12 @@ To greatly simplify, we'll just start with cards and handvalue.
 """
 
 
-def makeplay(player, options, street, betlevel, facing):
+def makeplay(seat, options, street, betlevel, facing):
     """
     Determines the appropriate play based on the street and handstrength.
     """
-    handval = player._hand.value()
-    strat = player.strategies[street + 1]
+    handval = seat.hand.value()
+    strat = seat.player.strategies[street + 1]
 
     if betlevel == 0:
         if handval >= strat.bet:
