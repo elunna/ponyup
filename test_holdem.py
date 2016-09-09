@@ -81,3 +81,10 @@ class TestHoldem(unittest.TestCase):
         expected = [(Ac, Kc), (Ad, Kd), (Ah, Kh), (As, Ks)]
         result = holdem.text2cards('AKs')
         self.assertEqual(expected, result)
+
+    def test_text2cards_AKo_returns12combos(self):
+        expected = 12
+        combos = holdem.text2cards('AKo')
+        result = len(combos)
+        self.assertEqual(expected, result)
+        self.assertEqual(expected, len(set(combos)))  # Verify all combos are unique

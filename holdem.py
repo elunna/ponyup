@@ -49,3 +49,9 @@ def text2cards(string):
             combos.append((card.Card(string[0], s), card.Card(string[1], s)))
 
         return combos
+
+    elif string[2] == 'o':
+        # Offsuit cards - 12 combos(suited combos not included)
+        rank1 = [card.Card(string[0], s) for s in card.SUITS]
+        rank2 = [card.Card(string[1], s) for s in card.SUITS]
+        return [(c1, c2) for c1 in rank1 for c2 in rank2 if c1.suit != c2.suit]
