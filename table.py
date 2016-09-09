@@ -87,7 +87,7 @@ class Table():
         """
         # Check if the player is already sitting.
         for s in self:
-            if player == s.player:
+            if player.name == s.player.name:
                 return False
 
         if self.seats[index].is_empty():
@@ -107,12 +107,12 @@ class Table():
         else:
             return -1
 
-    def __contains__(self, plyr):
+    def __contains__(self, player):
         """
         Returns True if the player is occupying a seat at the table, False otherwise.
         """
         for s in self:
-            if s.player == plyr:
+            if s.player == player:
                 return True
         else:
             return False

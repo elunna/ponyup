@@ -98,9 +98,9 @@ def deal_ranked_hands(table, _rev=False):
 def deal_random_cards(table, qty=5):
     d = deck.Deck()
 
-    for p in table:
+    for s in table:
         for i in range(qty):
-            p.add_card(d.deal())
+            s.hand.add(d.deal())
 
 
 def get_cards(qty):
