@@ -5,16 +5,17 @@ import player_5draw
 import player_5stud
 
 TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
+BANKDEFAULT = 1000
 
 
 class Player():
     def __init__(self, name, playertype="None"):
         self.set_name(name)
-        self.chips = 0
+        self.chips = BANKDEFAULT
         self._hand = hand.Hand()
 
         if playertype is None:
-            # Chooce random player type
+            # Choose random player type
             rnd_type = random_type()
             self.playertype = rnd_type
         else:
@@ -41,7 +42,7 @@ class Player():
         else:
             raise ValueError('Invalid username "{}" for object!'.format(name))
 
-    def bet(self, amt):
+    def withdraw(self, amt):
         """
         Removes the amount given from the player's stack and returns it. If the amount is more
         than the player has, then the remaining amount in the player's stack is remoevd and
@@ -58,7 +59,7 @@ class Player():
             self.chips -= amt
             return amt
 
-    def add_chips(self, amt):
+    def deposit(self, amt):
         """
         Adds the specified amount of chips to the player's stack.
         """
