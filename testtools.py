@@ -36,8 +36,8 @@ def deal_list_to_table(table, cards, faceup=False):
         for c in cards:
             c.hidden = False
 
-    for p in table:
-        p.add_card(cards.pop(0))
+    for s in table:
+        s.hand.add(cards.pop(0))
 
 
 def deal_stud5(table, matchingranks=0):
@@ -83,16 +83,16 @@ def deal_hand_dict(table, hand_dict):
     for k, v in sorted(hand_dict.items()):
         if k > len(table) - 1:
             return
-        table.seats[k]._hand.cards = v
+        table.seats[k].hand.cards = v
 
 
 def deal_ranked_hands(table, _rev=False):
     hands = sorted(RANKEDHANDS.keys())
     for s in table:
         if _rev:
-            s._hand.cards = RANKEDHANDS[hands.pop()]
+            s.hand.cards = RANKEDHANDS[hands.pop()]
         else:
-            s._hand.cards = RANKEDHANDS[hands.pop(0)]
+            s.hand.cards = RANKEDHANDS[hands.pop(0)]
 
 
 def deal_random_cards(table, qty=5):
