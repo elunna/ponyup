@@ -13,7 +13,7 @@ class Table():
 
         self.TOKENS = {'D': -1, 'SB': -1, 'BB': -1, 'BI': -1}
         #  self.seats = tuple([seat.Seat() for i in range(size)])  # Gen expr?
-        self.seats = [seat.Seat() for i in range(size)]
+        self.seats = [seat.Seat(i) for i in range(size)]
 
     def __len__(self):
         """
@@ -217,7 +217,7 @@ class Table():
         if haschips is True:
             seatlist = list(filter((lambda x: x.has_chips() == True), seatlist))
 
-        return [s.player for s in seatlist]
+        return seatlist
 
     def get_playerdict(self):
         """
@@ -231,9 +231,9 @@ class Table():
 
     def stackdict(self):
         """
-        Returns a name/stacksize dictionary for each player at the table.
+        Returns a seat number/stacksize dictionary for each player at the table.
         """
         stacks = {}
         for s in self:
-            stacks[str(s.player)] = s.stack
+            stacks[s.NUM] = s.stack
         return stacks

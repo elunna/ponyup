@@ -273,13 +273,13 @@ class TestTable(unittest.TestCase):
     """
     Tests for get_players()
     """
-    # From the setUp table, gets an array size 6.
+    # From the setUp table, gets a list size 6.
     def test_getplayers_6players_returnslistsize6(self):
         expected = 6
         result = len(self.t.get_players())
         self.assertEqual(expected, result)
 
-    # From a table of 1, gets an array of size 1.
+    # From a table of 1, gets a list size 1.
     def test_getplayers_1player_returnslistsize1(self):
         t = table.Table(6)
         p1 = player.Player('bob0', 'CPU')
@@ -293,15 +293,15 @@ class TestTable(unittest.TestCase):
         t = table.Table(6)
         p1 = player.Player('bob0', 'CPU')
         t.add_player(0, p1)
-        expected = True
-        result = p1 in t
+        expected = p1
+        result = t.get_players()[0].player
         self.assertEqual(expected, result)
 
     # 0 players holding cards, gets a list size 0
-    def test_getplayers_cardsandchips_0withcards_returns0(self):
+    def test_getplayers_cards_0withcards_returns0(self):
         self.t.randomize_button()
         expected = 0
-        result = len(self.t.get_players(hascards=True, haschips=True))
+        result = len(self.t.get_players(hascards=True))
         self.assertEqual(expected, result)
 
     # 1 players holding cards, gets a list size 1
@@ -317,7 +317,7 @@ class TestTable(unittest.TestCase):
     Tests for get_players(hascards=True)
     """
     # 1 player with cards. Button is -1. Raises Exception
-    def test_getplayers_withcards_seat0hascards_raiseException(self):
+    def test_getplayers_withcards_negbutton_raiseException(self):
         self.setUp(setblinds=True)
         c = card.Card('A', 's')
         self.t.seats[0].hand.add(c)
@@ -327,10 +327,9 @@ class TestTable(unittest.TestCase):
     def test_getplayers_withcards_btn0_seat0hascards_returnsPlayer(self):
         self.setUp(setblinds=True)
         self.assertTrue(self.t.TOKENS['D'] == 0)
-
         c = card.Card('A', 's')
         self.t.seats[0].hand.add(c)
-        expected = [self.t.seats[0].player]
+        expected = [self.t.seats[0]]
         result = self.t.get_players(hascards=True)
         self.assertEqual(expected, result)
 
@@ -342,7 +341,7 @@ class TestTable(unittest.TestCase):
         self.assertEqual(self.t.TOKENS['SB'], 0)  # Make sure the sb is at 0.
 
         testtools.deal_random_cards(self.t)
-        expected = self.t.seats[1].player  # SB should be first
+        expected = self.t.seats[1]  # SB should be first
         result = self.t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
 
@@ -354,7 +353,7 @@ class TestTable(unittest.TestCase):
         self.assertEqual(self.t.TOKENS['SB'], 1)
         testtools.deal_random_cards(self.t)
 
-        expected = self.t.seats[0].player  # BB will act first and be first in the list
+        expected = self.t.seats[0]  # BB will act first and be first in the list
         result = self.t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
 
@@ -364,7 +363,7 @@ class TestTable(unittest.TestCase):
         self.assertEqual(self.t.TOKENS['D'], 0)
         testtools.deal_random_cards(self.t)
 
-        expected = self.t.seats[1].player
+        expected = self.t.seats[1]
         result = self.t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
 
@@ -375,7 +374,7 @@ class TestTable(unittest.TestCase):
         self.t.set_blinds()
 
         testtools.deal_random_cards(self.t)
-        expected = self.t.seats[0].player
+        expected = self.t.seats[0]
         result = self.t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
 
@@ -626,3 +625,7 @@ class TestTable(unittest.TestCase):
         expected = [s1.player, s2.player]
         result = self.t.get_broke_players()
         self.assertEqual(expected, result)
+
+    """
+    Tests for stackdict()
+    """
