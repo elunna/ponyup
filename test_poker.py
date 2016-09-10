@@ -640,3 +640,10 @@ class TestPoker(unittest.TestCase):
         expected = 2
         result = self.r.position(BB)
         self.assertEqual(expected, result)
+
+    def test_position_6max_EP_returns3(self):
+        self.setUp(players=6)
+        BB = self.r._table.seats[3]
+        expected = 3
+        result = self.r.position(BB)
+        self.assertEqual(expected, result)
