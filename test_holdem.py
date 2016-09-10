@@ -93,20 +93,58 @@ class TestHoldem(unittest.TestCase):
     """
     Tests for power_index(c)
     """
-    def init_powerindex_Ace_returns15(self):
+    def test_powerindex_Ace_returns15(self):
         c = card.Card('A', 's')
         expected = 15
         result = holdem.power_index(c)
         self.assertEqual(expected, result)
 
-    def init_powerindex_King_returns13(self):
+    def test_powerindex_King_returns13(self):
         c = card.Card('K', 's')
         expected = 13
         result = holdem.power_index(c)
         self.assertEqual(expected, result)
 
-    def init_powerindex_Deuce_returns2(self):
+    def test_powerindex_Deuce_returns2(self):
         c = card.Card('2', 's')
         expected = 2
         result = holdem.power_index(c)
+        self.assertEqual(expected, result)
+
+    """
+    Tests for sage_score(cards)
+    """
+    # AA should be 67
+    def test_sagescore_AA_returns67(self):
+        cards = pokerhands.make('AA')
+        expected = 67
+        result = holdem.sage_score(cards)
+        self.assertEqual(expected, result)
+
+    # QQ should be 58
+    def test_sagescore_QQ_returns58(self):
+        cards = pokerhands.make('QQ')
+        expected = 58
+        result = holdem.sage_score(cards)
+        self.assertEqual(expected, result)
+
+    # AKs should be 45
+    def test_sagescore_AKs_returns45(self):
+        cards = pokerhands.make('AKs')
+        expected = 45
+        result = holdem.sage_score(cards)
+        self.assertEqual(expected, result)
+
+    # AKo should be 43
+    def test_sagescore_AKo_returns43(self):
+        cards = pokerhands.make('AKo')
+        expected = 43
+        result = holdem.sage_score(cards)
+        self.assertEqual(expected, result)
+
+    # 23 should be 8
+    def test_sagescore_23_returns8(self):
+        cards = pokerhands.make('23')
+        expected = 8
+        result = holdem.sage_score(cards)
         self.assertEqual(expected, result)

@@ -67,10 +67,12 @@ def power_index(c):
 def sage_score(cards):
     c1, c2 = sorted(cards)
 
-    score = power_index(c1) * 2 + power_index(c1)
+    score = power_index(c1) + power_index(c2) * 2
 
     if c1.rank == c2.rank:
         score += 22
 
     if c1.suit == c2.suit:
         score += 2
+
+    return score

@@ -101,6 +101,8 @@ HANDS = {
     'AKo': ['As', 'Kd'],
     'AA': ['Ac', 'Ah'],
     'KK_dupes': ['Ks', 'Ks'],
+    'QQ': ['Qc', 'Qh'],
+    '23': ['2c', '3h'],
 }
 
 RANKEDHANDS = {
