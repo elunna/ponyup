@@ -1,4 +1,5 @@
 import unittest
+import card
 import holdem
 import pokerhands
 
@@ -88,3 +89,24 @@ class TestHoldem(unittest.TestCase):
         result = len(combos)
         self.assertEqual(expected, result)
         self.assertEqual(expected, len(set(combos)))  # Verify all combos are unique
+
+    """
+    Tests for power_index(c)
+    """
+    def init_powerindex_Ace_returns15(self):
+        c = card.Card('A', 's')
+        expected = 15
+        result = holdem.power_index(c)
+        self.assertEqual(expected, result)
+
+    def init_powerindex_King_returns13(self):
+        c = card.Card('K', 's')
+        expected = 13
+        result = holdem.power_index(c)
+        self.assertEqual(expected, result)
+
+    def init_powerindex_Deuce_returns2(self):
+        c = card.Card('2', 's')
+        expected = 2
+        result = holdem.power_index(c)
+        self.assertEqual(expected, result)

@@ -55,3 +55,22 @@ def text2cards(string):
         rank1 = [card.Card(string[0], s) for s in card.SUITS]
         rank2 = [card.Card(string[1], s) for s in card.SUITS]
         return [(c1, c2) for c1 in rank1 for c2 in rank2 if c1.suit != c2.suit]
+
+
+def power_index(c):
+    if c.rank == 'A':
+        return 15
+    else:
+        return c.val()
+
+
+def sage_score(cards):
+    c1, c2 = sorted(cards)
+
+    score = power_index(c1) * 2 + power_index(c1)
+
+    if c1.rank == c2.rank:
+        score += 22
+
+    if c1.suit == c2.suit:
+        score += 2
