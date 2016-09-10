@@ -7,7 +7,7 @@ class TestDeck(unittest.TestCase):
     """
     Tests for __init__ and Deck construction.
     """
-    def test_init_nocards_stddeckwithsize52(self):
+    def test_init_len_size52(self):
         d = deck.Deck()
         expected = 52
         result = len(d)
@@ -21,14 +21,6 @@ class TestDeck(unittest.TestCase):
         expected = 2
         result = len(d)
         self.assertEqual(expected, result)
-
-    """
-    Tests for __str__
-    """
-
-    """
-    Tests for __len__
-    """
 
     """
     Tests for contains(card)
@@ -124,6 +116,33 @@ class TestDeck(unittest.TestCase):
         expected = None
         result = d.remove(c)
         self.assertEqual(expected, result)
+
+    """
+    Tests for remove_cards(cards)
+    """
+    def test_removecards_removeAs_sizeIs51(self):
+        d = deck.Deck()
+        c = card.Card('A', 's')
+        d.remove_cards([c])
+        expected = 51
+        result = len(d)
+        self.assertEqual(expected, result)
+
+    def test_removecards_removeAs_containsIsFalse(self):
+        d = deck.Deck()
+        c = card.Card('A', 's')
+        d.remove_cards([c])
+        expected = False
+        result = c in d
+        self.assertEqual(expected, result)
+
+    def test_removecards_removeAsKs_containsNeither(self):
+        d = deck.Deck()
+        c1 = card.Card('A', 's')
+        c2 = card.Card('K', 's')
+        d.remove_cards([c1, c2])
+        self.assertFalse(c1 in d)
+        self.assertFalse(c2 in d)
 
     """
     Tests for unhide()

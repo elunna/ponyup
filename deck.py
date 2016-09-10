@@ -79,6 +79,14 @@ class Deck():
         else:
             return None
 
+    def remove_cards(self, cards):
+        """
+        Removes a sequence of cards from the deck. If a card in the sequence is not in the deck
+        it is simply ignored.
+        """
+        for c in cards:
+            self.remove(c)
+
     def unhide(self):
         """
         Goes through all cards in the deck and unhides them.
