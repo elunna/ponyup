@@ -6,6 +6,7 @@ import combos
 import console
 import lobby
 import os
+import session_factory
 
 NAME = 'Loose Canon'
 GAME = lobby.tables[0]
@@ -73,7 +74,7 @@ def play_poker():
 
     print('Initializing new game...\n')
 
-    g = lobby.session_factory(GAME, NAME)
+    g = session_factory.make(GAME, NAME)
     playing = True
 
     while playing:

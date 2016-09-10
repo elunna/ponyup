@@ -4,8 +4,9 @@ import card
 import evaluator
 import poker
 import pokerhands
-import table_factory
+import session_factory
 import testtools
+import table_factory
 
 
 class TestPoker(unittest.TestCase):
@@ -14,7 +15,7 @@ class TestPoker(unittest.TestCase):
     """
     def setUp(self, level=2, players=6):
         # Make a 6 player table
-        self.g = testtools.draw5_session(level, players)
+        self.g = session_factory.draw5_session(level, players)
         self.r = poker.Round(self.g)
 
     def setup_allins(self, seats):

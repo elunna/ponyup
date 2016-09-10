@@ -2,6 +2,7 @@ import unittest
 import betting
 import pokerhands
 import stud
+import session_factory
 import testtools
 
 
@@ -11,7 +12,7 @@ class TestBetting(unittest.TestCase):
     Default level is $2/$4.
     """
     def setUp(self, level=2, players=6, street=1):
-        g = testtools.draw5_session(level, players)
+        g = session_factory.draw5_session(level, players)
         g._table.move_button()
         g._table.set_blinds()
         self.assertEqual(g._table.TOKENS['D'], 0)  # verify the button is 0
@@ -25,7 +26,7 @@ class TestBetting(unittest.TestCase):
         self.br = betting.BettingRound(self.r)
 
     def setUp_shorty(self, shortstack, level=2, players=6, street=1):
-        g = testtools.draw5_session(level, players)
+        g = session_factory.draw5_session(level, players)
         # Sets seat 1(we'll use as the SB) as the short stack amount for easy testing.
         g._table.seats[1].stack = shortstack
         g._table.move_button()
@@ -43,7 +44,7 @@ class TestBetting(unittest.TestCase):
         """
         Setup a 5 card stud game for testing.
         """
-        g = testtools.stud5_session(level, players)
+        g = session_factory.stud5_session(level, players)
         self.r = g.new_round()
 
         for i in range(street - 1):  # Adjust which street to test.

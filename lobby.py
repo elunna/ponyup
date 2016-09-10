@@ -1,7 +1,5 @@
 from collections import namedtuple
-import table_factory
 import blinds
-import sessions
 
 Game = namedtuple('Game', ['name', 'seats', 'level', 'game'])
 
@@ -46,21 +44,6 @@ def display_numbered_list(L):
         _stakes = stakes(k)
         _str += (fmt_str.format(i, k.name, _stakes, k.seats, k.game))
     return _str
-
-
-def session_factory(gametuple, name):
-    t = table_factory.HeroTable(gametuple.seats, name, gametuple.game)
-
-    if gametuple.game == "FIVE CARD DRAW":
-
-        NOANTE = blinds.BlindsNoAnte(gametuple.level)
-        g = sessions.Draw5Session(gametuple.game, t, NOANTE)
-        t.randomize_button()
-        return g
-
-    elif gametuple.game == "FIVE CARD STUD":
-        ANTE = blinds.BlindsAnte(gametuple.level)
-        return sessions.Stud5Session(gametuple.game, t, ANTE)
 
 
 # TABLENAME | TABLE SIZE | STAKES | GAME

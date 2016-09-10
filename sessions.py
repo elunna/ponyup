@@ -1,9 +1,7 @@
 import betting
 import colors
-import discard
 import poker
 import options
-import stud
 
 DISPLAYWIDTH = 70
 GAMES = {
@@ -77,70 +75,3 @@ class Session():
             print(colors.color(oneleft, 'LIGHTBLUE'))
             _round.award_pot(victor, _round.pot)
             return True
-
-
-class Stud5Session(Session):
-    def play(self):
-        """
-        Play a round of Five Card Draw.
-        """
-        r = self.new_round()
-        r.post_antes()
-
-        for s in self.streets:
-            if r.street == 0:
-                # 1 face down, 1 up
-                r.deal_cards(1)
-                r.deal_cards(1, faceup=True)
-
-                # The bringin determines the first bettor.
-                print(stud.post_bringin(r))
-            else:
-                r.deal_cards(1, faceup=True, handreq=True)
-                high = stud.highhand(r._table, r.gametype)
-
-                print('{} has high hand and will act first.'.format(r._table.seats[high]))
-
-            if not r.betting_over():
-                self.betting_round(r)
-
-            if self.found_winner(r):
-                break
-        else:
-            r.showdown()
-
-        r.cleanup()
-        self.rounds += 1
-
-
-class Draw5Session(Session):
-    def play(self):
-        """
-        Play a round of Five Card Draw.
-        """
-        DEALT = 5
-        r = self.new_round()
-        r._table.move_button()
-        r._table.set_blinds()
-        print(r.post_blinds())
-        r.deal_cards(DEALT)
-        r.sortcards()
-
-        for s in self.streets:
-            if r.street == 1:
-                # Discard phase
-                discards = discard.discard_phase(self._table, r.d)
-                r.muck.extend(discards)
-                r.sortcards()
-                # print table after discarding and drawing
-
-            if not r.betting_over():
-                self.betting_round(r)
-
-            if self.found_winner(r):
-                break
-        else:
-            r.showdown()
-
-        r.cleanup()
-        self.rounds += 1

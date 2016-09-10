@@ -1,8 +1,5 @@
-import blinds
 import deck
-import sessions
 import pokerhands
-import table_factory
 
 
 RANKEDHANDS = {
@@ -57,24 +54,6 @@ def deal_stud5(table, matchingranks=0):
         up = pokerhands.convert_to_cards(['5s', '5c', 'Qh', 'Jh', '5d', '5h'])
 
     deal_list_to_table(table, up, faceup=True)
-
-
-def draw5_session(level, players=6):
-    """
-    Create a table of 6 draw5 players with default starting stacks.
-    """
-    STAKES = blinds.BlindsNoAnte(level)
-    table = table_factory.Draw5Table(players)
-    return sessions.Draw5Session('FIVE CARD DRAW', table, STAKES)
-
-
-def stud5_session(level, players=6):
-    """
-    Create a table of 6 draw5 players with default starting stacks.
-    """
-    STAKES = blinds.BlindsAnte(level)
-    table = table_factory.Stud5Table(players)
-    return sessions.Stud5Session('FIVE CARD STUD', table, STAKES)
 
 
 def deal_hand_dict(table, hand_dict):
