@@ -1,4 +1,5 @@
 from collections import namedtuple
+import math
 
 Level = namedtuple('Level', ['BB', 'SB', 'ANTE', 'BRINGIN'])
 
@@ -64,7 +65,17 @@ class Blinds():
         Returns how many big blinds are in the stack. Uses the Big Blind from the current level
         and rounds down.
         """
-        return stack // self.BB
+        return round_number(stack / self.BB)
+
+    def eff_big_blinds(self, stack, players):
+        """
+        Returns how many big blinds are effectively in the stack. First adds up the current pot
+        which is (SB + BB + Antes). The players variable is an integer which specified how many
+        antes to add. Then the effective big blind is 2/3rds of the pot. Returns a rounded
+        integer.
+        """
+        pot = self.SB + self.BB + (players * self.ANTE)
+        return round_number(pot * .66)
 
     def sb_to_ante_ratio(self):
         """
@@ -97,6 +108,13 @@ def tuple_to_level(lev):
     elif len(lev) == 4:
         # There is SB, BB, bringin, and antes
         return Level(BB=lev[0], SB=lev[1], BRINGIN=lev[2], ANTE=lev[3])
+
+
+def round_number(num):
+    if num % 1 >= 0.5:
+        return math.ceil(num)
+    else:
+        return math.floor(num)
 
 
 no_ante = {

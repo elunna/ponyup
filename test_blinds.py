@@ -54,9 +54,15 @@ class TestBlinds(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # 50/100 blinds
-    def test_bigblinds_BB100_stack1050_returns10(self):
+    def test_bigblinds_BB100_stack1050_returns11(self):
         stack = 1050
-        expected = 10
+        expected = 11
+        result = self.b.big_blinds(stack)
+        self.assertEqual(expected, result)
+
+    def test_bigblinds_BB100_stack1070_returns11(self):
+        stack = 1070
+        expected = 11
         result = self.b.big_blinds(stack)
         self.assertEqual(expected, result)
 
@@ -66,4 +72,25 @@ class TestBlinds(unittest.TestCase):
         stack = 4000
         expected = 10
         result = self.b.big_blinds(stack)
+        self.assertEqual(expected, result)
+
+    """
+    Tests for round_number(num)
+    """
+    def test_roundnumber_10pt5_returns11(self):
+        num = 10.5
+        expected = 11
+        result = blinds.round_number(num)
+        self.assertEqual(expected, result)
+
+    def test_roundnumber_10pt4_returns10(self):
+        num = 10.4
+        expected = 10
+        result = blinds.round_number(num)
+        self.assertEqual(expected, result)
+
+    def test_roundnumber_1_returns1(self):
+        num = 1
+        expected = 1
+        result = blinds.round_number(num)
         self.assertEqual(expected, result)
