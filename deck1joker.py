@@ -8,5 +8,4 @@ class Deck1Joker(deck.Deck):
     """
     def __init__(self):
         super().__init__()
-        joker = card.Card('Z', 's')
-        self.cards.append(joker)
+        self.cards.append(card.JOKER1)

@@ -65,3 +65,6 @@ class Card:
 
     def __hash__(self):
         return hash(str(self))
+
+JOKER1 = Card('Z', 's')
+JOKER2 = Card('Z', 'c')
