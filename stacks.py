@@ -3,31 +3,41 @@
 
 def largest(table):
     """
-    Return the largest stack size at the table.
+    Return the largest stack size of the active players(with cards) at the table.
     """
-    return max(stacklist(table))
+    players = table.get_players(hascards=True)
+    return max([s.stack for s in players])
 
 
 def smallest(table):
     """
-    Return the smallest stack size at the table.
+    Return the smallest stack size of the active players(with cards) at the table.
     """
-    return min(stacklist(table))
+    players = table.get_players(hascards=True)
+    return min([s.stack for s in players])
 
 
 def average(table):
     """
-    Return the average stack size at the table.
+    Return the average stack size of active players(with cards) at the table.
     """
-    _stacks = stacklist(table)
-    return sum(_stacks) / len(_stacks)
+    players = table.get_players(hascards=True)
+    total = sum([s.stack for s in players])
+    return total / len(players)
 
 
 def effective(table):
     """
-    Return the effetive stack size at the table. (Note: It's also the smallest.
+    Return the effective stack size at the table.
+
+    If there are only 2 active players, it is the smaller of the 2 stacks.
+    If there are multiple active players, it is the average of all the stacks.
     """
-    return smallest(table)
+    players = table.get_players(hascards=True)
+    if len(players) == 2:
+        return smallest(table)
+    else:
+        return
 
 
 def stacklist(table):
