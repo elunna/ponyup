@@ -1,22 +1,25 @@
 """
-Game options:
-todo: Speed
-todo: Rabbit cam
-todo: Debug mode
-todo: Enable odds calculator
-todo: Toggle hand strength display
-
-
-Debug mode: Shows betting activity.
-God-mode: Shows all cards,
+        Game options
+    debug: Debug mode, shows betting activity, betsize, betlevel, costs, actions.
+    godmode: Shows all cards
+    odds: Enable odds calculator
+    rabbit: Toggle Rabbit cam. After the round is over, show the next dealt card.
+    rank: Toggle hand strength display
+    sound: Toggle sound off or on.
+    speed: Millisecond delay between player turns.
+    stacksize: Display size of stacksize in BB
+    view: Toggle table view vertical or horizontal listing of players.
 """
 
 
 OPTIONS = {
-    'rabbit': False,
     'debug': False,
-    'odds': True,
-    'rank': True,
     'godmode': False,
-    'speed': 1,
+    'odds': True,
+    'rabbit': False,
+    'rank': True,
+    'sound': False,
+    'speed': 500,
+    'stacksize': False,
+    'view': 'vertical',
 }
