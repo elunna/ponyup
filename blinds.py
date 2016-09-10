@@ -4,15 +4,14 @@ Level = namedtuple('Level', ['BB', 'SB', 'ANTE', 'BRINGIN'])
 
 
 class Blinds():
-    def __init__(self, level=1, structure_dict=None):
+    def __init__(self, level=1, structure=None):
         """
-        Initialize the Blinds object with a given blind structure, or use the default house
-        structure.
+        Initialize the Blinds object with a given blind structure.
         """
-        if structure_dict is None:
+        if structure is None:
             raise ValueError("Need a blind structure!")
         else:
-            self.blind_dict = structure_dict
+            self.structure = structure
 
         self.set_level(level)
 
@@ -32,46 +31,40 @@ class Blinds():
         return _str
 
     def stakes(self):
-        return show_stakes(self.blind_dict[self.level])
+        """
+        Returns the stakes, as in the small bet/big bet amounts. For games that only use blinds
+        (without antes), we calculate the amounts by using the Big Blind as the small bet, and
+        twice the Big Blind as the big bet.
+        """
+        return '${}/${}'.format(self.BB, self.BB * 2)
 
     def set_level(self, level):
         """
         Set the blind level, if valid.
         """
-        if level < 1 or level > len(self.blind_dict):
+        if level < 1 or level > len(self.structure):
             raise ValueError('level is out of bounds!')
 
         self.level = level
-
-        self.BB = self.blind_dict[level].BB
-        self.SB = self.blind_dict[level].SB
-        self.ANTE = self.blind_dict[level].ANTE
-        self.BRINGIN = self.blind_dict[level].BRINGIN
+        leveltuple = tuple_to_level(self.structure[level])
+        self.BB = leveltuple.BB
+        self.SB = leveltuple.SB
+        self.ANTE = leveltuple.ANTE
+        self.BRINGIN = leveltuple.BRINGIN
 
     def levels(self):
         """
         Returns a listing of all the available blind levels in the structure.
         """
-        for k, v in sorted(self.blind_dict.items()):
+        for k, v in sorted(self.structure.items()):
             print('\tLevel {:3}: ${}/${}'.format(k, v.BB, v.BB * 2))
 
-
-def show_stakes(lev):
-    """
-    Returns the stakes, as in the small bet/big bet amounts. For games that only use blinds
-    (without antes), we calculate the amounts by using the Big Blind as the small bet, and
-    twice the Big Blind as the big bet.
-    """
-    return '${}/${}'.format(lev.BB, lev.BB * 2)
-
-
-def noante_level(sb, bb):
-    return Level(sb, bb, 0, 0)
-
-
-class BlindsAnte(Blinds):
-    def __init__(self, level=1):
-        super().__init__(level, structure_dict=ante)
+    def big_blinds(self, stack):
+        """
+        Returns how many big blinds are in the stack. Uses the Big Blind from the current level
+        and rounds down.
+        """
+        return stack // self.BB
 
     def sb_to_ante_ratio(self):
         """
@@ -84,35 +77,53 @@ class BlindsAnte(Blinds):
             return 0
 
 
+class BlindsAnte(Blinds):
+    def __init__(self, level=1):
+        super().__init__(level, structure=ante)
+
+
 class BlindsNoAnte(Blinds):
     def __init__(self, level=1):
-        super().__init__(level, structure_dict=no_ante)
+        super().__init__(level, structure=no_ante)
+
+
+def tuple_to_level(lev):
+    if len(lev) == 2:
+        # There is only SB and BB
+        return Level(BB=lev[0], SB=lev[1], BRINGIN=0, ANTE=0)
+    elif len(lev) == 3:
+        # There is SB, BB, and antes
+        return Level(BB=lev[0], SB=lev[1], BRINGIN=0, ANTE=lev[2])
+    elif len(lev) == 4:
+        # There is SB, BB, bringin, and antes
+        return Level(BB=lev[0], SB=lev[1], BRINGIN=lev[2], ANTE=lev[3])
 
 
 no_ante = {
-    1:  noante_level(1, 0.50),
-    2:  noante_level(2, 1),
-    3:  noante_level(3, 1),
-    4:  noante_level(4, 2),
-    5:  noante_level(6, 3),
-    6:  noante_level(8, 4),
-    7:  noante_level(15, 10),
-    8:  noante_level(20, 10),
-    9:  noante_level(30, 15),
-    10: noante_level(50, 25),
+    1:  (1, 0.50),
+    2:  (2, 1),
+    3:  (3, 1),
+    4:  (4, 2),
+    5:  (6, 3),
+    6:  (8, 4),
+    7:  (15, 10),
+    8:  (20, 10),
+    9:  (30, 15),
+    10: (50, 25),
 }
 
 # Since there is no Big Blind in these games, the BB represents the "Big Bet", and the SB
 # represents the "Small Bet".
 ante = {
-    1:  Level(BB=1, SB=1, BRINGIN=0.50, ANTE=0.25),
-    2:  Level(BB=2, SB=2, BRINGIN=1, ANTE=.50),
-    3:  Level(BB=3, SB=3, BRINGIN=1.50, ANTE=0.75),
-    4:  Level(BB=4, SB=4, BRINGIN=2, ANTE=1),
-    5:  Level(BB=6, SB=6, BRINGIN=3, ANTE=1.5),
-    6:  Level(BB=8, SB=8, BRINGIN=4, ANTE=1.5),
-    7:  Level(BB=15, SB=15, BRINGIN=5, ANTE=3),
-    8:  Level(BB=20, SB=20, BRINGIN=8, ANTE=4),
-    9:  Level(BB=30, SB=25, BRINGIN=10, ANTE=5),
-    10: Level(BB=50, SB=50, BRINGIN=20, ANTE=10),
+    # BB, SB, BRINGIN, ANTE
+    1:  (1, 1, 0.50, 0.25),
+    2:  (2, 2, 1, .50),
+    3:  (3, 3, 1.50, 0.75),
+    4:  (4, 4, 2, 1),
+    5:  (6, 6, 3, 1.5),
+    6:  (8, 8, 4, 1.5),
+    7:  (15, 15, 5, 3),
+    8:  (20, 20, 8, 4),
+    9:  (25, 25, 10, 5),
+    10: (50, 50, 20, 10),
 }

@@ -61,20 +61,18 @@ def deal_stud5(table, matchingranks=0):
 
 def draw5_session(level, players=6):
     """
-    Create a table of 6 draw5 players with default starting stacks. Blinds are $1/$2.
+    Create a table of 6 draw5 players with default starting stacks.
     """
-    STAKES = blinds.BlindsNoAnte()
-    STAKES.set_level(level)
+    STAKES = blinds.BlindsNoAnte(level)
     table = table_factory.Draw5Table(players)
     return sessions.Draw5Session('FIVE CARD DRAW', table, STAKES)
 
 
 def stud5_session(level, players=6):
     """
-    Create a table of 6 draw5 players with default starting stacks. Blinds are $1/$2.
+    Create a table of 6 draw5 players with default starting stacks.
     """
-    STAKES = blinds.BlindsAnte()
-    STAKES.set_level(level)
+    STAKES = blinds.BlindsAnte(level)
     table = table_factory.Stud5Table(players)
     return sessions.Stud5Session('FIVE CARD STUD', table, STAKES)
 

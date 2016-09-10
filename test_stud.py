@@ -1,5 +1,4 @@
 import unittest
-import blinds
 import poker
 import pokerhands
 import stud
@@ -8,6 +7,7 @@ import table_factory
 
 
 class TestStud(unittest.TestCase):
+    # Level 2: Ante $0.50, Bringin $1, Small bet $2
     def setUp(self, level=2, players=6):
         self.g = testtools.stud5_session(level, players)
         self.r = poker.Round(self.g)
@@ -153,20 +153,19 @@ class TestStud(unittest.TestCase):
     """
     Tests for post_bringin():
     """
-    # Initial stacks=1000. smallbet = 2. Bringin = 1
+    # Initial stacks=1000.
     # Seat 0
     def test_postbringin_seat5_has2chipsless(self):
-        self.r.blinds = blinds.BlindsAnte(level=2)
         testtools.deal_stud5(self.r._table, matchingranks=0)
-        player = self.r._table.seats[stud.bringin(self.r._table)]
-        chips = player.stack
+        BI = stud.bringin(self.r._table)
+        seat = self.r._table.seats[BI]
+        stack = seat.stack
         stud.post_bringin(self.r)
         expected = 1
-        result = chips - player.stack
+        result = stack - seat.stack
         self.assertEqual(expected, result)
 
     def test_postbringin_seat5_returnsString(self):
-        self.r.blinds = blinds.BlindsAnte(level=2)
         testtools.deal_stud5(self.r._table, matchingranks=0)
         expected = 'bob5 brings it in for $1\n'
         result = stud.post_bringin(self.r)

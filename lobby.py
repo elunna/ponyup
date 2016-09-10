@@ -26,10 +26,15 @@ def get_games(L, game):
 
 
 def stakes(gametuple):
+    """
+    Return the small bet and big bet sizes.
+    """
     if gametuple.game == "FIVE CARD STUD":
-        return blinds.show_stakes(blinds.ante[gametuple.level])
+        sb = blinds.ante[gametuple.level][0]
+        return '${}/${}'.format(sb, sb*2)
     elif gametuple.game == "FIVE CARD DRAW":
-        return blinds.show_stakes(blinds.no_ante[gametuple.level])
+        sb = blinds.no_ante[gametuple.level][0]
+        return '${}/${}'.format(sb, sb*2)
 
 
 def display_numbered_list(L):

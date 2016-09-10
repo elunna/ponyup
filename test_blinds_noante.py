@@ -1,5 +1,4 @@
 import unittest
-from blinds import Level
 import blinds
 
 
@@ -46,17 +45,3 @@ class TestBlindsNoAnte(unittest.TestCase):
     def test_setlevel_lev2_noantes(self):
         self.assertEqual(self.b.ANTE, 0)
         self.assertEqual(self.b.BRINGIN, 0)
-
-    """
-    Tests for noante_level(sb, bb)
-    """
-    def test_noantelevel_BB2_SB1_returnsCorrectLevel(self):
-        self.b.set_level(2)
-        blind_tuple = (2, 1)
-        expected = Level(2, 1, 0, 0)
-        result = blinds.noante_level(*blind_tuple)
-        self.assertEqual(expected, result)
-
-    def test_blind_sizes(self):
-        for level in blinds.no_ante.values():
-            self.assertTrue(level.SB < level.BB)

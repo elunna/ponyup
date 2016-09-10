@@ -46,32 +46,15 @@ class TestBlindsAnte(unittest.TestCase):
     def test_setlevel_lev1_bringin_50cent(self):
         self.assertEqual(self.b.BRINGIN, 0.50)
 
-    """
-    Tests for sb_to_ante_ratio()
-    """
-    # lev1: ante=0.25, SB=1
-    def test_sbtoanteratio_lev1_returns4(self):
-        self.b = blinds.BlindsAnte(level=1)
-        expected = 4
-        result = self.b.sb_to_ante_ratio()
-        self.assertEqual(expected, result)
-
-    # lev5: ante=1, SB=5
-    def test_sbtoanteratio_lev5_returns5(self):
-        self.b = blinds.BlindsAnte(level=5)
-        expected = 4
-        result = self.b.sb_to_ante_ratio()
-        self.assertEqual(expected, result)
-
     def test_ante_sizes(self):
         for level in blinds.ante.values():
-            self.assertTrue(level.ANTE < level.BRINGIN)
+            self.assertTrue(level[3] < level[2])
 
     def test_bringin_sizes(self):
         for level in blinds.ante.values():
-            self.assertTrue(level.BRINGIN < level.SB)
+            self.assertTrue(level[2] < level[1])
 
     def test_blind_sizes(self):
         # These should be equal and should just represent the "Small Bet" Size.
         for level in blinds.ante.values():
-            self.assertTrue(level.BB == level.BB)
+            self.assertTrue(level[1] == level[0])
