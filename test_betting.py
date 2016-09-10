@@ -1,6 +1,7 @@
 import unittest
 import betting
 import pokerhands
+import stud
 import testtools
 
 
@@ -593,7 +594,7 @@ class TestBetting(unittest.TestCase):
     # Level 1, the ante is $0.25, and bringin is $0.50.
     def test_getbet_lev1bringin_returns50c(self):
         self.setUp_studGame(level=1)
-        self.r.post_bringin()
+        stud.post_bringin(self.r)
         expected = 0.50
         result = self.br.get_bet()
         self.assertEqual(expected, result)
@@ -601,7 +602,7 @@ class TestBetting(unittest.TestCase):
     # Level 2, the ante is $0.50, and bringin is $1.
     def test_getbet_lev2bringin_returns1(self):
         self.setUp_studGame(level=2)
-        self.r.post_bringin()
+        stud.post_bringin(self.r)
         expected = 1
         result = self.br.get_bet()
         self.assertEqual(expected, result)

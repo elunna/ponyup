@@ -3,6 +3,7 @@ import colors
 import discard
 import poker
 import options
+import stud
 
 DISPLAYWIDTH = 70
 GAMES = {
@@ -93,14 +94,14 @@ class Stud5Session(Session):
                 r.deal_cards(1, faceup=True)
 
                 # The bringin determines the first bettor.
-                print(r.post_bringin())
+                print(stud.post_bringin(r))
             else:
                 r.deal_cards(1, faceup=True, handreq=True)
-                high = poker.highhand(r._table, r.gametype)
+                high = stud.highhand(r._table, r.gametype)
 
                 print('{} has high hand and will act first.'.format(r._table.seats[high]))
 
-            if not self.r.betting_over():
+            if not r.betting_over():
                 self.betting_round(r)
 
             if self.found_winner(r):

@@ -3,7 +3,7 @@ from collections import namedtuple
 import colors
 import console
 import strategy
-import poker
+import stud
 
 Action = namedtuple('Action', ['name', 'cost'])
 ALLIN = Action('ALLIN', 0)
@@ -216,12 +216,12 @@ class BettingRound():
 
     def set_bettors_w_antes(self):
         if self.r.street == 0:
-            self.bettor = poker.bringin(self.r._table)
+            self.bettor = stud.bringin(self.r._table)
             self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
         else:
             # Go with high-hand
             # Default to lowest seat #, change this later.
-            self.bettor = poker.highhand(self.r._table, self.r.gametype)
+            self.bettor = stud.highhand(self.r._table, self.r.gametype)
             self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
 
     def set_betsize(self):
