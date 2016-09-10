@@ -7,9 +7,9 @@ class TestBlinds(unittest.TestCase):
     """
     Setup a table filled with 6 players for testing.
     """
-    def setUp(self):
+    def setUp(self, level=1):
         # Setup the standard no-ante blind structure
-        self.b = blinds.Blinds(structure=tourneys.WSOP)
+        self.b = blinds.Blinds(level, structure=tourneys.WSOP)
         # Level 1 of WSOP is 50/100 blinds.
 
     # trying to use a limit outside out the bounds of the blind_dictionary, raise exception
@@ -18,12 +18,6 @@ class TestBlinds(unittest.TestCase):
 
     def test_setlevel_level100_raiseException(self):
         self.assertRaises(ValueError, self.b.set_level, 1000)
-
-    def test_bigblinds_BB100_stack100_returns1(self):
-        stack = 100
-        expected = 1
-        result = self.b.big_blinds(stack)
-        self.assertEqual(expected, result)
 
     """
     Tests for sb_to_ante_ratio()
@@ -40,4 +34,36 @@ class TestBlinds(unittest.TestCase):
         self.b = blinds.BlindsAnte(level=5)
         expected = 4
         result = self.b.sb_to_ante_ratio()
+        self.assertEqual(expected, result)
+
+    """
+    Tests for big_blinds(stack)
+    """
+    # 50/100 blinds
+    def test_bigblinds_BB100_stack100_returns1(self):
+        stack = 100
+        expected = 1
+        result = self.b.big_blinds(stack)
+        self.assertEqual(expected, result)
+
+    # 50/100 blinds
+    def test_bigblinds_BB100_stack1000_returns10(self):
+        stack = 1000
+        expected = 10
+        result = self.b.big_blinds(stack)
+        self.assertEqual(expected, result)
+
+    # 50/100 blinds
+    def test_bigblinds_BB100_stack1050_returns10(self):
+        stack = 1050
+        expected = 10
+        result = self.b.big_blinds(stack)
+        self.assertEqual(expected, result)
+
+    # 200/400 blinds with 50 ante.
+    def test_bigblinds_BB400_stack4000_returns10(self):
+        self.setUp(level=5)
+        stack = 4000
+        expected = 10
+        result = self.b.big_blinds(stack)
         self.assertEqual(expected, result)
