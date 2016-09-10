@@ -24,9 +24,9 @@ class Draw5Session(sessions.Session):
                 # print table after discarding and drawing
 
             if not r.betting_over():
-                self.betting_round(r)
+                r.betting_round()
 
-            if self.found_winner(r):
+            if r.found_winner():
                 break
         else:
             r.showdown()

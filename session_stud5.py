@@ -25,9 +25,9 @@ class Stud5Session(sessions.Session):
                 print('{} has high hand and will act first.'.format(r._table.seats[high]))
 
             if not r.betting_over():
-                self.betting_round(r)
+                r.betting_round()
 
-            if self.found_winner(r):
+            if r.found_winner():
                 break
         else:
             r.showdown()

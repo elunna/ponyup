@@ -47,31 +47,3 @@ class Session():
         Defines the structure of how a single hand in the poker game is played.
         """
         print('Stub play function')
-
-    def betting_round(self, _round):
-        """
-        Run through a round of betting. Returns a victor if it exists.
-        """
-        print(self._table)
-        br = betting.BettingRound(_round)
-
-        for p in br:
-            o = br.player_decision(p)
-            br.process_option(o)
-            print(br.action_string(o))
-            if self.options['debug']:
-                print('Bet: {} Betlevel: {}'.format(br.bet, br.level()))
-
-        print(_round)           # Display pot
-
-    def found_winner(self, _round):
-        victor = _round.one_left()
-        if victor is None:
-            _round.next_street()
-            return False
-        else:
-            # One player left, award them the pot!
-            oneleft = 'Only one player left!'.rjust(70)
-            print(colors.color(oneleft, 'LIGHTBLUE'))
-            _round.award_pot(victor, _round.pot)
-            return True

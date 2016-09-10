@@ -1,4 +1,5 @@
 from __future__ import print_function
+import betting
 import colors
 import deck
 
@@ -393,3 +394,29 @@ class Round():
             seats = self._table.get_players()
 
         return len(seats) - seats.index(seat) - 1
+
+    def betting_round(self):
+        """
+        Run through a round of betting. Returns a victor if it exists.
+        """
+        print(self._table)
+        br = betting.BettingRound(self)
+
+        for p in br:
+            o = br.player_decision(p)
+            br.process_option(o)
+            print(br.action_string(o))
+
+        print(self)           # Display pot
+
+    def found_winner(self):
+        victor = self.one_left()
+        if victor is None:
+            self.next_street()
+            return False
+        else:
+            # One player left, award them the pot!
+            oneleft = 'Only one player left!'.rjust(70)
+            print(colors.color(oneleft, 'LIGHTBLUE'))
+            self.award_pot(victor, self.pot)
+            return True
