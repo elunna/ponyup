@@ -21,8 +21,8 @@ def is_integer(num):
 
 def pick_game():
     print('What game do you want to play?')
-    tables = lobby.sort_by_level(lobby.tables)
-    print(lobby.display_numbered_list(tables))
+    tables = lobby.sort_by_level()
+    print(lobby.display_numbered_list())
 
     while True:
         choice = input(':> ')

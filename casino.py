@@ -9,7 +9,7 @@ import os
 import session_factory
 
 NAME = 'Loose Canon'
-GAME = lobby.tables[0]
+GAME = lobby.default()
 
 # Define menu opions
 options = {}
