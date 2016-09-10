@@ -380,3 +380,16 @@ class Round():
             return True
         else:
             return False
+
+    def position(self, seat, postflop=False):
+        """
+        Returns how many seats from the button the seat is.
+        """
+        # Raise an exception if the button is not set
+
+        if postflop:
+            seats = self._table.get_players(hascards=True)
+        else:
+            seats = self._table.get_players()
+
+        return len(seats) - seats.index(seat) - 1

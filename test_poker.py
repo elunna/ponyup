@@ -607,3 +607,36 @@ class TestPoker(unittest.TestCase):
         expected = False
         result = self.r.betting_over()
         self.assertEqual(expected, result)
+
+    """
+    Tests for position(seat)
+    """
+    # Raise an exception if the button is not set
+
+    def test_position_3max_SB_returns2(self):
+        self.setUp(players=3)
+        SB = self.r._table.seats[1]
+        expected = 2
+        result = self.r.position(SB)
+        self.assertEqual(expected, result)
+
+    def test_position_3max_BB_returns1(self):
+        self.setUp(players=3)
+        BB = self.r._table.seats[2]
+        expected = 1
+        result = self.r.position(BB)
+        self.assertEqual(expected, result)
+
+    def test_position_4max_SB_returns3(self):
+        self.setUp(players=4)
+        SB = self.r._table.seats[1]
+        expected = 3
+        result = self.r.position(SB)
+        self.assertEqual(expected, result)
+
+    def test_position_4max_BB_returns2(self):
+        self.setUp(players=4)
+        BB = self.r._table.seats[2]
+        expected = 2
+        result = self.r.position(BB)
+        self.assertEqual(expected, result)
