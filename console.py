@@ -67,3 +67,44 @@ def menu(options):
             return options[choice]
         else:
             print('Invalid choice, try again.')
+
+
+def discard_menu(hand):
+    cards = ' '.join([str(c) for c in hand.cards])
+    txt = 'Your discard....1  2  3  4  5\n'.rjust(70)
+    txt += '\t'*7 + cards
+    txt += '\n'
+    return txt
+
+
+def human_discard(hand, max_discards=5):
+    """
+    Offers the human player a menu of discard options and returns the list of chosen discards.
+    """
+    print(discard_menu(hand))
+    while True:
+        helpme = ['?', 'h', 'help']
+        user_str = input(':> ')
+        if user_str in helpme:
+            print('')
+            print('Enter the cards you want to discard:')
+            print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
+            continue
+
+        # Split up the #s, and reverse them so we can remove them without the list
+        # collapsing and disrupting the numbering.
+        valid_picks = ['1', '2', '3', '4', '5']
+        picks = sorted(
+            [int(x) for x in set(user_str) if x in valid_picks], reverse=True)
+
+        if len(picks) > max_discards:
+            print('Sorry, the deck is low -- you can only pick up to {} cards.'.format(
+                max_discards))
+            continue
+
+        discards = []
+
+        for n in picks:
+            discards.append(hand.cards[int(n) - 1])
+        break
+    return discards
