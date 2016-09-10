@@ -108,3 +108,45 @@ def human_discard(hand, max_discards=5):
             discards.append(hand.cards[int(n) - 1])
         break
     return discards
+
+
+def display_table(table):
+    """
+    Return the string representation of the table.
+    """
+    _str = ''
+    _str = colors.color('{:5}{:7}{:7}{:20}{:<17}{:16}\n'.format(
+        'Seat', 'Blinds', 'Dealer', 'Player', 'Chips', 'Hand'), 'gray', STYLE='BOLD')
+
+    for i, s in enumerate(table.seats):
+        if s is None:
+            # No player is occupying the seat
+            _str += '{}\n'.format(i)
+            continue
+        else:
+            _str += '{:<5}'.format(i)
+
+        if table.TOKENS['SB'] == i:
+            _str += colors.color('{:7}'.format('[SB]'), 'lightblue')
+        elif table.TOKENS['BB'] == i:
+            _str += colors.color('{:7}'.format('[BB]'), 'blue')
+        elif table.TOKENS['BI'] == i:
+            _str += colors.color('{:7}'.format('[BI]'), 'lightblue')
+        else:
+            _str += ' '*7
+
+        if table.TOKENS['D'] == i:
+            _str += colors.color('{:7}'.format('[D]'), 'purple')
+        else:
+            _str += ' '*7
+
+        _str += '{:20}'.format(str(s.player))
+
+        _str += colors.color('${:<16}'.format(s.stack), 'yellow')
+
+        # Display hand if available
+        if s.hand is not None:
+            _str += '{:16}'.format(str(s.hand))
+        _str += '\n'
+
+    return _str

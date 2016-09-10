@@ -1,5 +1,5 @@
 from __future__ import print_function
-import colors
+import console
 import random
 import seat
 
@@ -15,52 +15,14 @@ class Table():
         #  self.seats = tuple([seat.Seat() for i in range(size)])  # Gen expr?
         self.seats = [seat.Seat(i) for i in range(size)]
 
+    def __str__(self):
+        return console.display_table(self)
+
     def __len__(self):
         """
         Return the total # of seats.
         """
         return len(self.seats)
-
-    def __str__(self):
-        """
-        Return the string representation of the table.
-        """
-        _str = ''
-        _str = colors.color('{:5}{:7}{:7}{:20}{:<17}{:16}\n'.format(
-            'Seat', 'Blinds', 'Dealer', 'Player', 'Chips', 'Hand'), 'gray', STYLE='BOLD')
-
-        for i, s in enumerate(self.seats):
-            if s is None:
-                # No player is occupying the seat
-                _str += '{}\n'.format(i)
-                continue
-            else:
-                _str += '{:<5}'.format(i)
-
-            if self.TOKENS['SB'] == i:
-                _str += colors.color('{:7}'.format('[SB]'), 'lightblue')
-            elif self.TOKENS['BB'] == i:
-                _str += colors.color('{:7}'.format('[BB]'), 'blue')
-            elif self.TOKENS['BI'] == i:
-                _str += colors.color('{:7}'.format('[BI]'), 'lightblue')
-            else:
-                _str += ' '*7
-
-            if self.TOKENS['D'] == i:
-                _str += colors.color('{:7}'.format('[D]'), 'purple')
-            else:
-                _str += ' '*7
-
-            _str += '{:20}'.format(str(s.player))
-
-            _str += colors.color('${:<16}'.format(s.stack), 'yellow')
-
-            # Display hand if available
-            if s.hand is not None:
-                _str += '{:16}'.format(str(s.hand))
-            _str += '\n'
-
-        return _str
 
     def __iter__(self):
         """
