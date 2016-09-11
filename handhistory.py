@@ -39,7 +39,11 @@ class HandHistory():
         self.text += header
 
     def write_player_list(self):
-        self.text += console.display_table(self.r._table)
+        self.text += console.player_listing(self.r._table)
+
+    def write_tokens(self):
+        # Note who has the button, SB, BB, bringin, etc.
+        pass
 
     def log(self, text):
         self.text += text + '\n'

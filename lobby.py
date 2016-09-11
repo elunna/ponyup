@@ -4,24 +4,24 @@ import table_selection
 This lobby listing is a list of all the available cash tables a pony can play
 at. Each has: Table name, seats, stakes level, game type.
 """
-L = table_selection.tables
+lobbylist = table_selection.tables
 DEFAULT_TABLE = 0
 
 
+def get_games(game):
+    return [x for x in lobbylist if x.game == game]
+
+
 def default():
-    return L[DEFAULT_TABLE]
+    return lobbylist[DEFAULT_TABLE]
 
 
-def sort_by_name():
+def sort_by_name(L):
     return sorted(L, key=lambda x: x.name)
 
 
-def sort_by_level():
+def sort_by_level(L):
     return sorted(L, key=lambda x: x.level)
-
-
-def get_games(game):
-    return [x for x in L if x.game == game]
 
 
 def stakes(gametuple):
@@ -36,7 +36,7 @@ def stakes(gametuple):
         return '${}/${}'.format(sb, sb*2)
 
 
-def display_numbered_list():
+def display_numbered_list(L):
     _str = ''
     fmt_str = '{:4}: {:25} {:9} {:6} {}\n'
     print(fmt_str.format('', 'Table Name', 'Stakes', 'Seats', 'Game'))
