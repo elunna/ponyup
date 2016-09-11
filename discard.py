@@ -182,11 +182,7 @@ def human_discard(hand, max_discards=5):
 def get_discards(hand, picks):
     if len(hand) == 0:
         raise ValueError('Hand is empty! Cannot pick any discards!')
-
-    discards = []
-    for n in picks:
-        discards.append(hand.cards[int(n) - 1])
-    return discards
+    return [hand.cards[n] for n in picks]
 
 
 def valid_picks(hand):
