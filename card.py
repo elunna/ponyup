@@ -21,12 +21,6 @@ class Card:
         self.suit = suit.lower()
         self.hidden = True  # Hide cards by default
 
-    def val(self):
-        """
-        Returns the value of the Cards rank.
-        """
-        return RANKS[self.rank]
-
     def __str__(self):
         """
         Returns the string representation as colored Rank/Suit.
@@ -65,3 +59,9 @@ class Card:
 
     def __hash__(self):
         return hash(str(self))
+
+    def val(self):
+        """
+        Returns the value of the Cards rank.
+        """
+        return RANKS[self.rank]
