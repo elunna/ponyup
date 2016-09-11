@@ -22,7 +22,7 @@ tables = (
     #  Game('Golden Oak Library', seats=6, level=2, game="FIVE CARD DRAW"),
     #  Game('Carousel Boutique', seats=6, level=3, game="FIVE CARD DRAW"),
     #  Game('Sugarcube Corner', seats=6, level=5, game="FIVE CARD DRAW"),
-    Game('Pinkie\'s Party Cavet', seats=6, level=8, game="FIVE CARD DRAW"),
+    Game('Pinkie\'s Party Cave', seats=6, level=8, game="FIVE CARD DRAW"),
     Game('Cutie Map', seats=6, level=10, game="FIVE CARD DRAW"),
 
     # 8max
