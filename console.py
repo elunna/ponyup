@@ -121,7 +121,7 @@ def human_discard(hand, max_discards=5):
 
 def display_table(table):
     """
-    Return the string representation of the table.
+    Return the string representation of the table, with colors.
     """
     _str = ''
     _str = colors.color('{:5}{:7}{:7}{:20}{:<17}{:16}\n'.format(

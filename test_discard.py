@@ -201,3 +201,30 @@ class TestDiscard(unittest.TestCase):
         expected = ['2d', '3s', '6s']
         result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
+
+    """
+    Tests for get_discards(hand, picks):
+    """
+    # Empty hand, raise exception
+    def test_getdiscards_emptyhand_raisesException(self):
+        h = hand.Hand()
+        picks = [0, 4]
+        self.assertRaises(ValueError, discard.get_discards, h, picks)
+
+    # Empty picks, return empty list
+    def test_getdiscards_nopicks_returnsEmptylist(self):
+        h = hand.Hand(pokerhands.convert_to_cards(['As', 'Ks', 'Qs']))
+        picks = []
+        expected = []
+        result = discard.get_discards(h, picks)
+        self.assertEqual(expected, result)
+
+    # picks 0, gets card at index 0
+    # picks 0 and 1, gets cards at index 0 and 1
+
+    """
+    Tests for valid_picks(hand)
+    """
+    # Empty hand, returns empty list
+    # 1 card in hand, returns [0]
+    # 2 cards in hand, returns [0, 1]
