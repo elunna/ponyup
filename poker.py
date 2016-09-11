@@ -445,6 +445,7 @@ class Round():
 
     def discard(self, seat, c):
         """
-        Takes the card from the seat's hand and transfers it to the muck.
+        Takes the card from the seat's hand and transfers it to the muck. Returns True if the
+        operation was successful, False if it didn't.
         """
         self.muck.append(seat.hand.discard(c))
