@@ -65,14 +65,14 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # 6 player table: BTN=0, SB=1, BB=2
-    def test_play_2ndplayer_returnsSeat4(self):
+    def test_init_2ndplayer_returnsSeat4(self):
         next(self.br)
         seat = next(self.br)
         expected = 4
         result = seat.NUM
         self.assertEqual(expected, result)
 
-    def test_play_3rdseat_hasNUM5(self):
+    def test_init_3rdseat_hasNUM5(self):
         next(self.br)
         next(self.br)
         seat = next(self.br)
@@ -286,6 +286,20 @@ class TestBetting(unittest.TestCase):
         result = self.br.closer
         self.assertEqual(expected, result)
 
+    # Helper method: HU situation where SB completes vs BB
+    def sb_completes(self):
+        self.setUp(players=2, street=1)
+        next(self.br)  # Seat 0
+        self.br.process_option(betting.Action('CALL', 1))
+        next(self.br)  # Seat 1
+
+    # Helper method: HU situation where SB raises vs BB
+    def sb_raises(self):
+        self.setUp(players=2, street=1)
+        next(self.br)  # Seat 0
+        self.br.process_option(betting.Action('RAISE', 3))
+        next(self.br)  # Seat 1
+
     """
     Tests for get_options(cost)
     """
@@ -300,20 +314,6 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
         # Verify that the SB's cost to raise reflects the blind posted
         self.assertEqual(options['r'].cost, 3)
-
-    # Helper method: HU situation where SB completes vs BB
-    def sb_completes(self):
-        self.setUp(players=2, street=1)
-        next(self.br)  # Seat 0
-        self.br.process_option(betting.Action('CALL', 1))
-        next(self.br)  # Seat 1
-
-    # Helper method: HU situation where SB raises vs BB
-    def sb_raises(self):
-        self.setUp(players=2, street=1)
-        next(self.br)  # Seat 0
-        self.br.process_option(betting.Action('RAISE', 3))
-        next(self.br)  # Seat 1
 
     # HU Preflop: BB can CHECK, RAISE $2 (when SB completes)
     def test_getoptions_HU_BBpreflop_SBcompletes_CHECKRAISE(self):
@@ -813,9 +813,9 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for menu()
-    """
-
-    """
     Tests for spacing()
     """
+    # Level 0: 0 spaces
+    # Level 1: 2 spaces
+    # Level 2: 4 spaces
+    # Level 3: 6 spaces

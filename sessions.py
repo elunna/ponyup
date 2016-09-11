@@ -1,7 +1,19 @@
-import betting
-import colors
 import poker
 import options
+"""
+The Session object manages the general structure of a poker cash game session.
+
+It is responsible for:
+    * knowing the game type,
+    * the table,
+    * the stakes,
+    * keeping track of how many rounds have been played.
+    * keeping track of how long the session has lasted.
+    * keeping a handhistory log of all rounds played
+    * Keeping track of when and what players get knocked out, for purposes of altering the
+    blind tokens if necessary.
+
+"""
 
 DISPLAYWIDTH = 70
 GAMES = {
@@ -14,10 +26,6 @@ GAMES = {
 
 
 class Session():
-    """
-    The Session object manages the general structure of a poker game. It sets up the essentials:
-        game type, the table, and stakes.
-    """
     def __init__(self, gametype, table, blinds):
         """
         Initialize the poker Session settings.

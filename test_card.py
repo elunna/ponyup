@@ -2,20 +2,16 @@ import unittest
 import card
 
 
-class TestCards(unittest.TestCase):
+class TestCard(unittest.TestCase):
 
     """
     Tests for __init__ and card construction
     """
     def test_init_invalidsuit_raiseEx(self):
         self.assertRaises(ValueError, card.Card, 'A', 'a')
-        # failUnlessRaises is deprecated!
-        # self.failUnlessRaises(ValueError, card.Card, 'A', 'a')
 
     def test_init_invalidrank_raiseEx(self):
         self.assertRaises(ValueError, card.Card, 'Y', 's')
-        # failUnlessRaises is deprecated!
-        # self.failUnlessRaises(ValueError, card.Card, 'Y', 's')
 
     def test_init_invalidboth_raiseEx(self):
         self.assertRaises(ValueError, card.Card, 's', 'A')
@@ -30,6 +26,107 @@ class TestCards(unittest.TestCase):
         c = card.Card('A', 's')
         expected = True
         result = c.hidden
+        self.assertEqual(expected, result)
+
+    """
+    Tests for str()
+    """
+    def test_str_hiddenCard_returnsXx(self):
+        c = card.Card('A', 's')
+        #  expected = 'Xx'
+        expected = '\x1b[1;40;40mXx\x1b[0m'
+        result = str(c)
+        self.assertEqual(expected, result)
+
+    def test_str_FaceupAs_returnsAs(self):
+        c = card.Card('A', 's')
+        c.hidden = False
+        #  expected = 'As'
+        expected = '\x1b[1;37;40mAs\x1b[0m'
+        result = str(c)
+        self.assertEqual(expected, result)
+
+    """
+    Tests for __repr__()
+    * Currently this just calls str so no tests are required.
+    """
+    def test_repr_hiddenCard_returnsXx(self):
+        c = card.Card('A', 's')
+        expected = 'Xx'
+        result = repr(c)
+        self.assertEqual(expected, result)
+
+    def test_repr_FaceupAs_returnsAs(self):
+        c = card.Card('A', 's')
+        c.hidden = False
+        expected = 'As'
+        result = repr(c)
+        self.assertEqual(expected, result)
+
+    """
+    Tests for __eq__()
+    """
+    def test_eq_SameCard_returnsTrue(self):
+        """ __equals__ tests that the two cards have exactly the same suit and rank."""
+        c1 = card.Card('A', 's')
+        c2 = card.Card('A', 's')
+        expected = True
+        result = c1 == c2
+        self.assertEqual(expected, result)
+
+    def test_eq_DiffSuits_returnsFalse(self):
+        c1 = card.Card('A', 's')
+        c2 = card.Card('A', 'c')
+        expected = False
+        result = c1 == c2
+        self.assertEqual(expected, result)
+
+    """
+    Tests for __gt__
+    """
+    def test_gt_HighToLow_returnsFalse(self):
+        high = card.Card('A', 's')
+        low = card.Card('K', 's')
+        expected = True
+        result = high > low
+        self.assertEqual(expected, result)
+
+    def test_gt_LowToHigh_returnsTrue(self):
+        high = card.Card('A', 's')
+        low = card.Card('K', 's')
+        expected = False
+        result = low > high
+        self.assertEqual(expected, result)
+
+    def test_gt_SameRanks_returnsFalse(self):
+        c1 = card.Card('K', 's')
+        c2 = card.Card('K', 'c')
+        expected = False
+        result = c2 > c1
+        self.assertEqual(expected, result)
+
+    """
+    Tests for __lt__
+    """
+    def test_lt_HighToLow_returnsFalse(self):
+        high = card.Card('A', 's')
+        low = card.Card('K', 's')
+        expected = False
+        result = high < low
+        self.assertEqual(expected, result)
+
+    def test_lt_LowToHigh_returnsTrue(self):
+        high = card.Card('A', 's')
+        low = card.Card('K', 's')
+        expected = True
+        result = low < high
+        self.assertEqual(expected, result)
+
+    def test_lt_SameRanks_returnsFalse(self):
+        c1 = card.Card('K', 's')
+        c2 = card.Card('K', 'c')
+        expected = False
+        result = c2 < c1
         self.assertEqual(expected, result)
 
     """
@@ -117,105 +214,4 @@ class TestCards(unittest.TestCase):
         instance = card.Card('2', 's')
         expected = 2
         result = instance.val()
-        self.assertEqual(expected, result)
-
-    """
-    Tests for str()
-    """
-    def test_str_hiddenCard_returnsXx(self):
-        c = card.Card('A', 's')
-        #  expected = 'Xx'
-        expected = '\x1b[1;40;40mXx\x1b[0m'
-        result = str(c)
-        self.assertEqual(expected, result)
-
-    def test_str_FaceupAs_returnsAs(self):
-        c = card.Card('A', 's')
-        c.hidden = False
-        #  expected = 'As'
-        expected = '\x1b[1;37;40mAs\x1b[0m'
-        result = str(c)
-        self.assertEqual(expected, result)
-
-    """
-    Tests for __repr__()
-    * Currently this just calls str so no tests are required.
-    """
-    def test_repr_hiddenCard_returnsXx(self):
-        c = card.Card('A', 's')
-        expected = 'Xx'
-        result = repr(c)
-        self.assertEqual(expected, result)
-
-    def test_repr_FaceupAs_returnsAs(self):
-        c = card.Card('A', 's')
-        c.hidden = False
-        expected = 'As'
-        result = repr(c)
-        self.assertEqual(expected, result)
-
-    """
-    Tests for __eq__()
-    """
-    def test_Equals_SameCard_returnsTrue(self):
-        """ __equals__ tests that the two cards have exactly the same suit and rank."""
-        c1 = card.Card('A', 's')
-        c2 = card.Card('A', 's')
-        expected = True
-        result = c1 == c2
-        self.assertEqual(expected, result)
-
-    def test_Equals_DiffSuits_returnsFalse(self):
-        c1 = card.Card('A', 's')
-        c2 = card.Card('A', 'c')
-        expected = False
-        result = c1 == c2
-        self.assertEqual(expected, result)
-
-    """
-    Tests for __gt__
-    """
-    def test_Greaterthan_HighToLow_returnsFalse(self):
-        high = card.Card('A', 's')
-        low = card.Card('K', 's')
-        expected = True
-        result = high > low
-        self.assertEqual(expected, result)
-
-    def test_Greaterthan_LowToHigh_returnsTrue(self):
-        high = card.Card('A', 's')
-        low = card.Card('K', 's')
-        expected = False
-        result = low > high
-        self.assertEqual(expected, result)
-
-    def test_Greaterthan_SameRanks_returnsFalse(self):
-        c1 = card.Card('K', 's')
-        c2 = card.Card('K', 'c')
-        expected = False
-        result = c2 > c1
-        self.assertEqual(expected, result)
-
-    """
-    Tests for __lt__
-    """
-    def test_Lessthan_HighToLow_returnsFalse(self):
-        high = card.Card('A', 's')
-        low = card.Card('K', 's')
-        expected = False
-        result = high < low
-        self.assertEqual(expected, result)
-
-    def test_Lessthan_LowToHigh_returnsTrue(self):
-        high = card.Card('A', 's')
-        low = card.Card('K', 's')
-        expected = True
-        result = low < high
-        self.assertEqual(expected, result)
-
-    def test_Lessthan_SameRanks_returnsFalse(self):
-        c1 = card.Card('K', 's')
-        c2 = card.Card('K', 'c')
-        expected = False
-        result = c2 < c1
         self.assertEqual(expected, result)

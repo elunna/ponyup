@@ -70,4 +70,4 @@ class Seat():
 
     def check_amount(self, amt):
         if amt <= 0:
-            raise ValueError('Win amount must be a positive number!')
+            raise ValueError('Bet amount must be a positive number!')
