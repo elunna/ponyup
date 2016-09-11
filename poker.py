@@ -294,10 +294,10 @@ class Round():
         """
         Adds the specified amount to a players stack. Returns a string describing who won what.
         """
-        chips = colors.color('${}'.format(amt), 'yellow')
-        w_txt = '{:>15} wins {}'.format(str(seat.player), chips)
+        w_txt = '{:>15} wins {}'.format(str(seat.player), amt)
         txt = w_txt.strip().rjust(84)
         seat.win(amt)
+        self.hh.log(txt)
         return txt
 
     def next_street(self):
@@ -438,7 +438,13 @@ class Round():
             # One player left, award them the pot!
             oneleft = 'Only one player left!'.rjust(70)
             print(colors.color(oneleft, 'LIGHTBLUE'))
+
             awardtext = self.award_pot(victor, self.pot)
             print(awardtext)
-            self.hh.log(awardtext)
             return True
+
+    def discard(self, seat, c):
+        """
+        Takes the card from the seat's hand and transfers it to the muck.
+        """
+        self.muck.append(seat.hand.discard(c))

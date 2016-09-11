@@ -648,3 +648,19 @@ class TestPoker(unittest.TestCase):
         expected = 3
         result = self.r.position(BB)
         self.assertEqual(expected, result)
+
+    """
+    Tests for discard_to_muck(self, seat, c):
+    """
+    # Discard As in seats hand. Seat doesn't have the card after.
+    def test_discard_As_notinhand(self):
+        self.setUp(players=2)
+        c = card.Card('A', 's')
+        s = self.r._table.seats[0]
+        s.hand.add(c)
+        self.r.discard(s, c)
+        expected = False
+        result = c in s.hand
+        self.assertEqual(expected, result)
+
+    # Discard As in seats hand. Card is in the muck
