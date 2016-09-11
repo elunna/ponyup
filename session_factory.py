@@ -8,10 +8,9 @@ def make(gametuple, name):
     t = table_factory.HeroTable(gametuple.seats, name, gametuple.game)
 
     if gametuple.game == "FIVE CARD DRAW":
-
         NOANTE = blinds.BlindsNoAnte(gametuple.level)
-        g = session_draw5.Draw5Session(gametuple.game, t, NOANTE)
         t.randomize_button()
+        g = session_draw5.Draw5Session(gametuple.game, t, NOANTE)
         return g
 
     elif gametuple.game == "FIVE CARD STUD":
