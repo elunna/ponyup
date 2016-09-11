@@ -116,7 +116,7 @@ class Round():
         self.pot += bb.bet(self.blinds.BB)
         actions = ''
         actions += '{} posts ${}\n'.format(sb, self.blinds.SB)
-        actions += '{} posts ${}\n'.format(bb, self.blinds.BB)
+        actions += '{} posts ${}'.format(bb, self.blinds.BB)
 
         return actions
 
