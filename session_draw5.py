@@ -18,7 +18,7 @@ class Draw5Session(sessions.Session):
         for s in self.streets:
             if r.street == 1:
                 # Discard phase
-                discards = discard.discard_phase(self._table, r.d)
+                discards = discard.discard_phase(r)
                 r.muck.extend(discards)
                 r.sortcards()
                 # print table after discarding and drawing
