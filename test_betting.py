@@ -286,8 +286,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.closer
         self.assertEqual(expected, result)
 
-    # COMPLETE - Players chips are diminished by the bet amount
-
     """
     Tests for get_options(cost)
     """
