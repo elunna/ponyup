@@ -152,7 +152,7 @@ def discard_phase(_round):
     print('')
 
 
-def redraw(seat, deck, handsize=5, human=False):
+def redraw(seat, deck, handsize=5):
     """
     Player draws cards back up to the normal handsize.
     """
@@ -160,7 +160,7 @@ def redraw(seat, deck, handsize=5, human=False):
     while len(seat.hand) < handsize:
         draw = deck.deal()
 
-        if human:  # Unhide our cards so we can see them.
+        if seat.player.is_human():  # Unhide our cards so we can see them.
             draw.hidden = False
 
         seat.hand.add(draw)

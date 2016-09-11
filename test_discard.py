@@ -2,14 +2,19 @@ import unittest
 import deck
 import discard
 import hand
+import player
 import pokerhands
 import seat
 
 
 class TestDiscard(unittest.TestCase):
-    def setUp(self, handsize=1):
+    def setUp(self, handsize=1, human=False):
         self.d = deck.Deck()
         self.s = seat.Seat(0)
+        if human:
+            self.s.player = player.Player('Erik', playertype='HUMAN')
+        else:
+            self.s.player = player.Player('CPU')
 
         for i in range(handsize):
             self.s.hand.add(self.d.deal())
@@ -303,9 +308,40 @@ class TestDiscard(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # CPU, 3 cards, draws 2 cards.
+    def test_redraw_3cardhand_draw2(self):
+        self.setUp(handsize=3)
+        expected = 2
+        result = len(discard.redraw(self.s, self.d))
+        self.assertEqual(expected, result)
+
     # CPU, 4 cards, draws 1 hidden card.
+    def test_redraw_draw1_cardIsHidden(self):
+        self.setUp(handsize=4)
+        expected = True
+        redraw = discard.redraw(self.s, self.d)
+        result = redraw.pop().hidden
+        self.assertEqual(expected, result)
 
     # human, 4 cards, draws 1 card.
+    def test_redraw_human_4cards_draws1(self):
+        self.setUp(handsize=4, human=True)
+        expected = 1
+        redraw = discard.redraw(self.s, self.d)
+        result = len(redraw)
+        self.assertEqual(expected, result)
+
     # human, 4 cards, draws 1 faceup card.
+    def test_redraw_human_draw1_cardIsFaceup(self):
+        self.setUp(handsize=4, human=True)
+        expected = False
+        redraw = discard.redraw(self.s, self.d)
+        result = redraw.pop().hidden
+        self.assertEqual(expected, result)
 
     # CPU, 4 cards, handsize=4, draws 0 cards.
+    def test_redraw_4cards_handsize4_draw0(self):
+        self.setUp(handsize=4, human=True)
+        expected = 0
+        redraw = discard.redraw(self.s, self.d, handsize=4)
+        result = len(redraw)
+        self.assertEqual(expected, result)
