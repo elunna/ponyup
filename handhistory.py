@@ -31,7 +31,7 @@ class HandHistory():
 
     def write_header(self):
         gameid = random.randint(100000000, 999999999)
-        tablename = 'twilicane'
+        tablename = self.r.label
         dt = datetime.datetime
         date = dt.today()
         time = dt.now()
@@ -43,10 +43,10 @@ class HandHistory():
         self.text += 'Seat {} has the button.\n'.format(self.r._table.TOKENS['D'])
 
     def holecards(self):
-        self.text += self.r.decorate('HOLE CARDS')
-        hero = self.r._table.seats[0].player
-        cards = self.r._table.seats[0].hand
-        self.text += 'Dealt to {}: [{}]'.format(hero, cards)
+        self.log(self.r.decorate('HOLE CARDS'))
+        hero = self.r.hero
+        cards = hero.hand.peek()
+        self.log('Dealt to {}: [{}]'.format(hero, cards.strip()))
 
     def write_player_list(self):
         self.text += console.player_listing(self.r._table)

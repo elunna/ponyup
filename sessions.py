@@ -26,11 +26,12 @@ GAMES = {
 
 
 class Session():
-    def __init__(self, gametype, table, blinds, hero=None):
+    def __init__(self, gametype, table, blinds, hero=None, label=None):
         """
         Initialize the poker Session settings.
         """
         self.gametype = gametype
+        self.label = label
         self.rounds = 1
         self._table = table
         self.streets = GAMES[gametype]

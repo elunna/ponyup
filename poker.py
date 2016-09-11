@@ -12,12 +12,13 @@ class Round():
         Initialize the next round of Poker.
         """
         self.gametype = session.gametype
+        self.label = session.label
         self.blinds = session.blinds
-        self.street = 0
         self.streets = session.streets
-        self.pot = 0
         self._table = session._table
         self.hero = session.hero
+        self.street = 0
+        self.pot = 0
 
         self.muck = []
         self.d = deck.Deck()
