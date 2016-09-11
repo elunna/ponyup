@@ -23,9 +23,18 @@ class Blinds():
         """
         _str = ''
         if self.ANTE:
-            _str += 'Ante: ${:.2f}\n'.format(self.ANTE)
+            _str += 'Ante: $'
+            if self.ANTE % 1 > 0:
+                _str += '{:.2f}\n'.format(self.ANTE)
+            else:
+                _str += '{}\n'.format(self.ANTE)
+
         if self.BRINGIN:
-            _str += 'Bringin: ${:.2f}\n'.format(self.BRINGIN)
+            _str += 'Bringin: $'
+            if self.BRINGIN % 1 > 0:
+                _str += '{:.2f}\n'.format(self.BRINGIN)
+            else:
+                _str += '{}\n'.format(self.BRINGIN)
         if self.SB != self.BB:
             _str += 'SB: ${}, BB: ${}\n'.format(self.SB, self.BB)
 
@@ -67,15 +76,24 @@ class Blinds():
         """
         return round_number(stack / self.BB)
 
-    def eff_big_blinds(self, stack, players):
+    def trueBB(self, players):
+        """
+        Calculates the effective BB given how many players are at the table. When antes come
+        into play it changes how much each hand costs.
+        """
+        if self.ANTE == 0:
+            return self.BB
+        pot = self.SB + self.BB + (players * self.ANTE)
+        return round(pot * .66)
+
+    def effectiveBB(self, stack, players):
         """
         Returns how many big blinds are effectively in the stack. First adds up the current pot
         which is (SB + BB + Antes). The players variable is an integer which specified how many
         antes to add. Then the effective big blind is 2/3rds of the pot. Returns a rounded
         integer.
         """
-        pot = self.SB + self.BB + (players * self.ANTE)
-        return round_number(pot * .66)
+        return round_number(stack / self.trueBB(players))
 
     def sb_to_ante_ratio(self):
         """

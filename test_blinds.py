@@ -15,10 +15,25 @@ class TestBlinds(unittest.TestCase):
     """
     Tests for __init__()
     """
+    def test_init_shouldbelevel1(self):
+        expected = 1
+        result = self.b.level
+        self.assertEqual(expected, result)
 
     """
     Tests for __str__()
     """
+    def test_str_level1_returns_SB50_BB100(self):
+        self.setUp(level=1)
+        expected = 'SB: $50, BB: $100\n'
+        result = str(self.b)
+        self.assertEqual(expected, result)
+
+    def test_str_level5_returns_Antes50_SB200_BB400(self):
+        self.setUp(level=5)
+        expected = 'Ante: $50\nSB: $200, BB: $400\n'
+        result = str(self.b)
+        self.assertEqual(expected, result)
 
     """
     Tests for set_level()
@@ -30,9 +45,25 @@ class TestBlinds(unittest.TestCase):
     def test_setlevel_level100_raiseException(self):
         self.assertRaises(ValueError, self.b.set_level, 1000)
 
+    def test_setlevel_level2_SB100_BB200(self):
+        self.setUp(level=2)
+        self.assertEqual(self.b.SB, 100)
+        self.assertEqual(self.b.BB, 200)
+
     """
     Tests for stakes():
     """
+    def test_str_level1_returns50_100_stakes(self):
+        self.setUp(level=1)
+        expected = '$100/$200'
+        result = self.b.stakes()
+        self.assertEqual(expected, result)
+
+    def test_str_level5_returns200_400_stakes(self):
+        self.setUp(level=5)
+        expected = '$400/$800'
+        result = self.b.stakes()
+        self.assertEqual(expected, result)
 
     """
     Tests for big_blinds(stack)
@@ -73,8 +104,55 @@ class TestBlinds(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for eff_big_blinds(self, stack, players):
+    Tests for eff_big_blinds(self, players):
     """
+    # 50/100 blinds with no ante. No change from regular BB
+    def test_trueBB_lev1_returns100(self):
+        self.setUp(level=1)
+        expected = self.b.BB
+        result = self.b.trueBB(players=8)
+        self.assertEqual(expected, result)
+
+    # 150/300 blinds with 25 ante.
+    def test_trueBB_lev4_8players_returns429(self):
+        self.setUp(level=4)
+        expected = 429
+        result = self.b.trueBB(players=8)
+        self.assertEqual(expected, result)
+
+    # 200/400 blinds with 50 ante.
+    def test_trueBB_lev5_8players_returns660(self):
+        self.setUp(level=5)
+        expected = 660
+        result = self.b.trueBB(players=8)
+        self.assertEqual(expected, result)
+
+    """
+    Tests for def effective_big_blinds(self, stack, players):
+    """
+    # 150/300 blinds with 25 ante.
+    def test_effectiveBB_lev4_10000stack_8players_returns23(self):
+        self.setUp(level=4)
+        stack = 10000
+        expected = 23
+        result = self.b.effectiveBB(stack, players=8)
+        self.assertEqual(expected, result)
+
+    # 200/400 blinds with 50 ante.
+    def test_effectiveBB_lev5_10000stack_8players_returns15(self):
+        self.setUp(level=5)
+        stack = 10000
+        expected = 15
+        result = self.b.effectiveBB(stack, players=8)
+        self.assertEqual(expected, result)
+
+    # 200/400 blinds with 50 ante.
+    def test_effectiveBB_lev5_10500stack_8players_returns16(self):
+        self.setUp(level=5)
+        stack = 10500
+        expected = 16
+        result = self.b.effectiveBB(stack, players=8)
+        self.assertEqual(expected, result)
 
     """
     Tests for sb_to_ante_ratio()
