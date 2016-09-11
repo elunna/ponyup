@@ -2,6 +2,9 @@ import card
 import deck
 import evaluator
 
+JOKER1 = card.Card('Z', 's')
+JOKER2 = card.Card('Z', 'c')
+
 
 def pick_joker(cards):
     """
