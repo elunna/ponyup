@@ -13,8 +13,8 @@ class Draw5Session(sessions.Session):
         r._table.set_blinds()
         r.out(r.post_blinds())  # Log this
         r.deal_cards(DEALT)
-        r.out('HOLE CARDS')
-        r.out(r.hero.hand.peek())
+        r.out('HOLE CARDS', decorate=True)
+        r.out('Dealt to {}: [{}]'.format(r.hero.player, r.hero.hand.peek()))
         r.sortcards()
 
         for s in self.streets:
