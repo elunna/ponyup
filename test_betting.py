@@ -446,11 +446,53 @@ class TestBetting(unittest.TestCase):
     """
     Tests for action_string(action)
     """
-    # Bet
-    # Raise
-    # Call
-    # Fold
-    # Allin
+    # BET
+    def test_actionstring_BET(self):
+        self.setUp(players=2, street=2)
+        next(self.br)  # Seat 1
+        expected = "bob1 bets $4"
+        result = self.br.action_string(betting.Action('BET', 4))
+        self.assertEqual(expected, result)
+
+    # RAISE
+    def test_actionstring_RAISE(self):
+        self.setUp(players=2, street=1)
+        next(self.br)  # Seat 0
+        expected = "bob0 raises $3"
+        result = self.br.action_string(betting.Action('RAISE', 3))
+        self.assertEqual(expected, result)
+
+    # CALL
+    def test_actionstring_CALL(self):
+        self.setUp(players=2, street=1)
+        next(self.br)  # Seat 0
+        expected = "bob0 calls $1"
+        result = self.br.action_string(betting.Action('CALL', 1))
+        self.assertEqual(expected, result)
+
+    # FOLD
+    def test_actionstring_FOLD(self):
+        self.setUp(players=2, street=1)
+        next(self.br)  # Seat 0
+        expected = "bob0 folds"
+        result = self.br.action_string(betting.FOLD)
+        self.assertEqual(expected, result)
+
+    # ALLIN
+    def test_actionstring_ALLIN(self):
+        self.setUp(players=2)
+        bettor = self.br.get_bettor()
+        bettor.bet(bettor.stack)
+        expected = "bob0 is all in."
+        result = self.br.action_string(betting.ALLIN)
+        self.assertEqual(expected, result)
+
+    # CHECK
+    def test_actionstring_CHECK(self):
+        self.setUp(players=2, street=2)
+        expected = "bob1 checks"
+        result = self.br.action_string(betting.CHECK)
+        self.assertEqual(expected, result)
 
     """
     Tests for invested(player)
@@ -816,6 +858,13 @@ class TestBetting(unittest.TestCase):
     Tests for spacing()
     """
     # Level 0: 0 spaces
+    def test_spacing_level0_returns0spaces(self):
+        expected = ''
+        result = betting.spacing(0)
+        self.assertEqual(expected, result)
+
     # Level 1: 2 spaces
-    # Level 2: 4 spaces
-    # Level 3: 6 spaces
+    def test_spacing_level1_returns2spaces(self):
+        expected = '  '
+        result = betting.spacing(1)
+        self.assertEqual(expected, result)

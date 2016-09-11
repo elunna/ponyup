@@ -1,6 +1,5 @@
 from __future__ import print_function
 from collections import namedtuple
-import colors
 import console
 import strategy
 import stud
@@ -169,22 +168,14 @@ class BettingRound():
     def action_string(self, action):
         s = self.get_bettor()
         act_str = ''
-        act_str += spacing(self.level())
         act_str += '{} {}s'.format(s.player, action.name.lower())
 
-        amt = colors.color(' $' + str(action.cost), 'yellow')
-
-        if action.name in ['BET', 'RAISE']:
-            return colors.color(act_str, 'red') + amt
-        elif action.name == 'CALL':
-            return colors.color(act_str, 'white') + amt
-        elif action.name == 'FOLD':
-            return colors.color(act_str, 'purple')
-        elif action.name == 'CHECK':
-            return colors.color(act_str, 'white')
+        if action.name in ['CALL', 'BET', 'RAISE']:
+            return '{} ${}'.format(act_str, str(action.cost))
+        elif action.name in ['FOLD', 'CHECK']:
+            return act_str
         elif action.name == 'ALLIN':
-            return colors.color(
-                '{}{} is all in.'.format(spacing(self.level()), s.player), 'gray')
+            return '{} is all in.'.format(s.player)
         else:
             raise Exception('Error processing the action!')
 
