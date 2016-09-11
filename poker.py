@@ -439,7 +439,7 @@ class Round():
             print(colors.color(oneleft, 'LIGHTBLUE'))
 
             awardtext = self.award_pot(victor, self.pot)
-            print(awardtext)
+            self.out(awardtext)
             return True
 
     def discard(self, seat, c):
