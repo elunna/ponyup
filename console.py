@@ -20,9 +20,17 @@ def is_integer(num):
 
 
 def pick_game():
+    LOBBY = lobby.lobbylist
+    drawgames = lobby.get_game(LOBBY, "FIVE CARD DRAW")
+    drawgames = lobby.sort_by_level(drawgames)
+    studgames = lobby.get_game(LOBBY, "FIVE CARD STUD")
+    studgames = lobby.sort_by_level(studgames)
+
+    tables = drawgames + studgames
+
     print('What game do you want to play?')
-    tables = lobby.sort_by_level(lobby.lobbylist)
     print(lobby.display_numbered_list(tables))
+
     valid_choices = list(range(len(tables)))
 
     while True:

@@ -8,12 +8,12 @@ lobbylist = table_selection.tables
 DEFAULT_TABLE = 0
 
 
-def get_games(game):
-    return [x for x in lobbylist if x.game == game]
-
-
 def default():
     return lobbylist[DEFAULT_TABLE]
+
+
+def get_game(L, game):
+    return [x for x in L if x.game == game]
 
 
 def sort_by_name(L):
@@ -22,6 +22,10 @@ def sort_by_name(L):
 
 def sort_by_level(L):
     return sorted(L, key=lambda x: x.level)
+
+
+def sort_by_seats(L):
+    return sorted(L, key=lambda x: x.seats)
 
 
 def stakes(gametuple):
@@ -38,10 +42,10 @@ def stakes(gametuple):
 
 def display_numbered_list(L):
     _str = ''
-    fmt_str = '{:4}: {:25} {:9} {:6} {}\n'
-    print(fmt_str.format('', 'Table Name', 'Stakes', 'Seats', 'Game'))
-    for i, k in enumerate(L):
+    fmt_str = '{:<8}{:20}{:<8}{:12}{:25}\n'
+    print(fmt_str.format('Pick#', 'Game', 'Seats', 'Stakes', 'Table Name'))
 
-        _stakes = stakes(k)
-        _str += (fmt_str.format(i, k.name, _stakes, k.seats, k.game))
+    for i, gt in enumerate(L):
+        _stakes = stakes(gt)
+        _str += (fmt_str.format(i, gt.game.title(), gt.seats, _stakes, gt.name))
     return _str
