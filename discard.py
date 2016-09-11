@@ -103,7 +103,7 @@ def discard_phase(_round):
     Goes through a table and offers all players with cards the option to discard.
     Returns a list of all the discards (ie:"muck" cards)
     """
-    _round.out('Discard phase:')
+    _round.out('DISCARD PHASE:', decorate=True)
     cardholders = _round._table.get_players(hascards=True)
 
     for s in cardholders:

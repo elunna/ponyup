@@ -8,10 +8,10 @@ class Draw5Session(sessions.Session):
         Play a round of Five Card Draw.
         """
         DEALT = 5
+        self._table.move_button()
         r = self.new_round()
-        r._table.move_button()
         r._table.set_blinds()
-        print(r.post_blinds())
+        r.out(r.post_blinds())  # Log this
         r.deal_cards(DEALT)
         r.sortcards()
 

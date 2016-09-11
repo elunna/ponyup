@@ -58,7 +58,7 @@ class Round():
         _str = ''
         for s in self._table.get_players(hascards=True):
             s.hand.unhide()
-            line = '\t\t\t\t {:>15} shows {:10}\n'.format(str(s), str(s.hand))
+            line = '{} shows {}\n'.format(str(s), str(s.hand))
             _str += line
         return _str
 
@@ -113,7 +113,6 @@ class Round():
         actions += '{} posts ${}\n'.format(sb, self.blinds.SB)
         actions += '{} posts ${}\n'.format(bb, self.blinds.BB)
 
-        self.hh.log(actions)
         return actions
 
     def invested(self, seat):
@@ -255,10 +254,8 @@ class Round():
         Compare all the hands of players holding cards and determine the winner(s). Awards each
         winner the appropriate amount.
         """
-        showdown_text = 'Showdown!' + '~'*60
-        showdown_text += self.show_cards()
-        print(showdown_text)
-        self.hh.log(showdown_text)
+        self.out('Showdown!', decorate=True)
+        self.out(self.show_cards())
 
         allins = self.get_allins()
         stack_shares = self.make_sidepots(allins)
@@ -269,36 +266,34 @@ class Round():
 
         if len(sidepots) > 1:
             for i, s in enumerate(sidepots):
-                print('Sidepot #{}: ${}'.format(i+1, s))
+                self.out('Sidepot #{}: ${}'.format(i+1, s))
 
-        self.process_awards(sidepots)
+        award_txt = self.process_awards(sidepots)
+        self.out(award_txt)
 
     def process_awards(self, award_dict):
         """
         Takes in the dictionary of awards/seats and awards each player their share. Uses
         split pot to correctly split up ties.
         """
+        _str = ''
         for sidepot, winners in award_dict.items():
             for i, amt in self.split_pot(winners, sidepot).items():
                 seat = self._table.seats[i]
-                h_txt = '{:>15} wins with a {}: {}'.format(
+                _str += '{} wins with a {}: {}\n'.format(
                     str(seat.player),
                     str(seat.hand.rank()),
                     str(seat.hand.desc())
                 )
-                self.hh.log(h_txt)
-                print(h_txt.strip().rjust(70))
-                self.award_pot(seat, amt)
+                _str += self.award_pot(seat, amt)
+        return _str
 
     def award_pot(self, seat, amt):
         """
         Adds the specified amount to a players stack. Returns a string describing who won what.
         """
-        w_txt = '{:>15} wins {}'.format(str(seat.player), amt)
-        txt = w_txt.strip().rjust(84)
         seat.win(amt)
-        self.hh.log(txt)
-        return txt
+        return '{:} wins ${}\n'.format(str(seat.player), amt)
 
     def next_street(self):
         """
@@ -367,12 +362,11 @@ class Round():
             _str += '{} left the table with no money!\n'.format(seat.player)
 
         # Log players leaving
-        self.hh.log(_str)
         return _str
 
     def cleanup(self):
         self.muck_all_cards()
-        self.clear_broke_players()
+        self.hh.log(self.clear_broke_players())
         self.hh.write_to_file()
 
         if not self.check_integrity_post():
@@ -450,7 +444,16 @@ class Round():
         """
         self.muck.append(seat.hand.discard(c))
 
-    def out(self, txt, log=True):
-        print(txt)
-        if log:
+    def out(self, txt, log=True, decorate=False):
+        if decorate:
+            dec = self.decorate(txt)
+            print(dec)
+            self.hh.log(dec)
+        else:
+            print(txt)
             self.hh.log(txt)
+
+    def decorate(self, text):
+        return '\n~~/) ' + text + ' (\~~'
+        # /)(\ (\/)
+        #  self.text += '~~(\ ' + text + ' /)~~'
