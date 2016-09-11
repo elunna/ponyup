@@ -176,8 +176,10 @@ def human_discard(hand, max_discards=5):
 def get_discards(hand, picks):
     if len(hand) == 0:
         raise ValueError('Hand is empty! Cannot pick any discards!')
-
-    return [hand.cards[n] for n in picks]
+    for n in picks:
+        if n < 1 or n > len(hand):
+            raise ValueError('An index is out of bounds!')
+    return [hand.cards[n - 1] for n in picks]
 
 
 def valid_picks(hand):
@@ -185,7 +187,7 @@ def valid_picks(hand):
     Create a list of all the indexes(in string format) of cards in the given hand.
     List starts from 0.
     """
-    return list(map(str, range(len(hand))))
+    return list(map(str, range(1, len(hand) + 1)))
 
 
 def discard_menu(hand):

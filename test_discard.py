@@ -234,19 +234,25 @@ class TestDiscard(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # picks 0, gets card at index 0
-    def test_getdiscards_pick0_returnsCard0(self):
+    def test_getdiscards_pick0_raiseException(self):
         cards = pokerhands.convert_to_cards(['As', 'Ks', 'Qs'])
         h = hand.Hand(cards)
         picks = [0]
+        self.assertRaises(ValueError, discard.get_discards, h, picks)
+
+    def test_getdiscards_pick1_returnsCard0(self):
+        cards = pokerhands.convert_to_cards(['As', 'Ks', 'Qs'])
+        h = hand.Hand(cards)
+        picks = [1]
         expected = [cards[0]]
         result = discard.get_discards(h, picks)
         self.assertEqual(expected, result)
 
     # picks 0 and 1, gets cards at index 0 and 1
-    def test_getdiscards_pick01_returnsCard0and1(self):
+    def test_getdiscards_pick12_returnsCard0and1(self):
         cards = pokerhands.convert_to_cards(['As', 'Ks', 'Qs'])
         h = hand.Hand(cards)
-        picks = [0, 1]
+        picks = [1, 2]
         expected = [cards[0], cards[1]]
         result = discard.get_discards(h, picks)
         self.assertEqual(expected, result)
@@ -262,18 +268,18 @@ class TestDiscard(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # 1 card in hand, returns [0]
-    def test_validpicks_handsize1_returnInts0(self):
+    def test_validpicks_handsize1_returnInts1(self):
         cards = pokerhands.convert_to_cards(['As'])
         h = hand.Hand(cards)
-        expected = ['0']
+        expected = ['1']
         result = discard.valid_picks(h)
         self.assertEqual(expected, result)
 
-    # 3 cards in hand, returns [0, 1, 2]
-    def test_validpicks_handsize3_returnInts012(self):
+    # 3 cards in hand, returns [1, 2, 3]
+    def test_validpicks_handsize3_returnInts123(self):
         cards = pokerhands.convert_to_cards(['As', 'Ks', 'Qs'])
         h = hand.Hand(cards)
-        expected = ['0', '1', '2']
+        expected = ['1', '2', '3']
         result = discard.valid_picks(h)
         self.assertEqual(expected, result)
 
@@ -284,7 +290,7 @@ class TestDiscard(unittest.TestCase):
     def test_discardmenu_1card_returnsMenu(self):
         cards = pokerhands.convert_to_cards(['As'])
         h = hand.Hand(cards)
-        expected = '0  \nAs\n'
+        expected = '1  \nAs\n'
         result = discard.discard_menu(h)
         self.assertEqual(expected, result)
 
@@ -292,7 +298,7 @@ class TestDiscard(unittest.TestCase):
     def test_discardmenu_2cards_returnsMenu(self):
         cards = pokerhands.convert_to_cards(['As', 'Ks'])
         h = hand.Hand(cards)
-        expected = '0  1  \nAs Ks\n'
+        expected = '1  2  \nAs Ks\n'
         result = discard.discard_menu(h)
         self.assertEqual(expected, result)
 
