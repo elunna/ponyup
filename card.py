@@ -1,5 +1,3 @@
-import colors
-
 # Use tuples instead of lists
 SUITS = ('c', 'd', 'h', 's')
 SUITVALUES = {'c': 1, 'd': 2, 'h': 3, 's': 4}
@@ -8,6 +6,8 @@ COLORS = {'c': 'green', 'd': 'blue', 'h': 'red', 's': 'white'}
 # Fancy way of creating the card/value dictionary.
 FACECARDS = {'T': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14, 'Z': 15}
 RANKS = dict({str(x): x for x in range(2, 10)}, **FACECARDS)
+
+HIDDEN = 'Xx'
 
 
 class Card:
@@ -23,21 +23,18 @@ class Card:
 
     def __str__(self):
         """
-        Returns the string representation as colored Rank/Suit.
+        Returns the string representation
         """
         if self.hidden:
-            return colors.color('Xx', 'gray', STYLE='BOLD')
-
-        return colors.color(self.rank + self.suit, COLORS[self.suit], STYLE='BOLD')
+            return HIDDEN
+        else:
+            return self.rank + self.suit
 
     def __repr__(self):
         """
         Returns the string representation as Rank/Suit.
         """
-        if self.hidden:
-            return 'Xx'
-        else:
-            return self.rank + self.suit
+        return str(self)
 
     def __eq__(self, other):
         """

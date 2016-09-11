@@ -33,16 +33,14 @@ class TestCard(unittest.TestCase):
     """
     def test_str_hiddenCard_returnsXx(self):
         c = card.Card('A', 's')
-        #  expected = 'Xx'
-        expected = '\x1b[1;40;40mXx\x1b[0m'
+        expected = 'Xx'
         result = str(c)
         self.assertEqual(expected, result)
 
     def test_str_FaceupAs_returnsAs(self):
         c = card.Card('A', 's')
         c.hidden = False
-        #  expected = 'As'
-        expected = '\x1b[1;37;40mAs\x1b[0m'
+        expected = 'As'
         result = str(c)
         self.assertEqual(expected, result)
 
