@@ -3,25 +3,6 @@ import card
 import evaluator as ev
 
 
-def get_discards(hand, picks):
-    if len(hand) == 0:
-        raise ValueError('Hand is empty! Cannot pick any discards!')
-    return [hand.cards[n] for n in picks]
-
-
-def valid_picks(hand):
-    return list(range(len(hand)))
-
-
-def discard_menu(hand):
-    indices = ''.join(['{:<3}'.format(n) for n in valid_picks(hand)])
-
-    txt = indices + '\n'
-    txt += ' '.join([str(c) for c in hand.cards])
-    txt += '\n'
-    return txt
-
-
 def made_hand_discards(hand, ranklist):
     """
     Determine the best cards to discard for a given made hand.
@@ -122,13 +103,13 @@ def discard_phase(_round):
     Goes through a table and offers all players with cards the option to discard.
     Returns a list of all the discards (ie:"muck" cards)
     """
-    print('Discard phase: ' + '~'*55)
-    cardholders = _round.table.get_players(hascards=True)
+    _round.out('Discard phase:')
+    cardholders = _round._table.get_players(hascards=True)
 
     for s in cardholders:
-        max_discards = (5 if len(_round.deck) >= 5 else len(_round.deck))
+        max_discards = (5 if len(_round.d) >= 5 else len(_round.d))
         if max_discards == 0:
-            print('Deck has been depleted!')
+            _round.out('Deck has been depleted!')
             break
 
         if s.player.is_human():
@@ -137,9 +118,9 @@ def discard_phase(_round):
             discards = auto_discard(s.hand, max_discards)
 
         if discards:
-            print('{} discards {}'.format(str(s), discards).rjust(70))
+            _round.out('{} discards {}'.format(str(s), discards))
         else:
-            print('{} stands pat.'.format(str(s)).rjust(70))
+            _round.out('{} stands pat.'.format(str(s)))
 
         # Discard
         for c in discards:
@@ -147,9 +128,7 @@ def discard_phase(_round):
 
         # Redraw
         drawpile = redraw(s, _round.d)
-        print('{} draws {}'.format(str(s.player), drawpile))
-
-    print('')
+        _round.out('{} draws {}'.format(str(s.player), drawpile))
 
 
 def redraw(seat, deck, handsize=5):
@@ -183,6 +162,7 @@ def human_discard(hand, max_discards=5):
             print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
             continue
 
+        # Note: x is checking if there is a str x in valid_picks.
         picks = [int(x) for x in set(user_str) if x in valid_picks(hand)]
 
         if len(picks) > max_discards:
@@ -191,3 +171,27 @@ def human_discard(hand, max_discards=5):
             continue
 
         return get_discards(hand, picks)
+
+
+def get_discards(hand, picks):
+    if len(hand) == 0:
+        raise ValueError('Hand is empty! Cannot pick any discards!')
+
+    return [hand.cards[n] for n in picks]
+
+
+def valid_picks(hand):
+    """
+    Create a list of all the indexes(in string format) of cards in the given hand.
+    List starts from 0.
+    """
+    return list(map(str, range(len(hand))))
+
+
+def discard_menu(hand):
+    indices = ''.join(['{:<3}'.format(n) for n in valid_picks(hand)])
+
+    txt = indices + '\n'
+    txt += ' '.join([str(c) for c in hand.cards])
+    txt += '\n'
+    return txt

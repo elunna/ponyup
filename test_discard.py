@@ -265,7 +265,7 @@ class TestDiscard(unittest.TestCase):
     def test_validpicks_handsize1_returnInts0(self):
         cards = pokerhands.convert_to_cards(['As'])
         h = hand.Hand(cards)
-        expected = [0]
+        expected = ['0']
         result = discard.valid_picks(h)
         self.assertEqual(expected, result)
 
@@ -273,7 +273,7 @@ class TestDiscard(unittest.TestCase):
     def test_validpicks_handsize3_returnInts012(self):
         cards = pokerhands.convert_to_cards(['As', 'Ks', 'Qs'])
         h = hand.Hand(cards)
-        expected = [0, 1, 2]
+        expected = ['0', '1', '2']
         result = discard.valid_picks(h)
         self.assertEqual(expected, result)
 
