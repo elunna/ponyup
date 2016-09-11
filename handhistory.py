@@ -11,3 +11,15 @@ For a normal hand history file, we will start with a header:
         * date
         * Seats, names, stack sizes
 """
+
+
+class HandHistory():
+    def __init__(self, _round):
+        pass
+        self.text = ''
+
+    def write_header(self):
+        self.text += 'PonyUp Poker'
+
+    def log(self, text):
+        self.text += text

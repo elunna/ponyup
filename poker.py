@@ -2,6 +2,7 @@ from __future__ import print_function
 import betting
 import colors
 import deck
+import handhistory
 
 
 class Round():
@@ -25,6 +26,8 @@ class Round():
         self.starting_stacks = self._table.stackdict()
 
         self.check_integrity_pre()
+
+        self.hh = handhistory.HandHistory(self)
 
     def __str__(self):
         """
@@ -405,7 +408,8 @@ class Round():
         for p in br:
             o = br.player_decision(p)
             br.process_option(o)
-            print(br.action_string(o))
+            act_str = betting.spacing(br.level()) + br.action_string(o)
+            print(act_str)
 
         print(self)           # Display pot
 
