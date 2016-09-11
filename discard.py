@@ -3,6 +3,25 @@ import card
 import evaluator as ev
 
 
+def get_discards(hand, picks):
+    if len(hand) == 0:
+        raise ValueError('Hand is empty! Cannot pick any discards!')
+    return [hand.cards[n] for n in picks]
+
+
+def valid_picks(hand):
+    return list(range(len(hand)))
+
+
+def discard_menu(hand):
+    indices = ''.join(['{:<3}'.format(n) for n in valid_picks(hand)])
+
+    txt = indices + '\n'
+    txt += ' '.join([str(c) for c in hand.cards])
+    txt += '\n'
+    return txt
+
+
 def made_hand_discards(hand, ranklist):
     """
     Determine the best cards to discard for a given made hand.
@@ -143,14 +162,6 @@ def discard_phase(table, deck):
     return muckpile
 
 
-def discard_menu(hand):
-    cards = ' '.join([str(c) for c in hand.cards])
-    txt = 'Your discard....1  2  3  4  5\n'.rjust(70)
-    txt += '\t'*7 + cards
-    txt += '\n'
-    return txt
-
-
 def human_discard(hand, max_discards=5):
     """
     Offers the human player a menu of discard options and returns the list of chosen discards.
@@ -167,9 +178,9 @@ def human_discard(hand, max_discards=5):
 
         # Split up the #s, and reverse them so we can remove them without the list
         # collapsing and disrupting the numbering.
-        valid_picks = ['1', '2', '3', '4', '5']
+
         picks = sorted(
-            [int(x) for x in set(user_str) if x in valid_picks], reverse=True)
+            [int(x) for x in set(user_str) if x in valid_picks(hand)], reverse=True)
 
         if len(picks) > max_discards:
             print('Sorry, the deck is low -- you can only pick up to {} cards.'.format(
@@ -177,13 +188,3 @@ def human_discard(hand, max_discards=5):
             continue
 
         return get_discards(hand, picks)
-
-
-def get_discards(hand, picks):
-    if len(hand) == 0:
-        raise ValueError('Hand is empty! Cannot pick any discards!')
-    return [hand.cards[n] for n in picks]
-
-
-def valid_picks(hand):
-    return list(range(len(hand)))

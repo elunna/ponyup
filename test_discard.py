@@ -262,3 +262,22 @@ class TestDiscard(unittest.TestCase):
         expected = [0, 1, 2]
         result = discard.valid_picks(h)
         self.assertEqual(expected, result)
+
+    """
+    Tests for discard_menu(hand):
+    """
+    # 1 card in hand, shows index and card
+    def test_discardmenu_1card_returnsMenu(self):
+        cards = pokerhands.convert_to_cards(['As'])
+        h = hand.Hand(cards)
+        expected = '0  \nAs\n'
+        result = discard.discard_menu(h)
+        self.assertEqual(expected, result)
+
+    # 1 card in hand, shows index and card
+    def test_discardmenu_2cards_returnsMenu(self):
+        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        h = hand.Hand(cards)
+        expected = '0  1  \nAs Ks\n'
+        result = discard.discard_menu(h)
+        self.assertEqual(expected, result)
