@@ -449,3 +449,8 @@ class Round():
         operation was successful, False if it didn't.
         """
         self.muck.append(seat.hand.discard(c))
+
+    def out(self, txt, log=True):
+        print(txt)
+        if log:
+            self.hh.log(txt)
