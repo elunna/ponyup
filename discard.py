@@ -193,6 +193,6 @@ def discard_menu(hand):
 
     txt = indices + '\n'
     #  txt += ' '.join([(c) for c in hand.peek()])
-    txt += hand.peek()
+    txt += hand.peek().strip()
     txt += '\n'
     return txt
