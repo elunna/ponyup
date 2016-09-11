@@ -186,4 +186,4 @@ def get_discards(hand, picks):
 
 
 def valid_picks(hand):
-    pass
+    return list(range(len(hand)))

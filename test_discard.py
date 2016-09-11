@@ -241,5 +241,24 @@ class TestDiscard(unittest.TestCase):
     Tests for valid_picks(hand)
     """
     # Empty hand, returns empty list
+    def test_validpicks_handsize0_returnEmptylist(self):
+        h = hand.Hand()
+        expected = []
+        result = discard.valid_picks(h)
+        self.assertEqual(expected, result)
+
     # 1 card in hand, returns [0]
-    # 2 cards in hand, returns [0, 1]
+    def test_validpicks_handsize1_returnInts0(self):
+        cards = pokerhands.convert_to_cards(['As'])
+        h = hand.Hand(cards)
+        expected = [0]
+        result = discard.valid_picks(h)
+        self.assertEqual(expected, result)
+
+    # 3 cards in hand, returns [0, 1, 2]
+    def test_validpicks_handsize3_returnInts012(self):
+        cards = pokerhands.convert_to_cards(['As', 'Ks', 'Qs'])
+        h = hand.Hand(cards)
+        expected = [0, 1, 2]
+        result = discard.valid_picks(h)
+        self.assertEqual(expected, result)
