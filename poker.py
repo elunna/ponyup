@@ -88,6 +88,8 @@ class Round():
         for s in self._table:
             actions += '{} posts a {} ante.'.format(s, self.blinds.ANTE)
             self.pot += s.bet(self.blinds.ANTE)
+
+        self.hh.log(actions)
         return actions
 
     def post_blinds(self):
@@ -110,6 +112,8 @@ class Round():
         actions = ''
         actions += '{} posts ${}\n'.format(sb, self.blinds.SB)
         actions += '{} posts ${}\n'.format(bb, self.blinds.BB)
+
+        self.hh.log(actions)
         return actions
 
     def invested(self, seat):
@@ -251,8 +255,10 @@ class Round():
         Compare all the hands of players holding cards and determine the winner(s). Awards each
         winner the appropriate amount.
         """
-        print('Showdown!' + '~'*60)
-        print(self.show_cards())
+        showdown_text = 'Showdown!' + '~'*60
+        showdown_text += self.show_cards()
+        print(showdown_text)
+        self.hh.log(showdown_text)
 
         allins = self.get_allins()
         stack_shares = self.make_sidepots(allins)
@@ -280,18 +286,19 @@ class Round():
                     str(seat.hand.rank()),
                     str(seat.hand.desc())
                 )
+                self.hh.log(h_txt)
                 print(h_txt.strip().rjust(70))
                 self.award_pot(seat, amt)
 
     def award_pot(self, seat, amt):
         """
-        Adds the specified amount to a players stack.
+        Adds the specified amount to a players stack. Returns a string describing who won what.
         """
         chips = colors.color('${}'.format(amt), 'yellow')
         w_txt = '{:>15} wins {}'.format(str(seat.player), chips)
         txt = w_txt.strip().rjust(84)
-        print(txt)
         seat.win(amt)
+        return txt
 
     def next_street(self):
         """
@@ -359,9 +366,15 @@ class Round():
             seat.standup()
             _str += '{} left the table with no money!\n'.format(seat.player)
 
+        # Log players leaving
+        self.hh.log(_str)
+        return _str
+
     def cleanup(self):
         self.muck_all_cards()
         self.clear_broke_players()
+        self.hh.write_to_file()
+
         if not self.check_integrity_post():
             raise Exception('Integrity of game could not be verified after round was complete!')
 
@@ -411,6 +424,9 @@ class Round():
             act_str = betting.spacing(br.level()) + br.action_string(o)
             print(act_str)
 
+            # Log every action
+            self.hh.log(act_str)
+
         print(self)           # Display pot
 
     def found_winner(self):
@@ -422,5 +438,7 @@ class Round():
             # One player left, award them the pot!
             oneleft = 'Only one player left!'.rjust(70)
             print(colors.color(oneleft, 'LIGHTBLUE'))
-            self.award_pot(victor, self.pot)
+            awardtext = self.award_pot(victor, self.pot)
+            print(awardtext)
+            self.hh.log(awardtext)
             return True

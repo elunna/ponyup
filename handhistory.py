@@ -1,3 +1,6 @@
+import random
+import datetime
+
 """
 Hand history logger. Logs the actions that take place during a round of poker.
 
@@ -10,16 +13,33 @@ For a normal hand history file, we will start with a header:
         * time,
         * date
         * Seats, names, stack sizes
+
+Full Tilt Poker Game #108180711: Table Pilot - $1/$2 - Limit Hold'em - 12:11:53 ET - 2009/02/24
 """
+
+FILE = 'log.log'
 
 
 class HandHistory():
     def __init__(self, _round):
-        pass
+        self.r = _round
         self.text = ''
+        self.write_header()
 
     def write_header(self):
-        self.text += 'PonyUp Poker'
+        gameid = random.randint(100000000, 999999999)
+        tablename = 'twilicane'
+        dt = datetime.datetime
+        date = dt.today()
+        time = dt.now()
+        header = 'PonyUp Poker Game ID# {}: Table {} - {} - {} - {}\n'.format(
+            gameid, tablename, self.r.blinds.stakes(), self.r.gametype, time, date)
+        self.text += header
 
     def log(self, text):
-        self.text += text
+        self.text += text + '\n'
+
+    def write_to_file(self):
+        with open(FILE, 'a') as f:
+            for l in self.text:
+                f.write(l)
