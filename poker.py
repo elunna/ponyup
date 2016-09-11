@@ -86,7 +86,7 @@ class Round():
         """
         actions = ''
         for s in self._table:
-            actions += '{} posts a {} ante.'.format(s, self.blinds.ANTE)
+            actions += '{} posts  ${} ante.\n'.format(s, self.blinds.ANTE)
             self.pot += s.bet(self.blinds.ANTE)
 
         self.hh.log(actions)
@@ -421,8 +421,8 @@ class Round():
         for p in br:
             o = br.player_decision(p)
             br.process_option(o)
-            act_str = betting.spacing(br.level()) + br.action_string(o)
-            print(act_str)
+            act_str = br.action_string(o)
+            print(betting.spacing(br.level()) + act_str)
 
             # Log every action
             self.hh.log(act_str)

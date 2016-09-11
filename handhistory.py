@@ -1,5 +1,6 @@
-import random
+import console
 import datetime
+import random
 
 """
 Hand history logger. Logs the actions that take place during a round of poker.
@@ -25,6 +26,7 @@ class HandHistory():
         self.r = _round
         self.text = ''
         self.write_header()
+        self.write_player_list()
 
     def write_header(self):
         gameid = random.randint(100000000, 999999999)
@@ -35,6 +37,9 @@ class HandHistory():
         header = 'PonyUp Poker Game ID# {}: Table {} - {} - {} - {}\n'.format(
             gameid, tablename, self.r.blinds.stakes(), self.r.gametype, time, date)
         self.text += header
+
+    def write_player_list(self):
+        self.text += console.display_table(self.r._table)
 
     def log(self, text):
         self.text += text + '\n'
