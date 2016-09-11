@@ -28,6 +28,9 @@ class Hand():
                 handstr += ' '
         return handstr
 
+    def __contains__(self, card):
+        return card in self.cards
+
     def add(self, card):
         """
         Add a card to the hand.
