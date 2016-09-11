@@ -1,10 +1,19 @@
 import unittest
+import deck
 import discard
 import hand
 import pokerhands
+import seat
 
 
 class TestDiscard(unittest.TestCase):
+    def setUp(self, handsize=1):
+        self.d = deck.Deck()
+        self.s = seat.Seat(0)
+
+        for i in range(handsize):
+            self.s.hand.add(self.d.deal())
+
     """
     Tests for auto_discard(hand):
     """
@@ -281,3 +290,22 @@ class TestDiscard(unittest.TestCase):
         expected = '0  1  \nAs Ks\n'
         result = discard.discard_menu(h)
         self.assertEqual(expected, result)
+
+    """
+    Tests for redraw(players, handsize=5):
+    """
+
+    # CPU, 4 cards, draws 1 card.
+    def test_redraw_4cardhand_draw1(self):
+        self.setUp(handsize=4)
+        expected = 1
+        result = len(discard.redraw(self.s, self.d))
+        self.assertEqual(expected, result)
+
+    # CPU, 3 cards, draws 2 cards.
+    # CPU, 4 cards, draws 1 hidden card.
+
+    # human, 4 cards, draws 1 card.
+    # human, 4 cards, draws 1 faceup card.
+
+    # CPU, 4 cards, handsize=4, draws 0 cards.

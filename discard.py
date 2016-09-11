@@ -117,21 +117,20 @@ def draw_discards(cards, ranklist):
     return ev.strip_ranks(cards, highcards)
 
 
-def discard_phase(table, deck):
+def discard_phase(_round):
     """
     Goes through a table and offers all players with cards the option to discard.
     Returns a list of all the discards (ie:"muck" cards)
     """
     print('Discard phase: ' + '~'*55)
-    # Make sure the button goes last!
-    holdingcards = table.get_players(hascards=True)
-    muckpile = []
+    cardholders = _round.table.get_players(hascards=True)
 
-    for s in holdingcards:
-        max_discards = (5 if len(deck) >= 5 else len(deck))
+    for s in cardholders:
+        max_discards = (5 if len(_round.deck) >= 5 else len(_round.deck))
         if max_discards == 0:
             print('Deck has been depleted!')
             break
+
         if s.player.is_human():
             discards = human_discard(s.hand, max_discards)
         else:
@@ -142,24 +141,32 @@ def discard_phase(table, deck):
         else:
             print('{} stands pat.'.format(str(s)).rjust(70))
 
-        # Redraw!
-        human_draw = []
+        # Discard
         for c in discards:
-            muckpile.append(s.hand.discard(c))
-            draw = deck.deal()
+            _round.discard(s, c)
 
-            if s.player.is_human():
-                draw.hidden = False
-                human_draw.append(draw)
-
-            s.hand.add(draw)
-
-        if s.player.is_human():
-            print('{} draws {}'.format(str(s), human_draw).rjust(70))
+        # Redraw
+        drawpile = redraw(s, _round.d)
+        print('{} draws {}'.format(str(s.player), drawpile))
 
     print('')
 
-    return muckpile
+
+def redraw(seat, deck, handsize=5, human=False):
+    """
+    Player draws cards back up to the normal handsize.
+    """
+    drawpile = []
+    while len(seat.hand) < handsize:
+        draw = deck.deal()
+
+        if human:  # Unhide our cards so we can see them.
+            draw.hidden = False
+
+        seat.hand.add(draw)
+        drawpile.append(draw)
+
+    return drawpile
 
 
 def human_discard(hand, max_discards=5):
@@ -176,11 +183,7 @@ def human_discard(hand, max_discards=5):
             print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
             continue
 
-        # Split up the #s, and reverse them so we can remove them without the list
-        # collapsing and disrupting the numbering.
-
-        picks = sorted(
-            [int(x) for x in set(user_str) if x in valid_picks(hand)], reverse=True)
+        picks = [int(x) for x in set(user_str) if x in valid_picks(hand)]
 
         if len(picks) > max_discards:
             print('Sorry, the deck is low -- you can only pick up to {} cards.'.format(
