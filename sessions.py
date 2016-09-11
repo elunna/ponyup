@@ -26,7 +26,7 @@ GAMES = {
 
 
 class Session():
-    def __init__(self, gametype, table, blinds):
+    def __init__(self, gametype, table, blinds, hero=None):
         """
         Initialize the poker Session settings.
         """
@@ -36,6 +36,7 @@ class Session():
         self.streets = GAMES[gametype]
         self.blinds = blinds
         self.options = options.OPTIONS
+        self.hero = self.find_hero()
 
     def __str__(self):
         """
@@ -55,3 +56,8 @@ class Session():
         Defines the structure of how a single hand in the poker game is played.
         """
         print('Stub play function')
+
+    def find_hero(self):
+        for s in self._table:
+            if s.player.is_human():
+                return s

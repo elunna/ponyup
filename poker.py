@@ -1,6 +1,7 @@
 from __future__ import print_function
 import betting
 import colors
+import console
 import deck
 import handhistory
 
@@ -16,6 +17,7 @@ class Round():
         self.streets = session.streets
         self.pot = 0
         self._table = session._table
+        self.hero = session.hero
 
         self.muck = []
         self.d = deck.Deck()
@@ -33,6 +35,9 @@ class Round():
         """
         Return info about the current round.
         """
+        return console.display_table(self._table, self.hero)
+
+    def show_pot(self):
         _str = 'Pot: '
         _str += colors.color('${}'.format(self.pot), 'yellow')
         return _str.rjust(84)
@@ -409,7 +414,7 @@ class Round():
         """
         Run through a round of betting. Returns a victor if it exists.
         """
-        print(self._table)
+        print(self)
         br = betting.BettingRound(self)
 
         for p in br:
@@ -421,7 +426,7 @@ class Round():
             # Log every action
             self.hh.log(act_str)
 
-        print(self)           # Display pot
+        print(self.show_pot())           # Display pot
 
     def found_winner(self):
         victor = self.one_left()

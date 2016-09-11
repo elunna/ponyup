@@ -78,7 +78,7 @@ def menu(options):
             print('Invalid choice, try again.')
 
 
-def display_table(table):
+def display_table(table, hero=None):
     """
     Return the string representation of the table, with colors.
     """
@@ -113,7 +113,9 @@ def display_table(table):
         _str += colors.color('${:<16}'.format(s.stack), 'yellow')
 
         # Display hand if available
-        if s.hand is not None:
+        if s == hero:
+            _str += '{:16}'.format(str(s.hand.peek()))
+        elif s.hand is not None:
             _str += '{:16}'.format(str(s.hand))
         _str += '\n'
 

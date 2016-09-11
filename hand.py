@@ -5,14 +5,11 @@ import evaluator
 
 
 class Hand():
-    def __init__(self, cards=None, p=None):
+    def __init__(self, cards=None):
         if cards is None:
             self.cards = []
         else:
             self.cards = cards
-        self.player = p
-        if p is not None and p.is_human():
-            self.unhide()
 
     def __len__(self):
         """
@@ -35,8 +32,6 @@ class Hand():
         """
         Add a card to the hand.
         """
-        if self.player is not None and self.player.is_human():
-            card.hidden = False
         self.cards.append(card)
 
     def discard(self, card):
@@ -74,3 +69,9 @@ class Hand():
         Returns a list of all the face-up cards the player has.
         """
         return [c for c in self.cards if c.hidden is False]
+
+    def peek(self):
+        _str = ''
+        for c in self.cards:
+            _str += c.peek() + ' '
+        return _str

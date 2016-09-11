@@ -62,3 +62,9 @@ class Card:
         Returns the value of the Cards rank.
         """
         return RANKS[self.rank]
+
+    def peek(self):
+        """
+        This is how human/hero's are able to view hidden cards.
+        """
+        return self.rank + self.suit

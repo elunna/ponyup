@@ -192,6 +192,7 @@ def discard_menu(hand):
     indices = ''.join(['{:<3}'.format(n) for n in valid_picks(hand)])
 
     txt = indices + '\n'
-    txt += ' '.join([str(c) for c in hand.cards])
+    #  txt += ' '.join([(c) for c in hand.peek()])
+    txt += hand.peek()
     txt += '\n'
     return txt
