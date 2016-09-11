@@ -21,14 +21,15 @@ def is_integer(num):
 
 def pick_game():
     print('What game do you want to play?')
-    tables = lobby.sort_by_level()
-    print(lobby.display_numbered_list())
+    tables = lobby.sort_by_level(lobby.lobbylist)
+    print(lobby.display_numbered_list(tables))
+    valid_choices = list(range(len(tables)))
 
     while True:
         choice = input(':> ')
         if is_integer(choice) is False:
             print('Please enter a number for your selection!')
-        elif int(choice) in list(range(len(tables))):
+        elif int(choice) in valid_choices:
             return tables[int(choice)]
         else:
             print('Selection not available, try again.')
@@ -150,6 +151,17 @@ def display_table(table):
         _str += '\n'
 
     return _str
+
+
+def player_listing(table):
+    """
+    Returns the list of seats with players and stacks, for the hand history.
+    """
+    _str = ''
+    for i, s in enumerate(table.seats):
+        _str += 'Seat #{}: {}(${})\n'.format(i, str(s.player), s.stack)
+    return _str
+
 
 """
 How to make this display color?
