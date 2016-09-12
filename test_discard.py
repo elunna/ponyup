@@ -217,6 +217,63 @@ class TestDiscard(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for made_hand_discards(hand, ranklist):
+    """
+
+    """
+    Tests for draw_discards(cards, ranklist):
+    """
+
+    """
+    Tests for discard_phase(_round):
+    """
+
+    """
+    Tests for discard_menu(hand):
+    """
+    # 1 card in hand, shows index and card
+    def test_discardmenu_1card_returnsMenu(self):
+        cards = pokerhands.convert_to_cards(['As'])
+        h = hand.Hand(cards)
+        expected = '1  \nAs\n'
+        result = discard.discard_menu(h)
+        self.assertEqual(expected, result)
+
+    # 1 card in hand, shows index and card
+    def test_discardmenu_2cards_returnsMenu(self):
+        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        h = hand.Hand(cards)
+        expected = '1  2  \nAs Ks\n'
+        result = discard.discard_menu(h)
+        self.assertEqual(expected, result)
+
+    """
+    Tests for valid_picks(hand)
+    """
+    # Empty hand, returns empty list
+    def test_validpicks_handsize0_returnEmptylist(self):
+        h = hand.Hand()
+        expected = []
+        result = discard.valid_picks(h)
+        self.assertEqual(expected, result)
+
+    # 1 card in hand, returns [0]
+    def test_validpicks_handsize1_returnInts1(self):
+        cards = pokerhands.convert_to_cards(['As'])
+        h = hand.Hand(cards)
+        expected = ['1']
+        result = discard.valid_picks(h)
+        self.assertEqual(expected, result)
+
+    # 3 cards in hand, returns [1, 2, 3]
+    def test_validpicks_handsize3_returnInts123(self):
+        cards = pokerhands.convert_to_cards(['As', 'Ks', 'Qs'])
+        h = hand.Hand(cards)
+        expected = ['1', '2', '3']
+        result = discard.valid_picks(h)
+        self.assertEqual(expected, result)
+
+    """
     Tests for get_discards(hand, picks):
     """
     # Empty hand, raise exception
@@ -255,51 +312,6 @@ class TestDiscard(unittest.TestCase):
         picks = [1, 2]
         expected = [cards[0], cards[1]]
         result = discard.get_discards(h, picks)
-        self.assertEqual(expected, result)
-
-    """
-    Tests for valid_picks(hand)
-    """
-    # Empty hand, returns empty list
-    def test_validpicks_handsize0_returnEmptylist(self):
-        h = hand.Hand()
-        expected = []
-        result = discard.valid_picks(h)
-        self.assertEqual(expected, result)
-
-    # 1 card in hand, returns [0]
-    def test_validpicks_handsize1_returnInts1(self):
-        cards = pokerhands.convert_to_cards(['As'])
-        h = hand.Hand(cards)
-        expected = ['1']
-        result = discard.valid_picks(h)
-        self.assertEqual(expected, result)
-
-    # 3 cards in hand, returns [1, 2, 3]
-    def test_validpicks_handsize3_returnInts123(self):
-        cards = pokerhands.convert_to_cards(['As', 'Ks', 'Qs'])
-        h = hand.Hand(cards)
-        expected = ['1', '2', '3']
-        result = discard.valid_picks(h)
-        self.assertEqual(expected, result)
-
-    """
-    Tests for discard_menu(hand):
-    """
-    # 1 card in hand, shows index and card
-    def test_discardmenu_1card_returnsMenu(self):
-        cards = pokerhands.convert_to_cards(['As'])
-        h = hand.Hand(cards)
-        expected = '1  \nAs\n'
-        result = discard.discard_menu(h)
-        self.assertEqual(expected, result)
-
-    # 1 card in hand, shows index and card
-    def test_discardmenu_2cards_returnsMenu(self):
-        cards = pokerhands.convert_to_cards(['As', 'Ks'])
-        h = hand.Hand(cards)
-        expected = '1  2  \nAs Ks\n'
-        result = discard.discard_menu(h)
         self.assertEqual(expected, result)
 
     """
@@ -351,3 +363,16 @@ class TestDiscard(unittest.TestCase):
         redraw = discard.redraw(self.s, self.d, handsize=4)
         result = len(redraw)
         self.assertEqual(expected, result)
+
+    """
+    Tests for human_discard(hand, max_discards=5):
+    """
+
+    """
+    Tests for def extract_discards(cards, keep):
+    """
+    # Empty list, raise exception
+    # Empty keep, return full list of cards
+    # Keep has a card not in the card list, raise exception
+    # Keep 1 card of 5 cards, returns the other 4 cards.
+    # Keep 4 card of 5 cards, returns the remaining 1 card

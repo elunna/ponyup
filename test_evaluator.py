@@ -521,106 +521,6 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for chk_straight_draw(cards, qty, gap):
-    """
-    def test_straightdrawchk_2card_0gap_275Q6K_returnsQK(self):
-        qty, gap = 2, 0
-        cards = pokerhands.convert_to_cards(['2c', '7s', '5h', 'Qd', '6s', 'Kh'])
-        expected = pokerhands.convert_to_cards(['Qd', 'Kh'])
-        result = evaluator.chk_straight_draw(cards, qty, gap)
-        self.assertEqual(expected, result)
-
-    def test_straightdrawchk_2card_0gap_2A5Q6_returns56(self):
-        qty, gap = 2, 0
-        cards = pokerhands.convert_to_cards(['2c', 'As', '5h', 'Qd', '6s'])
-        expected = pokerhands.convert_to_cards(['5h', '6s'])
-        result = evaluator.chk_straight_draw(cards, qty, gap)
-        self.assertEqual(expected, result)
-
-    def test_straightdrawchk_3card_0gap_AK_raisesException(self):
-        qty, gap = 3, 0
-        cards = pokerhands.convert_to_cards(['As', 'Kc'])
-        self.assertRaises(ValueError, evaluator.chk_straight_draw, cards, qty, gap)
-
-    def test_straightdrawchk_3card_0gap_AKQ_returnsQKA(self):
-        qty, gap = 3, 0
-        cards = pokerhands.convert_to_cards(['As', 'Kc', 'Qd'])
-        expected = pokerhands.convert_to_cards(['Qd', 'Kc', 'As'])
-        result = evaluator.chk_straight_draw(cards, qty, gap)
-        self.assertEqual(expected, result)
-
-    def test_straightdrawchk_3card_0gap_AK9_returnsNone(self):
-        qty, gap = 3, 0
-        cards = pokerhands.convert_to_cards(['As', 'Kc', '9d'])
-        expected = None
-        result = evaluator.chk_straight_draw(cards, qty, gap)
-        self.assertEqual(expected, result)
-
-    def test_straightdrawchk_3card_0gap_AKQJ_returnsQKA(self):
-        qty, gap = 3, 0
-        cards = pokerhands.convert_to_cards(['As', 'Kc', 'Qd', 'Jd'])
-        expected = pokerhands.convert_to_cards(['Qd', 'Kc', 'As'])
-        result = evaluator.chk_straight_draw(cards, qty, gap)
-        self.assertEqual(expected, result)
-
-    # 3 card wheel draw
-    def test_straightdrawchk_3card_0gap_27J3KA_returns23A(self):
-        qty, gap = 3, 0
-        cards = pokerhands.convert_to_cards(['2d', '7h', 'Js', '3s', 'Ks', 'As'])
-        expected = pokerhands.convert_to_cards(['2d', '3s', 'As'])
-        result = evaluator.chk_straight_draw(cards, qty, gap)
-        self.assertEqual(expected, result)
-
-    def test_straightdrawchk_3card_1gap_27T4KA_returns24A(self):
-        qty, gap = 3, 1
-        cards = pokerhands.convert_to_cards(['2d', '7h', 'Ts', '4s', 'Ks', 'As'])
-        expected = pokerhands.convert_to_cards(['2d', '4s', 'As'])
-        result = evaluator.chk_straight_draw(cards, qty, gap)
-        self.assertEqual(expected, result)
-
-    def test_straightdrawchk_3card_1gap_JA5Q6_returnsJQA(self):
-        qty, gap = 3, 1
-        cards = pokerhands.convert_to_cards(['Jd', 'As', '5h', 'Qd', '6s'])
-        expected = pokerhands.convert_to_cards(['Jd', 'Qd', 'As'])
-        result = evaluator.chk_straight_draw(cards, qty, gap)
-        self.assertEqual(expected, result)
-
-    def test_straightdrawchk_3card_1gap_JA596_returnsNone(self):
-        qty, gap = 3, 1
-        cards = pokerhands.convert_to_cards(['Jd', 'As', '5h', '9d', '6s'])
-        expected = None
-        result = evaluator.chk_straight_draw(cards, qty, gap)
-        self.assertEqual(expected, result)
-
-    def test_straightdrawchk_4card_0gap_2J5Q6K_returnsNone(self):
-        qty, gap = 4, 0
-        cards = pokerhands.convert_to_cards(['2c', 'Js', '5h', 'Qd', '6s', 'Kh'])
-        expected = None
-        result = evaluator.chk_straight_draw(cards, qty, gap)
-        self.assertEqual(expected, result)
-
-    def test_straightdrawchk_4card_0gap_A2234_returns234A(self):
-        qty, gap = 4, 0
-        cards = pokerhands.convert_to_cards(['Ah', '2h', '2c', '3d', '4h'])
-        expected = pokerhands.convert_to_cards(['2h', '3d', '4h', 'Ah'])
-        result = evaluator.chk_straight_draw(cards, qty, gap)
-        self.assertEqual(expected, result)
-
-    def test_straightdrawchk_4card_1gap_43674_returns3467(self):
-        qty, gap = 4, 1
-        cards = pokerhands.convert_to_cards(['4c', '3c', '6h', '7d', '4d'])
-        expected = pokerhands.convert_to_cards(['3c', '4c', '6h', '7d'])
-        result = evaluator.chk_straight_draw(cards, qty, gap)
-        self.assertEqual(expected, result)
-
-    def test_straightdrawchk_4card_1gap_34589A_returnsA345(self):
-        qty, gap = 4, 1
-        cards = pokerhands.convert_to_cards(['3h', '4s', '5d', '8h', '9d', 'Ad'])
-        expected = pokerhands.convert_to_cards(['3h', '4s', '5d', 'Ad'])
-        result = evaluator.chk_straight_draw(cards, qty, gap)
-        self.assertEqual(expected, result)
-
-    """
     Tests for chk_wheel(cards):
     """
     def test_chkwheel_A_returnsTrue(self):
@@ -678,13 +578,108 @@ class TestEvaluator(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for def extract_discards(cards, keep):
+    Tests for chk_straight_draw(cards, qty, gap):
     """
+    def test_chkstraightdraw_2card_0gap_275Q6K_returnsQK(self):
+        qty, gap = 2, 0
+        cards = pokerhands.convert_to_cards(['2c', '7s', '5h', 'Qd', '6s', 'Kh'])
+        expected = pokerhands.convert_to_cards(['Qd', 'Kh'])
+        result = evaluator.chk_straight_draw(cards, qty, gap)
+        self.assertEqual(expected, result)
+
+    def test_chkstraightdraw_2card_0gap_2A5Q6_returns56(self):
+        qty, gap = 2, 0
+        cards = pokerhands.convert_to_cards(['2c', 'As', '5h', 'Qd', '6s'])
+        expected = pokerhands.convert_to_cards(['5h', '6s'])
+        result = evaluator.chk_straight_draw(cards, qty, gap)
+        self.assertEqual(expected, result)
+
+    def test_chkstraightdraw_3card_0gap_AK_raisesException(self):
+        qty, gap = 3, 0
+        cards = pokerhands.convert_to_cards(['As', 'Kc'])
+        self.assertRaises(ValueError, evaluator.chk_straight_draw, cards, qty, gap)
+
+    def test_chkstraightdraw_3card_0gap_AKQ_returnsQKA(self):
+        qty, gap = 3, 0
+        cards = pokerhands.convert_to_cards(['As', 'Kc', 'Qd'])
+        expected = pokerhands.convert_to_cards(['Qd', 'Kc', 'As'])
+        result = evaluator.chk_straight_draw(cards, qty, gap)
+        self.assertEqual(expected, result)
+
+    def test_chkstraightdraw_3card_0gap_AK9_returnsNone(self):
+        qty, gap = 3, 0
+        cards = pokerhands.convert_to_cards(['As', 'Kc', '9d'])
+        expected = None
+        result = evaluator.chk_straight_draw(cards, qty, gap)
+        self.assertEqual(expected, result)
+
+    def test_chkstraightdraw_3card_0gap_AKQJ_returnsQKA(self):
+        qty, gap = 3, 0
+        cards = pokerhands.convert_to_cards(['As', 'Kc', 'Qd', 'Jd'])
+        expected = pokerhands.convert_to_cards(['Qd', 'Kc', 'As'])
+        result = evaluator.chk_straight_draw(cards, qty, gap)
+        self.assertEqual(expected, result)
+
+    # 3 card wheel draw
+    def test_chkstraightdraw_3card_0gap_27J3KA_returns23A(self):
+        qty, gap = 3, 0
+        cards = pokerhands.convert_to_cards(['2d', '7h', 'Js', '3s', 'Ks', 'As'])
+        expected = pokerhands.convert_to_cards(['2d', '3s', 'As'])
+        result = evaluator.chk_straight_draw(cards, qty, gap)
+        self.assertEqual(expected, result)
+
+    def test_chkstraightdraw_3card_1gap_27T4KA_returns24A(self):
+        qty, gap = 3, 1
+        cards = pokerhands.convert_to_cards(['2d', '7h', 'Ts', '4s', 'Ks', 'As'])
+        expected = pokerhands.convert_to_cards(['2d', '4s', 'As'])
+        result = evaluator.chk_straight_draw(cards, qty, gap)
+        self.assertEqual(expected, result)
+
+    def test_chkstraightdraw_3card_1gap_JA5Q6_returnsJQA(self):
+        qty, gap = 3, 1
+        cards = pokerhands.convert_to_cards(['Jd', 'As', '5h', 'Qd', '6s'])
+        expected = pokerhands.convert_to_cards(['Jd', 'Qd', 'As'])
+        result = evaluator.chk_straight_draw(cards, qty, gap)
+        self.assertEqual(expected, result)
+
+    def test_chkstraightdraw_3card_1gap_JA596_returnsNone(self):
+        qty, gap = 3, 1
+        cards = pokerhands.convert_to_cards(['Jd', 'As', '5h', '9d', '6s'])
+        expected = None
+        result = evaluator.chk_straight_draw(cards, qty, gap)
+        self.assertEqual(expected, result)
+
+    def test_chkstraightdraw_4card_0gap_2J5Q6K_returnsNone(self):
+        qty, gap = 4, 0
+        cards = pokerhands.convert_to_cards(['2c', 'Js', '5h', 'Qd', '6s', 'Kh'])
+        expected = None
+        result = evaluator.chk_straight_draw(cards, qty, gap)
+        self.assertEqual(expected, result)
+
+    def test_chkstraightdraw_4card_0gap_A2234_returns234A(self):
+        qty, gap = 4, 0
+        cards = pokerhands.convert_to_cards(['Ah', '2h', '2c', '3d', '4h'])
+        expected = pokerhands.convert_to_cards(['2h', '3d', '4h', 'Ah'])
+        result = evaluator.chk_straight_draw(cards, qty, gap)
+        self.assertEqual(expected, result)
+
+    def test_chkstraightdraw_4card_1gap_43674_returns3467(self):
+        qty, gap = 4, 1
+        cards = pokerhands.convert_to_cards(['4c', '3c', '6h', '7d', '4d'])
+        expected = pokerhands.convert_to_cards(['3c', '4c', '6h', '7d'])
+        result = evaluator.chk_straight_draw(cards, qty, gap)
+        self.assertEqual(expected, result)
+
+    def test_chkstraightdraw_4card_1gap_34589A_returnsA345(self):
+        qty, gap = 4, 1
+        cards = pokerhands.convert_to_cards(['3h', '4s', '5d', '8h', '9d', 'Ad'])
+        expected = pokerhands.convert_to_cards(['3h', '4s', '5d', 'Ad'])
+        result = evaluator.chk_straight_draw(cards, qty, gap)
+        self.assertEqual(expected, result)
 
     """
     Tests for remove_pairs(cards)
     """
-
     def test_removepairs_22_returns2(self):
         cards = pokerhands.convert_to_cards(['2c', '2d'])
         expected = [card.Card('2', 'c')]

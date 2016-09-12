@@ -426,13 +426,6 @@ def chk_straight_draw(cards, qty, gap):
         return None
 
 
-def extract_discards(cards, keep):
-    """
-    Returns the cards we should discard from a group of cards.
-    """
-    return [c for c in cards if c not in keep]
-
-
 def remove_pairs(cards):
     """
     Goes through a list of cards and removes any extra pairs.

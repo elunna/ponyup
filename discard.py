@@ -4,27 +4,6 @@ import console
 import evaluator as ev
 
 
-def made_hand_discards(hand, ranklist):
-    """
-    Determine the best cards to discard for a given made hand.
-    hand is a Hand object.
-    """
-    PAT_HANDS = ['STRAIGHT', 'FLUSH', 'FULL HOUSE', 'STRAIGHT FLUSH', 'ROYAL FLUSH']
-    DIS_RANKS = ['PAIR', 'TRIPS', 'QUADS']
-
-    if hand.rank() in PAT_HANDS:
-        return []  # Don't discard anything
-    elif hand.rank() in DIS_RANKS:
-        #  standard discard
-        paircard = ranklist[0].rank
-        return ev.strip_ranks(hand.cards, paircard)
-    elif hand.rank() == 'TWO PAIR':
-        # Keep the two pair, discard 1.
-        paircard = ranklist[0].rank + ranklist[1].rank
-
-        return ev.strip_ranks(hand.cards, paircard)
-
-
 def auto_discard(hand, max_discards=5):
     """
     Calculates the best discard in a 5 card hand. Takes a maximum number of allowed discards. If
@@ -46,6 +25,27 @@ def auto_discard(hand, max_discards=5):
     return discards
 
 
+def made_hand_discards(hand, ranklist):
+    """
+    Determine the best cards to discard for a given made hand.
+    hand is a Hand object.
+    """
+    PAT_HANDS = ['STRAIGHT', 'FLUSH', 'FULL HOUSE', 'STRAIGHT FLUSH', 'ROYAL FLUSH']
+    DIS_RANKS = ['PAIR', 'TRIPS', 'QUADS']
+
+    if hand.rank() in PAT_HANDS:
+        return []  # Don't discard anything
+    elif hand.rank() in DIS_RANKS:
+        #  standard discard
+        paircard = ranklist[0].rank
+        return ev.strip_ranks(hand.cards, paircard)
+    elif hand.rank() == 'TWO PAIR':
+        # Keep the two pair, discard 1.
+        paircard = ranklist[0].rank + ranklist[1].rank
+
+        return ev.strip_ranks(hand.cards, paircard)
+
+
 def draw_discards(cards, ranklist):
     """
     Calculates the approprate card to discard for any draw-type hands.
@@ -61,12 +61,12 @@ def draw_discards(cards, ranklist):
     # Test for open-ended straight draw(s)
     OESD = ev.chk_straight_draw(cards, 4, 0)
     if OESD is not None:
-        return ev.extract_discards(cards, OESD)
+        return get_discards(cards, OESD)
 
     # Test for gutshot straight draw(s)
     GSSD = ev.chk_straight_draw(cards, 4, 1)
     if GSSD is not None:
-        return ev.extract_discards(cards, GSSD)
+        return get_discards(cards, GSSD)
 
     # Draw to high cards (J+)
     if card.RANKS[ranklist[2].rank] > 10:
@@ -87,12 +87,12 @@ def draw_discards(cards, ranklist):
     # Backdoor straight draws are pretty desparate
     BDSD = ev.chk_straight_draw(cards, 3, 0)
     if BDSD is not None:
-        return ev.extract_discards(cards, BDSD)
+        return get_discards(cards, BDSD)
 
     # 1-gap Backdoor straight draws are truly desparate!
     BDSD = ev.chk_straight_draw(cards, 3, 1)
     if BDSD is not None:
-        return ev.extract_discards(cards, BDSD)
+        return get_discards(cards, BDSD)
 
     # Last ditch effort - just draw to the best 2.
     highcards = ''.join([ranklist[i].rank for i in range(2)])
@@ -132,6 +132,33 @@ def discard_phase(_round):
         _round.log('{} draws {}'.format(str(s.player), drawpile))
 
 
+def discard_menu(hand):
+    indices = ''.join(['{:<3}'.format(n) for n in valid_picks(hand)])
+
+    txt = indices + '\n'
+    #  txt += ' '.join([(c) for c in hand.peek()])
+    txt += hand.peek().strip()
+    txt += '\n'
+    return txt
+
+
+def valid_picks(hand):
+    """
+    Create a list of all the indexes(in string format) of cards in the given hand.
+    List starts from 0.
+    """
+    return list(map(str, range(1, len(hand) + 1)))
+
+
+def get_discards(hand, picks):
+    if len(hand) == 0:
+        raise ValueError('Hand is empty! Cannot pick any discards!')
+    for n in picks:
+        if n < 1 or n > len(hand):
+            raise ValueError('An index is out of bounds!')
+    return [hand.cards[n - 1] for n in picks]
+
+
 def redraw(seat, deck, handsize=5):
     """
     Player draws cards back up to the normal handsize.
@@ -158,7 +185,7 @@ def human_discard(hand, max_discards=5):
         helpme = ['?', 'h', 'help']
         c = console.prompt()
         if c is None:
-            continue
+            continue  # Prompt processed a menu option
         elif c in helpme:
             print('')
             print('Enter the cards you want to discard:')
@@ -176,28 +203,8 @@ def human_discard(hand, max_discards=5):
         return get_discards(hand, picks)
 
 
-def get_discards(hand, picks):
-    if len(hand) == 0:
-        raise ValueError('Hand is empty! Cannot pick any discards!')
-    for n in picks:
-        if n < 1 or n > len(hand):
-            raise ValueError('An index is out of bounds!')
-    return [hand.cards[n - 1] for n in picks]
-
-
-def valid_picks(hand):
+def get_discards(cards, keep):
     """
-    Create a list of all the indexes(in string format) of cards in the given hand.
-    List starts from 0.
+    Returns the cards we should discard from a group of cards.
     """
-    return list(map(str, range(1, len(hand) + 1)))
-
-
-def discard_menu(hand):
-    indices = ''.join(['{:<3}'.format(n) for n in valid_picks(hand)])
-
-    txt = indices + '\n'
-    #  txt += ' '.join([(c) for c in hand.peek()])
-    txt += hand.peek().strip()
-    txt += '\n'
-    return txt
+    return [c for c in cards if c not in keep]
