@@ -16,8 +16,6 @@ def to_card(string):
 def convert_to_cards(strings):
     # Unhide for testing purposes
     cards = [to_card(x) for x in strings]
-    #  for c in cards:
-        #  c.hidden = False
     return cards
 
 
@@ -51,6 +49,7 @@ HANDS = {
     'dupes': ['As', '3h', 'As', '4d', '5c'],
     'royalflush': ['As', 'Ks', 'Js', 'Ts', 'Qs'],
     'straightflush_high': ['9s', 'Ks', 'Qs', 'Js', 'Ts'],
+    'straightflush 4card': ['Ks', 'Qs', 'Js', 'Ts'],
     'straightflush_low': ['2s', 'As', '3s', '4s', '5s'],
     'quads_high': ['As', 'Ad', 'Ah', 'Ac', 'Kc'],
     'quads_low': ['2s', '2d', '2h', '2c', '3c'],
@@ -71,7 +70,9 @@ HANDS = {
     'GSSFD': ['Js', 'Ts', '7s', '2d', '9s'],
     'flushdrawA': ['As', 'Ts', '7s', '2d', '9s'],
     'flushdrawB': ['3s', 'Ts', '7s', '2d', '9s'],
+    'flushdraw 4card': ['3s', 'Ts', '7s', '9s'],
     'OESD': ['Jh', 'Ts', '8c', '2d', '9s'],
+    'OESD 4card': ['Jh', 'Ts', '8c', '9s'],
     'GSSD': ['Jh', 'Ts', 'As', '2d', 'Kh'],
     'wheeldraw': ['3h', '4s', 'As', '2d', 'Kh'],
     'BDFD1': ['2d', '4s', '5s', '7s', 'Kh'],
