@@ -20,6 +20,22 @@ class TestSeat(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for __str__()
+    """
+    # Test that the players name shows up
+    def test_str_playersitting_returnsName(self):
+        self.s.sitdown(self.p)
+        expected = 'Erik'
+        result = str(self.s)
+        self.assertEqual(expected, result)
+
+    # If no player is sitting, returns 'Open Seat'
+    def test_str_empty_returnsOpenSeat(self):
+        expected = 'Open Seat'
+        result = str(self.s)
+        self.assertEqual(expected, result)
+
+    """
     Tests for sitdown(self, player):
     """
     def test_sitdown_player_isnotEmpty(self):

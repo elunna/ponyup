@@ -10,12 +10,15 @@ class Seat():
         self.stack = 0
 
     def __str__(self):
-        return str(self.player)
+        if self.player is None:
+            return 'Open Seat'
+        else:
+            return str(self.player)
 
     def sitdown(self, player):
         # Set the player
         if not self.is_empty():
-            raise Exception('The seat is currently occupised!')
+            raise Exception('The seat is currently occupied!')
         else:
             self.player = player
             self.hand = hand.Hand()
