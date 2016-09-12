@@ -13,7 +13,7 @@ class Draw5Session(sessions.Session):
 
         r.hh.button()
         r._table.set_blinds()
-        r.out(r.post_blinds())  # Log this
+        r.log(r.post_blinds())  # Log this
         r.deal_cards(DEALT)
         r.hh.holecards()
         r.sortcards()

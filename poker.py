@@ -94,8 +94,6 @@ class Round():
         for s in self._table:
             actions += '{} posts ${} ante.\n'.format(s, self.blinds.ANTE)
             self.pot += s.bet(self.blinds.ANTE)
-
-        self.hh.log(actions)
         return actions
 
     def post_blinds(self):
@@ -260,8 +258,8 @@ class Round():
         Compare all the hands of players holding cards and determine the winner(s). Awards each
         winner the appropriate amount.
         """
-        self.out('Showdown!', decorate=True)
-        self.out(self.show_cards())
+        self.log('Showdown!', decorate=True)
+        self.log(self.show_cards())
 
         allins = self.get_allins()
         stack_shares = self.make_sidepots(allins)
@@ -272,10 +270,10 @@ class Round():
 
         if len(sidepots) > 1:
             for i, s in enumerate(sidepots):
-                self.out('Sidepot #{}: ${}'.format(i+1, s))
+                self.log('Sidepot #{}: ${}'.format(i+1, s))
 
         award_txt = self.process_awards(sidepots)
-        self.out(award_txt)
+        self.log(award_txt)
 
     def process_awards(self, award_dict):
         """
@@ -439,7 +437,7 @@ class Round():
             print(colors.color(oneleft, 'LIGHTBLUE'))
 
             awardtext = self.award_pot(victor, self.pot)
-            self.out(awardtext)
+            self.log(awardtext)
             return True
 
     def discard(self, seat, c):
@@ -449,14 +447,12 @@ class Round():
         """
         self.muck.append(seat.hand.discard(c))
 
-    def out(self, txt, log=True, decorate=False):
+    def log(self, txt, echo=True, decorate=False):
         if decorate:
-            dec = self.decorate(txt)
-            print(dec)
-            self.hh.log(dec)
-        else:
+            txt = self.decorate(txt)
+        if echo:
             print(txt)
-            self.hh.log(txt)
+        self.hh.log(txt)
 
     def decorate(self, text):
         return '\n~~/) ' + text + ' (\~~'
