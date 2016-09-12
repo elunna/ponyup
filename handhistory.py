@@ -25,7 +25,6 @@ class HandHistory():
         self.text = ''
         self.write_header()
         self.write_player_list()
-        self.button()
 
     def write_header(self):
         gameid = random.randint(100000000, 999999999)

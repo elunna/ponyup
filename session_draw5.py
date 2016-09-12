@@ -10,6 +10,8 @@ class Draw5Session(sessions.Session):
         DEALT = 5
         self._table.move_button()
         r = self.new_round()
+
+        r.hh.button()
         r._table.set_blinds()
         r.out(r.post_blinds())  # Log this
         r.deal_cards(DEALT)
