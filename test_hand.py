@@ -1,6 +1,7 @@
 import unittest
 import card
 import hand
+import pokerhands
 
 
 class TestHand(unittest.TestCase):
@@ -8,7 +9,7 @@ class TestHand(unittest.TestCase):
         self.assertRaises(ValueError, card.Card, 's', 'A')
 
     """
-    Tests for __init__
+    Tests for __init__, and __len__
     """
     # No cards pass, length = 0
     def test_init_0cardspassed_length0(self):
@@ -34,7 +35,7 @@ class TestHand(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for __len__()
+    Tests for __len__(), __contains__()
     """
     # See add and discard tests
 
@@ -67,9 +68,7 @@ class TestHand(unittest.TestCase):
 
     # 1 card passed, displays the hidden card as "Xx"
     def test_str_2cards_unhidden_returnsAs_Ks(self):
-        cards = []
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('K', 's'))
+        cards = pokerhands.convert_to_cards(['As', 'Ks'])
         h = hand.Hand(cards)
         h.unhide()
         expected = 'As Ks'
@@ -153,24 +152,39 @@ class TestHand(unittest.TestCase):
     """
     # Takes in a 564 hand and after it is 456
     def test_sort_unsortedhand_sortedafter(self):
-        c1, c2, c3 = card.Card('5', 's'), card.Card('6', 's'), card.Card('4', 's')
-        h = hand.Hand([c1, c2, c3])
+        cards = pokerhands.convert_to_cards(['5s', '6s', '4s'])
+        h = hand.Hand(cards)
         h.sort()
-        expected = [c3, c1, c2]
+        expected = [cards[2], cards[1], cards[0]]
         result = h.cards
         self.assertTrue(expected, result)
 
     """
     Tests for value()
     """
+    def test_value_royalflush_returns100000000000(self):
+        h = hand.Hand(pokerhands.make('royalflush'))
+        expected = 100000000000
+        result = h.value()
+        self.assertTrue(expected, result)
 
     """
     Tests for rank()
     """
+    def test_rank_royalflush_returnsROYALFLUSH(self):
+        h = hand.Hand(pokerhands.make('royalflush'))
+        expected = 'ROYAL FLUSH'
+        result = h.rank()
+        self.assertTrue(expected, result)
 
     """
     Tests for desc()
     """
+    def test_desc_royalflush_AceHigh(self):
+        h = hand.Hand(pokerhands.make('royalflush'))
+        expected = 'A high'
+        result = h.rank()
+        self.assertTrue(expected, result)
 
     """
     Tests for get_upcards()
@@ -194,10 +208,10 @@ class TestHand(unittest.TestCase):
 
     # 2 card hand - 1 up, 1 down - returns the up card
     def test_getupcards_1up1down_returns1up(self):
-        c1 = card.Card('A', 's')
-        c2 = card.Card('K', 's')
-        c1.hidden = False
-        h = hand.Hand([c1, c2])
+        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        cards[0].hidden = False
+        cards[1].hidden = True
+        h = hand.Hand(cards)
 
         expected = 1
         result = len(h.get_upcards())
