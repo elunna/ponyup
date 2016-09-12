@@ -74,4 +74,4 @@ class Hand():
         _str = ''
         for c in self.cards:
             _str += c.peek() + ' '
-        return _str
+        return _str.strip()

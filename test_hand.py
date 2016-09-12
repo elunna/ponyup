@@ -220,12 +220,18 @@ class TestHand(unittest.TestCase):
     Tests for peek()
     """
     # Ex: As Ks. Returns string.
-    # Ex: As Ks. Cards are still hidden.
 
-    def test_getupcards_1upcard_returnsUpCard(self):
-        c = card.Card('A', 's')
-        c.hidden = False
-        h = hand.Hand([c])
-        expected = [c]
-        result = h.get_upcards()
+    def test_peek_AsKs_returnsString(self):
+        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        h = hand.Hand(cards)
+        expected = 'As Ks'
+        result = h.peek()
         self.assertEqual(expected, result)
+
+    # Ex: As Ks. Cards are still hidden.
+    def test_peek_AsKs_stillhidden(self):
+        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        h = hand.Hand(cards)
+        h.peek()
+        result = h.cards[0].hidden is True and h.cards[1].hidden is True
+        self.assertTrue(result)
