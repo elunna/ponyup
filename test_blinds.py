@@ -174,6 +174,15 @@ class TestBlinds(unittest.TestCase):
     """
     Tests for tuple_to_level(lev):
     """
+    # Tuple size 0 - raise exception
+    def test_tupletolevel_size0_raisesException(self):
+        t = tuple()
+        self.assertRaises(ValueError, blinds.tuple_to_level, t)
+
+    # Tuple size 1 - raise exception
+    def test_tupletolevel_size1_raisesException(self):
+        t = (0, )
+        self.assertRaises(ValueError, blinds.tuple_to_level, t)
 
     """
     Tests for round_number(num)

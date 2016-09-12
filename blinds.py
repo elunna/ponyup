@@ -126,6 +126,8 @@ def tuple_to_level(lev):
     elif len(lev) == 4:
         # There is SB, BB, bringin, and antes
         return Level(BB=lev[0], SB=lev[1], BRINGIN=lev[2], ANTE=lev[3])
+    else:
+        raise ValueError('Tuple needs to be 2-4 elements to be converted to a Level!')
 
 
 def round_number(num):
