@@ -20,16 +20,16 @@ class Draw5Session(sessions.Session):
 
         for s in self.streets:
             if r.street == 1:
-                # Discard phase
                 discard.discard_phase(r)
                 r.sortcards()
-                # print table after discarding and drawing
 
+            r.log(r.get_street().name, decorate=True)
             if not r.betting_over():
                 r.betting_round()
 
             if r.found_winner():
                 break
+
         else:
             r.showdown()
 
