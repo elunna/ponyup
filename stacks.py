@@ -37,7 +37,7 @@ def effective(table):
     if len(players) == 2:
         return smallest(table)
     else:
-        return
+        return average(table)
 
 
 def stacklist(table):

@@ -37,12 +37,24 @@ class TestStacks(unittest.TestCase):
     """
     Tests for test_effective(table):
     """
+    def test_effective_6players_returns350(self):
+        self.setUp(seats=6)
+        expected = 350
+        result = stacks.effective(self.t)
+        self.assertEqual(expected, result)
+
+    def test_effective_2players_returns100(self):
+        self.setUp(seats=2)
+        expected = 100
+        result = stacks.effective(self.t)
+        self.assertEqual(expected, result)
 
     """
     Tests for stacklist(table)
     """
-    def test_average_6players_returns4stacks(self):
+    def test_stacklist_6players_returns4stacks(self):
         self.setUp(seats=6)
         expected = [100, 200, 300, 400, 500, 600]
         result = stacks.stacklist(self.t)
         self.assertEqual(expected, result)
+
