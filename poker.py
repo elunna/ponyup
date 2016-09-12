@@ -462,3 +462,6 @@ class Round():
         return '\n~~/) ' + text + ' (\~~'
         # /)(\ (\/)
         #  self.text += '~~(\ ' + text + ' /)~~'
+
+    def get_street(self):
+        return self.streets[self.street]

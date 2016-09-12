@@ -219,7 +219,7 @@ class BettingRound():
         if self.r.street > len(self.r.streets):
             raise Exception('The street is larger than the number of streets in the game!')
         else:
-            self.betsize = self.r.streets[self.r.street] * self.r.blinds.BB
+            self.betsize = self.r.get_street().betsize * self.r.blinds.BB
 
     def get_bet(self):
         bet = 0
