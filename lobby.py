@@ -12,6 +12,12 @@ def default():
     return lobbylist[DEFAULT_TABLE]
 
 
+def sorted_by_game_and_lev():
+    drawgames = get_game(lobbylist, "FIVE CARD DRAW")
+    studgames = get_game(lobbylist, "FIVE CARD STUD")
+    return sort_by_level(drawgames) + sort_by_level(studgames)
+
+
 def get_game(L, game):
     return [x for x in L if x.game == game]
 

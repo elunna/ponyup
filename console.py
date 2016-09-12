@@ -7,6 +7,10 @@ Provides tools for interacting with the user at the text-based console.
 """
 
 
+def prompt():
+    return input(':> ')
+
+
 def is_integer(num):
     """
     Returns True if the num argument is an integer, and False if it is not.
@@ -20,14 +24,7 @@ def is_integer(num):
 
 
 def pick_game():
-    LOBBY = lobby.lobbylist
-    drawgames = lobby.get_game(LOBBY, "FIVE CARD DRAW")
-    drawgames = lobby.sort_by_level(drawgames)
-    studgames = lobby.get_game(LOBBY, "FIVE CARD STUD")
-    studgames = lobby.sort_by_level(studgames)
-
-    tables = drawgames + studgames
-
+    tables = lobby.sorted_by_game_and_lev()
     print('What game do you want to play?')
     print(lobby.display_numbered_list(tables))
 
