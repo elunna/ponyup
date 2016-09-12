@@ -8,7 +8,7 @@ class Stud5Session(sessions.Session):
         Play a round of Five Card Draw.
         """
         r = self.new_round()
-        r.post_antes()
+        print(r.post_antes())
 
         for s in self.streets:
             if r.street == 0:
