@@ -61,12 +61,12 @@ def draw_discards(cards, ranklist):
     # Test for open-ended straight draw(s)
     OESD = ev.chk_straight_draw(cards, 4, 0)
     if OESD is not None:
-        return get_discards(cards, OESD)
+        return extract_discards(cards, OESD)
 
     # Test for gutshot straight draw(s)
     GSSD = ev.chk_straight_draw(cards, 4, 1)
     if GSSD is not None:
-        return get_discards(cards, GSSD)
+        return extract_discards(cards, GSSD)
 
     # Draw to high cards (J+)
     if card.RANKS[ranklist[2].rank] > 10:
@@ -87,12 +87,12 @@ def draw_discards(cards, ranklist):
     # Backdoor straight draws are pretty desparate
     BDSD = ev.chk_straight_draw(cards, 3, 0)
     if BDSD is not None:
-        return get_discards(cards, BDSD)
+        return extract_discards(cards, BDSD)
 
     # 1-gap Backdoor straight draws are truly desparate!
     BDSD = ev.chk_straight_draw(cards, 3, 1)
     if BDSD is not None:
-        return get_discards(cards, BDSD)
+        return extract_discards(cards, BDSD)
 
     # Last ditch effort - just draw to the best 2.
     highcards = ''.join([ranklist[i].rank for i in range(2)])
@@ -203,7 +203,7 @@ def human_discard(hand, max_discards=5):
         return get_discards(hand, picks)
 
 
-def get_discards(cards, keep):
+def extract_discards(cards, keep):
     """
     Returns the cards we should discard from a group of cards.
     """
