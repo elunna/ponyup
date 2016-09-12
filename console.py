@@ -138,16 +138,6 @@ def display_table(table, hero=None):
     return _str
 
 
-def player_listing(table):
-    """
-    Returns the list of seats with players and stacks, for the hand history.
-    """
-    _str = ''
-    for i, s in enumerate(table.seats):
-        _str += 'Seat #{}: {}(${})\n'.format(i, str(s.player), s.stack)
-    return _str
-
-
 """
 How to make this display color?
 def action_string(action):
