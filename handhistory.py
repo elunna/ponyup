@@ -34,7 +34,7 @@ class HandHistory():
         tablename = self.r.label
         dt = datetime.datetime
         date = dt.today()
-        time = dt.now()
+        time = dt.now().strftime('%Y-%m-%d %H:%M:%S')
         header = 'PonyUp Poker Game ID# {}: Table {} - {} - {} - {}\n'.format(
             gameid, tablename, self.r.blinds.stakes(), self.r.gametype, time, date)
         self.text += header
