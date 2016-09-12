@@ -92,7 +92,7 @@ class Round():
         """
         actions = ''
         for s in self._table:
-            actions += '{} posts  ${} ante.\n'.format(s, self.blinds.ANTE)
+            actions += '{} posts ${} ante.\n'.format(s, self.blinds.ANTE)
             self.pot += s.bet(self.blinds.ANTE)
 
         self.hh.log(actions)
