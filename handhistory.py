@@ -18,8 +18,6 @@ For a normal hand history file, we will start with a header:
 Full Tilt Poker Game #108180711: Table Pilot - $1/$2 - Limit Hold'em - 12:11:53 ET - 2009/02/24
 """
 
-FILE = 'log.log'
-
 
 class HandHistory():
     def __init__(self, _round):
@@ -58,7 +56,7 @@ class HandHistory():
     def log(self, text):
         self.text += text + '\n'
 
-    def write_to_file(self):
-        with open(FILE, 'a') as f:
+    def write_to_file(self, filename):
+        with open(filename, 'a') as f:
             for l in self.text:
                 f.write(l)

@@ -373,7 +373,6 @@ class Round():
     def cleanup(self):
         self.muck_all_cards()
         self.hh.log(self.clear_broke_players())
-        self.hh.write_to_file()
 
         if not self.check_integrity_post():
             raise Exception('Integrity of game could not be verified after round was complete!')
