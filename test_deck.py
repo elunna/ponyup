@@ -7,28 +7,30 @@ import pokerhands
 
 class TestDeck(unittest.TestCase):
     """
-    Tests for __init__ and Deck construction.
+    Tests for __str__()
     """
-    def test_init_len_size52(self):
+    def test_str_2cards_returnsAsKsinParentheses(self):
+        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        d = deck.Deck(cards)
+        expected = 'As Ks'
+        result = str(d)
+        self.assertEqual(expected, result)
+
+    """
+    Tests for __len__()
+    """
+    def test_len_size52(self):
         d = deck.Deck()
         expected = 52
         result = len(d)
         self.assertEqual(expected, result)
 
-    def test_init_2cards_haslen2(self):
+    def test_len_2cards_haslen2(self):
         cards = pokerhands.convert_to_cards(['As', 'Ks'])
         d = deck.Deck(cards)
         expected = 2
         result = len(d)
         self.assertEqual(expected, result)
-
-    """
-    Tests for __str__()
-    """
-
-    """
-    Tests for __len__()
-    """
 
     """
     Tests for contains(card)
@@ -78,6 +80,13 @@ class TestDeck(unittest.TestCase):
         d.deal()
         expected = 51
         result = len(d)
+        self.assertEqual(expected, result)
+
+    def test_deal_As_returnsCard(self):
+        c = card.Card('A', 's')
+        d = deck.Deck([c])
+        expected = c
+        result = d.deal()
         self.assertEqual(expected, result)
 
     def test_deal_emptydeck_raiseException(self):
@@ -148,3 +157,9 @@ class TestDeck(unittest.TestCase):
     Tests for unhide()
     """
     # All cards in deck are faceup
+    def test_unhide_2cards_bothfaceup(self):
+        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        d = deck.Deck(cards)
+        d.unhide
+        self.assertTrue(d.cards[0].hidden is False)
+        self.assertTrue(d.cards[1].hidden is False)

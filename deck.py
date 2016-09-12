@@ -27,7 +27,7 @@ class Deck():
             if i % 13 == 0 and i != 0:
                 _str += '\n'
             _str += '{} '.format(str(c))
-        return _str
+        return _str.strip()
 
     def __len__(self):
         """
