@@ -629,6 +629,12 @@ class TestTable(unittest.TestCase):
     """
     Tests for stackdict()
     """
+    # 2 players.
+    def test_stackdict_2players(self):
+        self.setUp(players=2)
+        expected = {0: 1000, 1: 1000}
+        result = self.t.stackdict()
+        self.assertEqual(expected, result)
 
     """
     Tests for player_listing()
