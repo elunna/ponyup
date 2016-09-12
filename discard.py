@@ -1,5 +1,6 @@
 from __future__ import print_function
 import card
+import console
 import evaluator as ev
 
 
@@ -155,15 +156,17 @@ def human_discard(hand, max_discards=5):
     print(discard_menu(hand))
     while True:
         helpme = ['?', 'h', 'help']
-        user_str = input(':> ')
-        if user_str in helpme:
+        c = console.prompt()
+        if c is None:
+            continue
+        elif c in helpme:
             print('')
             print('Enter the cards you want to discard:')
             print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
             continue
 
         # Note: x is checking if there is a str x in valid_picks.
-        picks = [int(x) for x in set(user_str) if x in valid_picks(hand)]
+        picks = [int(x) for x in set(c) if x in valid_picks(hand)]
 
         if len(picks) > max_discards:
             print('Sorry, the deck is low -- you can only pick up to {} cards.'.format(

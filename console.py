@@ -19,7 +19,7 @@ def show_options():
     print('This is the options menu')
 
 
-def prompt(p):
+def prompt(p=''):
     print(p)
     i = input(':> ')
     # Process the universal options
