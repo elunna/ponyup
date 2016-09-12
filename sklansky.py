@@ -1,3 +1,5 @@
+import holdem
+
 SKLANSKY = {
     1: ['AA', 'KK', 'QQ', 'JJ', 'AKs'],
     2: ['TT', 'AK', 'AQs', 'AJs', 'KQs'],
@@ -21,6 +23,9 @@ def get_group(cardrep):
 
     If the card is 87 (8 7 offsuit), but comes in as 87o, this will cut out the 'o'
     """
+    if isinstance(cardrep, list):
+        cardrep = holdem.card2text(cardrep)
+
     if cardrep.endswith('o'):
         cardrep = cardrep[0:2]
     for k, v in SKLANSKY.items():

@@ -1,4 +1,5 @@
 import unittest
+import pokerhands
 import sklansky
 
 
@@ -70,6 +71,12 @@ class TestSklansky(unittest.TestCase):
     def test_getgroup_J4_returnsNeg1(self):
         handrep, expected = 'J4', -1
         result = sklansky.get_group(handrep)
+        self.assertEqual(expected, result)
+
+    def test_getgroup_AsKs_returns1(self):
+        cards = pokerhands.make('AKs')
+        expected = 1
+        result = sklansky.get_group(cards)
         self.assertEqual(expected, result)
 
     # All unique?
