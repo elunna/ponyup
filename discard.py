@@ -103,13 +103,13 @@ def discard_phase(_round):
     Goes through a table and offers all players with cards the option to discard.
     Returns a list of all the discards (ie:"muck" cards)
     """
-    _round.out('DISCARD PHASE:', decorate=True)
+    _round.log('DISCARD PHASE:', decorate=True)
     cardholders = _round._table.get_players(hascards=True)
 
     for s in cardholders:
         max_discards = (5 if len(_round.d) >= 5 else len(_round.d))
         if max_discards == 0:
-            _round.out('Deck has been depleted!')
+            _round.log('Deck has been depleted!')
             break
 
         if s.player.is_human():
@@ -118,9 +118,9 @@ def discard_phase(_round):
             discards = auto_discard(s.hand, max_discards)
 
         if discards:
-            _round.out('{} discards {}'.format(str(s), discards))
+            _round.log('{} discards {}'.format(str(s), discards))
         else:
-            _round.out('{} stands pat.'.format(str(s)))
+            _round.log('{} stands pat.'.format(str(s)))
 
         # Discard
         for c in discards:
@@ -128,7 +128,7 @@ def discard_phase(_round):
 
         # Redraw
         drawpile = redraw(s, _round.d)
-        _round.out('{} draws {}'.format(str(s.player), drawpile))
+        _round.log('{} draws {}'.format(str(s.player), drawpile))
 
 
 def redraw(seat, deck, handsize=5):

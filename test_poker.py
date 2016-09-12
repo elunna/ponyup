@@ -214,7 +214,7 @@ class TestPoker(unittest.TestCase):
         self.r._table.move_button()
         self.r._table.set_blinds()
         self.assertEqual(self.r._table.TOKENS['D'], 0)  # verify the button is 0
-        expected = 'bob1 posts $1\nbob2 posts $2\n'
+        expected = 'bob1 posts $1\nbob2 posts $2'
         result = self.r.post_blinds()
         self.assertEqual(expected, result)
 

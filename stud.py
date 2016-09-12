@@ -77,4 +77,6 @@ def post_bringin(_round):
     _round.pot += seat.bet(_round.blinds.BRINGIN)
     action = ''
     action += '{} brings it in for ${}\n'.format(seat.player, _round.blinds.BRINGIN)
+
+    _round.log(action, echo=False)
     return action
