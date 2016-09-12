@@ -1,3 +1,4 @@
+import games
 import poker
 import options
 """
@@ -16,13 +17,6 @@ It is responsible for:
 """
 
 DISPLAYWIDTH = 70
-GAMES = {
-    #  'OMAHA': [1, 1, 2, 2],
-    #  'HOLDEM': [1, 1, 2, 2],
-    'FIVE CARD DRAW': [1, 2],
-    'FIVE CARD STUD': [1, 1, 2, 2],
-    #  'SEVEN CARD STUD': [1, 1, 2, 2, 2],
-}
 
 
 class Session():
@@ -34,7 +28,7 @@ class Session():
         self.label = label
         self.rounds = 1
         self._table = table
-        self.streets = GAMES[gametype]
+        self.streets = games.GAMES[gametype]
         self.blinds = blinds
         self.options = options.OPTIONS
         self.hero = self.find_hero()
