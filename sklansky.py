@@ -40,4 +40,15 @@ def percentile(group):
     Takes in a group number and returns what percent of playable hands that group represents.
     ie: Group 1 is about 5%
     """
-    pass
+    STARTINGHANDS = 1326
+    hands = 0
+
+    for i in range(1, group + 1):
+        for h in SKLANSKY[i]:
+            hands += len(holdem.text2cards(h))
+
+    return int((hands / STARTINGHANDS) * 100)
+
+if __name__ == "__main__":
+    for k in sorted(SKLANSKY.keys()):
+        print('Group {} is {}% of hands.'.format(k, percentile(k)))

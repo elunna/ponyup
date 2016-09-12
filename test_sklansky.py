@@ -79,4 +79,7 @@ class TestSklansky(unittest.TestCase):
         result = sklansky.get_group(cards)
         self.assertEqual(expected, result)
 
-    # All unique?
+    def test_percentile_group1_returns2percent(self):
+        expected = 2
+        result = sklansky.percentile(1)
+        self.assertEqual(expected, result)
