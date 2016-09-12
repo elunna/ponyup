@@ -41,8 +41,11 @@ def text2cards(string):
         for c in cards:
             c.hidden = False
         return list(itertools.combinations(cards, 2))
+    elif len(string) == 2:
+        # So we can process hands like 'AK', instead of needing 'AKo'
+        string += 'o'
 
-    elif string[2] == 's':
+    if string[2] == 's':
         # Suited cards - only have 4 combos
         combos = []
         for s in card.SUITS:
