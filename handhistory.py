@@ -1,4 +1,3 @@
-import console
 import datetime
 import random
 
@@ -46,7 +45,7 @@ class HandHistory():
         self.log('Dealt to {}: [{}]'.format(hero, cards.strip()))
 
     def write_player_list(self):
-        self.text += console.player_listing(self.r._table)
+        self.text += self.r._table.player_listing()
 
     def write_tokens(self):
         # Note who has the button, SB, BB, bringin, etc.

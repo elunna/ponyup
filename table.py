@@ -199,3 +199,15 @@ class Table():
         for s in self:
             stacks[s.NUM] = s.stack
         return stacks
+
+    def player_listing(self):
+        """
+        Returns the list of seats with players and stacks, for the hand history.
+        """
+        _str = ''
+        for i, s in enumerate(self.seats):
+            if s.player is None:
+                _str += 'Seat #{}:\n'.format(i)
+            else:
+                _str += 'Seat #{}: {}(${})\n'.format(i, str(s.player), s.stack)
+        return _str

@@ -629,3 +629,21 @@ class TestTable(unittest.TestCase):
     """
     Tests for stackdict()
     """
+
+    """
+    Tests for player_listing()
+    """
+    # 1 player, 2 seats. Missing players just have the seats displayed.
+    def test_playerlisting_1player2seats(self):
+        self.setUp(players=2)
+        self.t.pop(1)
+        expected = 'Seat #0: bob0($1000)\nSeat #1:\n'
+        result = self.t.player_listing()
+        self.assertEqual(expected, result)
+
+    # 2 players.
+    def test_playerlisting_2players(self):
+        self.setUp(players=2)
+        expected = 'Seat #0: bob0($1000)\nSeat #1: bob1($1000)\n'
+        result = self.t.player_listing()
+        self.assertEqual(expected, result)

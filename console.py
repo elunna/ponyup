@@ -5,10 +5,23 @@ import names
 """
 Provides tools for interacting with the user at the text-based console.
 """
+
 menu = {}
 menu['h'] = ('(H)elp', 'show_help()')
 menu['o'] = ('(O)ptions', 'show_options()')
 menu['q'] = ('(Q)uit', 'exit()')
+
+
+def is_integer(num):
+    """
+    Returns True if the num argument is an integer, and False if it is not.
+    """
+    try:
+        num = float(num)
+    except:
+        return False
+
+    return num.is_integer()
 
 
 def show_help():
@@ -28,18 +41,6 @@ def prompt(p=''):
         return None
     else:  # We got something else...
         return i
-
-
-def is_integer(num):
-    """
-    Returns True if the num argument is an integer, and False if it is not.
-    """
-    try:
-        num = float(num)
-    except:
-        return False
-
-    return num.is_integer()
 
 
 def pick_game():
