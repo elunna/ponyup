@@ -26,3 +26,10 @@ class TestJoker(unittest.TestCase):
         expected = card.Card('A', 's')
         result = joker.pick_joker(h)
         self.assertEqual(expected, result)
+
+    def test_pickjoker_2AA_returnsA(self):
+        h = pokerhands.make('2AA_v1')
+        j = joker.pick_joker(h)
+        expected = 'A'
+        result = j.rank
+        self.assertEqual(expected, result)
