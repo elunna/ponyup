@@ -12,6 +12,7 @@ class TestDeck(unittest.TestCase):
     def test_str_2cards_returnsAsKsinParentheses(self):
         cards = pokerhands.convert_to_cards(['As', 'Ks'])
         d = deck.Deck(cards)
+        d.unhide()  # They are hidden by default
         expected = 'As Ks'
         result = str(d)
         self.assertEqual(expected, result)
@@ -160,6 +161,6 @@ class TestDeck(unittest.TestCase):
     def test_unhide_2cards_bothfaceup(self):
         cards = pokerhands.convert_to_cards(['As', 'Ks'])
         d = deck.Deck(cards)
-        d.unhide
+        d.unhide()
         self.assertTrue(d.cards[0].hidden is False)
         self.assertTrue(d.cards[1].hidden is False)

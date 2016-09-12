@@ -210,9 +210,22 @@ class TestHand(unittest.TestCase):
     def test_getupcards_1up1down_returns1up(self):
         cards = pokerhands.convert_to_cards(['As', 'Ks'])
         cards[0].hidden = False
-        cards[1].hidden = True
         h = hand.Hand(cards)
 
         expected = 1
         result = len(h.get_upcards())
+        self.assertEqual(expected, result)
+
+    """
+    Tests for peek()
+    """
+    # Ex: As Ks. Returns string.
+    # Ex: As Ks. Cards are still hidden.
+
+    def test_getupcards_1upcard_returnsUpCard(self):
+        c = card.Card('A', 's')
+        c.hidden = False
+        h = hand.Hand([c])
+        expected = [c]
+        result = h.get_upcards()
         self.assertEqual(expected, result)

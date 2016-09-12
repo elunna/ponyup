@@ -16,8 +16,8 @@ def to_card(string):
 def convert_to_cards(strings):
     # Unhide for testing purposes
     cards = [to_card(x) for x in strings]
-    for c in cards:
-        c.hidden = False
+    #  for c in cards:
+        #  c.hidden = False
     return cards
 
 
