@@ -39,7 +39,7 @@ class HandHistory():
     def button(self):
         self.text += 'Seat {} has the button.\n'.format(self.r._table.TOKENS['D'])
 
-    def holecards(self):
+    def log_holecards(self):
         self.log(self.r.decorate('HOLE CARDS'))
         hero = self.r.hero
         cards = hero.hand.peek()

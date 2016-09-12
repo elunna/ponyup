@@ -15,6 +15,7 @@ class Stud5Session(sessions.Session):
                 # 1 face down, 1 up
                 r.deal_cards(1)
                 r.deal_cards(1, faceup=True)
+                r.hh.log_holecards()
 
                 # The bringin determines the first bettor.
                 print(stud.post_bringin(r))

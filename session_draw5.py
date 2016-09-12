@@ -15,7 +15,7 @@ class Draw5Session(sessions.Session):
         r._table.set_blinds()
         r.log(r.post_blinds())  # Log this
         r.deal_cards(DEALT)
-        r.hh.holecards()
+        r.hh.log_holecards()
         r.sortcards()
 
         for s in self.streets:
