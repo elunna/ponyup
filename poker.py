@@ -55,6 +55,7 @@ class Round():
                 c = self.d.deal()
                 if faceup is True:
                     c.hidden = False
+                    self.log('{} was dealt [{}]'.format(s.player, c), echo=False)
                 s.hand.add(c)
 
     def show_cards(self):
