@@ -4,5 +4,20 @@ Project Glossary
 
 SB = Small Blind
 BB = Big Blind
+BTN = Button
+D = Dealer
 UTG = Under the Gun, or the first bettor in a given round.
 
+OESD = Open Ended Straight Draw
+OESFD = Open Ended Straight Flush Draw
+SD = Straight Draw
+FD = Flush Draw
+GSSD = Gutshot Straight Draw
+BD = Back door
+BDSD = Backdoor Straight Draw
+BDFD = Backdoor Flush draw
+
+Boat = Full House
+Set = Three of a Kind
+Trips = Three of a Kind
+Quads = Four of a Kind
