@@ -65,9 +65,7 @@ class BettingRound():
             # Player is allin
             return Action('ALLIN', 0)
         elif s.player.is_human():
-            #  amt = colors.color('${}'.format(self.bet), 'YELLOW')
-            #  print('Bet to you is {}'.format(amt))
-            return console.menu(options)
+            return console.betmenu(options)
         else:
             facing = self.cost(s) / self.betsize
             return strategy.makeplay(s, options, self.r.street, self.level(), facing)
@@ -276,3 +274,5 @@ def spacing(level):
     Spaces the player actions by the current bet level.
     """
     return '  ' * level
+
+

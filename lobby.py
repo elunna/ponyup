@@ -46,7 +46,7 @@ def stakes(gametuple):
         return '${}/${}'.format(sb, sb*2)
 
 
-def display_numbered_list(L):
+def numbered_list(L):
     _str = ''
     fmt_str = '{:<8}{:20}{:<8}{:12}{:25}\n'
     print(fmt_str.format('Pick#', 'Game', 'Seats', 'Stakes', 'Table Name'))

@@ -5,10 +5,29 @@ import names
 """
 Provides tools for interacting with the user at the text-based console.
 """
+menu = {}
+menu['h'] = ('(H)elp', 'show_help()')
+menu['o'] = ('(O)ptions', 'show_options()')
+menu['q'] = ('(Q)uit', 'exit()')
 
 
-def prompt():
-    return input(':> ')
+def show_help():
+    print('This is the help menu')
+
+
+def show_options():
+    print('This is the options menu')
+
+
+def prompt(p):
+    print(p)
+    i = input(':> ')
+    # Process the universal options
+    if i in menu:
+        exec(menu[i][1])  # Execute the menu item.
+        return None
+    else:  # We got something else...
+        return i
 
 
 def is_integer(num):
@@ -25,14 +44,14 @@ def is_integer(num):
 
 def pick_game():
     tables = lobby.sorted_by_game_and_lev()
-    print('What game do you want to play?')
-    print(lobby.display_numbered_list(tables))
-
+    print(lobby.numbered_list(tables))
     valid_choices = list(range(len(tables)))
 
     while True:
-        choice = input(':> ')
-        if is_integer(choice) is False:
+        choice = prompt('What game do you want to play?')
+        if choice is None:
+            pass
+        elif is_integer(choice) is False:
             print('Please enter a number for your selection!')
         elif int(choice) in valid_choices:
             return tables[int(choice)]
@@ -41,10 +60,11 @@ def pick_game():
 
 
 def pick_name():
-    print('Please enter your username.')
     while True:
-        name = input(':> ')
-        if not names.is_validname(name):
+        name = prompt('Please enter your username.')
+        if name is None:
+            pass
+        elif not names.is_validname(name):
             print('Name must be between {} and {} characters long.'.format(
                 names.MIN_LEN, names.MAX_LEN))
         elif names.has_surr_char(name):
@@ -54,23 +74,21 @@ def pick_name():
             return name
 
 
-def menu(options):
+def betmenu(actions):
     """
     Display a list of betting options, and get input from the player to pick a valid option.
     """
     nice_opts = ['[' + colors.color(v.name[0], 'white', STYLE='BOLD') + ']' +
                  v.name[1:].lower()
-                 for k, v in sorted(options.items())]
+                 for k, v in sorted(actions.items())]
     choices = '/'.join(nice_opts)
 
-    print('')
     while True:
-        choice = input('{}? :> '.format(choices))
-
-        if choice == 'q':
-            exit()
-        elif choice.lower() in options:
-            return options[choice]
+        choice = prompt('{}?'.format(choices))
+        if choice is None:
+            pass  # They chose a main menu option
+        elif choice.lower() in actions:
+            return actions[choice]
         else:
             print('Invalid choice, try again.')
 

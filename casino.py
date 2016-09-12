@@ -8,7 +8,7 @@ import lobby
 import os
 import session_factory
 
-NAME = 'Loose Canon'
+NAME = 'AORIST'
 GAME = lobby.default()
 
 # Define menu opions
