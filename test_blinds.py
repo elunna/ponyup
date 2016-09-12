@@ -184,6 +184,49 @@ class TestBlinds(unittest.TestCase):
         t = (0, )
         self.assertRaises(ValueError, blinds.tuple_to_level, t)
 
+    def test_tupletolevel_size2_justblinds(self):
+        t = (2, 1)
+        expected = 0
+        result = blinds.tuple_to_level(t)
+        self.assertEqual(expected, result.ANTE)
+        self.assertEqual(expected, result.BRINGIN)
+
+    def test_tupletolevel_size2_BBset(self):
+        t = (2, 1)
+        expected = 2
+        result = blinds.tuple_to_level(t).BB
+        self.assertEqual(expected, result)
+
+    def test_tupletolevel_size2_SBset(self):
+        t = (2, 1)
+        expected = 1
+        result = blinds.tuple_to_level(t).SB
+        self.assertEqual(expected, result)
+
+    def test_tupletolevel_size3_bringin0(self):
+        t = (2, 1, 0.5)
+        expected = 0
+        result = blinds.tuple_to_level(t)
+        self.assertEqual(expected, result.BRINGIN)
+
+    def test_tupletolevel_size3_anteset(self):
+        t = (2, 1, 0.5)
+        expected = 0.5
+        result = blinds.tuple_to_level(t).ANTE
+        self.assertEqual(expected, result)
+
+    def test_tupletolevel_size4_bringinset(self):
+        t = (2, 1, 0.5, 0.25)
+        expected = 0.5
+        result = blinds.tuple_to_level(t).BRINGIN
+        self.assertEqual(expected, result)
+
+    def test_tupletolevel_size4_anteset(self):
+        t = (2, 1, 0.5, 0.25)
+        expected = 0.25
+        result = blinds.tuple_to_level(t).ANTE
+        self.assertEqual(expected, result)
+
     """
     Tests for round_number(num)
     """
