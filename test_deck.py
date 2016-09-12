@@ -1,6 +1,8 @@
 import unittest
 import deck
 import card
+import joker
+import pokerhands
 
 
 class TestDeck(unittest.TestCase):
@@ -14,13 +16,19 @@ class TestDeck(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_init_2cards_haslen2(self):
-        cards = []
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('K', 's'))
+        cards = pokerhands.convert_to_cards(['As', 'Ks'])
         d = deck.Deck(cards)
         expected = 2
         result = len(d)
         self.assertEqual(expected, result)
+
+    """
+    Tests for __str__()
+    """
+
+    """
+    Tests for __len__()
+    """
 
     """
     Tests for contains(card)
@@ -29,15 +37,13 @@ class TestDeck(unittest.TestCase):
         d = deck.Deck()
         c = card.Card('A', 's')
         expected = True
-        #  result = d.contains(c)
         result = c in d
         self.assertEqual(expected, result)
 
     def test_contains_JokerinStandardDeck_returnsFalse(self):
         d = deck.Deck()
-        c = card.Card('Z', 's')
+        c = joker.JOKER1
         expected = False
-        #  result = d.contains(c)
         result = c in d
         self.assertEqual(expected, result)
 
@@ -49,9 +55,7 @@ class TestDeck(unittest.TestCase):
     Tests for sort()
     """
     def test_sort_2cards_deuceisfirst(self):
-        cards = []
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('2', 's'))
+        cards = pokerhands.convert_to_cards(['As', '2s'])
         d = deck.Deck(cards)
         d.sort()
         expected = '2'
@@ -59,10 +63,7 @@ class TestDeck(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_sort_3cards_deuceisfirst(self):
-        cards = []
-        cards.append(card.Card('A', 's'))
-        cards.append(card.Card('7', 's'))
-        cards.append(card.Card('2', 's'))
+        cards = pokerhands.convert_to_cards(['As', '7s', '2s'])
         d = deck.Deck(cards)
         d.sort()
         expected = '2'
@@ -138,12 +139,12 @@ class TestDeck(unittest.TestCase):
 
     def test_removecards_removeAsKs_containsNeither(self):
         d = deck.Deck()
-        c1 = card.Card('A', 's')
-        c2 = card.Card('K', 's')
-        d.remove_cards([c1, c2])
-        self.assertFalse(c1 in d)
-        self.assertFalse(c2 in d)
+        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        d.remove_cards(cards)
+        self.assertFalse(cards[0] in d)
+        self.assertFalse(cards[1] in d)
 
     """
     Tests for unhide()
     """
+    # All cards in deck are faceup
