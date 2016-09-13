@@ -11,3 +11,27 @@ class TestTableFactory(unittest.TestCase):
         expected = 2
         result = len(t)
         self.assertEqual(expected, result)
+
+    def test_factory_2seats_tablehas2players(self):
+        t = table_factory.factory(seats=2)
+        expected = 2
+        result = len(t.get_players())
+        self.assertEqual(expected, result)
+
+    def test_factory_3seats_Tablehas3seats(self):
+        t = table_factory.factory(seats=3)
+        expected = 3
+        result = len(t)
+        self.assertEqual(expected, result)
+
+    def test_factory_3seats_Tablehas3players(self):
+        t = table_factory.factory(seats=3)
+        expected = 3
+        result = len(t.get_players())
+        self.assertEqual(expected, result)
+
+    def test_factory_hero_defaultseat0(self):
+        name = 'Octavia'
+        t = table_factory.factory(seats=2, heroname=name)
+        result = str(t.seats[0].player)
+        self.assertEqual(name, result)
