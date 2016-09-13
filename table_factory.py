@@ -38,7 +38,7 @@ def factory(**new_config):
     for i, s in enumerate(t):
         p = player.factory(nameset[i], config['game'], config['types'])
 
-        #  p.deposit(config['deposit'])
+        p.deposit(config['deposit'])
         s.sitdown(p)
 
     """

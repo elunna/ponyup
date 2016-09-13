@@ -12,6 +12,18 @@ class TestTableFactory(unittest.TestCase):
         result = len(t)
         self.assertEqual(expected, result)
 
+    def test_factory_2seat_player0hasbank(self):
+        t = table_factory.factory(seats=2)
+        expected = table_factory.DEPOSIT
+        result = t.seats[0].player.bank
+        self.assertEqual(expected, result)
+
+    def test_factory_2seat_player1hasbank(self):
+        t = table_factory.factory(seats=2)
+        expected = table_factory.DEPOSIT
+        result = t.seats[1].player.bank
+        self.assertEqual(expected, result)
+
     def test_factory_2seats_tablehas2players(self):
         t = table_factory.factory(seats=2)
         expected = 2
