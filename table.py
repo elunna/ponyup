@@ -12,7 +12,6 @@ class Table():
             raise ValueError('Not a valid table size!')
 
         self.TOKENS = {'D': -1, 'SB': -1, 'BB': -1, 'BI': -1}
-        #  self.seats = tuple([seat.Seat() for i in range(size)])  # Gen expr?
         self.seats = [seat.Seat(i) for i in range(size)]
 
     def __str__(self):
@@ -208,6 +207,3 @@ class Table():
             raise Exception('Cannot place the button, no players at table!')
         choice = random.choice(seats)
         self.TOKENS['D'] = choice
-
-        # This will also set the blinds...
-        self.move_button()
