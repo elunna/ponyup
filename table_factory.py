@@ -42,7 +42,7 @@ def factory(**new_config):
 
     # Create and place the hero player.
     if config['heroname']:
-        hero = player.Player(config['heroname'])
+        hero = player.Player(config['heroname'], 'HUMAN')
         hero.deposit(config['deposit'])
         heroseat = t.seats[config['heroseat']]
         heroseat.sitdown(hero)
