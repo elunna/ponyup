@@ -26,13 +26,13 @@ def factory(**new_config):
     config.update(new_config)
     SEATS = config['seats']
     t = table.Table(SEATS)
+
     # Create a list of players
     if config['names'] == 'random':
         # Generate random names
         nameset = names.random_names(SEATS)
     else:
         nameset = [config['names'] + str(i) for i in range(SEATS)]
-        #  nameset = ['bob' for i in range(SEATS)]
 
     # Fund and Seat the players
     for i, s in enumerate(t):
@@ -44,11 +44,13 @@ def factory(**new_config):
     # Create and place the hero player.
     if config['heroname']:
         hero = player.Player(config['heroname'])
+        hero.deposit(config['deposit'])
         heroseat = t.seats[config['heroseat']]
+
         if not heroseat.is_empty():
             heroseat.standup()
+
         heroseat.sitdown(hero)
-    """
 
     # Players buyin to the table.
     if config['stepstacks']:
@@ -57,5 +59,4 @@ def factory(**new_config):
     else:
         for s in t:
             s.buy_chips(DEF_STACK)
-    """
     return t
