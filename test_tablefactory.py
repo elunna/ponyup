@@ -65,3 +65,15 @@ class TestTableFactory(unittest.TestCase):
         expected = table_factory.DEPOSIT - table_factory.DEF_STACK
         result = t.seats[0].player.bank
         self.assertEqual(expected, result)
+
+    def test_factory_2stepstacks_seat0has100(self):
+        t = table_factory.factory(seats=2, stepstacks=True)
+        expected = 100
+        result = t.seats[0].stack
+        self.assertEqual(expected, result)
+
+    def test_factory_2stepstacks_seat1has200(self):
+        t = table_factory.factory(seats=2, stepstacks=True)
+        expected = 200
+        result = t.seats[1].stack
+        self.assertEqual(expected, result)
