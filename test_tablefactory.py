@@ -54,14 +54,14 @@ class TestTableFactory(unittest.TestCase):
         result = len(t.get_players())
         self.assertEqual(expected, result)
 
-    def test_factory_hero_defaultseat0(self):
+    def test_factory_hero_heroseat0(self):
         name = 'Octavia'
-        t = table_factory.factory(seats=2, heroname=name)
+        t = table_factory.factory(seats=2, heroname=name, heroseat=0)
         result = str(t.seats[0].player)
         self.assertEqual(name, result)
 
     def test_factory_hero_herohasbankminusstack(self):
-        t = table_factory.factory(seats=2)
+        t = table_factory.factory(seats=2, heroname='Octavia')
         expected = table_factory.DEPOSIT - table_factory.DEF_STACK
         result = t.seats[0].player.bank
         self.assertEqual(expected, result)
@@ -94,7 +94,7 @@ class TestTableFactory(unittest.TestCase):
         vary = .50
         # We'll use a really large stacksize to try to create almost no chance of duplicates.
         # So it is possible for this test to fail, but incredibly rarely.
-        t = table_factory.factory(seats=8, stack=10000000, variance=vary)
+        t = table_factory.factory(seats=8, deposit=10000000, stack=10000000, variance=vary)
         stacks = t.stacklist()
         expected = 8
         result = len(set(stacks))

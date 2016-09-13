@@ -34,20 +34,21 @@ def factory(**new_config):
     else:
         nameset = [config['names'] + str(i) for i in range(SEATS)]
 
-    # Fund and Seat the players
-    for i, s in enumerate(t):
-        p = player.factory(nameset[i], config['game'], config['types'])
-
-        p.deposit(config['deposit'])
-        s.sitdown(p)
-
     # Create and place the hero player.
     if config['heroname']:
         hero = player.Player(config['heroname'])
         hero.deposit(config['deposit'])
         heroseat = t.seats[config['heroseat']]
-        heroseat.standup()
         heroseat.sitdown(hero)
+
+    # Fund and Seat the players
+    for i, s in enumerate(t):
+        if not s.is_empty():
+            continue  # Save this seat for the hero.
+        p = player.factory(nameset[i], config['game'], config['types'])
+
+        p.deposit(config['deposit'])
+        s.sitdown(p)
 
     # Players buyin to the table.
     # There are a few different ways to set stack sizes.
