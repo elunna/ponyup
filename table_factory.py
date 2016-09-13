@@ -13,7 +13,7 @@ def factory(**new_config):
         'seats': None,
         'game': None,
         'tablename': 'default',
-        'types': None,  # Player types
+        'types': 'random',  # Player types
         'names': 'bob',  # Player names, can be 'random'
         'empty': False,
         'heroname': None,  # If there is a hero, they will be placed at the hero seat.
