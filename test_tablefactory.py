@@ -47,3 +47,9 @@ class TestTableFactory(unittest.TestCase):
         t = table_factory.factory(seats=2, heroname=name)
         result = str(t.seats[0].player)
         self.assertEqual(name, result)
+
+    def test_factory_hero_herohasbank(self):
+        t = table_factory.factory(seats=2)
+        expected = table_factory.DEPOSIT
+        result = t.seats[0].player.bank
+        self.assertEqual(expected, result)

@@ -41,12 +41,14 @@ def factory(**new_config):
         p.deposit(config['deposit'])
         s.sitdown(p)
 
-    """
     # Create and place the hero player.
     if config['heroname']:
         hero = player.Player(config['heroname'])
         heroseat = t.seats[config['heroseat']]
+        if not heroseat.is_empty():
+            heroseat.standup()
         heroseat.sitdown(hero)
+    """
 
     # Players buyin to the table.
     if config['stepstacks']:
