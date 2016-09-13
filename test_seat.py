@@ -36,6 +36,53 @@ class TestSeat(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for _-eq__(self, other)
+    """
+    # Same seat, no player, are equal
+    def test_eq_sameseat_noplayer_returnsTrue(self):
+        seatcopy = self.s
+        expected = True
+        result = self.s == seatcopy
+        self.assertEqual(expected, result)
+
+    # Different seats, not equal
+    def test_eq_different_returnsFalse(self):
+        s2 = seat.Seat(2)
+        expected = False
+        result = self.s == s2
+        self.assertEqual(expected, result)
+
+    # Different seats, same players, not equal
+    def test_eq_diffseats_sameplayers_returnsFalse(self):
+        s2 = seat.Seat(2)
+        self.s.sitdown(self.p)
+        s2.sitdown(self.p)
+        expected = False
+        result = self.s == s2
+        self.assertEqual(expected, result)
+
+    # Same seats, same players, equal
+    def test_eq_sameseats_sameplayers_returnsTrue(self):
+        s2 = seat.Seat(1)
+        self.s.sitdown(self.p)
+        s2.sitdown(self.p)
+        expected = True
+        result = self.s == s2
+        self.assertEqual(expected, result)
+
+    # Same seats, same players, diff stacks, not equal
+    def test_eq_sameplayers_diffstacks_returnsFalse(self):
+        s2 = seat.Seat(1)
+        self.s.sitdown(self.p)
+        s2.sitdown(self.p)
+        self.s.buy_chips(100)
+        s2.buy_chips(300)
+
+        expected = False
+        result = self.s == s2
+        self.assertEqual(expected, result)
+
+    """
     Tests for sitdown(self, player):
     """
     def test_sitdown_player_isnotEmpty(self):

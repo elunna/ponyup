@@ -15,6 +15,19 @@ class Seat():
         else:
             return str(self.player)
 
+    def __eq__(self, other):
+        """
+        Compares this seat to another seat and returns True if all attributes match.
+        """
+        if self.player != other.player:
+            return False
+        elif self.stack != other.stack:
+            return False
+        elif self.NUM != other.NUM:
+            return False
+        else:
+            return True
+
     def sitdown(self, player):
         # Set the player
         if not self.vacant():
