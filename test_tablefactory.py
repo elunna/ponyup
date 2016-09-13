@@ -9,6 +9,13 @@ class TestTableFactory(unittest.TestCase):
     def test_factory_noseatspassed_raisesException(self):
         self.assertRaises(ValueError, table_factory.factory)
 
+    def test_factory_namedPonyville_hasName(self):
+        name = 'Ponyville'
+        t = table_factory.factory(seats=2, tablename=name)
+        expected = name
+        result = t.name
+        self.assertEqual(expected, result)
+
     def test_factory_2seat_Tablehas2seats(self):
         t = table_factory.factory(seats=2)
         expected = 2
