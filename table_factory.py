@@ -15,6 +15,7 @@ def factory(**new_config):
         'tablename': 'default',
         'types': None,  # Player types
         'names': 'bob',  # Player names, can be 'random'
+        'empty': False,
         'heroname': None,  # If there is a hero, they will be placed at the hero seat.
         'heroseat': 0,
         'deposit': DEPOSIT,
@@ -27,6 +28,9 @@ def factory(**new_config):
     SEATS = config['seats']
     t = table.Table(SEATS)
     t.name = config['tablename']
+
+    if config['empty']:
+        return t
 
     # Create a list of players
     if config['names'] == 'random':
