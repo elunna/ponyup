@@ -161,7 +161,7 @@ class TestTable(unittest.TestCase):
     def test_pop_seat0_seat0isEmpty(self):
         self.t.pop(0)
         expected = True
-        result = self.t.seats[0].is_empty()
+        result = self.t.seats[0].vacant()
         self.assertEqual(expected, result)
 
     def test_pop_seat0_returnsPlayer(self):
@@ -171,7 +171,7 @@ class TestTable(unittest.TestCase):
 
     def test_pop_emptyseat_raisesException(self):
         self.t.pop(0)
-        self.assertTrue(self.t.seats[0].is_empty())
+        self.assertTrue(self.t.seats[0].vacant())
         self.assertRaises(ValueError, self.t.pop, 0)
 
     """

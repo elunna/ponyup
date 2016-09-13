@@ -57,10 +57,10 @@ class Table():
         Returns True if successful, False otherwise.
         """
         # Check if the player is already sitting.
-        if player.name in [s.player.name for s in self if not s.is_empty()]:
+        if player.name in [s.player.name for s in self if s.occupied()]:
             return False
 
-        if self.seats[index].is_empty():
+        if self.seats[index].vacant():
             self.seats[index].sitdown(player)
             return True
         else:
@@ -72,7 +72,7 @@ class Table():
         ValueError exception.
         """
         s = self.seats[index]
-        if s.is_empty():
+        if s.vacant():
             raise ValueError('The seat is already empty!')
         else:
             p = s.standup()
@@ -103,7 +103,7 @@ class Table():
         first = (btn + 1) % length
         seats = list(range(first, length)) + list(range(first))
 
-        seatlist = [self.seats[s] for s in seats if self.seats[s].is_empty() is False]
+        seatlist = [self.seats[s] for s in seats if self.seats[s].occupied()]
 
         if hascards is True:
             seatlist = list(filter((lambda x: x.has_hand() == True), seatlist))
@@ -130,7 +130,7 @@ class Table():
             seat = (from_seat + (i * step)) % length
             s = self.seats[seat]
 
-            if s.is_empty():
+            if s.vacant():
                 continue
             elif hascards and not s.has_hand():
                 continue
@@ -151,7 +151,7 @@ class Table():
         """
         players = {}
         for i, s in enumerate(self.seats):
-            if not s.is_empty():
+            if s.occupied():
                 players[i] = s.player
         return players
 

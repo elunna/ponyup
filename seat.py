@@ -17,7 +17,7 @@ class Seat():
 
     def sitdown(self, player):
         # Set the player
-        if not self.is_empty():
+        if not self.vacant():
             raise Exception('The seat is currently occupied!')
         else:
             self.player = player
@@ -31,7 +31,7 @@ class Seat():
         self.player = None
         return p
 
-    def is_empty(self):
+    def vacant(self):
         return self.player is None
 
     def occupied(self):

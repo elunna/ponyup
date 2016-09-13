@@ -41,7 +41,7 @@ class TestSeat(unittest.TestCase):
     def test_sitdown_player_isnotEmpty(self):
         self.s.sitdown(self.p)
         expected = False
-        result = self.s.is_empty()
+        result = self.s.vacant()
         self.assertEqual(expected, result)
 
     def test_sitdown_player_matchesSeatPlayer(self):
@@ -60,7 +60,7 @@ class TestSeat(unittest.TestCase):
         self.s.sitdown(self.p)
         self.s.standup()
         expected = True
-        result = self.s.is_empty()
+        result = self.s.vacant()
         self.assertEqual(expected, result)
 
     def test_standup_playerwithchips_0chips(self):
@@ -79,10 +79,10 @@ class TestSeat(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for is_empty(self):
+    Tests for vacant(self):
     """
-    def test_isempty_emptyseat_returnsTrue(self):
-        self.assertTrue(self.s.is_empty())
+    def test_vacant_emptyseat_returnsTrue(self):
+        self.assertTrue(self.s.vacant())
 
     """
     Tests for occupied(self):

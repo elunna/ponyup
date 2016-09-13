@@ -49,7 +49,7 @@ def factory(**new_config):
 
     # Fund and Seat the players
     for i, s in enumerate(t):
-        if not s.is_empty():
+        if not s.vacant():
             continue  # Save this seat for the hero.
         p = player.factory(nameset[i], config['game'], config['types'])
 
