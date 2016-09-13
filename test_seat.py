@@ -63,9 +63,6 @@ class TestSeat(unittest.TestCase):
         result = self.s.is_empty()
         self.assertEqual(expected, result)
 
-    def test_standup_empty_raisesException(self):
-        self.assertRaises(Exception, self.s.standup)
-
     def test_standup_playerwithchips_0chips(self):
         self.s.sitdown(self.p)
         self.s.buy_chips(100)

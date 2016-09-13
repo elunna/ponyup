@@ -46,10 +46,7 @@ def factory(**new_config):
         hero = player.Player(config['heroname'])
         hero.deposit(config['deposit'])
         heroseat = t.seats[config['heroseat']]
-
-        if not heroseat.is_empty():
-            heroseat.standup()
-
+        heroseat.standup()
         heroseat.sitdown(hero)
 
     # Players buyin to the table.

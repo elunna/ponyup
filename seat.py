@@ -24,10 +24,6 @@ class Seat():
             self.hand = hand.Hand()
 
     def standup(self):
-        # If no player is sitting, raise an exception
-        if self.player is None:
-            raise Exception('There is no player to stand up from this seat!')
-
         # Give their chips back
         self.player.deposit(self.stack)
         self.stack = 0
