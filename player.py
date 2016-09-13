@@ -1,11 +1,9 @@
-from collections import namedtuple
 import names
 import random
 import draw5_plyr
 import stud5_plyr
 
 TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
-Ranges = namedtuple('Ranges', ['call1', 'call2', 'bet', 'raise1', 'raise2', 'bluff'])
 
 
 def random_type():
