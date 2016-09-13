@@ -25,10 +25,10 @@ class Table():
 
     def __iter__(self):
         """
-        Creates an iterator for the table.
+        Creates an iterator for the table seats. Iterates over all seats, empty or not.
         """
         self.counter = 0
-        self.seat_tup = tuple(s for s in self.seats if s.is_empty() is not True)
+        self.seat_tup = tuple(s for s in self.seats)
         return self
 
     def __next__(self):
