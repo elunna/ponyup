@@ -5,15 +5,15 @@ import testtools
 
 
 class TestStacks(unittest.TestCase):
-    def setUp(self, seats=6):
-        self.t = table_factory.SteppedStackTable(seats)
+    def setUp(self, _seats=6):
+        self.t = table_factory.factory(seats=_seats, stepstacks=True)
         testtools.deal_random_cards(self.t, 1)
 
     """
     Tests for test_largest(table):
     """
     def test_largest_6players_returns600(self):
-        self.setUp(seats=6)
+        self.setUp(_seats=6)
         expected = 600
         result = stacks.largest(self.t)
         self.assertEqual(expected, result)
@@ -38,13 +38,13 @@ class TestStacks(unittest.TestCase):
     Tests for test_effective(table):
     """
     def test_effective_6players_returns350(self):
-        self.setUp(seats=6)
+        self.setUp(_seats=6)
         expected = 350
         result = stacks.effective(self.t)
         self.assertEqual(expected, result)
 
     def test_effective_2players_returns100(self):
-        self.setUp(seats=2)
+        self.setUp(_seats=2)
         expected = 100
         result = stacks.effective(self.t)
         self.assertEqual(expected, result)

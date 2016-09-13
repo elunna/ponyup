@@ -18,12 +18,19 @@ class TestPoker(unittest.TestCase):
         self.g = session_factory.draw5_session(level, players)
         self.r = poker.Round(self.g)
 
-    def setup_allins(self, seats):
-        self.g._table = table_factory.SteppedStackTable(seats)
+    def setup_allins(self, _seats):
+        self.g._table = table_factory.factory(
+            seats=_seats, game="FIVE CARD DRAW", stepstacks=True
+        )
         self.r = poker.Round(self.g)
 
         # For make_sidepots, get_allins need players to have cards.
         testtools.deal_random_cards(self.g._table, 2)
+
+    def get_generic_table(self, seats=6):
+        return table_factory.factory(
+                seats=seats, heroname='octavia', game="FIVE CARD DRAW", stepstacks=True
+        )
 
     def everybody_bet(self, bet):
         for s in self.r._table:
@@ -303,7 +310,7 @@ class TestPoker(unittest.TestCase):
     # 5 players, 2 allins, challenge stack sizes.
     def test_makesidepots_4plyr_2allin_returns2sidepot(self):
         # Setup a problem situation
-        self.g._table = table_factory.BobTable(4)
+        self.g._table = self.get_generic_table(4)
         stacks = [1000, 1000, 225, 100]
         for p in self.g._table:
             p.stack = stacks.pop(0)
