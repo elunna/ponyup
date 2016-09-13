@@ -38,10 +38,3 @@ def effective(table):
         return smallest(table)
     else:
         return average(table)
-
-
-def stacklist(table):
-    """
-    Returns a list of all the stack sizes.
-    """
-    return [s.stack for s in table]

@@ -165,6 +165,13 @@ class Table():
             stacks[s.NUM] = s.stack
         return stacks
 
+
+    def stacklist(self):
+        """
+        Returns a list of all the stack sizes.
+        """
+        return [s.stack for s in self]
+
     def player_listing(self):
         """
         Returns the list of seats with players and stacks, for the hand history.

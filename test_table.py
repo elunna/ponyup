@@ -11,7 +11,10 @@ class TestTable(unittest.TestCase):
     Setup a table filled with 6 players for testing.
     """
     def setUp(self, players=6, removed=None, btn_moved=1, setblinds=False):
-        self.t = table_factory.BobTable(players)
+        config = {
+            'seats': players
+        }
+        self.t = table_factory.factory(config)
 
         if removed is not None:
             self.t.pop(removed)
@@ -41,7 +44,7 @@ class TestTable(unittest.TestCase):
         self.assertRaises(ValueError, table.Table, '11')
 
     def test_init_Dtoken_returnsNeg1(self):
-        t = table_factory.BobTable(6)
+        t = table_factory.factory({'seats': 6})
         expected = -1
         result = t.TOKENS['D']
         self.assertEqual(expected, result)
@@ -528,6 +531,15 @@ class TestTable(unittest.TestCase):
         self.setUp(players=2)
         expected = {0: 1000, 1: 1000}
         result = self.t.stackdict()
+        self.assertEqual(expected, result)
+
+    """
+    Tests for stacklist(table)
+    """
+    def test_stacklist_6players_returns4stacks(self):
+        self.setUp(seats=6)
+        expected = [100, 200, 300, 400, 500, 600]
+        result = self.t.stacklist(self.t)
         self.assertEqual(expected, result)
 
     """

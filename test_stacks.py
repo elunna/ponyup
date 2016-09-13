@@ -48,13 +48,3 @@ class TestStacks(unittest.TestCase):
         expected = 100
         result = stacks.effective(self.t)
         self.assertEqual(expected, result)
-
-    """
-    Tests for stacklist(table)
-    """
-    def test_stacklist_6players_returns4stacks(self):
-        self.setUp(seats=6)
-        expected = [100, 200, 300, 400, 500, 600]
-        result = stacks.stacklist(self.t)
-        self.assertEqual(expected, result)
-
