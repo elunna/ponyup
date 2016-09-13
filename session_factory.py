@@ -5,7 +5,7 @@ import table_factory
 
 
 def make(gametuple, name):
-    t = table_factory.HeroTable(gametuple.seats, name, gametuple.game)
+    t = table_factory.factory(seats=gametuple.seats, heroname=name, game=gametuple.game)
 
     if gametuple.game == "FIVE CARD DRAW":
         NOANTE = blinds.BlindsNoAnte(gametuple.level)
@@ -23,8 +23,9 @@ def draw5_session(level, players=6):
     Create a table of 6 draw5 players with default starting stacks.
     """
     STAKES = blinds.BlindsNoAnte(level)
-    table = table_factory.Draw5Table(players)
-    return session_draw5.Draw5Session('FIVE CARD DRAW', table, STAKES)
+
+    t = table_factory.factory(seats=players, game="FIVE CARD DRAW")
+    return session_draw5.Draw5Session('FIVE CARD DRAW', t, STAKES)
 
 
 def stud5_session(level, players=6):
@@ -32,5 +33,6 @@ def stud5_session(level, players=6):
     Create a table of 6 draw5 players with default starting stacks.
     """
     STAKES = blinds.BlindsAnte(level)
-    table = table_factory.Stud5Table(players)
-    return session_stud5.Stud5Session('FIVE CARD STUD', table, STAKES)
+    t = table_factory.factory(seats=players, game="FIVE CARD STUD")
+
+    return session_stud5.Stud5Session('FIVE CARD STUD', t, STAKES)
