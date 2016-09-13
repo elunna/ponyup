@@ -1,10 +1,15 @@
+from collections import namedtuple
 import names
 import random
-import player_5draw
-import player_5stud
+import draw5_plyr
+import stud5_plyr
 
 TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
-BANKDEFAULT = 10000
+Ranges = namedtuple('Ranges', ['call1', 'call2', 'bet', 'raise1', 'raise2', 'bluff'])
+
+
+def random_type():
+    return random.choice(TYPES)
 
 
 class Player():
@@ -73,19 +78,17 @@ class Player():
         return self.playertype == 'HUMAN'
 
 
-def random_type():
-    return random.choice(TYPES)
+def factory(name, game, playertype=None):
+    """
+    Create a new Player, using the game strategy from the game specified.
+    """
+    p = Player(name, playertype)
 
+    if game == "FIVE CARD DRAW":
+        p.strategies = draw5_plyr.strat[playertype]
+    elif game == "FIVE CARD STUD":
+        p.strategies = stud5_plyr.strat[playertype]
+    elif game is None:
+        p.strategies = None
 
-class Player5Card(Player):
-    def __init__(self, name, playertype=None):
-        super().__init__(name, playertype)
-        self.strategies = {}
-        self.strategies = player_5draw.TYPES[self.playertype]
-
-
-class Player5Stud(Player):
-    def __init__(self, name, playertype=None):
-        super().__init__(name, playertype)
-        self.strategies = {}
-        self.strategies = player_5stud.TYPES[self.playertype]
+    return p
