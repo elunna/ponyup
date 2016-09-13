@@ -15,6 +15,7 @@ class BettingRound():
         """
         Manages the betting info and activities. Takes in a Round object as r.
         """
+        self.pot = r.pot
         self.r = r
         self.BETCAP = 4
         if self.r.gametype == "FIVE CARD DRAW":
@@ -102,7 +103,7 @@ class BettingRound():
             self.bet = player_bet
 
         # Add the bet/raise amount to the pot
-        self.r.pot += s.bet(action.cost)
+        self.pot += s.bet(action.cost)
 
     def get_options(self, s):
         """
@@ -254,19 +255,9 @@ class BettingRound():
 
     def set_stacks(self):
         if self.r.street == 0:
-            self.stacks = self.r.starting_stacks
+            self.stacks = self.pot.stacks
         elif self.r.street > 0:
             self.stacks = self.r._table.stackdict()
-
-
-def calc_odds(bet, pot):
-    """
-    Calculate the odds offered to a player given a bet amount and a pot amount.
-    """
-    if bet < 0 or pot < 0:
-        raise ValueError('bet or pot must be positive!')
-    odds = pot / bet
-    return odds
 
 
 def spacing(level):
@@ -274,5 +265,3 @@ def spacing(level):
     Spaces the player actions by the current bet level.
     """
     return '  ' * level
-
-

@@ -837,23 +837,6 @@ class TestBetting(unittest.TestCase):
 
     ################################################################################
     """
-    Tests for calc_odds(bet ,pot)
-    """
-    # bet cannot be negative
-    def test_calcodds_negbet_raiseEx(self):
-        self.assertRaises(ValueError, betting.calc_odds, -10, 10)
-
-    # pot cannot be negative
-    def test_calcodds_negpot_raiseEx(self):
-        self.assertRaises(ValueError, betting.calc_odds, 10, -10)
-
-    # bet = 5, pot = 10, we are getting 2-to-1 odds.
-    def test_calcodds_pot10_bet5_returns2(self):
-        expected = 2.0
-        result = betting.calc_odds(5, 10)
-        self.assertEqual(expected, result)
-
-    """
     Tests for spacing()
     """
     # Level 0: 0 spaces
