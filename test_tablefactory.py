@@ -109,3 +109,14 @@ class TestTableFactory(unittest.TestCase):
         expected = 8
         result = len(set(stacks))
         self.assertEqual(expected, result)
+
+
+
+
+
+
+    def test_factory_2seats_remove0_1player(self):
+        t = table_factory.factory(seats=2, remove=0)
+        expected = 1
+        result = len(t.get_players())
+        self.assertEqual(expected, result)

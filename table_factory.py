@@ -21,7 +21,8 @@ def factory(**new_config):
         'deposit': DEPOSIT,
         'stack': DEF_STACK,
         'stepstacks': False,
-        'variance': None  # A percentage that the stack size can randomly vary.
+        'variance': None,   # A percentage that the stack size can randomly vary.
+        'remove': None,
     }
 
     config.update(new_config)
@@ -82,4 +83,9 @@ def factory(**new_config):
             hilimit = int(s.stack * config['variance'])
             offset = random.randint(0, hilimit)
             s.stack -= offset
+
+    # Removes a player from the table, if specified.
+    if config['remove'] is not None:
+        t.pop(config['remove'])
+
     return t
