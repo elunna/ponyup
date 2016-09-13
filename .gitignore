@@ -1,6 +1,7 @@
 __pycache__/*
 old/*
 logs/*
+data/*
 .ropeproject/*
 *.pyc
 dirlist
