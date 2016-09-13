@@ -143,7 +143,7 @@ class Table():
         """
         Returns a list of all the seats that have no chips in front of them.
         """
-        return [s for s in self if s.has_chips() is False]
+        return [s for s in self if s.occupied() and s.has_chips() is False]
 
     def get_playerdict(self):
         """
