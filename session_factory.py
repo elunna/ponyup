@@ -5,17 +5,32 @@ import table_factory
 
 
 def make(gametuple, name):
-    t = table_factory.factory(seats=gametuple.seats, heroname=name, game=gametuple.game)
+    t = table_factory.factory(
+        seats=gametuple.seats,
+        heroname=name,
+        game=gametuple.game
+    )
 
     if gametuple.game == "FIVE CARD DRAW":
         NOANTE = blinds.BlindsNoAnte(gametuple.level)
         t.randomize_button()
-        g = session_draw5.Draw5Session(gametuple.game, t, NOANTE, label=gametuple.name)
+        g = session_draw5.Draw5Session(
+            gametuple.game,
+            t,
+            NOANTE,
+            label=gametuple.name
+        )
         return g
 
     elif gametuple.game == "FIVE CARD STUD":
         ANTE = blinds.BlindsAnte(gametuple.level)
-        return session_stud5.Stud5Session(gametuple.game, t, ANTE, label=gametuple.name)
+
+        return session_stud5.Stud5Session(
+            gametuple.game,
+            t,
+            ANTE,
+            label=gametuple.name
+        )
 
 
 def draw5_session(level, players=6):
