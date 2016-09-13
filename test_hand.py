@@ -1,7 +1,7 @@
 import unittest
 import card
 import hand
-import pokerhands
+import tools
 
 
 class TestHand(unittest.TestCase):
@@ -68,7 +68,7 @@ class TestHand(unittest.TestCase):
 
     # 1 card passed, displays the hidden card as "Xx"
     def test_str_2cards_unhidden_returnsAs_Ks(self):
-        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        cards = tools.convert_to_cards(['As', 'Ks'])
         h = hand.Hand(cards)
         h.unhide()
         expected = 'As Ks'
@@ -152,7 +152,7 @@ class TestHand(unittest.TestCase):
     """
     # Takes in a 564 hand and after it is 456
     def test_sort_unsortedhand_sortedafter(self):
-        cards = pokerhands.convert_to_cards(['5s', '6s', '4s'])
+        cards = tools.convert_to_cards(['5s', '6s', '4s'])
         h = hand.Hand(cards)
         h.sort()
         expected = [cards[2], cards[1], cards[0]]
@@ -163,7 +163,7 @@ class TestHand(unittest.TestCase):
     Tests for value()
     """
     def test_value_royalflush_returns100000000000(self):
-        h = hand.Hand(pokerhands.make('royalflush'))
+        h = hand.Hand(tools.make('royalflush'))
         expected = 100000000000
         result = h.value()
         self.assertTrue(expected, result)
@@ -172,7 +172,7 @@ class TestHand(unittest.TestCase):
     Tests for rank()
     """
     def test_rank_royalflush_returnsROYALFLUSH(self):
-        h = hand.Hand(pokerhands.make('royalflush'))
+        h = hand.Hand(tools.make('royalflush'))
         expected = 'ROYAL FLUSH'
         result = h.rank()
         self.assertTrue(expected, result)
@@ -181,7 +181,7 @@ class TestHand(unittest.TestCase):
     Tests for desc()
     """
     def test_desc_royalflush_AceHigh(self):
-        h = hand.Hand(pokerhands.make('royalflush'))
+        h = hand.Hand(tools.make('royalflush'))
         expected = 'A high'
         result = h.rank()
         self.assertTrue(expected, result)
@@ -208,7 +208,7 @@ class TestHand(unittest.TestCase):
 
     # 2 card hand - 1 up, 1 down - returns the up card
     def test_getupcards_1up1down_returns1up(self):
-        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        cards = tools.convert_to_cards(['As', 'Ks'])
         cards[0].hidden = False
         h = hand.Hand(cards)
 
@@ -222,7 +222,7 @@ class TestHand(unittest.TestCase):
     # Ex: As Ks. Returns string.
 
     def test_peek_AsKs_returnsString(self):
-        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        cards = tools.convert_to_cards(['As', 'Ks'])
         h = hand.Hand(cards)
         expected = 'As Ks'
         result = h.peek()
@@ -230,7 +230,7 @@ class TestHand(unittest.TestCase):
 
     # Ex: As Ks. Cards are still hidden.
     def test_peek_AsKs_stillhidden(self):
-        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        cards = tools.convert_to_cards(['As', 'Ks'])
         h = hand.Hand(cards)
         h.peek()
         result = h.cards[0].hidden is True and h.cards[1].hidden is True

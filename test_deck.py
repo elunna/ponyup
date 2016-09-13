@@ -2,7 +2,7 @@ import unittest
 import deck
 import card
 import joker
-import pokerhands
+import tools
 
 
 class TestDeck(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestDeck(unittest.TestCase):
     Tests for __str__()
     """
     def test_str_2cards_returnsAsKsinParentheses(self):
-        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        cards = tools.convert_to_cards(['As', 'Ks'])
         d = deck.Deck(cards)
         d.unhide()  # They are hidden by default
         expected = 'As Ks'
@@ -27,7 +27,7 @@ class TestDeck(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_len_2cards_haslen2(self):
-        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        cards = tools.convert_to_cards(['As', 'Ks'])
         d = deck.Deck(cards)
         expected = 2
         result = len(d)
@@ -58,7 +58,7 @@ class TestDeck(unittest.TestCase):
     Tests for sort()
     """
     def test_sort_2cards_deuceisfirst(self):
-        cards = pokerhands.convert_to_cards(['As', '2s'])
+        cards = tools.convert_to_cards(['As', '2s'])
         d = deck.Deck(cards)
         d.sort()
         expected = '2'
@@ -66,7 +66,7 @@ class TestDeck(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_sort_3cards_deuceisfirst(self):
-        cards = pokerhands.convert_to_cards(['As', '7s', '2s'])
+        cards = tools.convert_to_cards(['As', '7s', '2s'])
         d = deck.Deck(cards)
         d.sort()
         expected = '2'
@@ -149,7 +149,7 @@ class TestDeck(unittest.TestCase):
 
     def test_removecards_removeAsKs_containsNeither(self):
         d = deck.Deck()
-        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        cards = tools.convert_to_cards(['As', 'Ks'])
         d.remove_cards(cards)
         self.assertFalse(cards[0] in d)
         self.assertFalse(cards[1] in d)
@@ -159,7 +159,7 @@ class TestDeck(unittest.TestCase):
     """
     # All cards in deck are faceup
     def test_unhide_2cards_bothfaceup(self):
-        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        cards = tools.convert_to_cards(['As', 'Ks'])
         d = deck.Deck(cards)
         d.unhide()
         self.assertTrue(d.cards[0].hidden is False)

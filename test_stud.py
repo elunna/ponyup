@@ -1,9 +1,8 @@
 import unittest
 import poker
-import pokerhands
+import tools
 import session_factory
 import stud
-import testtools
 import table_factory
 
 
@@ -14,7 +13,7 @@ class TestStud(unittest.TestCase):
         self.r = poker.Round(self.g)
 
     def givehand(self, seat, hand):
-        self.r._table.seats[seat].hand.cards = pokerhands.make(hand)
+        self.r._table.seats[seat].hand.cards = tools.make(hand)
         # Hide the 1st card
         self.r._table.seats[seat].hand.cards[0].hidden = True
 
@@ -24,7 +23,7 @@ class TestStud(unittest.TestCase):
     # Stud5 deal: seat 5 has lowest card, 9
     def test_bringin_stud5_no_ties_returns5(self):
         t = table_factory.factory(seats=6)
-        testtools.deal_stud5(t, matchingranks=0)
+        tools.deal_stud5(t, matchingranks=0)
         expected = 5
         result = stud.bringin(t)
         self.assertEqual(expected, result)
@@ -32,7 +31,7 @@ class TestStud(unittest.TestCase):
     # Stud5 deal: 2 Tied ranks
     def test_bringin_stud5_2tied_returns1(self):
         t = table_factory.factory(seats=6)
-        testtools.deal_stud5(t, matchingranks=2)
+        tools.deal_stud5(t, matchingranks=2)
         expected = 1
         result = stud.bringin(t)
         self.assertEqual(expected, result)
@@ -40,7 +39,7 @@ class TestStud(unittest.TestCase):
     # Stud5 deal: 3 Tied ranks
     def test_bringin_stud5_3tied_returns1(self):
         t = table_factory.factory(seats=6)
-        testtools.deal_stud5(t, matchingranks=3)
+        tools.deal_stud5(t, matchingranks=3)
         expected = 1
         result = stud.bringin(t)
         self.assertEqual(expected, result)
@@ -48,7 +47,7 @@ class TestStud(unittest.TestCase):
     # Stud5 deal: 4 Tied ranks
     def test_bringin_stud5_4tied_returns1(self):
         t = table_factory.factory(seats=6)
-        testtools.deal_stud5(t, matchingranks=4)
+        tools.deal_stud5(t, matchingranks=4)
         expected = 1
         result = stud.bringin(t)
         self.assertEqual(expected, result)
@@ -56,7 +55,7 @@ class TestStud(unittest.TestCase):
     # Stud7 deal: seat 5 has lowest card, 9
     def test_bringin_stud7_no_ties_returns6(self):
         t = table_factory.factory(seats=6)
-        testtools.deal_stud5(t, matchingranks=0)
+        tools.deal_stud5(t, matchingranks=0)
         expected = 5
         result = stud.bringin(t)
         self.assertEqual(expected, result)
@@ -64,7 +63,7 @@ class TestStud(unittest.TestCase):
     # Stud7 deal: 2 Tied ranks
     def test_bringin_stud7_2tied_returns1(self):
         t = table_factory.factory(seats=6)
-        testtools.deal_stud5(t, matchingranks=2)
+        tools.deal_stud5(t, matchingranks=2)
         expected = 1
         result = stud.bringin(t)
         self.assertEqual(expected, result)
@@ -72,7 +71,7 @@ class TestStud(unittest.TestCase):
     # Stud7 deal: 3 Tied ranks
     def test_bringin_stud7_3tied_returns1(self):
         t = table_factory.factory(seats=6)
-        testtools.deal_stud5(t, matchingranks=3)
+        tools.deal_stud5(t, matchingranks=3)
         expected = 1
         result = stud.bringin(t)
         self.assertEqual(expected, result)
@@ -80,7 +79,7 @@ class TestStud(unittest.TestCase):
     # Stud7 deal: 4 Tied ranks
     def test_bringin_stud7_4tied_returns1(self):
         t = table_factory.factory(seats=6)
-        testtools.deal_stud5(t, matchingranks=4)
+        tools.deal_stud5(t, matchingranks=4)
         expected = 1
         result = stud.bringin(t)
         self.assertEqual(expected, result)
@@ -157,7 +156,7 @@ class TestStud(unittest.TestCase):
     # Initial stacks=1000.
     # Seat 0
     def test_postbringin_seat5_has2chipsless(self):
-        testtools.deal_stud5(self.r._table, matchingranks=0)
+        tools.deal_stud5(self.r._table, matchingranks=0)
         BI = stud.bringin(self.r._table)
         seat = self.r._table.seats[BI]
         stack = seat.stack
@@ -167,7 +166,7 @@ class TestStud(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_postbringin_seat5_returnsString(self):
-        testtools.deal_stud5(self.r._table, matchingranks=0)
+        tools.deal_stud5(self.r._table, matchingranks=0)
         expected = 'bob5 brings it in for $1\n'
         result = stud.post_bringin(self.r)
         self.assertEqual(expected, result)

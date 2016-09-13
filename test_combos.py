@@ -1,7 +1,7 @@
 import unittest
 import combos
 import deck
-import pokerhands
+import tools
 
 
 class TestCombos(unittest.TestCase):
@@ -88,21 +88,21 @@ class TestCombos(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_getallcombos_1card_returns1(self):
-        cards = pokerhands.convert_to_cards(['As'])
+        cards = tools.convert_to_cards(['As'])
         allcombos = combos.get_allcombos(cards)
         expected = 1
         result = len(allcombos)
         self.assertEqual(expected, result)
 
     def test_getallcombos_2cards_returns3(self):
-        cards = pokerhands.convert_to_cards(['As', 'Ks'])
+        cards = tools.convert_to_cards(['As', 'Ks'])
         allcombos = combos.get_allcombos(cards)
         expected = 3
         result = len(allcombos)
         self.assertEqual(expected, result)
 
     def test_getallcombos_3cards_returns7(self):
-        cards = pokerhands.convert_to_cards(['As', 'Ks', 'Qs'])
+        cards = tools.convert_to_cards(['As', 'Ks', 'Qs'])
         allcombos = combos.get_allcombos(cards)
         expected = 7
         result = len(allcombos)

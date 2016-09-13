@@ -1,9 +1,8 @@
 import unittest
 import betting
-import pokerhands
 import stud
 import session_factory
-import testtools
+import tools
 
 
 class TestBetting(unittest.TestCase):
@@ -51,7 +50,7 @@ class TestBetting(unittest.TestCase):
             self.r.next_street()
 
         self.r.post_antes()
-        testtools.deal_5stud_test_hands(self.r._table)
+        tools.deal_5stud_test_hands(self.r._table)
         self.br = betting.BettingRound(self.r)
 
     """
@@ -100,7 +99,7 @@ class TestBetting(unittest.TestCase):
     def test_playerdecision_royalflush_returnsRaise(self):
         self.setUp(players=2)
         bettor = self.br.get_bettor()
-        bettor.hand.cards = pokerhands.make('royalflush')
+        bettor.hand.cards = tools.make('royalflush')
         expected = "RAISE"
         result = self.br.player_decision(bettor).name
         self.assertEqual(expected, result)
@@ -111,7 +110,7 @@ class TestBetting(unittest.TestCase):
         next(self.br)  # SB
         next(self.br)  # BB
         bettor = self.br.get_bettor()
-        bettor.hand.cards = pokerhands.make('junk')
+        bettor.hand.cards = tools.make('junk')
         expected = "CHECK"
         result = self.br.player_decision(bettor).name
         self.assertEqual(expected, result)

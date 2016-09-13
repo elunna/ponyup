@@ -1,31 +1,5 @@
-#!/usr/bin/env python3
-"""
-This is a collection of functions that return lists of cards that compose all the regular poker
-hands and also some variations on them. These are meant to be used for testing.
-"""
-from __future__ import print_function
 import card
-
-
-def to_card(string):
-    if len(string) != 2:
-        raise Exception('String must be exactly 2 characters to convert to a card!')
-    return card.Card(string[0], string[1])
-
-
-def convert_to_cards(strings):
-    # Unhide for testing purposes
-    cards = [to_card(x) for x in strings]
-    return cards
-
-
-def make(hand_name, hidden=False):
-    h = convert_to_cards(HANDS[hand_name])
-    if not hidden:
-        for c in h:
-            c.hidden = False
-    return h
-
+import deck
 
 # These are constants to help with computer AI
 HI_KT = 1310000000
@@ -105,6 +79,98 @@ HANDS = {
     'QQ': ['Qc', 'Qh'],
     '23': ['2c', '3h'],
 }
+
+
+def to_card(string):
+    if len(string) != 2:
+        raise Exception('String must be exactly 2 characters to convert to a card!')
+    return card.Card(string[0], string[1])
+
+
+def convert_to_cards(strings):
+    # Unhide for testing purposes
+    cards = [to_card(x) for x in strings]
+    return cards
+
+
+def make(hand_name, hidden=False):
+    h = convert_to_cards(HANDS[hand_name])
+    if not hidden:
+        for c in h:
+            c.hidden = False
+    return h
+
+
+def deal_5stud_test_hands(table):
+    hands = []
+    hands.append(convert_to_cards(['As', 'Ah']))
+    hands.append(convert_to_cards(['Ks', 'Kh']))
+    hands.append(convert_to_cards(['Qs', 'Qh']))
+    hands.append(convert_to_cards(['Js', 'Jh']))
+    hands.append(convert_to_cards(['Ts', 'Th']))
+    hands.append(convert_to_cards(['9s', '9h']))
+    for p in table:
+        p.hand.cards = hands.pop(0)
+
+
+def deal_list_to_table(table, cards, faceup=False):
+    if faceup:
+        for c in cards:
+            c.hidden = False
+
+    for s in table:
+        s.hand.add(cards.pop(0))
+
+
+def deal_stud5(table, matchingranks=0):
+    # These cards are meant to be dealt face-down
+    down = convert_to_cards(['As', 'Ks', 'Qs', 'Js', 'Ts', '9s', '2d', '3d', '4d',
+                             '2s', '3s', '4s'])
+    deal_list_to_table(table, down)
+
+    # These are the up-cards
+    if matchingranks == 0:
+        up = convert_to_cards(['Ah', 'Kh', 'Qh', 'Jh', 'Th', '9h'])
+    elif matchingranks == 2:
+        up = convert_to_cards(['5h', '5c', 'Qh', 'Jh', 'Th', '9h'])
+    elif matchingranks == 3:
+        up = convert_to_cards(['5s', '5c', 'Qh', 'Jh', '5d', '9h'])
+    elif matchingranks == 4:
+        up = convert_to_cards(['5s', '5c', 'Qh', 'Jh', '5d', '5h'])
+
+    deal_list_to_table(table, up, faceup=True)
+
+
+def deal_hand_dict(table, hand_dict):
+    for k, v in sorted(hand_dict.items()):
+        if k > len(table) - 1:
+            return
+        table.seats[k].hand.cards = v
+
+
+def deal_ranked_hands(table, _rev=False):
+    hands = sorted(RANKEDHANDS.keys())
+    for s in table:
+        if _rev:
+            s.hand.cards = RANKEDHANDS[hands.pop()]
+        else:
+            s.hand.cards = RANKEDHANDS[hands.pop(0)]
+
+
+def deal_random_cards(table, qty=5):
+    d = deck.Deck()
+
+    for s in table:
+        for i in range(qty):
+            s.hand.add(d.deal())
+
+
+def get_cards(qty):
+    d, cards = deck.Deck(), []
+    for i in range(qty):
+        cards.append(d.deal())
+    return cards
+
 
 RANKEDHANDS = {
     0: make('royalflush'),

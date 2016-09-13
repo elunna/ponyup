@@ -1,5 +1,5 @@
 import unittest
-import pokerhands
+import tools
 import sklansky
 
 
@@ -74,7 +74,7 @@ class TestSklansky(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_getgroup_AsKs_returns1(self):
-        cards = pokerhands.make('AKs')
+        cards = tools.make('AKs')
         expected = 1
         result = sklansky.get_group(cards)
         self.assertEqual(expected, result)

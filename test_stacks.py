@@ -1,13 +1,13 @@
 import unittest
 import stacks
 import table_factory
-import testtools
+import tools
 
 
 class TestStacks(unittest.TestCase):
     def setUp(self, _seats=6):
         self.t = table_factory.factory(seats=_seats, stepstacks=True)
-        testtools.deal_random_cards(self.t, 1)
+        tools.deal_random_cards(self.t, 1)
 
     """
     Tests for test_largest(table):

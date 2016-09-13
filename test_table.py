@@ -2,7 +2,7 @@ import unittest
 import card
 import table
 import player
-import testtools
+import tools
 import table_factory
 
 
@@ -266,7 +266,7 @@ class TestTable(unittest.TestCase):
         self.assertEqual(self.t.TOKENS['D'], 0)  # Make sure the btn is at 0
         self.assertEqual(self.t.TOKENS['SB'], 0)  # Make sure the sb is at 0.
 
-        testtools.deal_random_cards(self.t)
+        tools.deal_random_cards(self.t)
         expected = self.t.seats[1]  # SB should be first
         result = self.t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
@@ -277,7 +277,7 @@ class TestTable(unittest.TestCase):
         self.setUp(players=2, btn_moved=2, setblinds=True)
         self.assertEqual(self.t.TOKENS['D'], 1)
         self.assertEqual(self.t.TOKENS['SB'], 1)
-        testtools.deal_random_cards(self.t)
+        tools.deal_random_cards(self.t)
 
         expected = self.t.seats[0]  # BB will act first and be first in the list
         result = self.t.get_players(hascards=True)[0]
@@ -287,7 +287,7 @@ class TestTable(unittest.TestCase):
     def test_getplayers_withcards_6havecards_btn0_seat1first(self):
         self.setUp(setblinds=True)
         self.assertEqual(self.t.TOKENS['D'], 0)
-        testtools.deal_random_cards(self.t)
+        tools.deal_random_cards(self.t)
 
         expected = self.t.seats[1]
         result = self.t.get_players(hascards=True)[0]
@@ -299,7 +299,7 @@ class TestTable(unittest.TestCase):
         self.t.TOKENS['D'] = 5
         self.t.set_blinds()
 
-        testtools.deal_random_cards(self.t)
+        tools.deal_random_cards(self.t)
         expected = self.t.seats[0]
         result = self.t.get_players(hascards=True)[0]
         self.assertEqual(expected, result)
@@ -307,7 +307,7 @@ class TestTable(unittest.TestCase):
     # 6 players with cards, Button at 0. Returns list that's size 6.
     def test_getplayers_withcards_6havecards_lengthis6(self):
         self.setUp(setblinds=True)
-        testtools.deal_random_cards(self.t)
+        tools.deal_random_cards(self.t)
         expected = 6
         result = len(self.t.get_players(hascards=True))
         self.assertEqual(expected, result)
@@ -432,7 +432,7 @@ class TestTable(unittest.TestCase):
     # Full table - all w cards. btn at 0. From 0 returns 1.
     def test_nextplayer_withcards_fulltable_from0_return1(self):
         self.assertEqual(self.t.TOKENS['D'], 0)
-        testtools.deal_random_cards(self.t, qty=1)
+        tools.deal_random_cards(self.t, qty=1)
         from_seat = 0
         expected = 1
         result = self.t.next_player(from_seat, hascards=True)
@@ -451,7 +451,7 @@ class TestTable(unittest.TestCase):
     def test_nextplayer_withcards_fulltable_negstep_from0_return5(self):
         self.assertEqual(self.t.TOKENS['D'], 0)
         # Give everyone cards
-        testtools.deal_random_cards(self.t, qty=1)
+        tools.deal_random_cards(self.t, qty=1)
         from_seat = 0
         expected = 5
         result = self.t.next_player(from_seat, -1, hascards=True)
