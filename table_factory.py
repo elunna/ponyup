@@ -10,7 +10,7 @@ STEP = 100
 
 def factory(**new_config):
     config = {
-        'seats': 6,
+        'seats': None,
         'game': None,
         'tablename': 'default',
         'types': None,  # Player types
@@ -26,6 +26,7 @@ def factory(**new_config):
     config.update(new_config)
     SEATS = config['seats']
     t = table.Table(SEATS)
+    t.name = config['tablename']
 
     # Create a list of players
     if config['names'] == 'random':
