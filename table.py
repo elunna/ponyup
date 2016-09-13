@@ -57,9 +57,8 @@ class Table():
         Returns True if successful, False otherwise.
         """
         # Check if the player is already sitting.
-        for s in self:
-            if player.name == s.player.name:
-                return False
+        if player.name in [s.player.name for s in self if not s.is_empty()]:
+            return False
 
         if self.seats[index].is_empty():
             self.seats[index].sitdown(player)
@@ -164,7 +163,6 @@ class Table():
         for s in self:
             stacks[s.NUM] = s.stack
         return stacks
-
 
     def stacklist(self):
         """

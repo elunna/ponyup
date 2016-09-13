@@ -10,15 +10,8 @@ class TestTable(unittest.TestCase):
     """
     Setup a table filled with 6 players for testing.
     """
-    def setUp(self, players=6, removed=None, btn_moved=1, setblinds=False):
-        config = {
-            'seats': players
-        }
-        self.t = table_factory.factory(config)
-
-        if removed is not None:
-            self.t.pop(removed)
-            self.assertTrue(self.t.seats[removed].is_empty())
+    def setUp(self, players=6, rm=None, btn_moved=1, setblinds=False):
+        self.t = table_factory.factory(seats=players, remove=rm)
 
         for i in range(btn_moved):
             self.t.move_button()
@@ -44,7 +37,7 @@ class TestTable(unittest.TestCase):
         self.assertRaises(ValueError, table.Table, '11')
 
     def test_init_Dtoken_returnsNeg1(self):
-        t = table_factory.factory({'seats': 6})
+        t = table_factory.factory(seats=6)
         expected = -1
         result = t.TOKENS['D']
         self.assertEqual(expected, result)
@@ -87,16 +80,16 @@ class TestTable(unittest.TestCase):
     def test_next2_newTable_getsseat1(self):
         expected = 'bob1'
         iterator = self.t.__iter__()
-        iterator.__next__()
-        result = str(iterator.__next__())
+        next(iterator)
+        result = str(next(iterator))
         self.assertEqual(expected, result)
 
-    # Iter should skip over an empty seat
-    def test_next_removedseat0_getsseat1(self):
-        self.setUp(removed=0)
-        expected = 'bob1'
+    # Iter should NOT skip over an empty seat
+    def test_iternext_removedseat0_getsseat0(self):
+        self.setUp(rm=0)
         iterator = self.t.__iter__()
-        result = str(iterator.__next__())
+        expected = 0
+        result = iterator.__next__().NUM
         self.assertEqual(expected, result)
 
     """
@@ -141,8 +134,8 @@ class TestTable(unittest.TestCase):
         result = t.add_player(0, p2)
         self.assertEqual(expected, result)
 
-    # Adding a duplicate player to the table, should raise exception.
-    def test_addplayer_duplicateplayer_raiseException(self):
+    # Adding a duplicate player to the table, not possible.
+    def test_addplayer_duplicateplayer_returnFalse(self):
         t = table.Table(6)
         p1 = player.Player('bob0', 'CPU')
         p2 = player.Player('bob1', 'CPU')
@@ -341,7 +334,7 @@ class TestTable(unittest.TestCase):
 
     # Empty seat between 0 and 2, returns 1
     def test_nextplayer_from0_seat1empty_return2(self):
-        self.setUp(removed=1)
+        self.setUp(rm=1)
         seat = 0
         expected = 2
         result = self.t.next_player(seat)
@@ -356,7 +349,7 @@ class TestTable(unittest.TestCase):
 
     # Empty seat between 4 and 0, returns 5
     def test_nextplayer_negativestep_seat5empty_from0_returnSeat5(self):
-        self.setUp(removed=5)
+        self.setUp(rm=5)
         seat = 0
         expected = 4
         result = self.t.next_player(seat, -1)
@@ -537,9 +530,9 @@ class TestTable(unittest.TestCase):
     Tests for stacklist(table)
     """
     def test_stacklist_6players_returns4stacks(self):
-        self.setUp(seats=6)
+        t = table_factory.factory(seats=6, stepstacks=True)
         expected = [100, 200, 300, 400, 500, 600]
-        result = self.t.stacklist(self.t)
+        result = t.stacklist()
         self.assertEqual(expected, result)
 
     """
@@ -571,7 +564,7 @@ class TestTable(unittest.TestCase):
 
     # New table(without seat 0), moving button once should go from -1 to 1
     def test_movebutton_seat0removed_returns1(self):
-        self.setUp(removed=0)
+        self.setUp(rm=0)
         expected = 1
         result = self.t.TOKENS['D']
         self.assertEqual(expected, result)
@@ -594,7 +587,7 @@ class TestTable(unittest.TestCase):
 
     # New table(seat 1 removed): Button at 0, sb should be at 2
     def test_setblinds_seat1removed_SBat2(self):
-        self.setUp(removed=1, btn_moved=1, setblinds=True)
+        self.setUp(rm=1, btn_moved=1, setblinds=True)
         self.t.set_blinds()
         expected = 2
         result = self.t.TOKENS['SB']
@@ -609,7 +602,7 @@ class TestTable(unittest.TestCase):
 
     # New table(seat 2 removed): Button at 0, bb should be at 3
     def test_setblinds_seat2removed_BBat3(self):
-        self.setUp(removed=2, setblinds=True)
+        self.setUp(rm=2, setblinds=True)
         self.assertEqual(self.t.TOKENS['D'], 0, "button ain't right")
         expected = 3
         result = self.t.TOKENS['BB']
