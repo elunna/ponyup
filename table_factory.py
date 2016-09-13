@@ -16,11 +16,11 @@ def factory(**new_config):
         'names': 'bob',  # Player names, can be 'random'
         'heroname': None,  # If there is a hero, they will be placed at the hero seat.
         'heroseat': 0,
-        'BB': None,  # Size of the big blind.
         'deposit': DEPOSIT,
         'stack': DEF_STACK,
         'stepstacks': False,
-        'stackvariation': None,
+        'BBs': None,  # Number of big blinds in the stack size
+        'variance': None  # A percentage that the stack size can randomly vary.
     }
 
     config.update(new_config)
@@ -50,10 +50,28 @@ def factory(**new_config):
         heroseat.sitdown(hero)
 
     # Players buyin to the table.
+    # There are a few different ways to set stack sizes.
+    # - There is a DEF_STACK value for a default.
+    # - stack parameter sets the stack amount.
+    # - There is a stepstacks bool to trigger stacksizes as a stepped 100, 200, 300, pattern.
+    # - There is a BBs parameter passed as a (BB size, BB quantity) pair to set stacks to the
+    #    commonly measured units of big blinds.
+    # - There is a stackvariation parameter to randomly vary the sizes of the stacks. The
+    #   parameter is a float value that is used to randomly calculate the variations.
+    #
     if config['stepstacks']:
         for i, s in enumerate(t):
             s.buy_chips(STEP * (i + 1))
+    elif config['BBs']:
+        pass
+    elif config['stack']:
+        for i, s in enumerate(t):
+            s.buy_chips(config['stack'])
     else:
         for s in t:
             s.buy_chips(DEF_STACK)
+
+    # Random variations
+    if config['variance']:
+        pass
     return t

@@ -77,3 +77,15 @@ class TestTableFactory(unittest.TestCase):
         expected = 200
         result = t.seats[1].stack
         self.assertEqual(expected, result)
+
+    def test_factory_2seats_stack666_seat0hasstack666(self):
+        newstack = 666
+        t = table_factory.factory(seats=2, stack=newstack)
+        result = t.seats[0].stack
+        self.assertEqual(newstack, result)
+
+    def test_factory_2seats_stack666_seat1hasstack666(self):
+        newstack = 666
+        t = table_factory.factory(seats=2, stack=newstack)
+        result = t.seats[1].stack
+        self.assertEqual(newstack, result)
