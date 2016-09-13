@@ -34,6 +34,9 @@ class Seat():
     def is_empty(self):
         return self.player is None
 
+    def occupied(self):
+        return self.player is not None
+
     def has_hand(self):
         if self.hand is None:
             return False

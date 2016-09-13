@@ -85,6 +85,20 @@ class TestSeat(unittest.TestCase):
         self.assertTrue(self.s.is_empty())
 
     """
+    Tests for occupied(self):
+    """
+    def test_occupied_emptyseat_returnsFalse(self):
+        expected = False
+        result = self.s.occupied()
+        self.assertEqual(expected, result)
+
+    def test_occupied_filledseat_returnsTrue(self):
+        self.s.sitdown(self.p)
+        expected = True
+        result = self.s.occupied()
+        self.assertEqual(expected, result)
+
+    """
     Tests for has_hand(self):
     """
     def test_hashand_emptyseat_returnsFalse(self):
