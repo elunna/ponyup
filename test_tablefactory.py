@@ -89,3 +89,13 @@ class TestTableFactory(unittest.TestCase):
         t = table_factory.factory(seats=2, stack=newstack)
         result = t.seats[1].stack
         self.assertEqual(newstack, result)
+
+    def test_factory_8seats_variance50percent_nodupedstacks(self):
+        vary = .50
+        # We'll use a really large stacksize to try to create almost no chance of duplicates.
+        # So it is possible for this test to fail, but incredibly rarely.
+        t = table_factory.factory(seats=8, stack=10000000, variance=vary)
+        stacks = t.stacklist()
+        expected = 8
+        result = len(set(stacks))
+        self.assertEqual(expected, result)

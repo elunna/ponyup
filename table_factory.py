@@ -1,6 +1,7 @@
 import player
 import table
 import names
+import random
 
 DEPOSIT = 10000
 DEF_STACK = 1000
@@ -19,7 +20,6 @@ def factory(**new_config):
         'deposit': DEPOSIT,
         'stack': DEF_STACK,
         'stepstacks': False,
-        'BBs': None,  # Number of big blinds in the stack size
         'variance': None  # A percentage that the stack size can randomly vary.
     }
 
@@ -62,8 +62,6 @@ def factory(**new_config):
     if config['stepstacks']:
         for i, s in enumerate(t):
             s.buy_chips(STEP * (i + 1))
-    elif config['BBs']:
-        pass
     elif config['stack']:
         for i, s in enumerate(t):
             s.buy_chips(config['stack'])
@@ -73,5 +71,9 @@ def factory(**new_config):
 
     # Random variations
     if config['variance']:
-        pass
+
+        for s in t:
+            hilimit = int(s.stack * config['variance'])
+            offset = random.randint(0, hilimit)
+            s.stack -= offset
     return t
