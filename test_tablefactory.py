@@ -12,13 +12,13 @@ class TestTableFactory(unittest.TestCase):
         result = len(t)
         self.assertEqual(expected, result)
 
-    def test_factory_2seat_player0hasbank(self):
+    def test_factory_2seat_seat0bankminusStack(self):
         t = table_factory.factory(seats=2)
         expected = table_factory.DEPOSIT - table_factory.DEF_STACK
         result = t.seats[0].player.bank
         self.assertEqual(expected, result)
 
-    def test_factory_2seat_player1hasbank(self):
+    def test_factory_2seat_seat1bankminusStack(self):
         t = table_factory.factory(seats=2)
         expected = table_factory.DEPOSIT - table_factory.DEF_STACK
         result = t.seats[1].player.bank
@@ -60,7 +60,7 @@ class TestTableFactory(unittest.TestCase):
         result = str(t.seats[0].player)
         self.assertEqual(name, result)
 
-    def test_factory_hero_herohasbank(self):
+    def test_factory_hero_herohasbankminusstack(self):
         t = table_factory.factory(seats=2)
         expected = table_factory.DEPOSIT - table_factory.DEF_STACK
         result = t.seats[0].player.bank
