@@ -6,10 +6,6 @@ import stud5_plyr
 TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
 
 
-def random_type():
-    return random.choice(TYPES)
-
-
 class Player():
     def __init__(self, name, playertype="None"):
         self.set_name(name)
@@ -76,11 +72,18 @@ class Player():
         return self.playertype == 'HUMAN'
 
 
-def factory(name, game, playertype=None):
+def random_type():
+    return random.choice(TYPES)
+
+
+def factory(name, game, playertype='random'):
     """
     Create a new Player, using the game strategy from the game specified.
     """
     p = Player(name, playertype)
+
+    if playertype == 'random':
+        playertype = random_type()
 
     if game == "FIVE CARD DRAW":
         p.strategies = draw5_plyr.strat[playertype]
