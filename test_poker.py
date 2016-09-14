@@ -5,13 +5,15 @@ import poker
 import session_factory
 import tools
 
+
 class TestPoker(unittest.TestCase):
     """
     Setup a session and round, with a table filled with 6 players.
     """
     def setUp(self, level=2, players=6):
         # Make a 6 player table
-        self.g = session_factory.draw5_session(level, players)
+        self.g = session_factory.factory(seats=players, game="FIVE CARD DRAW", blindlvl=level)
+
         self.r = poker.Round(self.g)
 
     """

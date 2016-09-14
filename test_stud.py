@@ -9,7 +9,7 @@ import table_factory
 class TestStud(unittest.TestCase):
     # Level 2: Ante $0.50, Bringin $1, Small bet $2
     def setUp(self, level=2, players=6):
-        self.g = session_factory.stud5_session(level, players)
+        self.g = session_factory.factory(seats=players, game="FIVE CARD STUD", blindlvl=level)
         self.r = poker.Round(self.g)
 
     def givehand(self, seat, hand):

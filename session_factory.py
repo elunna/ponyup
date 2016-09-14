@@ -15,10 +15,7 @@ def make(gametuple, name):
         NOANTE = blinds.BlindsNoAnte(gametuple.level)
         t.randomize_button()
         g = session_draw5.Draw5Session(
-            gametuple.game,
-            t,
-            NOANTE,
-            label=gametuple.name
+            gametuple.game, t, NOANTE, label=gametuple.name
         )
         return g
 
@@ -26,28 +23,38 @@ def make(gametuple, name):
         ANTE = blinds.BlindsAnte(gametuple.level)
 
         return session_stud5.Stud5Session(
-            gametuple.game,
-            t,
-            ANTE,
-            label=gametuple.name
+            gametuple.game, t, ANTE, label=gametuple.name
         )
 
 
-def draw5_session(level, players=6):
-    """
-    Create a table of 6 draw5 players with default starting stacks.
-    """
-    STAKES = blinds.BlindsNoAnte(level)
+def factory(**new_config):
+    config = {
+        'seats': None,
+        'game': None,
+        'tablename': 'default',
+        'table': None,
+        'heroname': None,  # If there is a hero, they will be placed at the hero seat.
+        'heroseat': None,
+        'blindlvl': 0,
+    }
+    config.update(new_config)
 
-    t = table_factory.factory(seats=players, game="FIVE CARD DRAW")
-    return session_draw5.Draw5Session('FIVE CARD DRAW', t, STAKES)
+    # Construct the table
+    t = table_factory.factory(
+        seats=config['seats'],
+        heroname=config['heroname'],
+        game=config['game'],
+        tablename=config['tablename']
+    )
 
+    if config['game'] == 'FIVE CARD STUD':
+        b = blinds.BlindsAnte(config['blindlvl'])
+        sesh = session_stud5.Stud5Session(config['game'], t, b)
 
-def stud5_session(level, players=6):
-    """
-    Create a table of 6 draw5 players with default starting stacks.
-    """
-    STAKES = blinds.BlindsAnte(level)
-    t = table_factory.factory(seats=players, game="FIVE CARD STUD")
+    elif config['game'] == 'FIVE CARD DRAW':
+        b = blinds.BlindsNoAnte(config['blindlvl'])
+        sesh = session_draw5.Draw5Session(config['game'], t, b)
+    else:
+        raise ValueError('Game unknown to session!')
 
-    return session_stud5.Stud5Session('FIVE CARD STUD', t, STAKES)
+    return sesh
