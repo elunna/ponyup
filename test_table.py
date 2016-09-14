@@ -611,22 +611,73 @@ class TestTable(unittest.TestCase):
     """
     Tests for set_bringin(index)
     """
-    # Passed 5, BI token should be 5.
-    def test_setbringin_index5_BItokenis5(self):
-        self.setUp(players=6, setblinds=False)
-        self.t.set_bringin(5)
-        self.assertEqual(self.t.TOKENS['BI'], 5)
 
-    # Passed 5, D token should be 4.
-    def test_setbringin_index5_Dtokenis4(self):
-        self.setUp(players=6, setblinds=False)
-        self.t.set_bringin(5)
-        self.assertEqual(self.t.TOKENS['D'], 4)
+    """
+    Tests for bring(table, gametype):
+    """
+    # Stud5 deal: seat 5 has lowest card, 9
+    def test_bringin_stud5_no_ties_returns5(self):
+        tools.deal_stud5(self.t, matchingranks=0)
+        self.t.set_bringin()
+        expected = 5
+        result = self.t.TOKENS['BI']
+        self.assertEqual(expected, result)
 
-    # Passed 5 in a table of 2 players. Exception
-    def test_setbringin_index5_2players_raiseException(self):
-        self.setUp(players=2, setblinds=False)
-        self.assertRaises(ValueError, self.t.set_bringin, 5)
+    # Stud5 deal: 2 Tied ranks
+    def test_bringin_stud5_2tied_returns1(self):
+        tools.deal_stud5(self.t, matchingranks=2)
+        self.t.set_bringin()
+        expected = 1
+        result = self.t.TOKENS['BI']
+        self.assertEqual(expected, result)
+
+    # Stud5 deal: 3 Tied ranks
+    def test_bringin_stud5_3tied_returns1(self):
+        tools.deal_stud5(self.t, matchingranks=3)
+        self.t.set_bringin()
+        expected = 1
+        result = self.t.TOKENS['BI']
+        self.assertEqual(expected, result)
+
+    # Stud5 deal: 4 Tied ranks
+    def test_bringin_stud5_4tied_returns1(self):
+        tools.deal_stud5(self.t, matchingranks=4)
+        self.t.set_bringin()
+        expected = 1
+        result = self.t.TOKENS['BI']
+        self.assertEqual(expected, result)
+
+    # Stud7 deal: seat 5 has lowest card, 9
+    def test_bringin_stud7_no_ties_returns6(self):
+        tools.deal_stud5(self.t, matchingranks=0)
+        self.t.set_bringin()
+        expected = 5
+        result = self.t.TOKENS['BI']
+        self.assertEqual(expected, result)
+
+    # Stud7 deal: 2 Tied ranks
+    def test_bringin_stud7_2tied_returns1(self):
+        tools.deal_stud5(self.t, matchingranks=2)
+        self.t.set_bringin()
+        expected = 1
+        result = self.t.TOKENS['BI']
+        self.assertEqual(expected, result)
+
+    # Stud7 deal: 3 Tied ranks
+    def test_bringin_stud7_3tied_returns1(self):
+        tools.deal_stud5(self.t, matchingranks=3)
+        self.t.set_bringin()
+        expected = 1
+        result = self.t.TOKENS['BI']
+        self.assertEqual(expected, result)
+
+    # Stud7 deal: 4 Tied ranks
+    def test_bringin_stud7_4tied_returns1(self):
+        tools.deal_stud5(self.t, matchingranks=4)
+        self.t.set_bringin()
+        expected = 1
+        result = self.t.TOKENS['BI']
+        self.assertEqual(expected, result)
 
     """
     Tests for randomize_button()

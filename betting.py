@@ -206,8 +206,8 @@ class BettingRound():
 
     def set_bettors_w_antes(self):
         if self.r.street == 0:
-            self.bettor = stud.bringin(self.r._table)
-            self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
+            self.bettor = self.r._table.TOKENS['BI']
+            self.closer = self.r._table.TOKENS['D']
         else:
             self.bettor = stud.highhand(self.r._table)
             self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)

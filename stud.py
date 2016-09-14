@@ -1,26 +1,4 @@
-import card
 import evaluator
-
-
-def bringin(table):
-    """
-    Finds which player has the lowest showing card and returns that player.
-    """
-    index = -1
-
-    # Start with the lowest as the highest possible card to beat.
-    lowcard = card.Card('Z', 's')
-    seat = None
-
-    for s in table:
-        c = s.hand.cards[index]
-
-        if c.rank < lowcard.rank:
-            lowcard, seat = c, s
-        elif c.rank == lowcard.rank:
-            if card.SUITVALUES[c.suit] < card.SUITVALUES[lowcard.suit]:
-                lowcard, seat = c, s
-    return seat.NUM
 
 
 def highhand(table):
@@ -61,12 +39,10 @@ def post_bringin(_round):
     returns a string describing what the blinds posted.
     """
     table = _round._table
-    bringin_index = bringin(table)
-    table.set_bringin(bringin_index)
-    seat = table.seats[bringin_index]
-
-    # Set the BI token on the table.
-    #  self._table.TOKENS['BI'] = self._table.get_index(bringin_index)
+    bi = table.TOKENS['BI']
+    if bi == -1:
+        raise Exception('Bringin has not been set on the table!')
+    seat = table.seats[bi]
 
     # Bet the Bringin amount and add to the pot
     _round.pot += seat.bet(_round.blinds.BRINGIN)

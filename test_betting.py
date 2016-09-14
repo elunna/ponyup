@@ -50,8 +50,9 @@ class TestBetting(unittest.TestCase):
         for i in range(street - 1):  # Adjust which street to test.
             self.r.next_street()
 
-        self.r.post_antes()
         tools.deal_5stud_test_hands(self.r._table)
+        self.r.post_antes()
+        self.r._table.set_bringin()
         self.br = betting.BettingRound(self.r)
 
     """
@@ -580,7 +581,7 @@ class TestBetting(unittest.TestCase):
     """
     def test_setbettorswantes_seat5islow_bettor5_closer4(self):
         self.setUp_studGame()
-        closer, bettor = 4, 5
+        bettor, closer, = 5, 4
         self.assertEqual(closer, self.br.closer)
         self.assertEqual(bettor, self.br.bettor)
 

@@ -19,10 +19,11 @@ class Stud5Session(sessions.Session):
                 r.hh.log_holecards()
 
                 # The bringin determines the first bettor.
+                r._table.set_bringin()
                 print(stud.post_bringin(r))
             else:
                 r.deal_cards(1, faceup=True, handreq=True)
-                high = stud.highhand(r._table, r.gametype)
+                high = stud.highhand(r._table)
 
                 print('{} has high hand and will act first.'.format(r._table.seats[high]))
 

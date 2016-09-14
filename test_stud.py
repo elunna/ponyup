@@ -3,7 +3,6 @@ import poker
 import tools
 import session_factory
 import stud
-import table_factory
 
 
 class TestStud(unittest.TestCase):
@@ -18,73 +17,6 @@ class TestStud(unittest.TestCase):
         self.r._table.seats[seat].hand.cards[0].hidden = True
 
     """
-    Tests for bring(table, gametype):
-    """
-    # Stud5 deal: seat 5 has lowest card, 9
-    def test_bringin_stud5_no_ties_returns5(self):
-        t = table_factory.factory(seats=6)
-        tools.deal_stud5(t, matchingranks=0)
-        expected = 5
-        result = stud.bringin(t)
-        self.assertEqual(expected, result)
-
-    # Stud5 deal: 2 Tied ranks
-    def test_bringin_stud5_2tied_returns1(self):
-        t = table_factory.factory(seats=6)
-        tools.deal_stud5(t, matchingranks=2)
-        expected = 1
-        result = stud.bringin(t)
-        self.assertEqual(expected, result)
-
-    # Stud5 deal: 3 Tied ranks
-    def test_bringin_stud5_3tied_returns1(self):
-        t = table_factory.factory(seats=6)
-        tools.deal_stud5(t, matchingranks=3)
-        expected = 1
-        result = stud.bringin(t)
-        self.assertEqual(expected, result)
-
-    # Stud5 deal: 4 Tied ranks
-    def test_bringin_stud5_4tied_returns1(self):
-        t = table_factory.factory(seats=6)
-        tools.deal_stud5(t, matchingranks=4)
-        expected = 1
-        result = stud.bringin(t)
-        self.assertEqual(expected, result)
-
-    # Stud7 deal: seat 5 has lowest card, 9
-    def test_bringin_stud7_no_ties_returns6(self):
-        t = table_factory.factory(seats=6)
-        tools.deal_stud5(t, matchingranks=0)
-        expected = 5
-        result = stud.bringin(t)
-        self.assertEqual(expected, result)
-
-    # Stud7 deal: 2 Tied ranks
-    def test_bringin_stud7_2tied_returns1(self):
-        t = table_factory.factory(seats=6)
-        tools.deal_stud5(t, matchingranks=2)
-        expected = 1
-        result = stud.bringin(t)
-        self.assertEqual(expected, result)
-
-    # Stud7 deal: 3 Tied ranks
-    def test_bringin_stud7_3tied_returns1(self):
-        t = table_factory.factory(seats=6)
-        tools.deal_stud5(t, matchingranks=3)
-        expected = 1
-        result = stud.bringin(t)
-        self.assertEqual(expected, result)
-
-    # Stud7 deal: 4 Tied ranks
-    def test_bringin_stud7_4tied_returns1(self):
-        t = table_factory.factory(seats=6)
-        tools.deal_stud5(t, matchingranks=4)
-        expected = 1
-        result = stud.bringin(t)
-        self.assertEqual(expected, result)
-
-    """
     Tests for highhand(table)
     """
     # Throw in an empty seat for testing.
@@ -96,7 +28,7 @@ class TestStud(unittest.TestCase):
         self.givehand(0, '2AA_v1')
         self.givehand(1, '2KK')
         self.givehand(2, '2QQ')
-        self.r._table.set_bringin(2)
+        self.r._table.set_bringin()
         expected = 0
         result = stud.highhand(self.r._table)
         self.assertEqual(expected, result)
@@ -108,7 +40,7 @@ class TestStud(unittest.TestCase):
         self.givehand(1, 'JTQ')
         self.givehand(2, '89J')
         self.givehand(3, '567')
-        self.r._table.set_bringin(3)
+        self.r._table.set_bringin()
         expected = 0
         result = stud.highhand(self.r._table)
         self.assertEqual(expected, result)
@@ -119,7 +51,7 @@ class TestStud(unittest.TestCase):
         self.givehand(0, '2AA_v1')
         self.givehand(1, '2KK')
         self.givehand(2, '2AA_v2')  # Ad is bringin; dealt first
-        self.r._table.set_bringin(2)
+        self.r._table.set_bringin()
         expected = 2
         result = stud.highhand(self.r._table)
         self.assertEqual(expected, result)
@@ -131,7 +63,7 @@ class TestStud(unittest.TestCase):
         self.givehand(1, 'JTQ')
         self.givehand(2, 'QKA_v2')
         self.givehand(3, '567')     # Bringin
-        self.r._table.set_bringin(3)
+        self.r._table.set_bringin()
         expected = 0
         result = stud.highhand(self.r._table)
         self.assertEqual(expected, result)
@@ -145,7 +77,7 @@ class TestStud(unittest.TestCase):
         self.givehand(3, '345')
         self.givehand(4, '234')     # Bringin
         self.givehand(5, '245')
-        self.r._table.set_bringin(4)
+        self.r._table.set_bringin()
         expected = 0
         result = stud.highhand(self.r._table)
         self.assertEqual(expected, result)
@@ -157,7 +89,8 @@ class TestStud(unittest.TestCase):
     # Seat 0
     def test_postbringin_seat5_has2chipsless(self):
         tools.deal_stud5(self.r._table, matchingranks=0)
-        BI = stud.bringin(self.r._table)
+        self.r._table.set_bringin()
+        BI = self.r._table.TOKENS['BI']
         seat = self.r._table.seats[BI]
         stack = seat.stack
         stud.post_bringin(self.r)
@@ -168,5 +101,6 @@ class TestStud(unittest.TestCase):
     def test_postbringin_seat5_returnsString(self):
         tools.deal_stud5(self.r._table, matchingranks=0)
         expected = 'bob5 brings it in for $1\n'
+        self.r._table.set_bringin()
         result = stud.post_bringin(self.r)
         self.assertEqual(expected, result)
