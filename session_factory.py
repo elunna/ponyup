@@ -1,6 +1,6 @@
 import blinds
-import session_stud5
-import session_draw5
+import stud
+import draw5
 import table_factory
 
 
@@ -14,7 +14,7 @@ def make(gametuple, name):
     if gametuple.game == "FIVE CARD DRAW":
         NOANTE = blinds.BlindsNoAnte(gametuple.level)
         t.randomize_button()
-        g = session_draw5.Draw5Session(
+        g = draw5.Draw5Session(
             gametuple.game, t, NOANTE, label=gametuple.name
         )
         return g
@@ -22,7 +22,7 @@ def make(gametuple, name):
     elif gametuple.game == "FIVE CARD STUD":
         ANTE = blinds.BlindsAnte(gametuple.level)
 
-        return session_stud5.Stud5Session(
+        return stud.Stud5Session(
             gametuple.game, t, ANTE, label=gametuple.name
         )
 
@@ -49,11 +49,11 @@ def factory(**new_config):
 
     if config['game'] == 'FIVE CARD STUD':
         b = blinds.BlindsAnte(config['blindlvl'])
-        sesh = session_stud5.Stud5Session(config['game'], t, b)
+        sesh = stud.Stud5Session(config['game'], t, b)
 
     elif config['game'] == 'FIVE CARD DRAW':
         b = blinds.BlindsNoAnte(config['blindlvl'])
-        sesh = session_draw5.Draw5Session(config['game'], t, b)
+        sesh = draw5.Draw5Session(config['game'], t, b)
     else:
         raise ValueError('Game unknown to session!')
 
