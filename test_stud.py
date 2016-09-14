@@ -98,7 +98,7 @@ class TestStud(unittest.TestCase):
         self.givehand(2, '2QQ')
         self.r._table.set_bringin(2)
         expected = 0
-        result = stud.highhand(self.r._table, gametype="FIVE CARD STUD")
+        result = stud.highhand(self.r._table)
         self.assertEqual(expected, result)
 
     # Stud5:
@@ -110,7 +110,7 @@ class TestStud(unittest.TestCase):
         self.givehand(3, '567')
         self.r._table.set_bringin(3)
         expected = 0
-        result = stud.highhand(self.r._table, gametype="FIVE CARD STUD")
+        result = stud.highhand(self.r._table)
         self.assertEqual(expected, result)
 
     # Stud5:
@@ -121,7 +121,7 @@ class TestStud(unittest.TestCase):
         self.givehand(2, '2AA_v2')  # Ad is bringin; dealt first
         self.r._table.set_bringin(2)
         expected = 2
-        result = stud.highhand(self.r._table, gametype="FIVE CARD STUD")
+        result = stud.highhand(self.r._table)
         self.assertEqual(expected, result)
 
     # Stud5:
@@ -133,7 +133,7 @@ class TestStud(unittest.TestCase):
         self.givehand(3, '567')     # Bringin
         self.r._table.set_bringin(3)
         expected = 0
-        result = stud.highhand(self.r._table, gametype="FIVE CARD STUD")
+        result = stud.highhand(self.r._table)
         self.assertEqual(expected, result)
 
     # Stud5:
@@ -147,7 +147,7 @@ class TestStud(unittest.TestCase):
         self.givehand(5, '245')
         self.r._table.set_bringin(4)
         expected = 0
-        result = stud.highhand(self.r._table, gametype="FIVE CARD STUD")
+        result = stud.highhand(self.r._table)
         self.assertEqual(expected, result)
 
     """

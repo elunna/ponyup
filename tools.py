@@ -109,6 +109,10 @@ def deal_5stud_test_hands(table):
     hands.append(convert_to_cards(['Js', 'Jh']))
     hands.append(convert_to_cards(['Ts', 'Th']))
     hands.append(convert_to_cards(['9s', '9h']))
+    # This is 5 stud, so the cards after the first should be faceup.
+    for h in hands:
+        for c in h[1:]:
+            c.hidden = False
     for p in table:
         p.hand.cards = hands.pop(0)
 

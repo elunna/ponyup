@@ -272,10 +272,6 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for showdown()
-    """
-
-    """
     Tests for next_street()
     """
     def test_nextstreet_street0_streetIs1(self):

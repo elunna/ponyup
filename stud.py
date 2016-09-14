@@ -23,23 +23,18 @@ def bringin(table):
     return seat.NUM
 
 
-def highhand(table, gametype):
+def highhand(table):
     """
     Finds which player has the highest showing hand and return their seat index.  For stud
     games, after the first street, the high hand on board initiates the action (a tie is broken
     by position, with the player who received cards first acting first).
     """
-    if gametype == 'SEVEN CARD STUD':
-        up_start = 2
-    elif gametype == 'FIVE CARD STUD':
-        up_start = 1
-
     highvalue = 0
     seat = None
     ties = []
 
     for s in table.get_players(hascards=True):
-        h = s.hand.cards[up_start:]
+        h = s.hand.get_upcards()
         value = evaluator.get_value(h)
 
         if value > highvalue:

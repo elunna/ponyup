@@ -209,9 +209,7 @@ class BettingRound():
             self.bettor = stud.bringin(self.r._table)
             self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
         else:
-            # Go with high-hand
-            # Default to lowest seat #, change this later.
-            self.bettor = stud.highhand(self.r._table, self.r.gametype)
+            self.bettor = stud.highhand(self.r._table)
             self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
 
     def set_betsize(self):
