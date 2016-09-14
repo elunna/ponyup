@@ -38,15 +38,10 @@ class Round():
 
     def log(self, txt, echo=True, decorate=False):
         if decorate:
-            txt = self.decorate(txt)
+            txt = handhistory.decorate(txt)
         if echo:
             print(txt)
         self.hh.log(txt)
-
-    def decorate(self, text):
-        return '\n~~/) ' + text + ' (\~~'
-        # /)(\ (\/)
-        #  self.text += '~~(\ ' + text + ' /)~~'
 
     def position(self, seat, postflop=False):
         """
@@ -222,7 +217,6 @@ class Round():
             awardtext = pots.award_pot(victor, self.pot.pot)
             self.log(awardtext)
             return True
-
 
     def showdown(self):
         """

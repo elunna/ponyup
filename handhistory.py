@@ -39,7 +39,7 @@ class HandHistory():
         self.text += 'Seat {} has the button.\n'.format(self.r._table.TOKENS['D'])
 
     def log_holecards(self):
-        self.log(self.r.decorate('HOLE CARDS'))
+        self.log(decorate('HOLE CARDS'))
         hero = self.r.hero
         cards = hero.hand.peek()
         self.log('Dealt to {}: [{}]'.format(hero, cards.strip()))
@@ -58,3 +58,9 @@ class HandHistory():
         with open(filename, 'a') as f:
             for l in self.text:
                 f.write(l)
+
+
+def decorate(text):
+    return '\n~~/) ' + text + ' (\~~'
+    # /)(\ (\/)
+    #  self.text += '~~(\ ' + text + ' /)~~'

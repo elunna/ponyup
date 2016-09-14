@@ -27,6 +27,11 @@ class TestPoker(unittest.TestCase):
     # None yet.
 
     """
+    Tests for log
+    """
+    # Make into a decorator?
+
+    """
     Tests for position(seat)
     """
     # Raise an exception if the button is not set
