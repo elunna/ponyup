@@ -69,6 +69,10 @@ class TestPots(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for allin_stacks()
+    """
+
+    """
     Tests for make_sidepots(self, _stacks):
     """
     # 2 players, 1 allin
@@ -214,6 +218,30 @@ class TestPots(unittest.TestCase):
     """
 
     """
+    Tests for split_pot(winners, amt)
+    """
+    # Award 1 player 100 chips. Their stack goes up 100.
+    # Award 2 players 100 chips. Each stack goes up 50
+    # Award 2 players -100 chips. Raise exception.
+
+    """
+    Tests for process_awards(self, award_dict):
+    """
+
+    """
+    Tests for valid_sidepots(self, sidepots):
+    """
+
+################################
+# Independent Functions
+    """
+    Tests for award_pot(player, amt)
+    """
+    # Award 1 player 100 chips. Their stack goes up 100.
+    # Try awarding -100. Should raise an exception.
+    # Try awarding a player with no cards. Should raise an exception.
+
+    """
     Tests for best_hand_val()
     # Note we'll use the table with the hand values reversed,
     # so that 0 has the lowest hand, 1 has better, 2 beats 1, etc.
@@ -268,30 +296,6 @@ class TestPots(unittest.TestCase):
         expected = evaluator.get_value(tools.make('straight_high'))
         result = pots.best_hand_val(players)
         self.assertEqual(expected, result)
-
-    """
-    Tests for split_pot(winners, amt)
-    """
-    # Award 1 player 100 chips. Their stack goes up 100.
-    # Award 2 players 100 chips. Each stack goes up 50
-    # Award 2 players -100 chips. Raise exception.
-
-    """
-    Tests for process_awards(self, award_dict):
-    """
-
-    """
-    Tests for valid_sidepots(self, sidepots):
-    """
-
-################################
-# Independent Functions
-    """
-    Tests for award_pot(player, amt)
-    """
-    # Award 1 player 100 chips. Their stack goes up 100.
-    # Try awarding -100. Should raise an exception.
-    # Try awarding a player with no cards. Should raise an exception.
 
     """
     Tests for calc_odds(bet ,pot)
