@@ -109,6 +109,24 @@ class TestPlayer(unittest.TestCase):
         self.assertRaises(Exception, p.deposit, -100)
 
     """
+    Tests for is_human()
+    """
+    # CPU player
+
+    def test_ishuman_CPU_returnsFalse(self):
+        p = player.Player('Erik', 'CPU')
+        expected = False
+        result = p.is_human()
+        self.assertEqual(expected, result)
+
+    # Human player
+    def test_ishuman_HUMAN_returnsTrue(self):
+        p = player.Player('Erik', 'HUMAN')
+        expected = True
+        result = p.is_human()
+        self.assertEqual(expected, result)
+
+    """
     Tests for makeplay(options, street)
     """
     # Where to start with this?
