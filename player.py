@@ -7,7 +7,7 @@ TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
 
 
 class Player():
-    def __init__(self, name, playertype="None"):
+    def __init__(self, name, playertype=None):
         self.set_name(name)
         self.bank = 0
 

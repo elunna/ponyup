@@ -127,6 +127,15 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for makeplay(options, street)
+    Tests for random_type()
     """
-    # Where to start with this?
+    # Type is within the TYPES list.
+    def test_randomtype_returnsTypeinTYPES(self):
+        p = player.Player('Erik')
+        expected = True
+        result = p.playertype in player.TYPES
+        self.assertEqual(expected, result)
+
+    """
+    Tests for factory(name, game, playertype='random')
+    """
