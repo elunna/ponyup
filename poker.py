@@ -36,6 +36,31 @@ class Round():
         """
         return console.display_table(self._table, self.hero)
 
+    def log(self, txt, echo=True, decorate=False):
+        if decorate:
+            txt = self.decorate(txt)
+        if echo:
+            print(txt)
+        self.hh.log(txt)
+
+    def decorate(self, text):
+        return '\n~~/) ' + text + ' (\~~'
+        # /)(\ (\/)
+        #  self.text += '~~(\ ' + text + ' /)~~'
+
+    def position(self, seat, postflop=False):
+        """
+        Returns how many seats from the button the seat is.
+        """
+        # Raise an exception if the button is not set
+
+        if postflop:
+            seats = self._table.get_players(hascards=True)
+        else:
+            seats = self._table.get_players()
+
+        return len(seats) - seats.index(seat) - 1
+
     def deal_cards(self, qty, faceup=False, handreq=False):
         """
         Deal the specified quantity of cards to each player. If faceup is True, the cards are
@@ -68,6 +93,13 @@ class Round():
         """
         for s in self._table:
             s.hand.sort()
+
+    def discard(self, seat, c):
+        """
+        Takes the card from the seat's hand and transfers it to the muck. Returns True if the
+        operation was successful, False if it didn't.
+        """
+        self.muck.append(seat.hand.discard(c))
 
     def muck_all_cards(self):
         """
@@ -116,6 +148,82 @@ class Round():
         self.log(actions, echo=False)
         return actions
 
+    def next_street(self):
+        """
+        Advanced the street counter by one.
+        """
+        if self.street >= len(self.streets):
+            raise Exception('The last street has been reached on this game!')
+        else:
+            self.street += 1
+
+    def get_street(self):
+        return self.streets[self.street]
+
+    def clear_broke_players(self):
+        broke_players = self._table.get_broke_players()
+        _str = ''
+        for seat in broke_players:
+            #  self._table.seats.remove(seat)
+            seat.standup()
+            _str += '{} left the table with no money!\n'.format(seat.player)
+
+        # Log players leaving
+        return _str
+
+    def one_left(self):
+        cardholders = self._table.get_players(hascards=True)
+        if len(cardholders) == 1:
+            return cardholders.pop()
+        else:
+            return None
+
+    def betting_round(self):
+        """
+        Run through a round of betting. Returns a victor if it exists.
+        """
+        print(self)
+        br = betting.BettingRound(self)
+
+        for p in br:
+            o = br.player_decision(p)
+            br.process_option(o)
+            act_str = br.action_string(o)
+            print(betting.spacing(br.level()) + act_str)
+
+            # Log every action
+            self.hh.log(act_str)
+
+        print(self.pot)           # Display pot
+
+    def betting_over(self):
+        """
+        Checks the players and sees if any valid bettors are left to duke it out. If no more
+        than 1 is left, the betting is over. Returns True if there is no more betting, False
+        otherwise.
+        """
+        hands = len(self._table.get_players(hascards=True))
+        broke = len(self._table.get_broke_players())
+        if hands - broke <= 1:
+            return True
+        else:
+            return False
+
+    def found_winner(self):
+        victor = self.one_left()
+        if victor is None:
+            self.next_street()
+            return False
+        else:
+            # One player left, award them the pot!
+            oneleft = 'Only one player left!'.rjust(70)
+            print(colors.color(oneleft, 'LIGHTBLUE'))
+
+            awardtext = pots.award_pot(victor, self.pot.pot)
+            self.log(awardtext)
+            return True
+
+
     def showdown(self):
         """
         Compare all the hands of players holding cards and determine the winner(s). Awards each
@@ -127,14 +235,12 @@ class Round():
         award_txt = self.pot.allocate_money_to_winners()
         self.log(award_txt)
 
-    def next_street(self):
-        """
-        Advanced the street counter by one.
-        """
-        if self.street >= len(self.streets):
-            raise Exception('The last street has been reached on this game!')
-        else:
-            self.street += 1
+    def cleanup(self):
+        self.muck_all_cards()
+        self.hh.log(self.clear_broke_players())
+
+        if not self.check_integrity_post():
+            raise Exception('Integrity of game could not be verified after round was complete!')
 
     def check_integrity_pre(self):
         """
@@ -171,108 +277,3 @@ class Round():
         # The sum of all sidepots should equal the potsize.
 
         return True
-
-    def clear_broke_players(self):
-        broke_players = self._table.get_broke_players()
-        _str = ''
-        for seat in broke_players:
-            #  self._table.seats.remove(seat)
-            seat.standup()
-            _str += '{} left the table with no money!\n'.format(seat.player)
-
-        # Log players leaving
-        return _str
-
-    def cleanup(self):
-        self.muck_all_cards()
-        self.hh.log(self.clear_broke_players())
-
-        if not self.check_integrity_post():
-            raise Exception('Integrity of game could not be verified after round was complete!')
-
-    def one_left(self):
-        cardholders = self._table.get_players(hascards=True)
-        if len(cardholders) == 1:
-            return cardholders.pop()
-        else:
-            return None
-
-    def betting_over(self):
-        """
-        Checks the players and sees if any valid bettors are left to duke it out. If no more
-        than 1 is left, the betting is over. Returns True if there is no more betting, False
-        otherwise.
-        """
-        hands = len(self._table.get_players(hascards=True))
-        broke = len(self._table.get_broke_players())
-        if hands - broke <= 1:
-            return True
-        else:
-            return False
-
-    def position(self, seat, postflop=False):
-        """
-        Returns how many seats from the button the seat is.
-        """
-        # Raise an exception if the button is not set
-
-        if postflop:
-            seats = self._table.get_players(hascards=True)
-        else:
-            seats = self._table.get_players()
-
-        return len(seats) - seats.index(seat) - 1
-
-    def betting_round(self):
-        """
-        Run through a round of betting. Returns a victor if it exists.
-        """
-        print(self)
-        br = betting.BettingRound(self)
-
-        for p in br:
-            o = br.player_decision(p)
-            br.process_option(o)
-            act_str = br.action_string(o)
-            print(betting.spacing(br.level()) + act_str)
-
-            # Log every action
-            self.hh.log(act_str)
-
-        print(self.pot)           # Display pot
-
-    def found_winner(self):
-        victor = self.one_left()
-        if victor is None:
-            self.next_street()
-            return False
-        else:
-            # One player left, award them the pot!
-            oneleft = 'Only one player left!'.rjust(70)
-            print(colors.color(oneleft, 'LIGHTBLUE'))
-
-            awardtext = pots.award_pot(victor, self.pot.pot)
-            self.log(awardtext)
-            return True
-
-    def discard(self, seat, c):
-        """
-        Takes the card from the seat's hand and transfers it to the muck. Returns True if the
-        operation was successful, False if it didn't.
-        """
-        self.muck.append(seat.hand.discard(c))
-
-    def log(self, txt, echo=True, decorate=False):
-        if decorate:
-            txt = self.decorate(txt)
-        if echo:
-            print(txt)
-        self.hh.log(txt)
-
-    def decorate(self, text):
-        return '\n~~/) ' + text + ' (\~~'
-        # /)(\ (\/)
-        #  self.text += '~~(\ ' + text + ' /)~~'
-
-    def get_street(self):
-        return self.streets[self.street]

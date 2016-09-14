@@ -27,6 +27,46 @@ class TestPoker(unittest.TestCase):
     # None yet.
 
     """
+    Tests for position(seat)
+    """
+    # Raise an exception if the button is not set
+
+    def test_position_3max_SB_returns2(self):
+        self.setUp(players=3)
+        SB = self.r._table.seats[1]
+        expected = 2
+        result = self.r.position(SB)
+        self.assertEqual(expected, result)
+
+    def test_position_3max_BB_returns1(self):
+        self.setUp(players=3)
+        BB = self.r._table.seats[2]
+        expected = 1
+        result = self.r.position(BB)
+        self.assertEqual(expected, result)
+
+    def test_position_4max_SB_returns3(self):
+        self.setUp(players=4)
+        SB = self.r._table.seats[1]
+        expected = 3
+        result = self.r.position(SB)
+        self.assertEqual(expected, result)
+
+    def test_position_4max_BB_returns2(self):
+        self.setUp(players=4)
+        BB = self.r._table.seats[2]
+        expected = 2
+        result = self.r.position(BB)
+        self.assertEqual(expected, result)
+
+    def test_position_6max_EP_returns3(self):
+        self.setUp(players=6)
+        BB = self.r._table.seats[3]
+        expected = 3
+        result = self.r.position(BB)
+        self.assertEqual(expected, result)
+
+    """
     Tests for deal_cards(qty, faceup=False)
     """
     # 6 players, deal 1 - should be 6 cardholders
@@ -69,7 +109,7 @@ class TestPoker(unittest.TestCase):
     """
     Tests show_cards()
     """
-    # Deal cards to 2 players, should be able to see CPU cards
+    # Deal facedown cards to 2 players, should be able to see CPU cards
 
     """
     Tests for sortcards()
@@ -82,6 +122,31 @@ class TestPoker(unittest.TestCase):
         expected = sorted(h)
         self.r.sortcards()
         result = self.r._table.seats[0].hand.cards
+        self.assertEqual(expected, result)
+
+    """
+    Tests for discard_to_muck(self, seat, c):
+    """
+    # Discard As in seats hand. Seat doesn't have the card after.
+    def test_discard_As_notinhand(self):
+        self.setUp(players=2)
+        c = card.Card('A', 's')
+        s = self.r._table.seats[0]
+        s.hand.add(c)
+        self.r.discard(s, c)
+        expected = False
+        result = c in s.hand
+        self.assertEqual(expected, result)
+
+    # Discard As in seats hand. Card is in the muck
+    def test_discard_As_inmuck(self):
+        self.setUp(players=2)
+        c = card.Card('A', 's')
+        s = self.r._table.seats[0]
+        s.hand.add(c)
+        self.r.discard(s, c)
+        expected = True
+        result = c in self.r.muck
         self.assertEqual(expected, result)
 
     """
@@ -220,35 +285,8 @@ class TestPoker(unittest.TestCase):
         self.assertRaises(Exception, self.r.next_street)
 
     """
-    Tests for check_integrity_post(self):
+    Tests for get_street()
     """
-    # All cards mucked, but 1 card in deck, returns False
-    def test_checkintegritypost_1cardindeck_returnsFalse(self):
-        self.r.muck_all_cards()
-        c = card.Card('A', 's')
-        self.r.d.cards.append(c)
-        expected = False
-        result = self.r.check_integrity_post()
-        self.assertEqual(expected, result)
-
-    # All cards mucked, but 1 player w cards, returns False
-    def test_checkintegritypost_1playerwithcards_returnsFalse(self):
-        self.r._table.move_button()
-        self.r._table.set_blinds()
-        self.r.muck_all_cards()
-        c = card.Card('A', 's')
-        self.r._table.seats[0].hand.add(c)
-        expected = False
-        result = self.r.check_integrity_post()
-        self.assertEqual(expected, result)
-
-    # All cards mucked, but card in muck deleted, returns False
-    def test_checkintegritypost_1poppedfrommuck_returnsFalse(self):
-        self.r.muck_all_cards()
-        self.r.muck.pop(0)
-        expected = False
-        result = self.r.check_integrity_post()
-        self.assertEqual(expected, result)
 
     """
     Tests for clear_broke_players()
@@ -260,6 +298,56 @@ class TestPoker(unittest.TestCase):
         self.r.clear_broke_players()
         result = self.r._table.get_broke_players()
         self.assertEqual(expected, result)
+
+    """
+    Tests for one_left()
+    """
+    def test_oneleft_allhavecards_returnsNone(self):
+        self.setUp(players=2)
+        self.r.deal_cards(1)
+        expected = None
+        result = self.r.one_left()
+        self.assertEqual(expected, result)
+
+    def test_oneleft_1withcards_returnsvictor(self):
+        self.setUp(players=2)
+        self.r.deal_cards(1)
+        self.r._table.pop(0)
+        victor = self.r._table.seats[1]
+        expected = victor
+        result = self.r.one_left()
+        self.assertEqual(expected, result)
+
+    """
+    Tests for betting_round()
+    """
+
+    """
+    Tests for betting_over()
+    """
+    def test_bettingover_2hands1broke_returnsTrue(self):
+        self.setUp(players=2)
+        self.r.deal_cards(1)
+        self.r._table.seats[0].stack = 0
+        expected = True
+        result = self.r.betting_over()
+        self.assertEqual(expected, result)
+
+    def test_bettingover_3hands1broke_returnsFalse(self):
+        self.setUp(players=3)
+        self.r.deal_cards(1)
+        self.r._table.seats[0].stack = 0
+        expected = False
+        result = self.r.betting_over()
+        self.assertEqual(expected, result)
+
+    """
+    Tests for found_winner()
+    """
+
+    """
+    Tests for showdown()
+    """
 
     """
     Tests for cleanup()
@@ -295,104 +383,36 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for one_left()
+    Tests for check_integrity_pre(self):
     """
-    def test_oneleft_allhavecards_returnsNone(self):
-        self.setUp(players=2)
-        self.r.deal_cards(1)
-        expected = None
-        result = self.r.one_left()
-        self.assertEqual(expected, result)
-
-    def test_oneleft_1withcards_returnsvictor(self):
-        self.setUp(players=2)
-        self.r.deal_cards(1)
-        self.r._table.pop(0)
-        victor = self.r._table.seats[1]
-        expected = victor
-        result = self.r.one_left()
-        self.assertEqual(expected, result)
 
     """
-    Tests for betting_over()
+    Tests for check_integrity_post(self):
     """
-    def test_bettingover_2hands1broke_returnsTrue(self):
-        self.setUp(players=2)
-        self.r.deal_cards(1)
-        self.r._table.seats[0].stack = 0
-        expected = True
-        result = self.r.betting_over()
-        self.assertEqual(expected, result)
-
-    def test_bettingover_3hands1broke_returnsFalse(self):
-        self.setUp(players=3)
-        self.r.deal_cards(1)
-        self.r._table.seats[0].stack = 0
-        expected = False
-        result = self.r.betting_over()
-        self.assertEqual(expected, result)
-
-    """
-    Tests for position(seat)
-    """
-    # Raise an exception if the button is not set
-
-    def test_position_3max_SB_returns2(self):
-        self.setUp(players=3)
-        SB = self.r._table.seats[1]
-        expected = 2
-        result = self.r.position(SB)
-        self.assertEqual(expected, result)
-
-    def test_position_3max_BB_returns1(self):
-        self.setUp(players=3)
-        BB = self.r._table.seats[2]
-        expected = 1
-        result = self.r.position(BB)
-        self.assertEqual(expected, result)
-
-    def test_position_4max_SB_returns3(self):
-        self.setUp(players=4)
-        SB = self.r._table.seats[1]
-        expected = 3
-        result = self.r.position(SB)
-        self.assertEqual(expected, result)
-
-    def test_position_4max_BB_returns2(self):
-        self.setUp(players=4)
-        BB = self.r._table.seats[2]
-        expected = 2
-        result = self.r.position(BB)
-        self.assertEqual(expected, result)
-
-    def test_position_6max_EP_returns3(self):
-        self.setUp(players=6)
-        BB = self.r._table.seats[3]
-        expected = 3
-        result = self.r.position(BB)
-        self.assertEqual(expected, result)
-
-    """
-    Tests for discard_to_muck(self, seat, c):
-    """
-    # Discard As in seats hand. Seat doesn't have the card after.
-    def test_discard_As_notinhand(self):
-        self.setUp(players=2)
+    # All cards mucked, but 1 card in deck, returns False
+    def test_checkintegritypost_1cardindeck_returnsFalse(self):
+        self.r.muck_all_cards()
         c = card.Card('A', 's')
-        s = self.r._table.seats[0]
-        s.hand.add(c)
-        self.r.discard(s, c)
+        self.r.d.cards.append(c)
         expected = False
-        result = c in s.hand
+        result = self.r.check_integrity_post()
         self.assertEqual(expected, result)
 
-    # Discard As in seats hand. Card is in the muck
-    def test_discard_As_inmuck(self):
-        self.setUp(players=2)
+    # All cards mucked, but 1 player w cards, returns False
+    def test_checkintegritypost_1playerwithcards_returnsFalse(self):
+        self.r._table.move_button()
+        self.r._table.set_blinds()
+        self.r.muck_all_cards()
         c = card.Card('A', 's')
-        s = self.r._table.seats[0]
-        s.hand.add(c)
-        self.r.discard(s, c)
-        expected = True
-        result = c in self.r.muck
+        self.r._table.seats[0].hand.add(c)
+        expected = False
+        result = self.r.check_integrity_post()
+        self.assertEqual(expected, result)
+
+    # All cards mucked, but card in muck deleted, returns False
+    def test_checkintegritypost_1poppedfrommuck_returnsFalse(self):
+        self.r.muck_all_cards()
+        self.r.muck.pop(0)
+        expected = False
+        result = self.r.check_integrity_post()
         self.assertEqual(expected, result)
