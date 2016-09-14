@@ -36,6 +36,16 @@ class TestPots(unittest.TestCase):
     def test_add_10tonewpot_potequals10(self):
         bet = 10
         expected = 10
+        self.p = self.p + bet
+        result = self.p
+        self.assertEqual(expected, result)
+
+    """
+    Tests for __iadd__(amt)
+    """
+    def test_iadd_10tonewpot_potequals10(self):
+        bet = 10
+        expected = 10
         self.p += bet
         result = self.p
         self.assertEqual(expected, result)
