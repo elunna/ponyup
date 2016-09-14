@@ -13,7 +13,10 @@ class TestPoker(unittest.TestCase):
     def setUp(self, level=2, players=6):
         # Make a 6 player table
         self.g = session_factory.factory(seats=players, game="FIVE CARD DRAW", blindlvl=level)
+        self.r = poker.Round(self.g)
 
+    def setUp_stud(self, level=2, players=6):
+        self.g = session_factory.factory(seats=players, game="FIVE CARD STUD", blindlvl=level)
         self.r = poker.Round(self.g)
 
     """
@@ -229,6 +232,31 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(self.r._table.TOKENS['D'], 0)  # verify the button is 0
         expected = 'bob1 posts $1\nbob2 posts $2'
         result = self.r.post_blinds()
+        self.assertEqual(expected, result)
+
+    """
+    Tests for post_bringin():
+    """
+    # Initial stacks=1000.
+    # Seat 0
+    def test_postbringin_seat5_has2chipsless(self):
+        self.setUp_stud()
+        tools.deal_stud5(self.r._table, matchingranks=0)
+        self.r._table.set_bringin()
+        BI = self.r._table.TOKENS['BI']
+        seat = self.r._table.seats[BI]
+        stack = seat.stack
+        self.r.post_bringin()
+        expected = 1
+        result = stack - seat.stack
+        self.assertEqual(expected, result)
+
+    def test_postbringin_seat5_returnsString(self):
+        self.setUp_stud()
+        tools.deal_stud5(self.r._table, matchingranks=0)
+        expected = 'bob5 brings it in for $1\n'
+        self.r._table.set_bringin()
+        result = self.r.post_bringin()
         self.assertEqual(expected, result)
 
     """

@@ -81,26 +81,3 @@ class TestStud(unittest.TestCase):
         expected = 0
         result = stud.highhand(self.r._table)
         self.assertEqual(expected, result)
-
-    """
-    Tests for post_bringin():
-    """
-    # Initial stacks=1000.
-    # Seat 0
-    def test_postbringin_seat5_has2chipsless(self):
-        tools.deal_stud5(self.r._table, matchingranks=0)
-        self.r._table.set_bringin()
-        BI = self.r._table.TOKENS['BI']
-        seat = self.r._table.seats[BI]
-        stack = seat.stack
-        stud.post_bringin(self.r)
-        expected = 1
-        result = stack - seat.stack
-        self.assertEqual(expected, result)
-
-    def test_postbringin_seat5_returnsString(self):
-        tools.deal_stud5(self.r._table, matchingranks=0)
-        expected = 'bob5 brings it in for $1\n'
-        self.r._table.set_bringin()
-        result = stud.post_bringin(self.r)
-        self.assertEqual(expected, result)

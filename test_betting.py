@@ -1,6 +1,5 @@
 import unittest
 import betting
-import stud
 import session_factory
 import tools
 
@@ -636,7 +635,7 @@ class TestBetting(unittest.TestCase):
     # Level 1, the ante is $0.25, and bringin is $0.50.
     def test_getbet_lev1bringin_returns50c(self):
         self.setUp_studGame(level=1)
-        stud.post_bringin(self.r)
+        self.r.post_bringin()
         expected = 0.50
         result = self.br.get_bet()
         self.assertEqual(expected, result)
@@ -644,7 +643,7 @@ class TestBetting(unittest.TestCase):
     # Level 2, the ante is $0.50, and bringin is $1.
     def test_getbet_lev2bringin_returns1(self):
         self.setUp_studGame(level=2)
-        stud.post_bringin(self.r)
+        self.r.post_bringin()
         expected = 1
         result = self.br.get_bet()
         self.assertEqual(expected, result)

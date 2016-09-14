@@ -130,6 +130,26 @@ class Round():
         self.log(actions, echo=False)
         return actions
 
+    def post_bringin(self):
+        """
+        Gets the player who must post the bringin amount, adds their bet to the pot, and
+        returns a string describing what the blinds posted.
+        """
+        table = self._table
+        bi = table.TOKENS['BI']
+        if bi == -1:
+            raise Exception('Bringin has not been set on the table!')
+
+        seat = table.seats[bi]
+
+        # Bet the Bringin amount and add to the pot
+        self.pot += seat.bet(self.blinds.BRINGIN)
+        action = ''
+        action += '{} brings it in for ${}\n'.format(seat.player, self.blinds.BRINGIN)
+
+        self.log(action, echo=False)
+        return action
+
     def next_street(self):
         """
         Advanced the street counter by one.
