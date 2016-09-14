@@ -1,5 +1,4 @@
 import sessions
-import stud
 
 
 class Stud5Session(sessions.Session):
@@ -23,7 +22,7 @@ class Stud5Session(sessions.Session):
                 print(r.post_bringin())
             else:
                 r.deal_cards(1, faceup=True, handreq=True)
-                high = stud.highhand(r._table)
+                high = r._table.highhand()
 
                 print('{} has high hand and will act first.'.format(r._table.seats[high]))
 

@@ -2,7 +2,6 @@ from __future__ import print_function
 from collections import namedtuple
 import console
 import strategy
-import stud
 
 Action = namedtuple('Action', ['name', 'cost'])
 ALLIN = Action('ALLIN', 0)
@@ -209,7 +208,7 @@ class BettingRound():
             self.bettor = self.r._table.TOKENS['BI']
             self.closer = self.r._table.TOKENS['D']
         else:
-            self.bettor = stud.highhand(self.r._table)
+            self.bettor = self.r._table.highhand()
             self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
 
     def set_betsize(self):
