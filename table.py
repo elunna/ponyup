@@ -212,3 +212,16 @@ class Table():
             raise Exception('Cannot place the button, no players at table!')
         choice = random.choice(seats)
         self.TOKENS['D'] = choice
+
+    def position(self, seat, postflop=False):
+        """
+        Returns how many seats from the button the seat is.
+        """
+        # Raise an exception if the button is not set
+
+        if postflop:
+            seats = self.get_players(hascards=True)
+        else:
+            seats = self.get_players()
+
+        return len(seats) - seats.index(seat) - 1

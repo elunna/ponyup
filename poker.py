@@ -43,19 +43,6 @@ class Round():
             print(txt)
         self.hh.log(txt)
 
-    def position(self, seat, postflop=False):
-        """
-        Returns how many seats from the button the seat is.
-        """
-        # Raise an exception if the button is not set
-
-        if postflop:
-            seats = self._table.get_players(hascards=True)
-        else:
-            seats = self._table.get_players()
-
-        return len(seats) - seats.index(seat) - 1
-
     def deal_cards(self, qty, faceup=False, handreq=False):
         """
         Deal the specified quantity of cards to each player. If faceup is True, the cards are

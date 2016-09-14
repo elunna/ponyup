@@ -661,3 +661,43 @@ class TestTable(unittest.TestCase):
         seats = 9
         t = table.Table(seats)
         self.assertRaises(Exception, t.randomize_button)
+
+    """
+    Tests for position(seat)
+    """
+    # Raise an exception if the button is not set
+
+    def test_position_3max_SB_returns2(self):
+        self.setUp(players=3)
+        SB = self.t.seats[1]
+        expected = 2
+        result = self.t.position(SB)
+        self.assertEqual(expected, result)
+
+    def test_position_3max_BB_returns1(self):
+        self.setUp(players=3)
+        BB = self.t.seats[2]
+        expected = 1
+        result = self.t.position(BB)
+        self.assertEqual(expected, result)
+
+    def test_position_4max_SB_returns3(self):
+        self.setUp(players=4)
+        SB = self.t.seats[1]
+        expected = 3
+        result = self.t.position(SB)
+        self.assertEqual(expected, result)
+
+    def test_position_4max_BB_returns2(self):
+        self.setUp(players=4)
+        BB = self.t.seats[2]
+        expected = 2
+        result = self.t.position(BB)
+        self.assertEqual(expected, result)
+
+    def test_position_6max_EP_returns3(self):
+        self.setUp(players=6)
+        BB = self.t.seats[3]
+        expected = 3
+        result = self.t.position(BB)
+        self.assertEqual(expected, result)
