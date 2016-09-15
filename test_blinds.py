@@ -1,6 +1,6 @@
 import unittest
 import blinds
-import tourneys
+import blind_structures
 
 
 class TestBlinds(unittest.TestCase):
@@ -9,7 +9,7 @@ class TestBlinds(unittest.TestCase):
     """
     def setUp(self, level=1):
         # Setup the standard no-ante blind structure
-        self.b = blinds.Blinds(level, structure=tourneys.WSOP)
+        self.b = blinds.Blinds(level, structure=blind_structures.WSOP)
         # Level 1 of WSOP is 50/100 blinds.
 
     """

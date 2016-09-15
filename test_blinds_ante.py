@@ -1,5 +1,6 @@
 import unittest
 import blinds
+import blind_structures
 
 
 class TestBlindsAnte(unittest.TestCase):
@@ -47,14 +48,14 @@ class TestBlindsAnte(unittest.TestCase):
         self.assertEqual(self.b.BRINGIN, 0.50)
 
     def test_ante_sizes(self):
-        for level in blinds.ante.values():
+        for level in blind_structures.ante.values():
             self.assertTrue(level[3] < level[2])
 
     def test_bringin_sizes(self):
-        for level in blinds.ante.values():
+        for level in blind_structures.ante.values():
             self.assertTrue(level[2] < level[1])
 
     def test_blind_sizes(self):
         # These should be equal and should just represent the "Small Bet" Size.
-        for level in blinds.ante.values():
+        for level in blind_structures.ante.values():
             self.assertTrue(level[1] == level[0])

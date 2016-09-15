@@ -1,5 +1,6 @@
 from collections import namedtuple
 import math
+import blind_structures
 
 Level = namedtuple('Level', ['BB', 'SB', 'ANTE', 'BRINGIN'])
 
@@ -108,12 +109,12 @@ class Blinds():
 
 class BlindsAnte(Blinds):
     def __init__(self, level=1):
-        super().__init__(level, structure=ante)
+        super().__init__(level, structure=blind_structures.ante)
 
 
 class BlindsNoAnte(Blinds):
     def __init__(self, level=1):
-        super().__init__(level, structure=no_ante)
+        super().__init__(level, structure=blind_structures.no_ante)
 
 
 def tuple_to_level(lev):
@@ -135,33 +136,3 @@ def round_number(num):
         return math.ceil(num)
     else:
         return math.floor(num)
-
-
-no_ante = {
-    1:  (1, 0.50),
-    2:  (2, 1),
-    3:  (3, 1),
-    4:  (4, 2),
-    5:  (6, 3),
-    6:  (8, 4),
-    7:  (15, 10),
-    8:  (20, 10),
-    9:  (30, 15),
-    10: (50, 25),
-}
-
-# Since there is no Big Blind in these games, the BB represents the "Big Bet", and the SB
-# represents the "Small Bet".
-ante = {
-    # BB, SB, BRINGIN, ANTE
-    1:  (1, 1, 0.50, 0.25),
-    2:  (2, 2, 1, .50),
-    3:  (3, 3, 1.50, 0.75),
-    4:  (4, 4, 2, 1),
-    5:  (6, 6, 3, 1.5),
-    6:  (8, 8, 4, 1.5),
-    7:  (15, 15, 5, 3),
-    8:  (20, 20, 8, 4),
-    9:  (25, 25, 10, 5),
-    10: (50, 50, 20, 10),
-}
