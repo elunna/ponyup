@@ -1,4 +1,4 @@
-import blinds
+import blind_structures
 import table_selection
 """
 This lobby listing is a list of all the available cash tables a pony can play
@@ -39,10 +39,10 @@ def stakes(gametuple):
     Return the small bet and big bet sizes.
     """
     if gametuple.game == "FIVE CARD STUD":
-        sb = blinds.ante[gametuple.level][0]
+        sb = blind_structures.ante[gametuple.level][0]
         return '${}/${}'.format(sb, sb*2)
     elif gametuple.game == "FIVE CARD DRAW":
-        sb = blinds.no_ante[gametuple.level][0]
+        sb = blind_structures.no_ante[gametuple.level][0]
         return '${}/${}'.format(sb, sb*2)
 
 
