@@ -179,18 +179,18 @@ def color_cards(cards):
 
 
 @colors.colorit("YELLOW")
-def colorpot(amt):
+def color_chips(amt):
     return '$' + amt
 
 
 def print_pot(pot):
-    txt = colorpot(pot).strip()
+    txt = color_chips(pot).strip()
     print('Pot: ' + txt)
 
 
 def print_action(space, act_str):
     mstart = act_str.find('$')
-    chips = colors.color(act_str[mstart:], "YELLOW")
+    chips = color_chips(act_str[mstart+1:])
 
     if 'fold' in act_str:
         print('{}{}'.format(space, colors.color(act_str, 'PURPLE')))
