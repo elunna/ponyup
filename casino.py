@@ -53,6 +53,7 @@ def settings_title():
 @colors.colorit("LIGHTBLUE")
 def menu_str():
     _str = ''
+    _str += 'Main Menu Options\n'
     for o in sorted(options.keys()):
         _str += '{}\n'.format(options[o][0])
     return _str
@@ -114,4 +115,5 @@ if __name__ == "__main__":
         else:
             print('Not a valid option!')
 
-        input('Press any key to continue...')
+        if choice == 'c':
+            input('Press any key to continue...')

@@ -149,7 +149,7 @@ def color_param(p):
 
 
 def color_name(name):
-    return '{:>15}: {}\n'.format(color_setting('Name'), color_param(name))
+    return '{:>15}: {}'.format(color_setting('Name'), color_param(name))
 
 
 def color_game(GAME):
