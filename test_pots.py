@@ -73,6 +73,37 @@ class TestPots(unittest.TestCase):
     """
     Tests for allin_stacks()
     """
+    # 2 players, 1 allin
+    def test_allinstacks_2plyr_1allin_returns1(self):
+        self.setup_allins(2)
+        self.everybody_bet(100)
+        expected = 1
+        result = len(self.p.allin_stacks())
+        self.assertEqual(expected, result)
+
+    # 3 players, 1 allin
+    def test_allinstacks_3plyr_1allin_returns1(self):
+        self.setup_allins(3)
+        self.everybody_bet(100)
+        expected = 1
+        result = len(self.p.allin_stacks())
+        self.assertEqual(expected, result)
+
+    # 3 players, 2 allins
+    def test_allinstacks_3plyr_2allin_returns2(self):
+        self.setup_allins(3)
+        self.everybody_bet(200)
+        expected = 2
+        result = len(self.p.allin_stacks())
+        self.assertEqual(expected, result)
+
+    # 4 players, 3 allins
+    def test_allinstacks_4plyr_3allin_returns3(self):
+        self.setup_allins(4)
+        self.everybody_bet(300)
+        expected = 3
+        result = len(self.p.allin_stacks())
+        self.assertEqual(expected, result)
 
     """
     Tests for make_sidepots(self, _stacks):
