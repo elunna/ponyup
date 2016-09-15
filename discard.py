@@ -209,4 +209,10 @@ def extract_discards(cards, keep):
     """
     Returns the cards we should discard from a group of cards.
     """
+    if len(cards) == 0 or cards is None:
+        raise ValueError('Card list needs to contain some cards!')
+    for c in keep:
+        if c not in cards:
+            raise ValueError('The keep list has a card not in the original card list!')
+
     return [c for c in cards if c not in keep]
