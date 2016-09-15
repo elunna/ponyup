@@ -138,26 +138,26 @@ def display_table(table, hero=None):
     return _str
 
 
-"""
-How to make this display color?
-def action_string(action):
-    s = self.get_bettor()
-    act_str = ''
-    act_str += '{} {}s'.format(s.player, action.name.lower())
+@colors.colorit("WHITE")
+def color_setting(p):
+    return p
 
-    amt = colors.color(' $' + str(action.cost), 'yellow')
 
-    if action.name in ['BET', 'RAISE']:
-        return colors.color(act_str, 'red') + amt
-    elif action.name == 'CALL':
-        return colors.color(act_str, 'white') + amt
-    elif action.name == 'FOLD':
-        return colors.color(act_str, 'purple')
-    elif action.name == 'CHECK':
-        return colors.color(act_str, 'white')
-    elif action.name == 'ALLIN':
-        return colors.color(
-            '{}{} is all in.'.format(spacing(self.level()), s.player), 'gray')
-    else:
-        raise Exception('Error processing the action!')
-"""
+@colors.colorit("PURPLE")
+def color_param(p):
+    return p
+
+
+def color_name(name):
+    return '{:>15}: {}\n'.format(color_setting('Name'), color_param(name))
+
+
+def color_game(GAME):
+    FMT = '{:>15}: {}\n'
+    _str = ''
+    _str += FMT.format(color_setting('Table Name'), color_param(GAME.tablename))
+    _str += FMT.format(color_setting('Game'), color_param(GAME.game))
+    _str += FMT.format(color_setting('Stakes'), color_param(lobby.stakes(GAME)))
+    _str += FMT.format(color_setting('Seats'), color_param(GAME.seats))
+
+    return _str

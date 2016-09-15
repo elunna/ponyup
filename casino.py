@@ -8,12 +8,13 @@ import lobby
 import os
 import session_factory
 
-NAME = 'AORIST'
+NAME = 'Aorist Twilist'
 GAME = lobby.default()
+DISPLAYWIDTH = 70
 
 # Define menu opions
 options = {}
-options['c'] = ('(C)ombination counts', 'view_combos()')
+options['c'] = ('(C)ombination counts', 'print(view_combos())')
 options['p'] = ('(P)lay Poker!', 'play_poker()')
 options['n'] = ('(N)ame change', 'pick_name()')
 options['g'] = ('(G)ame change', 'pick_game()')
@@ -30,51 +31,42 @@ def pick_game():
     GAME = console.pick_game()
 
 
-def print_logo():
+def logo():
     txt = ''
     with open('logo2.txt') as f:
-        #  print(f.read())
         for c in f.read():
             if c == '$':
                 txt += colors.color(c, 'yellow')
             else:
                 txt += colors.color(c, 'green')
     txt += '\n'
-    print(txt)
-    print('~'*70)
-    print('~'*70)
+    txt += ('~'*70)
+    txt += '\n'
+    return txt
 
 
-def menu():
-    os.system('clear')
-    print_logo()
-    print('')
-    print('-=- Settings -=-'.center(70))
-    print('{:>15}: {}'.format('Playername', NAME))
-    print('{:>15}: {}'.format('Table Name', GAME.tablename))
-    print('{:>15}: {}'.format('Game', GAME.game))
-    print('{:>15}: {}'.format('Stakes',  lobby.stakes(GAME)))
-    print('{:>15}: {}'.format('Seats', GAME.seats))
-    print('')
+@colors.colorit("WHITE")
+def settings_title():
+    return '-=- Settings -=-'.center(70)
 
+
+@colors.colorit("LIGHTBLUE")
+def menu_str():
+    _str = ''
     for o in sorted(options.keys()):
-        print(options[o][0])
+        _str += '{}\n'.format(options[o][0])
+    return _str
 
 
 def view_combos():
-    print("Calculating different possibilities for combinations in a standard 52-card deck:")
+    _str = ''
+    _str += "Calculating different possibilities for combinations in a standard 52-card deck:"
     for i in range(1, 52):
-        print('{} card: {} combos '.format(i, combos.n_choose_k(52, i)))
-
-    input('Press any key to continue...')
+        _str += '{} card: {} combos.\n'.format(i, combos.n_choose_k(52, i))
+    return _str
 
 
 def play_poker():
-    print('Alright, let\'s play some poker!')
-
-    print('Initializing new game...\n')
-
-    #  g = session_factory.make(GAME, NAME)
     g = session_factory.factory(
         seats=GAME.seats,
         game=GAME.game,
@@ -102,11 +94,18 @@ def exitgracefully():
     exit()
 
 
+def main_menu():
+    os.system('clear')
+    print(logo())
+    print(settings_title())
+    print(console.color_name(NAME))
+    print(console.color_game(GAME))
+    print(menu_str())
+
+
 if __name__ == "__main__":
     while True:
-        os.system('clear')
-        print_logo()
-        menu()
+        main_menu()
         choice = input('> ')
         choice = choice.lower()
 
@@ -114,4 +113,5 @@ if __name__ == "__main__":
             exec(options[choice][1])
         else:
             print('Not a valid option!')
-            input('Press any key to continue...')
+
+        input('Press any key to continue...')
