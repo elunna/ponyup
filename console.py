@@ -189,13 +189,18 @@ def print_pot(pot):
 
 
 def print_action(space, act_str):
+    mstart = act_str.find('$')
+    chips = colors.color(act_str[mstart:], "YELLOW")
+
     if 'fold' in act_str:
-        print(space, colors.color(act_str, 'PURPLE'))
+        print('{}{}'.format(space, colors.color(act_str, 'PURPLE')))
     elif 'check' in act_str:
-        print(space, colors.color(act_str, 'WHITE'))
+        print('{}{}'.format(space, colors.color(act_str, 'WHITE')))
     elif 'allin' in act_str:
-        print(space, colors.color(act_str, 'WHITE'))
+        print('{}{}'.format(space, colors.color(act_str, 'WHITE')))
+    elif 'call' in act_str:
+        print('{}{}{}'.format(space, colors.color(act_str[:mstart], 'WHITE'), chips))
     elif 'bet' in act_str:
-        print(space, colors.color(act_str, 'RED'))
+        print('{}{}{}'.format(space, colors.color(act_str[:mstart], 'RED'), chips))
     elif 'raise' in act_str:
-        print(space, colors.color(act_str, 'RED'))
+        print('{}{}{}'.format(space, colors.color(act_str[:mstart], 'RED'), chips))
