@@ -1,3 +1,5 @@
+import colors
+
 # Use tuples instead of lists
 SUITS = ('c', 'd', 'h', 's')
 SUITVALUES = {'c': 1, 'd': 2, 'h': 3, 's': 4}
@@ -23,7 +25,7 @@ class Card:
 
     def __str__(self):
         """
-        Returns the string representation
+        Returns the colored string representation
         """
         if self.hidden:
             return HIDDEN
@@ -68,3 +70,9 @@ class Card:
         This is how human/hero's are able to view hidden cards.
         """
         return self.rank + self.suit
+
+    def color(self):
+        if self.hidden:
+            return colors.color(HIDDEN, 'PURPLE')
+        else:
+            return colors.color(str(self), COLORS[self.suit])
