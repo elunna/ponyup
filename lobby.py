@@ -53,5 +53,5 @@ def numbered_list(L):
 
     for i, gt in enumerate(L):
         _stakes = stakes(gt)
-        _str += (fmt_str.format(i, gt.game.title(), gt.seats, _stakes, gt.name))
+        _str += (fmt_str.format(i, gt.game.title(), gt.seats, _stakes, gt.tablename))
     return _str
