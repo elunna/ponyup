@@ -260,7 +260,7 @@ class Round():
         self.log('Showdown!', decorate=True)
         self.show_cards()
 
-        self.log(console.show_hands(self._table, color=False))
+        self.log(console.show_hands(self._table, color=False), echo=False)
         print(console.show_hands(self._table, color=True))
 
         award_txt = self.pot.allocate_money_to_winners()

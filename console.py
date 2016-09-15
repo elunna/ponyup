@@ -220,3 +220,7 @@ def show_hands(table, color=True):
             _str += str(s.hand)
         _str += '\n'
     return _str
+
+
+def right_align(txt):
+    pass
