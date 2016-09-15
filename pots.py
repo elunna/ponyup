@@ -189,8 +189,11 @@ def award_pot(seat, amt):
     """
     Adds the specified amount to a players stack. Returns a string describing who won what.
     """
-    seat.win(amt)
-    return '{:} wins ${}\n'.format(str(seat.player), amt)
+    if seat.has_hand():
+        seat.win(amt)
+        return '{:} wins ${}\n'.format(str(seat.player), amt)
+    else:
+        raise ValueError('Player has no hand! Not eligible to win any pot!')
 
 
 def best_hand_val(seats):

@@ -13,12 +13,14 @@ class TestPots(unittest.TestCase):
         # Make a 6 player table
         self.t = table_factory.factory(seats=players)
         self.p = pots.Pot(self.t)
+        # Deal cards to all players
+        tools.deal_random_cards(self.t, 2)
 
     def setup_allins(self, _seats):
         self.t = table_factory.factory(seats=_seats, stepstacks=True)
         self.p = pots.Pot(self.t)
 
-        # For make_sidepots, get_allins need players to have cards.
+        # Deal cards to all players
         tools.deal_random_cards(self.t, 2)
 
     def everybody_bet(self, bet):
@@ -221,6 +223,7 @@ class TestPots(unittest.TestCase):
     Tests for split_pot(winners, amt)
     """
     # Award 1 player 100 chips. Their stack goes up 100.
+
     # Award 2 players 100 chips. Each stack goes up 50
     # Award 2 players -100 chips. Raise exception.
 
@@ -238,8 +241,25 @@ class TestPots(unittest.TestCase):
     Tests for award_pot(player, amt)
     """
     # Award 1 player 100 chips. Their stack goes up 100.
+    def test_awardpot_100to1player_stackincreases100(self):
+        p = self.t.seats[0]
+        expected = 100
+        p_stack = p.stack
+        pots.award_pot(p, expected)
+        result = p.stack - p_stack
+        self.assertEqual(expected, result)
+
     # Try awarding -100. Should raise an exception.
+    def test_awardpot_neg100_raisesException(self):
+        p = self.t.seats[0]
+        award = -100
+        self.assertRaises(ValueError, pots.award_pot, p, award)
+
     # Try awarding a player with no cards. Should raise an exception.
+    def test_awardpot_playerhasnocards_raisesException(self):
+        p = self.t.seats[0]
+        p.fold()
+        self.assertRaises(ValueError, pots.award_pot, p, 100)
 
     """
     Tests for best_hand_val()
