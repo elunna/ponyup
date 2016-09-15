@@ -1,3 +1,4 @@
+import card
 import console
 import unittest
 
@@ -35,4 +36,41 @@ class TestConsole(unittest.TestCase):
     def test_isinteger_str10pt3_returnsTrue(self):
         expected = False
         result = console.is_integer('10.3')
+        self.assertEqual(expected, result)
+
+    """
+    Tests for color(self):
+    """
+    def test_color_hiddenCard_returnsPurpleXx(self):
+        c = card.Card('A', 's')
+        expected = '\x1b[0;35;40mXx\x1b[0m'
+        result = console.color_cards(str(c))
+        self.assertEqual(expected, result)
+
+    def test_color_Ac_returnsGreenText(self):
+        c = card.Card('A', 'c')
+        c.hidden = False
+        expected = '\x1b[0;32;40mAc\x1b[0m'
+        result = console.color_cards(str(c))
+        self.assertEqual(expected, result)
+
+    def test_color_Ad_returnsBlueText(self):
+        c = card.Card('A', 'd')
+        c.hidden = False
+        expected = '\x1b[0;34;40mAd\x1b[0m'
+        result = console.color_cards(str(c))
+        self.assertEqual(expected, result)
+
+    def test_color_Ah_returnsRedText(self):
+        c = card.Card('A', 'h')
+        c.hidden = False
+        expected = '\x1b[0;31;40mAh\x1b[0m'
+        result = console.color_cards(str(c))
+        self.assertEqual(expected, result)
+
+    def test_color_As_returnsWhiteText(self):
+        c = card.Card('A', 's')
+        c.hidden = False
+        expected = '\x1b[0;37;40mAs\x1b[0m'
+        result = console.color_cards(str(c))
         self.assertEqual(expected, result)
