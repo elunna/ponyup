@@ -10,6 +10,64 @@ class TestTools(unittest.TestCase):
     Tests for deal_ranked_hands(table, reversed=False):
     """
 
+    """
+    Tests for to_card(string)
+    """
+    def test_tocard_As_returnsAs(self):
+        string = 'As'
+        rank = 'A'
+        suit = 's'
+        result = tools.to_card(string)
+        self.assertEqual(rank, result.rank)
+        self.assertEqual(suit, result.suit)
+
+    def test_tocard_AA_returnsAs(self):
+        string = 'AA'
+        self.assertRaises(Exception, tools.to_card, string)
+
+    """
+    Tests for convert_to_cards(cardlist):
+    """
+    def test_converttocards_AsKs_returnsCardAsKs(self):
+        As, Ks = card.Card('A', 's'), card.Card('K', 's')
+        cardstr = ['As', 'Ks']
+        expected = [As, Ks]
+        result = tools.convert_to_cards(cardstr)
+        self.assertEqual(expected, result)
+
+    """
+    Tests for make(hand_name):
+    """
+    def test_make_royalflush_returnsRoyalFlush(self):
+        h = tools.make('royalflush')
+        expected = 'ROYAL FLUSH'
+        result = ev.get_type(ev.get_value(h))
+        self.assertEqual(expected, result)
+
+    """
+    Tests for get_cards(qty)
+    """
+    # Ask for 0 cards, returns 0 cards
+    def test_getcards_0_returns0cards(self):
+        h = tools.get_cards(0)
+        expected = 0
+        result = len(h)
+        self.assertEqual(expected, result)
+
+    # Ask for 1 cards, returns 1 cards
+    def test_getcards_1_returns1card(self):
+        h = tools.get_cards(1)
+        expected = 1
+        result = len(h)
+        self.assertEqual(expected, result)
+
+    # Ask for 2 cards, returns 2 cards
+    def test_getcards_2_returns2cards(self):
+        h = tools.get_cards(2)
+        expected = 2
+        result = len(h)
+        self.assertEqual(expected, result)
+
 
 class TestPokerhands(unittest.TestCase):
     ##################################################
@@ -491,38 +549,4 @@ class TestPokerhands(unittest.TestCase):
         val = ev.get_value(h)
         expected = 'HIGH CARD'
         result = ev.get_type(val)
-        self.assertEqual(expected, result)
-
-    """
-    Tests for to_card(string)
-    """
-    def test_tocard_As_returnsAs(self):
-        string = 'As'
-        rank = 'A'
-        suit = 's'
-        result = tools.to_card(string)
-        self.assertEqual(rank, result.rank)
-        self.assertEqual(suit, result.suit)
-
-    def test_tocard_AA_returnsAs(self):
-        string = 'AA'
-        self.assertRaises(Exception, tools.to_card, string)
-
-    """
-    Tests for convert_to_cards(cardlist):
-    """
-    def test_converttocards_AsKs_returnsCardAsKs(self):
-        As, Ks = card.Card('A', 's'), card.Card('K', 's')
-        cardstr = ['As', 'Ks']
-        expected = [As, Ks]
-        result = tools.convert_to_cards(cardstr)
-        self.assertEqual(expected, result)
-
-    """
-    Tests for make(hand_name):
-    """
-    def test_make_royalflush_returnsRoyalFlush(self):
-        h = tools.make('royalflush')
-        expected = 'ROYAL FLUSH'
-        result = ev.get_type(ev.get_value(h))
         self.assertEqual(expected, result)
