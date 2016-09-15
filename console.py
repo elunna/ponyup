@@ -211,16 +211,16 @@ def show_hands(table, color=True):
     We might not want color for logging hand histories.
     """
     _str = ''
-    for s in table.get_players(hascards=True):
-        _str += '{} shows '.format(str(s))
+    if color:
+        for s in table.get_players(hascards=True):
+            _str += '{:29}{:>20} shows {}\n'.format('', str(s), color_cards(str(s.hand)))
+    else:
+        for s in table.get_players(hascards=True):
+            _str += '{:20} shows {}\n'.format(str(s), str(s.hand))
 
-        if color:
-            _str += color_cards(str(s.hand))
-        else:
-            _str += str(s.hand)
-        _str += '\n'
     return _str
 
 
 def right_align(txt):
-    pass
+    for l in txt.split('\n'):
+        print(l.rjust(DISPLAYWIDTH))

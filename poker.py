@@ -261,10 +261,11 @@ class Round():
         self.show_cards()
 
         self.log(console.show_hands(self._table, color=False), echo=False)
-        print(console.show_hands(self._table, color=True))
+        console.right_align((console.show_hands(self._table, color=True)))
 
         award_txt = self.pot.allocate_money_to_winners()
-        self.log(award_txt)
+        self.log(award_txt, echo=False)
+        console.right_align(award_txt)
 
     def cleanup(self):
         self.muck_all_cards()

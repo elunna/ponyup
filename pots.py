@@ -178,11 +178,13 @@ class Pot():
         if not self.valid_sidepots(sidepots):
             raise Exception('Sidepots are not valid - they do not total the pot amount!')
 
+        award_txt = ''
+
         if len(sidepots) > 1:
             for i, s in enumerate(sidepots):
-                self.log('Sidepot #{}: ${}'.format(i+1, s))
+                award_txt += 'Sidepot #{}: ${}\n'.format(i+1, s)
 
-        award_txt = self.process_awards(sidepots)
+        award_txt += self.process_awards(sidepots)
         return award_txt
 
 
