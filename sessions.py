@@ -16,8 +16,6 @@ It is responsible for:
 
 """
 
-DISPLAYWIDTH = 70
-
 
 class Session():
     def __init__(self, gametype, table, blinds, hero=None, label=None):
@@ -35,12 +33,14 @@ class Session():
 
     def __str__(self):
         """
-        Returns the Session info.
+        Return info about the current Session.
         """
-        _str = '{} {}'.format(self.blinds.stakes(), self.gametype)
-        rnd_str = 'Round: {:<5}\n'.format(self.rounds)
-        _str += rnd_str.rjust(DISPLAYWIDTH - len(_str))
-
+        _str = '~~~ Info about the current session: ~~~\n'
+        _str += 'Game: {}\n'.format(self.gametype)
+        _str += 'Stakes: {}\n'.format(self.blinds)
+        _str += 'Table name: {}\n'.format(self.label)
+        _str += 'Rounds played: {}\n'.format(self.rounds)
+        _str += 'Hero: {}\n'.format(self.hero)
         return _str
 
     def new_round(self):
