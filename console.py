@@ -128,7 +128,7 @@ def display_table(table, hero=None):
 
         _str += '{:20}'.format(str(s.player))
 
-        _str += colors.color('${:<16}'.format(s.stack), 'yellow')
+        _str += color_chips('{:<16}'.format(s.stack))
 
         # Display hand if available
         if s == hero:
