@@ -4,29 +4,6 @@ import draw5
 import table_factory
 
 
-def make(gametuple, name):
-    t = table_factory.factory(
-        seats=gametuple.seats,
-        heroname=name,
-        game=gametuple.game
-    )
-
-    if gametuple.game == "FIVE CARD DRAW":
-        NOANTE = blinds.BlindsNoAnte(gametuple.level)
-        t.randomize_button()
-        g = draw5.Draw5Session(
-            gametuple.game, t, NOANTE, label=gametuple.name
-        )
-        return g
-
-    elif gametuple.game == "FIVE CARD STUD":
-        ANTE = blinds.BlindsAnte(gametuple.level)
-
-        return stud.Stud5Session(
-            gametuple.game, t, ANTE, label=gametuple.name
-        )
-
-
 def factory(**new_config):
     config = {
         'seats': None,
