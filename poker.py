@@ -70,14 +70,10 @@ class Round():
 
     def show_cards(self):
         """
-        Unhides all player hands and returns a string that shows all the player hands.
+        Unhides all player hands.
         """
-        _str = ''
         for s in self._table.get_players(hascards=True):
             s.hand.unhide()
-            line = '{} shows {}\n'.format(str(s), str(s.hand))
-            _str += line
-        return _str
 
     def sortcards(self):
         """
@@ -262,7 +258,10 @@ class Round():
         winner the appropriate amount.
         """
         self.log('Showdown!', decorate=True)
-        self.log(self.show_cards())
+        self.show_cards()
+
+        self.log(console.show_hands(self._table, color=False))
+        print(console.show_hands(self._table, color=True))
 
         award_txt = self.pot.allocate_money_to_winners()
         self.log(award_txt)

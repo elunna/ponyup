@@ -204,3 +204,19 @@ def print_action(space, act_str):
         print('{}{}{}'.format(space, colors.color(act_str[:mstart], 'RED'), chips))
     elif 'raise' in act_str:
         print('{}{}{}'.format(space, colors.color(act_str[:mstart], 'RED'), chips))
+
+
+def show_hands(table, color=True):
+    """
+    We might not want color for logging hand histories.
+    """
+    _str = ''
+    for s in table.get_players(hascards=True):
+        _str += '{} shows '.format(str(s))
+
+        if color:
+            _str += color_cards(str(s.hand))
+        else:
+            _str += str(s.hand)
+        _str += '\n'
+    return _str
