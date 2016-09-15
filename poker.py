@@ -221,7 +221,8 @@ class Round():
             o = br.player_decision(p)
             br.process_option(o)
             act_str = br.action_string(o)
-            print(betting.spacing(br.level()) + act_str)
+            space = betting.spacing(br.level())
+            console.print_action(space, act_str)
 
             # Log every action
             self.hh.log(act_str)

@@ -175,7 +175,7 @@ def color_cards(cards):
             _str += colors.color(c, 'PURPLE') + ' '
         else:
             _str += colors.color(c, card.COLORS[c[1]]) + ' '
-    return _str
+    return _str.strip()
 
 
 @colors.colorit("YELLOW")
@@ -186,3 +186,16 @@ def colorpot(amt):
 def print_pot(pot):
     txt = colorpot(pot).strip()
     print('Pot: ' + txt)
+
+
+def print_action(space, act_str):
+    if 'fold' in act_str:
+        print(space, colors.color(act_str, 'PURPLE'))
+    elif 'check' in act_str:
+        print(space, colors.color(act_str, 'WHITE'))
+    elif 'allin' in act_str:
+        print(space, colors.color(act_str, 'WHITE'))
+    elif 'bet' in act_str:
+        print(space, colors.color(act_str, 'RED'))
+    elif 'raise' in act_str:
+        print(space, colors.color(act_str, 'RED'))

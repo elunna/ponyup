@@ -10,7 +10,6 @@ import session_factory
 
 NAME = 'Aorist Twilist'
 GAME = lobby.default()
-DISPLAYWIDTH = 70
 
 # Define menu opions
 options = {}
