@@ -1,6 +1,4 @@
-from collections import namedtuple
-
-Game = namedtuple('Game', ['name', 'seats', 'level', 'game'])
+from games import Game
 
 # TABLENAME | TABLE SIZE | STAKES | GAME
 tables = (

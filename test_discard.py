@@ -372,7 +372,39 @@ class TestDiscard(unittest.TestCase):
     Tests for def extract_discards(cards, keep):
     """
     # Empty list, raise exception
+    def test_extractdiscards_emptylist_raiseException(self):
+        cards = []
+        keep = []
+        self.assertRaises(ValueError, discard.extract_discards, cards, keep)
+
     # Empty keep, return full list of cards
+    def test_extractdiscards_emptykeep_returnsFullList(self):
+        cards = tools.convert_to_cards(['As', 'Ks', 'Qs', 'Js', '9s'])
+        keep = []
+        expected = cards
+        result = discard.extract_discards(cards, keep)
+        self.assertEqual(expected, result)
+
     # Keep has a card not in the card list, raise exception
+    def test_extractdiscards_keepdiffcard_raiseException(self):
+        cards = tools.convert_to_cards(['As', 'Ks', 'Qs', 'Js', '9s'])
+        keep = []
+        expected = cards
+        result = discard.extract_discards(cards, keep)
+        self.assertEqual(expected, result)
+
     # Keep 1 card of 5 cards, returns the other 4 cards.
+    def test_extractdiscards_keep1_returnOther4(self):
+        cards = tools.convert_to_cards(['As', 'Ks', 'Qs', 'Js', '9s'])
+        keep = [cards[0]]
+        expected = cards[1:]
+        result = discard.extract_discards(cards, keep)
+        self.assertEqual(expected, result)
+
     # Keep 4 card of 5 cards, returns the remaining 1 card
+    def test_extractdiscards_keep4_returnOther1(self):
+        cards = tools.convert_to_cards(['As', 'Ks', 'Qs', 'Js', '9s'])
+        keep = cards[0:4]
+        expected = [cards[4]]
+        result = discard.extract_discards(cards, keep)
+        self.assertEqual(expected, result)

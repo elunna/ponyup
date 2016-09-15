@@ -50,6 +50,8 @@ def draw_discards(cards, ranklist):
     """
     Calculates the approprate card to discard for any draw-type hands.
     """
+    if len(cards) != 5:
+        raise ValueError('Card list needs to be 5 cards for a valid discard.')
     suit = ev.dominant_suit(cards)
     suit_count = ev.count_suit(cards, suit)
 
@@ -207,4 +209,10 @@ def extract_discards(cards, keep):
     """
     Returns the cards we should discard from a group of cards.
     """
+    if len(cards) == 0 or cards is None:
+        raise ValueError('Card list needs to contain some cards!')
+    for c in keep:
+        if c not in cards:
+            raise ValueError('The keep list has a card not in the original card list!')
+
     return [c for c in cards if c not in keep]

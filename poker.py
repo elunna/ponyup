@@ -3,6 +3,7 @@ import betting
 import colors
 import console
 import deck
+import evaluator
 import handhistory
 import pots
 
@@ -34,7 +35,16 @@ class Round():
         """
         Return info about the current round.
         """
-        return console.display_table(self._table, self.hero)
+        _str = '~~~ Info about the current round: ~~~\n'
+        _str += 'Game: {}\n'.format(self.gametype)
+        _str += 'Stakes: {}\n'.format(self.blinds)
+        _str += 'Table name: {}\n'.format(self.label)
+        _str += 'Street: {}\n'.format(self.street)
+        #  _str += 'Hero: {}\n'.format(self.hero)
+        _str += 'Pot size: {}\n'.format(self.pot)
+        _str += 'Deck size: {}\n'.format(len(self.d))
+        _str += 'Muck size: {}\n'.format(len(self.muck))
+        return _str
 
     def log(self, txt, echo=True, decorate=False):
         if decorate:
@@ -153,8 +163,8 @@ class Round():
     def highhand(table):
         """
         Finds which player has the highest showing hand and return their seat index.  For stud
-        games, after the first street, the high hand on board initiates the action (a tie is broken
-        by position, with the player who received cards first acting first).
+        games, after the first street, the high hand on board initiates the action (a tie is
+        broken by position, with the player who received cards first acting first).
         """
         highvalue = 0
         seat = None
@@ -193,17 +203,6 @@ class Round():
     def get_street(self):
         return self.streets[self.street]
 
-    def clear_broke_players(self):
-        broke_players = self._table.get_broke_players()
-        _str = ''
-        for seat in broke_players:
-            #  self._table.seats.remove(seat)
-            seat.standup()
-            _str += '{} left the table with no money!\n'.format(seat.player)
-
-        # Log players leaving
-        return _str
-
     def one_left(self):
         cardholders = self._table.get_players(hascards=True)
         if len(cardholders) == 1:
@@ -215,7 +214,7 @@ class Round():
         """
         Run through a round of betting. Returns a victor if it exists.
         """
-        print(self)
+        print(console.display_table(self._table, self.hero))
         br = betting.BettingRound(self)
 
         for p in br:
@@ -227,7 +226,7 @@ class Round():
             # Log every action
             self.hh.log(act_str)
 
-        print(self.pot)           # Display pot
+        print(self.pot)
 
     def betting_over(self):
         """
@@ -269,7 +268,6 @@ class Round():
 
     def cleanup(self):
         self.muck_all_cards()
-        self.hh.log(self.clear_broke_players())
 
         if not self.check_integrity_post():
             raise Exception('Integrity of game could not be verified after round was complete!')

@@ -13,12 +13,14 @@ class TestPots(unittest.TestCase):
         # Make a 6 player table
         self.t = table_factory.factory(seats=players)
         self.p = pots.Pot(self.t)
+        # Deal cards to all players
+        tools.deal_random_cards(self.t, 2)
 
     def setup_allins(self, _seats):
         self.t = table_factory.factory(seats=_seats, stepstacks=True)
         self.p = pots.Pot(self.t)
 
-        # For make_sidepots, get_allins need players to have cards.
+        # Deal cards to all players
         tools.deal_random_cards(self.t, 2)
 
     def everybody_bet(self, bet):
@@ -34,6 +36,16 @@ class TestPots(unittest.TestCase):
     Tests for __add__(amt)
     """
     def test_add_10tonewpot_potequals10(self):
+        bet = 10
+        expected = 10
+        self.p = self.p + bet
+        result = self.p
+        self.assertEqual(expected, result)
+
+    """
+    Tests for __iadd__(amt)
+    """
+    def test_iadd_10tonewpot_potequals10(self):
         bet = 10
         expected = 10
         self.p += bet
@@ -56,6 +68,41 @@ class TestPots(unittest.TestCase):
         expected = 100
         self.t.seats[0].bet(100)
         result = self.p.invested(self.t.seats[0])
+        self.assertEqual(expected, result)
+
+    """
+    Tests for allin_stacks()
+    """
+    # 2 players, 1 allin
+    def test_allinstacks_2plyr_1allin_returns1(self):
+        self.setup_allins(2)
+        self.everybody_bet(100)
+        expected = 1
+        result = len(self.p.allin_stacks())
+        self.assertEqual(expected, result)
+
+    # 3 players, 1 allin
+    def test_allinstacks_3plyr_1allin_returns1(self):
+        self.setup_allins(3)
+        self.everybody_bet(100)
+        expected = 1
+        result = len(self.p.allin_stacks())
+        self.assertEqual(expected, result)
+
+    # 3 players, 2 allins
+    def test_allinstacks_3plyr_2allin_returns2(self):
+        self.setup_allins(3)
+        self.everybody_bet(200)
+        expected = 2
+        result = len(self.p.allin_stacks())
+        self.assertEqual(expected, result)
+
+    # 4 players, 3 allins
+    def test_allinstacks_4plyr_3allin_returns3(self):
+        self.setup_allins(4)
+        self.everybody_bet(300)
+        expected = 3
+        result = len(self.p.allin_stacks())
         self.assertEqual(expected, result)
 
     """
@@ -204,6 +251,77 @@ class TestPots(unittest.TestCase):
     """
 
     """
+    Tests for split_pot(winners, amt)
+    """
+    # Award 1 player 100 chips. Their stack goes up 100.
+    def test_splitpot_100to1player_awardis100(self):
+        p = self.t.seats[0]
+        pot = 100
+        expected = {0: 100}
+        result = self.p.split_pot([p.NUM], pot)
+        self.assertEqual(expected, result)
+
+    # Award 2 players 100 chips. Each stack goes up 50
+    def test_splitpot_100to2player_awardeach50(self):
+        p1 = self.t.seats[0]
+        p2 = self.t.seats[1]
+        pot = 100
+        expected = {0: 50, 1: 50}
+        result = self.p.split_pot([p1.NUM, p2.NUM], pot)
+        self.assertEqual(expected, result)
+
+    def test_splitpot_101to2player_awardeach50(self):
+        self.t.move_button()
+        p1 = self.t.seats[0]
+        p2 = self.t.seats[1]
+        self.assertEqual(self.t.TOKENS['D'], 0)
+        pot = 101
+        expected = {0: 50, 1: 51}
+        result = self.p.split_pot([p1.NUM, p2.NUM], pot)
+        self.assertEqual(expected, result)
+
+    # Award 2 players -100 chips. Raise exception.
+    def test_splitpot_neg100_raisesException(self):
+        p1 = self.t.seats[0]
+        p2 = self.t.seats[1]
+        pot = -100
+        self.assertRaises(ValueError, self.p.split_pot, [p1.NUM, p2.NUM], pot)
+
+    """
+    Tests for process_awards(self, award_dict):
+    """
+
+    """
+    Tests for valid_sidepots(self, sidepots):
+    """
+
+################################
+# Independent Functions
+    """
+    Tests for award_pot(player, amt)
+    """
+    # Award 1 player 100 chips. Their stack goes up 100.
+    def test_awardpot_100to1player_stackincreases100(self):
+        p = self.t.seats[0]
+        expected = 100
+        p_stack = p.stack
+        pots.award_pot(p, expected)
+        result = p.stack - p_stack
+        self.assertEqual(expected, result)
+
+    # Try awarding -100. Should raise an exception.
+    def test_awardpot_neg100_raisesException(self):
+        p = self.t.seats[0]
+        award = -100
+        self.assertRaises(ValueError, pots.award_pot, p, award)
+
+    # Try awarding a player with no cards. Should raise an exception.
+    def test_awardpot_playerhasnocards_raisesException(self):
+        p = self.t.seats[0]
+        p.fold()
+        self.assertRaises(ValueError, pots.award_pot, p, 100)
+
+    """
     Tests for best_hand_val()
     # Note we'll use the table with the hand values reversed,
     # so that 0 has the lowest hand, 1 has better, 2 beats 1, etc.
@@ -258,30 +376,6 @@ class TestPots(unittest.TestCase):
         expected = evaluator.get_value(tools.make('straight_high'))
         result = pots.best_hand_val(players)
         self.assertEqual(expected, result)
-
-    """
-    Tests for split_pot(winners, amt)
-    """
-    # Award 1 player 100 chips. Their stack goes up 100.
-    # Award 2 players 100 chips. Each stack goes up 50
-    # Award 2 players -100 chips. Raise exception.
-
-    """
-    Tests for process_awards(self, award_dict):
-    """
-
-    """
-    Tests for valid_sidepots(self, sidepots):
-    """
-
-################################
-# Independent Functions
-    """
-    Tests for award_pot(player, amt)
-    """
-    # Award 1 player 100 chips. Their stack goes up 100.
-    # Try awarding -100. Should raise an exception.
-    # Try awarding a player with no cards. Should raise an exception.
 
     """
     Tests for calc_odds(bet ,pot)

@@ -109,6 +109,33 @@ class TestPlayer(unittest.TestCase):
         self.assertRaises(Exception, p.deposit, -100)
 
     """
-    Tests for makeplay(options, street)
+    Tests for is_human()
     """
-    # Where to start with this?
+    # CPU player
+
+    def test_ishuman_CPU_returnsFalse(self):
+        p = player.Player('Erik', 'CPU')
+        expected = False
+        result = p.is_human()
+        self.assertEqual(expected, result)
+
+    # Human player
+    def test_ishuman_HUMAN_returnsTrue(self):
+        p = player.Player('Erik', 'HUMAN')
+        expected = True
+        result = p.is_human()
+        self.assertEqual(expected, result)
+
+    """
+    Tests for random_type()
+    """
+    # Type is within the TYPES list.
+    def test_randomtype_returnsTypeinTYPES(self):
+        p = player.Player('Erik')
+        expected = True
+        result = p.playertype in player.TYPES
+        self.assertEqual(expected, result)
+
+    """
+    Tests for factory(name, game, playertype='random')
+    """

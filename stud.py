@@ -1,33 +1,40 @@
-import evaluator
+import sessions
 
 
-def highhand(table):
-    """
-    Finds which player has the highest showing hand and return their seat index.  For stud
-    games, after the first street, the high hand on board initiates the action (a tie is broken
-    by position, with the player who received cards first acting first).
-    """
-    highvalue = 0
-    seat = None
-    ties = []
+class Stud5Session(sessions.Session):
+    def play(self):
+        """
+        Play a round of Five Card Draw.
+        """
+        r = self.new_round()
+        print(r.post_antes())
 
-    for s in table.get_players(hascards=True):
-        h = s.hand.get_upcards()
-        value = evaluator.get_value(h)
+        for s in self.streets:
+            r.log(r.get_street().name, decorate=True)
+            if r.street == 0:
+                # 1 face down, 1 up
+                r.deal_cards(1)
+                r.deal_cards(1, faceup=True)
+                r.hh.log_holecards()
 
-        if value > highvalue:
-            highvalue, seat = value, s
-            ties = [seat]  # Reset any lower ties.
-        elif value == highvalue:
-            ties.append(s)
-            if seat not in ties:
-                ties.append(seat)
+                # The bringin determines the first bettor.
+                r._table.set_bringin()
+                print(r.post_bringin())
+            else:
+                r.deal_cards(1, faceup=True, handreq=True)
+                high = r._table.highhand()
 
-    # Return the seat index of the first-to-act.
-    if len(ties) > 1:
-        # Process ties, get the player who was dealt first.
-        for s in table.get_players(hascards=True):
-            if s in ties:
-                return s.NUM
-    else:
-        return seat.NUM
+                print('{} has high hand and will act first.'.format(r._table.seats[high]))
+
+            if not r.betting_over():
+                r.betting_round()
+
+            if r.found_winner():
+                break
+        else:
+            r.showdown()
+
+        r.cleanup()
+        self.rounds += 1
+
+        r.hh.write_to_file('logs/stud5.log')

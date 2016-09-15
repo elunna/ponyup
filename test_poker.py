@@ -10,13 +10,13 @@ class TestPoker(unittest.TestCase):
     """
     Setup a session and round, with a table filled with 6 players.
     """
-    def setUp(self, level=2, players=6):
+    def setUp(self, lvl=2, players=6):
         # Make a 6 player table
-        self.g = session_factory.factory(seats=players, game="FIVE CARD DRAW", blindlvl=level)
+        self.g = session_factory.factory(seats=players, game="FIVE CARD DRAW", level=lvl)
         self.r = poker.Round(self.g)
 
-    def setUp_stud(self, level=2, players=6):
-        self.g = session_factory.factory(seats=players, game="FIVE CARD STUD", blindlvl=level)
+    def setUp_stud(self, lvl=2, players=6):
+        self.g = session_factory.factory(seats=players, game="FIVE CARD STUD", level=lvl)
         self.r = poker.Round(self.g)
 
     """
@@ -225,7 +225,7 @@ class TestPoker(unittest.TestCase):
 
     # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_6players_returnsString(self):
-        self.setUp(level=2)
+        self.setUp(lvl=2)
         self.r._table.TOKENS['D'] = -1
         self.r._table.move_button()
         self.r._table.set_blinds()
@@ -276,17 +276,6 @@ class TestPoker(unittest.TestCase):
     """
     Tests for get_street()
     """
-
-    """
-    Tests for clear_broke_players()
-    """
-    def test_clearbrokeplayers(self):
-        p = self.r._table.seats[0]
-        p.stack = 0
-        expected = []
-        self.r.clear_broke_players()
-        result = self.r._table.get_broke_players()
-        self.assertEqual(expected, result)
 
     """
     Tests for one_left()

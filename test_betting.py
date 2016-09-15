@@ -9,8 +9,8 @@ class TestBetting(unittest.TestCase):
     Setup a session and round, with a table filled with 6 players.
     Default level is $2/$4.
     """
-    def setUp(self, level=2, players=6, street=1):
-        g = session_factory.factory(seats=players, game="FIVE CARD DRAW", blindlvl=level)
+    def setUp(self, lvl=2, players=6, street=1):
+        g = session_factory.factory(seats=players, game="FIVE CARD DRAW", level=lvl)
 
         g._table.move_button()
         g._table.set_blinds()
@@ -24,8 +24,8 @@ class TestBetting(unittest.TestCase):
         self.r.deal_cards(5)
         self.br = betting.BettingRound(self.r)
 
-    def setUp_shorty(self, shortstack, level=2, players=6, street=1):
-        g = session_factory.factory(seats=players, game="FIVE CARD DRAW", blindlvl=level)
+    def setUp_shorty(self, shortstack, lvl=2, players=6, street=1):
+        g = session_factory.factory(seats=players, game="FIVE CARD DRAW", level=lvl)
         # Sets seat 1(we'll use as the SB) as the short stack amount for easy testing.
         g._table.seats[1].stack = shortstack
         g._table.move_button()
@@ -39,11 +39,11 @@ class TestBetting(unittest.TestCase):
         self.r.deal_cards(2)
         self.br = betting.BettingRound(self.r)
 
-    def setUp_studGame(self, level=2, players=6, street=1):
+    def setUp_studGame(self, lvl=2, players=6, street=1):
         """
         Setup a 5 card stud game for testing.
         """
-        g = session_factory.factory(seats=players, game="FIVE CARD STUD", blindlvl=level)
+        g = session_factory.factory(seats=players, game="FIVE CARD STUD", level=lvl)
         self.r = g.new_round()
 
         for i in range(street - 1):  # Adjust which street to test.
@@ -602,14 +602,14 @@ class TestBetting(unittest.TestCase):
 
     # Stud: level 2, street 1 should be the small bet: 2
     def test_setbetsize_stud_street1_betsize2(self):
-        self.setUp_studGame(level=2, street=1)
+        self.setUp_studGame(lvl=2, street=1)
         expected = 2
         result = self.br.betsize
         self.assertEqual(expected, result)
 
     # Stud: level 2, street 3 should be the big bet: 2
     def test_setbetsize_stud_street3_betsize4(self):
-        self.setUp_studGame(level=2, street=3)
+        self.setUp_studGame(lvl=2, street=3)
         expected = 4
         result = self.br.betsize
         self.assertEqual(expected, result)
@@ -634,7 +634,7 @@ class TestBetting(unittest.TestCase):
 
     # Level 1, the ante is $0.25, and bringin is $0.50.
     def test_getbet_lev1bringin_returns50c(self):
-        self.setUp_studGame(level=1)
+        self.setUp_studGame(lvl=1)
         self.r.post_bringin()
         expected = 0.50
         result = self.br.get_bet()
@@ -642,7 +642,7 @@ class TestBetting(unittest.TestCase):
 
     # Level 2, the ante is $0.50, and bringin is $1.
     def test_getbet_lev2bringin_returns1(self):
-        self.setUp_studGame(level=2)
+        self.setUp_studGame(lvl=2)
         self.r.post_bringin()
         expected = 1
         result = self.br.get_bet()
@@ -831,7 +831,7 @@ class TestBetting(unittest.TestCase):
 
     # Stud5: Ante posting
     def test_setstacks_stud_street1_samestacks(self):
-        self.setUp_studGame(players=2, level=4, street=1)
+        self.setUp_studGame(players=2, lvl=4, street=1)
         expected = {0: 1000, 1: 1000}
         result = self.br.stacks
         self.assertEqual(expected, result)

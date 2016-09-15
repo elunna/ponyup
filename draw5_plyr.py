@@ -42,19 +42,19 @@ strat = {
 
     'MOUSE': {
         1: ranges.Ranges(
-            call1=tools.TWOPAIR_KK,
-            call2=tools.TWOPAIR_TT,
+            call1=tools.PAIR_88,
+            call2=tools.PAIR_KK,
             bet=0,
-            raise1=tools.TRIPS,
-            raise2=tools.STRAIGHT,
+            raise1=tools.PAIR_AA,
+            raise2=tools.TWOPAIR_JJ,
             bluff=0
         ),
         2: ranges.Ranges(
-            call1=tools.TWOPAIR_TT,
-            call2=tools.TRIPS,
-            bet=tools.TWOPAIR_TT,
-            raise1=tools.STRAIGHT,
-            raise2=tools.FLUSH,
+            call1=tools.PAIR_KK,
+            call2=tools.TWOPAIR_22,
+            bet=tools.PAIR_KK,
+            raise1=tools.TRIPS,
+            raise2=tools.STRAIGHT,
             bluff=0
         ),
     },

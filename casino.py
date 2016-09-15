@@ -32,7 +32,7 @@ def pick_game():
 
 def print_logo():
     txt = ''
-    with open('logo.txt') as f:
+    with open('logo2.txt') as f:
         #  print(f.read())
         for c in f.read():
             if c == '$':
@@ -51,7 +51,7 @@ def menu():
     print('')
     print('-=- Settings -=-'.center(70))
     print('{:>15}: {}'.format('Playername', NAME))
-    print('{:>15}: {}'.format('Table Name', GAME.name))
+    print('{:>15}: {}'.format('Table Name', GAME.tablename))
     print('{:>15}: {}'.format('Game', GAME.game))
     print('{:>15}: {}'.format('Stakes',  lobby.stakes(GAME)))
     print('{:>15}: {}'.format('Seats', GAME.seats))
@@ -74,7 +74,16 @@ def play_poker():
 
     print('Initializing new game...\n')
 
-    g = session_factory.make(GAME, NAME)
+    #  g = session_factory.make(GAME, NAME)
+    g = session_factory.factory(
+        seats=GAME.seats,
+        game=GAME.game,
+        tablename=GAME.tablename,
+        level=GAME.level,
+        heroname=NAME,
+        names='random',
+    )
+
     playing = True
 
     while playing:

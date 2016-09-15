@@ -2,7 +2,6 @@ from __future__ import print_function
 from collections import namedtuple
 import console
 import strategy
-import stud
 
 Action = namedtuple('Action', ['name', 'cost'])
 ALLIN = Action('ALLIN', 0)
@@ -23,6 +22,7 @@ class BettingRound():
         elif self.r.gametype in ["FIVE CARD STUD", "SEVEN CARD STUD"]:
             self.set_bettors_w_antes()
 
+        self.set_closer()
         self.set_betsize()
         self.set_stacks()
 
@@ -194,23 +194,23 @@ class BettingRound():
     def done(self):
         return self.bettor == self.closer
 
+    def set_closer(self):
+        self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
+
     def set_bettors_w_blinds(self):
         if self.r._table.TOKENS['D'] == -1:
             raise Exception('Cannot set bettor or closer in the if button isn\'t set!')
+
         if self.r.street == 0:
-            self.closer = self.r._table.TOKENS['BB']
-            self.bettor = self.r._table.next_player(self.closer)
+            self.bettor = self.r._table.next_player(self.r._table.TOKENS['BB'])
         else:
             self.bettor = self.r._table.next_player(self.r._table.TOKENS['D'], hascards=True)
-            self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
 
     def set_bettors_w_antes(self):
         if self.r.street == 0:
             self.bettor = self.r._table.TOKENS['BI']
-            self.closer = self.r._table.TOKENS['D']
         else:
-            self.bettor = stud.highhand(self.r._table)
-            self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
+            self.bettor = self.r._table.highhand()
 
     def set_betsize(self):
         if self.r.street > len(self.r.streets):
