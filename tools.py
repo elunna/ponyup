@@ -2,8 +2,17 @@ import card
 import deck
 
 # These are constants to help with computer AI
+HI_9x = 900
+HI_Jx = 1100
+HI_Ax = 1400
+HI_Axx = 140000
+HI_Kxx = 130000
+HI_Txx = 100000
+HI_Axxx = 14000000
+HI_Kxxx = 13000000
 HI_KT = 1310000000
 HI_AQ = 1412000000
+HI_Axxxx = 1400000000
 PAIR_22 = 20000000000
 PAIR_66 = 20600000000
 PAIR_88 = 20800000000
