@@ -352,9 +352,9 @@ class TestDiscard(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # human, 4 cards, draws 1 faceup card.
-    def test_redraw_human_draw1_cardIsFaceup(self):
+    def test_redraw_human_draw1_cardIsFacedown(self):
         self.setUp(handsize=4, human=True)
-        expected = False
+        expected = True
         redraw = discard.redraw(self.s, self.d)
         result = redraw.pop().hidden
         self.assertEqual(expected, result)

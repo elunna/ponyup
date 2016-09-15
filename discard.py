@@ -121,7 +121,7 @@ def discard_phase(_round):
             discards = auto_discard(s.hand, max_discards)
 
         if discards:
-            _round.log('{} discards {}'.format(str(s), discards))
+            _round.log('{} discards {} cards'.format(str(s), len(discards)))
         else:
             _round.log('{} stands pat.'.format(str(s)))
 
@@ -130,8 +130,7 @@ def discard_phase(_round):
             _round.discard(s, c)
 
         # Redraw
-        drawpile = redraw(s, _round.d)
-        _round.log('{} draws {}'.format(str(s.player), drawpile))
+        redraw(s, _round.d)
 
 
 def discard_menu(hand):
@@ -171,13 +170,8 @@ def redraw(seat, deck, handsize=5):
     drawpile = []
     while len(seat.hand) < handsize:
         draw = deck.deal()
-
-        if seat.player.is_human():  # Unhide our cards so we can see them.
-            draw.hidden = False
-
         seat.hand.add(draw)
         drawpile.append(draw)
-
     return drawpile
 
 
