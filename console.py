@@ -100,7 +100,7 @@ def display_table(table, hero=None):
     """
     Return the string representation of the table, with colors.
     """
-    _str = ''
+    _str = '\n'
     _str = colors.color('{:5}{:7}{:7}{:20}{:<17}{:16}\n'.format(
         'Seat', 'Blinds', 'Dealer', 'Player', 'Chips', 'Hand'), 'gray', STYLE='BOLD')
 
@@ -184,8 +184,8 @@ def color_chips(amt):
 
 
 def print_pot(pot):
-    txt = color_chips(pot).strip()
-    print('Pot: ' + txt)
+    txt = color_chips(str(pot)).strip()
+    print('Pot: {}'.format(txt).rjust(84))
 
 
 def print_action(space, act_str):

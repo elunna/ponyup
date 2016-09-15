@@ -7,16 +7,16 @@ class Stud5Session(sessions.Session):
         Play a round of Five Card Draw.
         """
         r = self.new_round()
-        print(r)
+        print(self)
         print(r.post_antes())
 
         for s in self.streets:
-            r.log(r.get_street().name, decorate=True)
+            r.log(r.get_street().name, decorate=True, echo=False)
             if r.street == 0:
                 # 1 face down, 1 up
                 r.deal_cards(1)
                 r.deal_cards(1, faceup=True)
-                r.hh.log_holecards()
+                r.log_holecards()
 
                 # The bringin determines the first bettor.
                 r._table.set_bringin()

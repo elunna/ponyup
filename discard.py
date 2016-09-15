@@ -106,7 +106,10 @@ def discard_phase(_round):
     Goes through a table and offers all players with cards the option to discard.
     Returns a list of all the discards (ie:"muck" cards)
     """
-    _round.log('DISCARD PHASE:', decorate=True)
+    title = 'Discard Phase:'
+    _round.log(title, decorate=True, echo=False)
+    console.right_align(title)
+
     cardholders = _round._table.get_players(hascards=True)
 
     for s in cardholders:
@@ -121,9 +124,12 @@ def discard_phase(_round):
             discards = auto_discard(s.hand, max_discards)
 
         if discards:
-            _round.log('{} discards {} cards'.format(str(s), len(discards)))
+            d_txt = '{} discards {} cards'.format(str(s), len(discards))
         else:
-            _round.log('{} stands pat.'.format(str(s)))
+            d_txt = '{} stands pat.'.format(str(s))
+
+        _round.log(d_txt, echo=False)  # Log it
+        console.right_align(d_txt)  # Print it
 
         # Discard
         for c in discards:

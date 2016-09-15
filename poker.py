@@ -14,7 +14,6 @@ class Round():
         Initialize the next round of Poker.
         """
         self.gametype = session.gametype
-        self.label = session.label
         self.blinds = session.blinds
         self.streets = session.streets
         self._table = session._table
@@ -36,6 +35,8 @@ class Round():
         Return info about the current round.
         """
         _str = '{} -- {}, {} '.format(self.label, self.gametype, self.blinds)
+        _str += 'Potsize: {}'.format(self.pot)
+        _str += 'Street: {}'.format(self.street)
         return _str
 
     def log(self, txt, echo=True, decorate=False):
@@ -44,6 +45,12 @@ class Round():
         if echo:
             print(txt)
         self.hh.log(txt)
+
+    def log_holecards(self):
+        self.log('Hole Cards', decorate=True, echo=False)
+        hero = self.hero
+        cards = hero.hand.peek()
+        self.log('{}: [{}]'.format(hero, cards.strip()), echo=False)
 
     def deal_cards(self, qty, faceup=False, handreq=False):
         """
@@ -143,7 +150,7 @@ class Round():
         # Bet the Bringin amount and add to the pot
         self.pot += seat.bet(self.blinds.BRINGIN)
         action = ''
-        action += '{} brings it in for ${}\n'.format(seat.player, self.blinds.BRINGIN)
+        action += '{} brings it in for ${}'.format(seat.player, self.blinds.BRINGIN)
 
         self.log(action, echo=False)
         return action
@@ -215,7 +222,7 @@ class Round():
             # Log every action
             self.hh.log(act_str)
 
-        console.print_pot(str(self.pot))
+        console.print_pot(self.pot)
 
     def betting_over(self):
         """
@@ -249,7 +256,9 @@ class Round():
         Compare all the hands of players holding cards and determine the winner(s). Awards each
         winner the appropriate amount.
         """
-        self.log('Showdown!', decorate=True)
+        title = 'Showdown!'
+        self.log(title, decorate=True, echo=False)
+        console.right_align(title)
         self.show_cards()
 
         self.log(console.show_hands(self._table, color=False), echo=False)

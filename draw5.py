@@ -10,21 +10,23 @@ class Draw5Session(sessions.Session):
         DEALT = 5
         self._table.move_button()
         r = self.new_round()
-        print(r)
+        print(self)
 
         r.hh.button()
         r._table.set_blinds()
-        r.log(r.post_blinds())  # Log this
+        print(r.post_blinds())
         r.deal_cards(DEALT)
-        r.hh.log_holecards()
         r.sortcards()
+        r.log_holecards()
 
         for s in self.streets:
             if r.street == 1:
                 discard.discard_phase(r)
                 r.sortcards()
+                r.log_holecards()
 
-            r.log(r.get_street().name, decorate=True)
+            r.log(r.get_street().name, echo=False, decorate=True)
+
             if not r.betting_over():
                 r.betting_round()
 

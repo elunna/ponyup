@@ -220,6 +220,8 @@ class Table():
         self.TOKENS['BI'] = seat.NUM
         self.TOKENS['D'] = self.next_player(self.TOKENS['BI'], -1)
 
+        return '{} has the lowest showing card.'.format(seat.player)
+
     def randomize_button(self):
         """
         Places the button at a random player's seat. If there is no players at the table, it

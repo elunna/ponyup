@@ -27,7 +27,7 @@ class HandHistory():
 
     def write_header(self):
         gameid = random.randint(100000000, 999999999)
-        tablename = self.r.label
+        tablename = self.r._table.name
         dt = datetime.datetime
         date = dt.today()
         time = dt.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -37,12 +37,6 @@ class HandHistory():
 
     def button(self):
         self.text += 'Seat {} has the button.\n'.format(self.r._table.TOKENS['D'])
-
-    def log_holecards(self):
-        self.log(decorate('HOLE CARDS'))
-        hero = self.r.hero
-        cards = hero.hand.peek()
-        self.log('Dealt to {}: [{}]'.format(hero, cards.strip()))
 
     def write_player_list(self):
         self.text += self.r._table.player_listing()

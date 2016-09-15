@@ -18,12 +18,11 @@ It is responsible for:
 
 
 class Session():
-    def __init__(self, gametype, table, blinds, hero=None, label=None):
+    def __init__(self, gametype, table, blinds, hero=None):
         """
         Initialize the poker Session settings.
         """
         self.gametype = gametype
-        self.label = label
         self.rounds = 1
         self._table = table
         self.streets = games.GAMES[gametype]
@@ -35,12 +34,8 @@ class Session():
         """
         Return info about the current Session.
         """
-        _str = '~~~ Info about the current session: ~~~\n'
-        _str += 'Game: {}\n'.format(self.gametype)
-        _str += 'Stakes: {}\n'.format(self.blinds)
-        _str += 'Table name: {}\n'.format(self.label)
-        _str += 'Rounds played: {}\n'.format(self.rounds)
-        _str += 'Hero: {}\n'.format(self.hero)
+        _str = '{} -- {} {}\n'.format(self._table.name, self.blinds.stakes(), self.gametype)
+        _str += 'Round: {}\n'.format(self.rounds)
         return _str
 
     def new_round(self):

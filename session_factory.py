@@ -28,11 +28,11 @@ def factory(**new_config):
 
     if config['game'] == 'FIVE CARD STUD':
         b = blinds.BlindsAnte(config['level'])
-        sesh = stud.Stud5Session(config['game'], t, b)
+        sesh = stud.Stud5Session(config['game'], table=t, blinds=b)
 
     elif config['game'] == 'FIVE CARD DRAW':
         b = blinds.BlindsNoAnte(config['level'])
-        sesh = draw5.Draw5Session(config['game'], t, b)
+        sesh = draw5.Draw5Session(config['game'], table=t, blinds=b)
     else:
         raise ValueError('Game unknown to session!')
 

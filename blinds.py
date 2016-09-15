@@ -38,7 +38,6 @@ class Blinds():
                 _str += '{}\n'.format(self.BRINGIN)
         if self.SB != self.BB:
             _str += 'SB: ${}, BB: ${}\n'.format(self.SB, self.BB)
-
         return _str
 
     def stakes(self):
