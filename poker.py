@@ -35,7 +35,16 @@ class Round():
         """
         Return info about the current round.
         """
-        return console.display_table(self._table, self.hero)
+        _str = '~~~ Info about the current round: ~~~\n'
+        _str += 'Game: {}\n'.format(self.gametype)
+        _str += 'Stakes: {}\n'.format(self.blinds)
+        _str += 'Table name: {}\n'.format(self.label)
+        _str += 'Street: {}\n'.format(self.street)
+        #  _str += 'Hero: {}\n'.format(self.hero)
+        _str += 'Pot size: {}\n'.format(self.pot)
+        _str += 'Deck size: {}\n'.format(len(self.d))
+        _str += 'Muck size: {}\n'.format(len(self.muck))
+        return _str
 
     def log(self, txt, echo=True, decorate=False):
         if decorate:
@@ -205,7 +214,7 @@ class Round():
         """
         Run through a round of betting. Returns a victor if it exists.
         """
-        print(self)
+        print(console.display_table(self._table, self.hero))
         br = betting.BettingRound(self)
 
         for p in br:
@@ -217,7 +226,7 @@ class Round():
             # Log every action
             self.hh.log(act_str)
 
-        print(self.pot)           # Display pot
+        print(self.pot)
 
     def betting_over(self):
         """
