@@ -87,7 +87,7 @@ class Pot():
             pot = sidepots[stack]
             leftovers -= pot
 
-            # Determine which players can win this share of the pot.
+            # Determine which seat numbers can win this share of the pot.
             shares[pot] = self.eligible_for_pot(stack)
 
             # Move onto the next sidepot.
@@ -108,7 +108,7 @@ class Pot():
 
     def eligible_for_pot(self, stack_required):
         """
-        Makes a list of the players who qualify the given stack size and who have (or tie) the
+        Makes a list of seat numbers that qualify the given stack size and who have (or tie) the
         best hand of all cardholding players.
         """
         eligible_players = self.get_eligible(stack_required)
@@ -121,6 +121,9 @@ class Pot():
         they must split the pot If there is a remainder amount, we give it to the next left of
         the BTN.  (ie: Usually the SB)
         """
+        if amt <= 0:
+            raise ValueError('Cannot split a pot that is zero or negative!')
+
         award_dict = {}
         if len(winners) > 1:
             share = int(amt / len(winners))
@@ -133,7 +136,7 @@ class Pot():
             award_dict[w] = share
 
         if remainder > 0:
-            first_after_btn = self.table.next_player(self.table.btn, hascards=True)
+            first_after_btn = self.table.next_player(self.table.TOKENS['D'], hascards=True)
             r_winner = self.table.seats[first_after_btn].NUM
             award_dict[r_winner] += remainder
         return award_dict

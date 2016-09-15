@@ -223,9 +223,38 @@ class TestPots(unittest.TestCase):
     Tests for split_pot(winners, amt)
     """
     # Award 1 player 100 chips. Their stack goes up 100.
+    def test_splitpot_100to1player_awardis100(self):
+        p = self.t.seats[0]
+        pot = 100
+        expected = {0: 100}
+        result = self.p.split_pot([p.NUM], pot)
+        self.assertEqual(expected, result)
 
     # Award 2 players 100 chips. Each stack goes up 50
+    def test_splitpot_100to2player_awardeach50(self):
+        p1 = self.t.seats[0]
+        p2 = self.t.seats[1]
+        pot = 100
+        expected = {0: 50, 1: 50}
+        result = self.p.split_pot([p1.NUM, p2.NUM], pot)
+        self.assertEqual(expected, result)
+
+    def test_splitpot_101to2player_awardeach50(self):
+        self.t.move_button()
+        p1 = self.t.seats[0]
+        p2 = self.t.seats[1]
+        self.assertEqual(self.t.TOKENS['D'], 0)
+        pot = 101
+        expected = {0: 50, 1: 51}
+        result = self.p.split_pot([p1.NUM, p2.NUM], pot)
+        self.assertEqual(expected, result)
+
     # Award 2 players -100 chips. Raise exception.
+    def test_splitpot_neg100_raisesException(self):
+        p1 = self.t.seats[0]
+        p2 = self.t.seats[1]
+        pot = -100
+        self.assertRaises(ValueError, self.p.split_pot, [p1.NUM, p2.NUM], pot)
 
     """
     Tests for process_awards(self, award_dict):
