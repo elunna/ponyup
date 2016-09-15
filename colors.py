@@ -1,3 +1,4 @@
+from functools import wraps
 CSI = "\x1b["
 CSI_end = "\x1b[0m"
 #  reset = CSI + "m"
@@ -38,3 +39,26 @@ def color(string, fg, bg='GRAY', STYLE='NORMAL'):
             CSI_end)
     else:
         raise ValueError('Passed arg color is not in the available colors!')
+
+
+def colorit(c):
+    def decorate(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            result = func(*args, **kwargs)
+
+            return '{}{};{};{}m{}{}'.format(
+                CSI, STYLES['NORMAL'], COLORS[c.upper()], 40, result, CSI_end)
+
+            return func(*args, **kwargs)
+        return wrapper
+    return decorate
+
+
+@colorit('yellow')
+def pot(p):
+    return 'pot={}'.format(p)
+
+
+if __name__ == "__main__":
+    print(pot(10))
