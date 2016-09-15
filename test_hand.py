@@ -223,10 +223,10 @@ class TestHand(unittest.TestCase):
 
     def test_peek_AsKs_returnsString(self):
         cards = tools.convert_to_cards(['As', 'Ks'])
-        c1 = card.color(cards[0].peek())
-        c2 = card.color(cards[1].peek())
+        #  c1 = card.color(cards[0].peek())
+        #  c2 = card.color(cards[1].peek())
         h = hand.Hand(cards)
-        expected = '{} {}'.format(c1, c2)
+        expected = 'As Ks'
         result = h.peek()
         self.assertEqual(expected, result)
 

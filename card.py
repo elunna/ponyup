@@ -1,5 +1,3 @@
-import colors
-
 # Use tuples instead of lists
 SUITS = ('c', 'd', 'h', 's')
 SUITVALUES = {'c': 1, 'd': 2, 'h': 3, 's': 4}
@@ -70,16 +68,3 @@ class Card:
         This is how human/hero's are able to view hidden cards.
         """
         return self.rank + self.suit
-
-
-def color(cardtext):
-    """
-    Process a Card or it's text equivalent to color.
-    """
-    if isinstance(cardtext, Card):
-        cardtext = str(cardtext)
-
-    if cardtext == 'Xx':
-        return colors.color(cardtext, 'PURPLE')
-    else:
-        return colors.color(str(cardtext), COLORS[cardtext[1]])

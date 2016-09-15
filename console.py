@@ -1,3 +1,4 @@
+import card
 import colors
 import lobby
 import names
@@ -130,9 +131,9 @@ def display_table(table, hero=None):
 
         # Display hand if available
         if s == hero:
-            _str += '{:16}'.format(str(s.hand.peek()))
+            _str += '{:16}'.format(color_cards(s.hand.peek()))
         elif s.hand is not None:
-            _str += '{:16}'.format(str(s.hand))
+            _str += '{:16}'.format(color_cards(str(s.hand)))
         _str += '\n'
 
     return _str
@@ -160,4 +161,17 @@ def color_game(GAME):
     _str += FMT.format(color_setting('Stakes'), color_param(lobby.stakes(GAME)))
     _str += FMT.format(color_setting('Seats'), color_param(GAME.seats))
 
+    return _str
+
+
+def color_cards(cards):
+    """
+    Process card text to color representation
+    """
+    _str = ''
+    for c in cards.split():
+        if c == 'Xx':
+            _str += colors.color(c, 'PURPLE') + ' '
+        else:
+            _str += colors.color(c, card.COLORS[c[1]]) + ' '
     return _str

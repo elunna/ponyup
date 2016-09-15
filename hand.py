@@ -1,5 +1,4 @@
 from __future__ import print_function
-import card
 import evaluator
 
 
@@ -19,7 +18,7 @@ class Hand():
     def __str__(self):
         handstr = ''
         for i, c in enumerate(self.cards):
-            handstr += card.color(c)
+            handstr += str(c)
             if i != len(self.cards) - 1:
                 handstr += ' '
         return handstr
@@ -72,5 +71,5 @@ class Hand():
     def peek(self):
         _str = ''
         for c in self.cards:
-            _str += card.color(c.peek()) + ' '
+            _str += c.peek() + ' '
         return _str.strip()
