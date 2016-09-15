@@ -226,7 +226,7 @@ class Round():
             # Log every action
             self.hh.log(act_str)
 
-        print(self.pot)
+        console.print_pot(str(self.pot))
 
     def betting_over(self):
         """

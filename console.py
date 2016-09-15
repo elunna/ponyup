@@ -7,6 +7,7 @@ import names
 Provides tools for interacting with the user at the text-based console.
 """
 
+DISPLAYWIDTH = 70
 menu = {}
 menu['h'] = ('(H)elp', 'show_help()')
 menu['o'] = ('(O)ptions', 'show_options()')
@@ -175,3 +176,13 @@ def color_cards(cards):
         else:
             _str += colors.color(c, card.COLORS[c[1]]) + ' '
     return _str
+
+
+@colors.colorit("YELLOW")
+def colorpot(amt):
+    return '$' + amt
+
+
+def print_pot(pot):
+    txt = colorpot(pot).strip()
+    print('Pot: ' + txt)
