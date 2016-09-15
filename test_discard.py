@@ -372,6 +372,13 @@ class TestDiscard(unittest.TestCase):
     Tests for def extract_discards(cards, keep):
     """
     # Empty list, raise exception
+    def test_extractdiscards_emptylist_raiseException(self):
+        cards = tools.convert_to_cards(['As', 'Ks', 'Qs', 'Js', '9s'])
+        keep = cards[:4]
+        expected = [cards[4]]
+        result = discard.extract_discards(cards, keep)
+        self.assertEqual(expected, result)
+
     # Empty keep, return full list of cards
     # Keep has a card not in the card list, raise exception
     # Keep 1 card of 5 cards, returns the other 4 cards.
