@@ -10,6 +10,7 @@ class Draw5Session(sessions.Session):
         DEALT = 5
         self._table.move_button()
         r = self.new_round()
+        print(r)
 
         r.hh.button()
         r._table.set_blinds()

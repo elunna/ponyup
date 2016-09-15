@@ -35,15 +35,7 @@ class Round():
         """
         Return info about the current round.
         """
-        _str = '~~~ Info about the current round: ~~~\n'
-        _str += 'Game: {}\n'.format(self.gametype)
-        _str += 'Stakes: {}\n'.format(self.blinds)
-        _str += 'Table name: {}\n'.format(self.label)
-        _str += 'Street: {}\n'.format(self.street)
-        #  _str += 'Hero: {}\n'.format(self.hero)
-        _str += 'Pot size: {}\n'.format(self.pot)
-        _str += 'Deck size: {}\n'.format(len(self.d))
-        _str += 'Muck size: {}\n'.format(len(self.muck))
+        _str = '{} -- {}, {} '.format(self.label, self.gametype, self.blinds)
         return _str
 
     def log(self, txt, echo=True, decorate=False):

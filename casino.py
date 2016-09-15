@@ -80,7 +80,6 @@ def play_poker():
 
     while playing:
         os.system('clear')
-        print(g)
         g.play()
         choice = input('keep playing? > ')
         if choice.lower() == 'n' or choice == 0:
