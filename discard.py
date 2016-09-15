@@ -137,11 +137,13 @@ def discard_phase(_round):
 def discard_menu(hand):
     indices = ''.join(['{:<3}'.format(n) for n in valid_picks(hand)])
 
-    txt = indices + '\n'
-    #  txt += ' '.join([(c) for c in hand.peek()])
-    #  txt += hand.peek().strip()
-    txt += console.color_cards(hand.peek())
-    txt += '\n'
+    menulen = 14
+    offset = console.DISPLAYWIDTH - menulen
+    txt = ' ' * offset
+    txt += indices + '\n'
+    txt += ' ' * offset
+    txt += console.color_cards(hand.peek()) + '\n'
+
     return txt
 
 
