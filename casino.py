@@ -32,7 +32,7 @@ def pick_game():
 
 def print_logo():
     txt = ''
-    with open('logo.txt') as f:
+    with open('logo2.txt') as f:
         #  print(f.read())
         for c in f.read():
             if c == '$':
