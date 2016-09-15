@@ -139,7 +139,8 @@ def discard_menu(hand):
 
     txt = indices + '\n'
     #  txt += ' '.join([(c) for c in hand.peek()])
-    txt += hand.peek().strip()
+    #  txt += hand.peek().strip()
+    txt += console.color_cards(hand.peek())
     txt += '\n'
     return txt
 
