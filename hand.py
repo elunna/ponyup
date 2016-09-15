@@ -19,7 +19,7 @@ class Hand():
     def __str__(self):
         handstr = ''
         for i, c in enumerate(self.cards):
-            handstr += str(c)
+            handstr += card.color(c)
             if i != len(self.cards) - 1:
                 handstr += ' '
         return handstr
