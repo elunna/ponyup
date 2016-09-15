@@ -13,6 +13,7 @@ def factory(**new_config):
         'heroname': None,  # If there is a hero, they will be placed at the hero seat.
         'heroseat': None,
         'blindlvl': 0,
+        'names': 'bob',
     }
     config.update(new_config)
 
@@ -21,7 +22,8 @@ def factory(**new_config):
         seats=config['seats'],
         heroname=config['heroname'],
         game=config['game'],
-        tablename=config['tablename']
+        tablename=config['tablename'],
+        names=config['names'],
     )
 
     if config['game'] == 'FIVE CARD STUD':

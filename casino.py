@@ -81,6 +81,7 @@ def play_poker():
         tablename=GAME.tablename,
         blindlvl=GAME.level,
         heroname=NAME,
+        names='random',
     )
 
     playing = True
