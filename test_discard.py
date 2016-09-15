@@ -1,4 +1,5 @@
 import unittest
+import card
 import deck
 import discard
 import hand
@@ -234,16 +235,20 @@ class TestDiscard(unittest.TestCase):
     # 1 card in hand, shows index and card
     def test_discardmenu_1card_returnsMenu(self):
         cards = tools.convert_to_cards(['As'])
+        c1 = card.color(cards[0].peek())
         h = hand.Hand(cards)
-        expected = '1  \nAs\n'
+        expected = '1  \n{}\n'.format(c1)
         result = discard.discard_menu(h)
         self.assertEqual(expected, result)
 
     # 1 card in hand, shows index and card
     def test_discardmenu_2cards_returnsMenu(self):
         cards = tools.convert_to_cards(['As', 'Ks'])
+        c1 = card.color(cards[0].peek())
+        c2 = card.color(cards[1].peek())
+
         h = hand.Hand(cards)
-        expected = '1  2  \nAs Ks\n'
+        expected = '1  2  \n{} {}\n'.format(c1, c2)
         result = discard.discard_menu(h)
         self.assertEqual(expected, result)
 

@@ -71,8 +71,15 @@ class Card:
         """
         return self.rank + self.suit
 
-    def color(self):
-        if self.hidden:
-            return colors.color(HIDDEN, 'PURPLE')
-        else:
-            return colors.color(str(self), COLORS[self.suit])
+
+def color(cardtext):
+    """
+    Process a Card or it's text equivalent to color.
+    """
+    if isinstance(cardtext, Card):
+        cardtext = str(cardtext)
+
+    if cardtext == 'Xx':
+        return colors.color(cardtext, 'PURPLE')
+    else:
+        return colors.color(str(cardtext), COLORS[cardtext[1]])

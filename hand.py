@@ -1,6 +1,5 @@
-#!/usr/bin/env python
-
 from __future__ import print_function
+import card
 import evaluator
 
 
@@ -73,5 +72,5 @@ class Hand():
     def peek(self):
         _str = ''
         for c in self.cards:
-            _str += c.peek() + ' '
+            _str += card.color(c.peek()) + ' '
         return _str.strip()
