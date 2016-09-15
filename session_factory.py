@@ -12,7 +12,7 @@ def factory(**new_config):
         'table': None,
         'heroname': None,  # If there is a hero, they will be placed at the hero seat.
         'heroseat': None,
-        'blindlvl': 0,
+        'level': 0,
         'names': 'bob',
     }
     config.update(new_config)
@@ -27,11 +27,11 @@ def factory(**new_config):
     )
 
     if config['game'] == 'FIVE CARD STUD':
-        b = blinds.BlindsAnte(config['blindlvl'])
+        b = blinds.BlindsAnte(config['level'])
         sesh = stud.Stud5Session(config['game'], t, b)
 
     elif config['game'] == 'FIVE CARD DRAW':
-        b = blinds.BlindsNoAnte(config['blindlvl'])
+        b = blinds.BlindsNoAnte(config['level'])
         sesh = draw5.Draw5Session(config['game'], t, b)
     else:
         raise ValueError('Game unknown to session!')

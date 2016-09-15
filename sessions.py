@@ -56,3 +56,14 @@ class Session():
         for s in self._table:
             if s.player.is_human():
                 return s
+
+    def clear_broke_players(self):
+        """
+        Remove all the seats that have 0 chips. Return a string showing what happened.
+        """
+        broke_players = self._table.get_broke_players()
+        _str = ''
+        for seat in broke_players:
+            seat.standup()
+            _str += '{} left the table with no money!\n'.format(seat.player)
+        return _str

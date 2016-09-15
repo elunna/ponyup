@@ -3,6 +3,7 @@ import betting
 import colors
 import console
 import deck
+import evaluator
 import handhistory
 import pots
 
@@ -153,8 +154,8 @@ class Round():
     def highhand(table):
         """
         Finds which player has the highest showing hand and return their seat index.  For stud
-        games, after the first street, the high hand on board initiates the action (a tie is broken
-        by position, with the player who received cards first acting first).
+        games, after the first street, the high hand on board initiates the action (a tie is
+        broken by position, with the player who received cards first acting first).
         """
         highvalue = 0
         seat = None
@@ -192,17 +193,6 @@ class Round():
 
     def get_street(self):
         return self.streets[self.street]
-
-    def clear_broke_players(self):
-        broke_players = self._table.get_broke_players()
-        _str = ''
-        for seat in broke_players:
-            #  self._table.seats.remove(seat)
-            seat.standup()
-            _str += '{} left the table with no money!\n'.format(seat.player)
-
-        # Log players leaving
-        return _str
 
     def one_left(self):
         cardholders = self._table.get_players(hascards=True)
@@ -269,7 +259,6 @@ class Round():
 
     def cleanup(self):
         self.muck_all_cards()
-        self.hh.log(self.clear_broke_players())
 
         if not self.check_integrity_post():
             raise Exception('Integrity of game could not be verified after round was complete!')
