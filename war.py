@@ -44,7 +44,8 @@ class War():
         self.players = {1: [], 2: []}
         self.shuffle_between_rounds = True
         self.warcount = {}
-
+        self.delay = .05
+        #  self.delay = .15
         d = deck2joker.Deck2Joker()
         self.decksize = len(d)
 
@@ -87,9 +88,7 @@ class War():
         random.shuffle(self.players[2])
 
     def pause(self):
-        # Optional sleep
-        time.sleep(.05)
-        #  time.sleep(1)
+        time.sleep(self.delay)
 
     def gamestate(self):
         """
