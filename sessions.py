@@ -1,6 +1,8 @@
 import games
 import poker
 import options
+import random
+
 """
 The Session object manages the general structure of a poker cash game session.
 
@@ -62,3 +64,20 @@ class Session():
             seat.standup()
             _str += '{} left the table with no money!\n'.format(seat.player)
         return _str
+
+    def repopulate(self):
+        """
+        If there are free seats, we'll take a random chance that a new player will occupy a
+        seat. If there is only one player at the table (ie: probably the human), then we MUST
+        add a new player to play. Otherwise, the chance a new player will arrive will be rather
+        low, ~5-10%, to give some variety in the game play.
+        """
+        CHANCE = 10.0   # as a percent
+        freeseats = self._table.get_free_seats()
+
+        if freeseats:
+            result = random.randint(1, 100)
+            if result <= CHANCE:
+                print('Free seat! Repopulating!')
+                pass
+                #  newplayer = player.factory(names.
