@@ -19,6 +19,11 @@ Other clarification:
 * If a player draws a last card for war that is an exception.
 """
 
+TIE = 0
+PLAYER1WIN = 1
+PLAYER2WIN = 2
+PLAYING = -1
+
 WAR = {
     1: 'WAR',
     2: 'DOUBLE WAR',
@@ -29,51 +34,166 @@ WAR = {
 }
 
 
-def get_players():
-    """
-    Creates 2 players and deals a deck evenly between them.
-    """
-    players = [[], []]
-    d = deck2joker.Deck2Joker()
-    d.shuffle(10)
+class War():
+    def __init__(self):
+        self.rounds = 0
+        self.warlevel = 0
+        self.spoils = []
+        self.players = {1: [], 2: []}
 
-    while len(d) > 0:
-        players[0].append(d.deal())
-        players[1].append(d.deal())
-    return players
+        d = deck2joker.Deck2Joker()
+        self.decksize = len(d)
 
+        d.shuffle(100)
 
-def get_gamestate(players):
-    """
-    Returns a number that indicates the state of the game:
-        0 = Tie
-        1 = Player 1 won
-        2 = Player 2 won
-        -1 = Still playing
-    """
-    if len(players[0]) == 0 and len(players[1]) == 0:
-        return 0
-    elif len(players[0]) == 0:
-        return 2
-    elif len(players[1]) == 0:
-        return 1
-    else:
-        return -1
+        # Deal out the shuffled deck to both players
+        while len(d) > 0:
+            self.players[1].append(d.deal())
+            self.players[2].append(d.deal())
 
+    def __str__(self):
+        return 'Round {}: Player 1 = {} Player2 = {}'.format(
+            self.rounds, len(self.players[1]), len(self.players[2]))
 
-def get_winner(players):
-    """
-    Determines the winner by looking at the top card of each players pile.
-    Returns 1 if player 1 has a higher card.
-    Returns 2 if player 2 has a higher card.
-    Returns 0 if they tie.
-    """
-    if players[0][0].val() > players[1][0].val():
-        return 1
-    elif players[0][0].val() < players[1][0].val():
-        return 2
-    else:
-        return 0
+    def errcheck(self):
+        if len(self.players[1]) + len(self.players[2]) != self.decksize:
+            raise Exception('Deck corruption, player decks do not have correct counts!')
+
+    def gameloop(self):
+        """
+        The main game loop that controls the game flow.
+        """
+        while True:
+            self.pause()
+            print(self)
+            self.playround()
+
+    def shuffle(self):
+        random.shuffle(self.players[1])
+        random.shuffle(self.players[2])
+
+    def pause(self):
+        # Optional sleep
+        time.sleep(.05)
+        #  time.sleep(1)
+
+    def gamestate(self):
+        """
+        Returns a number that indicates the state of the game:
+            0 = Tie, 1 = Player 1 won, 2 = Player 2 won
+            -1 = Still playing
+        """
+        if len(self.players[2]) == 0 and len(self.players[2]) == 0:
+            return TIE
+        elif len(self.players[1]) == 0:
+            return PLAYER2WIN
+        elif len(self.players[2]) == 0:
+            return PLAYER1WIN
+        else:
+            return PLAYING
+
+    def get_winner(self):
+        """
+        Determines the winner by looking at the top card of each players pile.
+        Returns 1 if player 1 has a higher card.
+        Returns 2 if player 2 has a higher card.
+        Returns 0 if they tie.
+        """
+        if self.players[1][0] > self.players[2][0]:
+            return PLAYER1WIN
+        elif self.players[2][0] > self.players[1][0]:
+            return PLAYER2WIN
+        else:
+            return TIE
+
+    def show_topcards(self):
+        """
+        Returns a string showing the top card of each players pile vs the other.
+        """
+        print('{} vs {}'.format(self.players[1][0].peek(), self.players[2][0].peek()))
+
+    def award_cards(self, p):
+        """
+        Add the compared cards to specified player's stack
+        """
+        self.players[p].extend(self.spoils)
+        self.spoils = []
+
+    def playround(self):
+        """
+        Play through one round of War.
+        """
+        self.rounds += 1
+        if self.gamestate() >= 0:
+            self.gameover()
+
+        self.show_topcards()
+        winner = self.get_winner()
+        self.get_spoils(1)
+
+        if winner > 0:
+            print('Player {} wins!'.format(winner))
+            self.award_cards(winner)
+            return winner
+
+        else:
+            # War: Use a counter to count what level of war we're at
+            self.warlevel += 1
+            warwinner = self.war()
+            return warwinner
+
+    def war(self):
+        """
+        Executes a round of War when each player ties for rank. If a player doesn't have 4
+        cards for a standard war, we'll take just enough so they can play war and the
+        determining 2 cards.
+        """
+        print(get_wartext(self.warlevel))
+
+        smallerstack = min([len(i) for i in self.players.items()])
+
+        if smallerstack < 4:
+            reducedsize = smallerstack - 1
+            self.get_spoils(reducedsize)
+        else:
+            # Normal war
+            self.get_spoils(3)
+
+        display_cards(self.spoils)
+        winner = self.playround()
+
+        print('Player {} wins war #{}!'.format(winner, self.warlevel))
+        self.award_cards(winner)
+        # The war is over...
+        self.warlevel = 0
+        return winner
+
+    def get_spoils(self, qty):
+        """
+        Collects the cards that go into the War pile.
+        """
+        for i in range(qty):
+            if self.gamestate() >= 0:
+                self.gameover()
+            self.add_spoils()
+
+    def add_spoils(self):
+        self.spoils.append(self.players[1].pop(0))
+        self.spoils.append(self.players[2].pop(0))
+
+    def gameover(self):
+        """
+        The game has ended, prints out the appropriate ending text, and exits.
+        """
+        state = self.gamestate()
+        print('Game over! ', end='')
+        if state == 0:
+            print('TIE GAME!')
+        elif state == 1:
+            print('Player 1 wins!')
+        if state == 2:
+            print('Player 2 wins!')
+        sys.exit()
 
 
 def display_cards(cardlist):
@@ -81,67 +201,8 @@ def display_cards(cardlist):
     Returns a string representing the cards in the list.
     """
     for c in cardlist:
-        c.hidden = False
-        print('{} '.format(str(c)), end='')
-        c.hidden = True
+        print('{} '.format(c.peek()), end='')
     print('')
-
-
-def show_topcards(players):
-    """
-    Returns a string showing the top card of each players pile vs the other.
-    """
-    #  players[0][0].hidden = False
-    #  players[1][0].hidden = False
-    #  print('{} vs {}'.format(players[0][0], players[1][0]))
-    #  players[0][0].hidden = True
-    #  players[1][0].hidden = True
-    return '{}{} vs {}{}'.format(
-        players[0][0].rank, players[0][0].suit, players[1][0].rank, players[1][0].suit)
-
-
-def award_cards(plyr, spoils):
-    """
-    Add the compared cards to specified player's stack
-    """
-    plyr.extend(spoils)
-
-
-def get_spoils(players, qty):
-    """
-    Collects the cards that go into the War pile.
-    """
-    spoils = []
-    for i in range(qty):
-        if get_gamestate(players) >= 0:
-            gameover(players)
-
-        spoils.append(players[0].pop(0))
-        spoils.append(players[1].pop(0))
-    return spoils
-
-
-def playround(players, warlevel):
-    """
-    Play through one round of War.
-    """
-    if get_gamestate(players) >= 0:
-        gameover(players)
-
-    print(show_topcards(players))
-    winner = get_winner(players)
-
-    spoils = get_spoils(players, 1)
-    if winner > 0:
-        print('Player {} takes the round!'.format(winner))
-        award_cards(players[winner - 1], spoils)
-        return winner
-    else:
-        # Go into the 'war' mode.
-        # Use a counter to count what level of war we're at
-        warlevel += 1
-        result = war(players, warlevel, spoils)
-        return result
 
 
 def get_wartext(level):
@@ -152,72 +213,6 @@ def get_wartext(level):
     return '{}{}'.format(WAR[level], '!' * expoints)
 
 
-def war(players, level, spoils):
-    """
-    Executes a round of War when each player ties for rank.
-    """
-    print(get_wartext(level))
-    # Pause button
-    #  input()
-
-    # Check player stacks first
-    # If a player doesn't have 4 cards for a standard war,
-    # we'll take just enough so they can play war and the determining 2 cards.
-    if len(players[0]) < 4:
-        reducedsize = len(players[0]) - 1
-        spoils.extend(get_spoils(players, reducedsize))
-
-    elif len(players[1]) < 4:
-        reducedsize = len(players[1]) - 1
-        spoils.extend(get_spoils(players, reducedsize))
-    else:
-        spoils.extend(get_spoils(players, 3))
-    display_cards(spoils)
-    winner = playround(players, level)
-
-    print('Player {} wins war #{}!'.format(winner, level))
-    award_cards(players[winner - 1], spoils)
-    return winner
-
-
-def gameover(players):
-    """
-    The game has ended, prints out the appropriate ending text, and exits.
-    """
-    state = get_gamestate(players)
-    print('Game over! ', end='')
-    if state == 0:
-        print('TIE GAME!')
-    elif state == 1:
-        print('Player 1 wins!')
-    if state == 2:
-        print('Player 2 wins!')
-    sys.exit()
-
-
-def gameloop(players):
-    """
-    The main game loop that controls the game flow.
-    """
-    rounds = 0
-    while True:
-
-        # Optional sleep
-        time.sleep(.05)
-
-        random.shuffle(players[0])
-        random.shuffle(players[1])
-
-        rounds += 1
-        print('\nRound {}....Player1 = {}    Player2 = {}'.format(
-            rounds, len(players[0]), len(players[1])))
-
-        #  Pause button
-        #  input()
-
-        playround(players, warlevel=0)
-
-
 if __name__ == '__main__':
-    players = get_players()
-    gameloop(players)
+    w = War()
+    w.gameloop()

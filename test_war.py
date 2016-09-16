@@ -4,13 +4,29 @@ import card
 
 
 class TestWar(unittest.TestCase):
+
+    def setUp(self):
+        self.w = war.War()
     """
-    Tests for get_players():
+    Tests for __init__()
     """
-    def test_getplayers_bothareequalsize(self):
-        p = war.get_players()
+    # Make sure the decks are shuffled???
+
+    # make sure both players start with 27 cards
+    def test_init_player1_has27cards(self):
+        expected = 27
+        result = len(self.w.plyr[1])
+        self.assertEqual(expected, result)
+
+    def test_init_player2_has27cards(self):
+        expected = 27
+        result = len(self.w.plyr[2])
+        self.assertEqual(expected, result)
+
+    # Make sure both players have equal decks
+    def test_init_bothareequalsize(self):
         expected = True
-        result = len(p[0]) == len(p[1])
+        result = len(self.w.plyr[1]) == len(self.w.plyr[2])
         self.assertEqual(expected, result)
 
     """
