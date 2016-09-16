@@ -21,7 +21,7 @@ pokerplayers = ['Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmu
          'Laak', 'Lederer', 'Lindren', 'Matusow', 'Minieri']
 
 
-def random_names(num, namelist):
+def random_names(num, namelist=ponynames.getnames()):
     """
     Generate a unique list of names from the names module. num specifies how many names.
     """

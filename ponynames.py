@@ -3,8 +3,13 @@ import pickle
 PONYPICKLE = 'data/ponynames.dat'
 PONYNAMES = 'ponynames.txt'
 
+def getnames():
+    """
+    Just a more pleasant wrapper for unpickle names.
+    """
+    return unpickle_names()
 
-def read_ponynames():
+def read_namefile():
     names = []
     with open(PONYNAMES) as f:
         for l in f.readlines():
@@ -36,7 +41,7 @@ def unpickle_names():
 
 if __name__ == "__main__":
     print('testing the reading....\n\n')
-    n = read_ponynames()
+    n = read_namefile()
 
     print('testing writing....\n\n')
     pickle_names(n)
