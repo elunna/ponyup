@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from __future__ import print_function
+import console
 import deck2joker
 import random
 import sys
@@ -123,7 +124,10 @@ class War():
         """
         Returns a string showing the top card of each players pile vs the other.
         """
-        print('{} vs {}'.format(self.players[1][0].peek(), self.players[2][0].peek()))
+        c1 = console.color_cards(self.players[1][0].peek())
+        c2 = console.color_cards(self.players[2][0].peek())
+        _str = c1 + c2.rjust(30)
+        print(_str.center(WIDTH + 28))
 
     def award_cards(self, p):
         """
@@ -144,7 +148,12 @@ class War():
         self.get_spoils(1)
 
         if winner > 0:
-            print('Player {} wins!'.format(winner))
+            wintext = 'Player {} wins!'.format(winner).center(WIDTH)
+            if winner == 1:
+                print(wintext)
+            elif winner == 2:
+                print(wintext.rjust(WIDTH))
+
             self.award_cards(winner)
             return winner
 
@@ -180,7 +189,12 @@ class War():
         display_cards(self.spoils)
         winner = self.playround()
 
-        print('Player {} wins war #{}!'.format(winner, self.warlevel))
+        wintext = 'Player {} wins war #{}!'.format(winner, self.warlevel)
+        if winner == 1:
+            print(wintext)
+        if winner == 2:
+            print(wintext.rjust(WIDTH))
+
         self.award_cards(winner)
         # The war is over...
         self.warlevel = 0
@@ -228,9 +242,10 @@ def display_cards(cardlist):
     """
     Returns a string representing the cards in the list.
     """
+    _str = ''
     for c in cardlist:
-        print('{} '.format(c.peek()), end='')
-    print('')
+        _str += str(c) + ' '
+    return console.color_chips(_str)
 
 
 def get_wartext(level):
