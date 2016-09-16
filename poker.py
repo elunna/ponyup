@@ -309,3 +309,9 @@ class Round():
         # The sum of all sidepots should equal the potsize.
 
         return True
+
+    def exposed_cards(self):
+        exposed = []
+        for s in self._table:
+            exposed.extend(s.hand.get_upcards())
+        return exposed
