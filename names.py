@@ -1,3 +1,4 @@
+import ponynames
 import random
 import re
 """
@@ -12,7 +13,7 @@ MAX_LEN = 20
 MIN_LEN = 3
 INVALID_CHARACTERS = r"[<>()/{}[\]`'\\]"
 
-names = ['Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'Mortensen',
+pokerplayers = ['Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'Mortensen',
          'Antonius', 'Harman', 'Ungar', 'Dwan', 'Greenstein', 'Chan', 'Moss', 'Ivey', 'Brunson',
          'Reese', 'Esfandiari', 'Juanda', 'Duhamel', 'Gold', 'Cada', 'Mizrachi', 'Schulman',
          'Selbst', 'Duke', 'Rousso', 'Liebert', 'Galfond', 'Elezra', 'Benyamine', 'Booth',
@@ -20,15 +21,7 @@ names = ['Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'M
          'Laak', 'Lederer', 'Lindren', 'Matusow', 'Minieri']
 
 
-def read_ponynames():
-    names = []
-    with open('ponynames.txt') as f:
-        for l in f.readlines():
-            names.append(l.strip())
-    return names
-
-
-def random_names(num):
+def random_names(num, namelist):
     """
     Generate a unique list of names from the names module. num specifies how many names.
     """
@@ -36,12 +29,14 @@ def random_names(num):
 
     # Make sure all the names are unique
     for i in range(num):
-        while True:
-            nextname = random.choice(read_ponynames())
-            if nextname not in nameset and is_validname(nextname):
-                nameset.append(nextname)
-                break
+        nameset.append(new_name(nameset, namelist))
     return nameset
+
+def new_name(taken, namelist):
+    while True:
+        nextname = random.choice(namelist)
+        if nextname not in taken and is_validname(nextname):
+            return nextname
 
 
 def is_validname(name):

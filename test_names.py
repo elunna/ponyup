@@ -8,14 +8,14 @@ class TestNames(unittest.TestCase):
     Tests for random_names(num)
     """
     def test_randomnames_10_returns10names(self):
-        namelist = names.random_names(10)
+        namelist = names.random_names(10, names.pokerplayers)
         expected = 10
         result = len(namelist)
         self.assertEqual(expected, result)
 
     def test_randomnames_10_isset(self):
         qty = 10
-        namelist = names.random_names(qty)
+        namelist = names.random_names(qty, names.pokerplayers)
         expected = qty
         result = len(set(namelist))
         self.assertEqual(expected, result)
