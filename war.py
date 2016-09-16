@@ -66,8 +66,9 @@ class War():
         The main game loop that controls the game flow.
         """
         while True:
-            self.pause()
+            self.rounds += 1
             print(self)
+            self.pause()
             self.playround()
             if self.shuffle_between_rounds:
                 self.shuffle()
@@ -127,7 +128,6 @@ class War():
         """
         Play through one round of War.
         """
-        self.rounds += 1
         if self.gamestate() >= 0:
             self.gameover()
 
@@ -143,6 +143,12 @@ class War():
         else:
             # War: Use a counter to count what level of war we're at
             self.warlevel += 1
+
+            if self.warlevel not in self.warcount:
+                self.warcount[self.warlevel] = 1
+            else:
+                self.warcount[self.warlevel] += 1
+
             warwinner = self.war()
             return warwinner
 
@@ -197,7 +203,17 @@ class War():
             print('Player 1 wins!')
         if state == 2:
             print('Player 2 wins!')
+
+        self.summary()
         sys.exit()
+
+    def summary(self):
+        print('\n\n')
+        print('~~/) Game summary ~~(\\')
+        print('Rounds: {}'.format(self.rounds))
+        print('War counts:')
+        for k, v in self.warcount.items():
+            print('\t{}: {}x'.format(get_wartext(k), v))
 
 
 def display_cards(cardlist):
@@ -215,7 +231,6 @@ def get_wartext(level):
     """
     expoints = 2 * (level + 1)
     return '{}{}'.format(WAR[level], '!' * expoints)
-
 
 if __name__ == '__main__':
     w = War()
