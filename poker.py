@@ -25,6 +25,7 @@ class Round():
         self.d = deck.Deck()
         self.d.shuffle(17)  # Shuffle 17 times for good measure.
         self.DECKSIZE = len(self.d)
+        self.exposed = []
 
         self.check_integrity_pre()
 
@@ -65,6 +66,7 @@ class Round():
                 if faceup is True:
                     c.hidden = False
                     self.log('{} was dealt [{}]'.format(s.player, c), echo=False)
+                    self.exposed.append(c)
                 s.hand.add(c)
 
     def show_cards(self):
