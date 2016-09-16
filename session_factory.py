@@ -42,7 +42,6 @@ def factory(**new_config):
         raise ValueError('Game unknown to session!')
 
     # Set tablename for the session.
-    sesh.tablename = config['tablename']
     sesh.playerpool = playerpool
     return sesh
 
