@@ -13,8 +13,8 @@ def factory(**new_config):
         'game': None,
         'tablename': 'default',
         'table': None,
-        'heroname': None,  # If there is a hero, they will be placed at the hero seat.
-        'heroseat': None,
+        'hero': None,  # If there is a hero, they will be placed at the hero seat.
+        'heroseat': 0,
         'level': 1,
         'names': 'bob',
         'deposit': table_factory.DEPOSIT
@@ -25,16 +25,15 @@ def factory(**new_config):
     # Construct the table
     t = table_factory.factory(
         seats=config['seats'],
-        heroseat=config['heroseat'],
+        heroseat=(config['heroseat'] if config['hero'] is not None else None),
         game=config['game'],
         tablename=config['tablename'],
         names=config['names'],
     )
 
     # Create and place the hero player.
-    if config['heroname']:
-        hero = player.Player(config['heroname'], 'HUMAN')
-        hero.deposit(config['deposit'])
+    if config['hero']:
+        hero = config['hero']
         heroseat = t.seats[config['heroseat']]
         heroseat.sitdown(hero)
         heroseat.buy_chips(table_factory.DEF_STACK)

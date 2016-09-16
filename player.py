@@ -1,10 +1,13 @@
 import draw5_plyr
 import names
-import pickle
 import random
+import os
+import pickle
 import stud5_plyr
 
 TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
+DATADIR = 'data/'
+BITS = 10000
 
 
 class Player():
@@ -101,31 +104,64 @@ def factory(name, game, playertype='random'):
     return p
 
 
+def mk_filename(name):
+    return DATADIR + name + '.dat'
+
+
 def load_player(name):
     """
     Gets the username, checks for any previous player info and loads the player. If no player
     file it creates a new one. Returns a Player object.
     """
-    userfile = str(name) + '.dat'
+    userfile = mk_filename(name)
     # check if they have a file
     try:
         with open(userfile, 'rb') as f:
-            user = pickle.load(f)
-            return user
+            plyr = pickle.load(f)
+            return plyr
 
     except IOError:
-        print('Creating a new player file.')
-        return Player(name, playertype="HUMAN")
+        print('No player file found for that name!')
 
 
-def save_user(user):
+def player_exists(name):
+    return os.path.isfile(mk_filename(name))
+
+
+def del_player(name):
+    if player_exists(name):
+        print('Are you sure you want to delete player: {}?'.format(name))
+        choice = input('[y/n] :> ')
+        if choice.lower().startswith('y'):
+            os.remove(mk_filename(name))
+            print('Deleted the player...')
+    else:
+        print('That player doesn\'t exist!')
+
+
+def create_player(name):
+    if player_exists(name):
+        print('That player already exists!')
+    else:
+        print('Creating player named {}, with ${} bits'.format(name, BITS))
+        try:
+            p = Player(name, playertype="HUMAN")
+            p.deposit(BITS)
+            save_player(p)
+            return p
+        except ValueError:
+            print('Name is not valid. Player creation aborted!')
+            return None
+
+
+def save_player(plyr):
     """
-    Saves the players current stats to file.
+    Saves the Player current stats to file.
     """
-    userfile = user.name + '.dat'
+    userfile = mk_filename(plyr.name)
 
     try:
         with open(userfile, 'wb') as f:
-            pickle.dump(user, f)
+            pickle.dump(plyr, f)
     except IOError:
         print('An error occurred while writing, aborting program!')

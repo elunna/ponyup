@@ -64,7 +64,7 @@ def pick_game():
 
 def pick_name():
     while True:
-        name = prompt('Please enter your username.')
+        name = prompt('Username?')
         if name is None:
             pass
         elif not names.is_validname(name):

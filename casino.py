@@ -6,23 +6,44 @@ import combos
 import console
 import lobby
 import os
+import player
 import session_factory
 
-NAME = 'Aorist Twilist'
+HERO = None
 GAME = lobby.default()
 
 # Define menu opions
 options = {}
-options['c'] = ('(C)ombination counts', 'print(view_combos())')
+options['m'] = ('(M)athematical Analysis', 'print(view_combos())')
 options['p'] = ('(P)lay Poker!', 'play_poker()')
-options['n'] = ('(N)ame change', 'pick_name()')
+options['l'] = ('(L)oad Player', 'load_player()')
+options['c'] = ('(C)reate Player', 'create_player()')
+options['d'] = ('(D)elete Player', 'delete_player()')
 options['g'] = ('(G)ame change', 'pick_game()')
 options['q'] = ('(Q)uit', 'exitgracefully()')
 
 
-def pick_name():
-    global NAME
-    NAME = console.pick_name()
+def load_player():
+    name = console.pick_name()
+    global HERO
+    HERO = player.load_player(name)
+    pause()
+
+
+def create_player():
+    name = console.pick_name()
+    global HERO
+    HERO = player.create_player(name)
+    pause()
+
+
+def delete_player():
+    name = console.pick_name()
+    player.del_player(name)
+    if name == HERO.name:
+        global HERO
+        HERO = None
+    pause()
 
 
 def pick_game():
@@ -61,12 +82,17 @@ def view_combos():
 
 
 def play_poker():
+    if HERO is None:
+        print('You need to load or create a player first!')
+        pause()
+        return
+
     g = session_factory.factory(
         seats=GAME.seats,
         game=GAME.game,
         tablename=GAME.tablename,
         level=GAME.level,
-        heroname=NAME,
+        hero=HERO,
         names='random',
     )
 
@@ -87,11 +113,15 @@ def exitgracefully():
     exit()
 
 
+def pause():
+    input('Press any key to continue...')
+
+
 def main_menu():
     os.system('clear')
     print(logo())
     print(console.title('-=- Settings -=-'))
-    print(console.color_name(NAME))
+    print(console.color_name(HERO))
     print(console.color_game(GAME))
     print(console.title('-=- Main Menu Options -=-'))
     print(menu_str())
@@ -108,5 +138,5 @@ if __name__ == "__main__":
         else:
             print('Not a valid option!')
 
-        if choice == 'c':
-            input('Press any key to continue...')
+        if choice == 'm':
+            pause()

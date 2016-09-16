@@ -1,25 +1,35 @@
 import unittest
+import player
 import session_factory
 import table_factory
 
 
 class TestSessionFactory(unittest.TestCase):
+    def setUp(self):
+        # Make a default hero
+        self.h = player.Player('Octavia', playertype="HUMAN")
+        self.h.deposit(table_factory.DEPOSIT)
+
     """
     Tests for factory(**new_config)
     """
     def test_factory_noseatspassed_raisesException(self):
         self.assertRaises(ValueError, session_factory.factory)
 
-    def test_factory_hero_heroseat0(self):
-        name = 'Octavia'
-        s = session_factory.factory(seats=2, game="FIVE CARD STUD",
-                                    heroname=name, heroseat=0)
+    def test_factory_hero_defaultseat_seat0(self):
+        s = session_factory.factory(seats=2, game="FIVE CARD STUD", hero=self.h)
+        expected = 0
+        result = s._table.get_index(self.h)
+        self.assertEqual(expected, result)
+
+    def test_factory_hero_defaultseat_seat0hashero(self):
+        s = session_factory.factory(seats=2, game="FIVE CARD STUD", hero=self.h)
+        expected = self.h.name
         result = str(s._table.seats[0].player)
-        self.assertEqual(name, result)
+        self.assertEqual(expected, result)
 
     def test_factory_hero_herohasbankminusstack(self):
-        s = session_factory.factory(seats=2, game="FIVE CARD STUD",
-                                    heroname='Octavia', heroseat=0)
+        s = session_factory.factory(seats=2, game="FIVE CARD STUD", hero=self.h)
         expected = table_factory.DEPOSIT - table_factory.DEF_STACK
         result = s._table.seats[0].player.bank
         self.assertEqual(expected, result)
