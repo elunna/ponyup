@@ -20,6 +20,14 @@ names = ['Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'M
          'Laak', 'Lederer', 'Lindren', 'Matusow', 'Minieri']
 
 
+def read_ponynames():
+    names = []
+    with open('ponynames.txt') as f:
+        for l in f.readlines():
+            names.append(l.strip())
+    return names
+
+
 def random_names(num):
     """
     Generate a unique list of names from the names module. num specifies how many names.
@@ -29,8 +37,8 @@ def random_names(num):
     # Make sure all the names are unique
     for i in range(num):
         while True:
-            nextname = random.choice(names)
-            if nextname not in nameset:
+            nextname = random.choice(read_ponynames())
+            if nextname not in nameset and is_validname(nextname):
                 nameset.append(nextname)
                 break
     return nameset
