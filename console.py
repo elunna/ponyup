@@ -150,12 +150,17 @@ def color_param(p):
     return p
 
 
+@colors.colorit("WHITE")
+def title(txt):
+    return txt.center(70)
+
+
 def color_name(name):
-    return '{:>15}: {}'.format(color_setting('Name'), color_param(name))
+    return '{:>25}: {}'.format(color_setting('Name'), color_param(name))
 
 
 def color_game(GAME):
-    FMT = '{:>15}: {}\n'
+    FMT = '{:>25}: {}\n'
     _str = ''
     _str += FMT.format(color_setting('Table Name'), color_param(GAME.tablename))
     _str += FMT.format(color_setting('Game'), color_param(GAME.game))

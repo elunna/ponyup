@@ -44,17 +44,11 @@ def logo():
     return txt
 
 
-@colors.colorit("WHITE")
-def settings_title():
-    return '-=- Settings -=-'.center(70)
-
-
 @colors.colorit("LIGHTBLUE")
 def menu_str():
     _str = ''
-    _str += 'Main Menu Options\n'
     for o in sorted(options.keys()):
-        _str += '{}\n'.format(options[o][0])
+        _str += '{:12}{}\n'.format('', options[o][0])
     return _str
 
 
@@ -96,9 +90,10 @@ def exitgracefully():
 def main_menu():
     os.system('clear')
     print(logo())
-    print(settings_title())
+    print(console.title('-=- Settings -=-'))
     print(console.color_name(NAME))
     print(console.color_game(GAME))
+    print(console.title('-=- Main Menu Options -=-'))
     print(menu_str())
 
 
