@@ -40,6 +40,8 @@ class War():
         self.warlevel = 0
         self.spoils = []
         self.players = {1: [], 2: []}
+        self.shuffle_between_rounds = True
+        self.warcount = {}
 
         d = deck2joker.Deck2Joker()
         self.decksize = len(d)
@@ -67,6 +69,8 @@ class War():
             self.pause()
             print(self)
             self.playround()
+            if self.shuffle_between_rounds:
+                self.shuffle()
 
     def shuffle(self):
         random.shuffle(self.players[1])
@@ -83,7 +87,7 @@ class War():
             0 = Tie, 1 = Player 1 won, 2 = Player 2 won
             -1 = Still playing
         """
-        if len(self.players[2]) == 0 and len(self.players[2]) == 0:
+        if len(self.players[1]) == 0 and len(self.players[2]) == 0:
             return TIE
         elif len(self.players[1]) == 0:
             return PLAYER2WIN
