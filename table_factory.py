@@ -16,8 +16,7 @@ def factory(**new_config):
         'types': 'random',  # Player types
         'names': 'bob',  # Player names, can be 'random'
         'empty': False,
-        'heroname': None,  # If there is a hero, they will be placed at the hero seat.
-        'heroseat': 0,
+        'heroseat': None,
         'deposit': DEPOSIT,
         'stack': DEF_STACK,
         'stepstacks': False,
@@ -40,16 +39,9 @@ def factory(**new_config):
     else:
         nameset = [config['names'] + str(i) for i in range(SEATS)]
 
-    # Create and place the hero player.
-    if config['heroname']:
-        hero = player.Player(config['heroname'], 'HUMAN')
-        hero.deposit(config['deposit'])
-        heroseat = t.seats[config['heroseat']]
-        heroseat.sitdown(hero)
-
     # Fund and Seat the players
     for i, s in enumerate(t):
-        if not s.vacant():
+        if i == config['heroseat']:
             continue  # Save this seat for the hero.
         p = player.factory(nameset[i], config['game'], config['types'])
 
@@ -65,21 +57,24 @@ def factory(**new_config):
     #    commonly measured units of big blinds.
     # - There is a stackvariation parameter to randomly vary the sizes of the stacks. The
     #   parameter is a float value that is used to randomly calculate the variations.
-    #
-    if config['stepstacks']:
-        for i, s in enumerate(t):
+
+    # *** Player buyins ***
+    # Go through all the seats
+    for i, s in enumerate(t):
+        # Check if the seat is occupied or vacant.
+        if s.vacant():
+            continue
+
+        # Buy chips based on the parameter preference
+        if config['stepstacks']:
             s.buy_chips(STEP * (i + 1))
-    elif config['stack']:
-        for i, s in enumerate(t):
+        elif config['stack']:
             s.buy_chips(config['stack'])
-    else:
-        for s in t:
+        else:
             s.buy_chips(DEF_STACK)
 
-    # Random variations
-    if config['variance']:
-
-        for s in t:
+        # Random variations
+        if config['variance']:
             hilimit = int(s.stack * config['variance'])
             offset = random.randint(0, hilimit)
             s.stack -= offset

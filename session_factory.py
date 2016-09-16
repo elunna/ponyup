@@ -17,19 +17,27 @@ def factory(**new_config):
         'heroseat': None,
         'level': 1,
         'names': 'bob',
+        'deposit': table_factory.DEPOSIT
     }
     config.update(new_config)
-
     playerpool = make_playerpool(quantity=config['poolsize'])
 
     # Construct the table
     t = table_factory.factory(
         seats=config['seats'],
-        heroname=config['heroname'],
+        heroseat=config['heroseat'],
         game=config['game'],
         tablename=config['tablename'],
         names=config['names'],
     )
+
+    # Create and place the hero player.
+    if config['heroname']:
+        hero = player.Player(config['heroname'], 'HUMAN')
+        hero.deposit(config['deposit'])
+        heroseat = t.seats[config['heroseat']]
+        heroseat.sitdown(hero)
+        heroseat.buy_chips(table_factory.DEF_STACK)
 
     if config['game'] == 'FIVE CARD STUD':
         b = blinds.BlindsAnte(config['level'])

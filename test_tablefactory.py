@@ -9,6 +9,13 @@ class TestTableFactory(unittest.TestCase):
     def test_factory_noseatspassed_raisesException(self):
         self.assertRaises(ValueError, table_factory.factory)
 
+    def test_factory_namedPonyville_hasName(self):
+        name = 'Ponyville'
+        t = table_factory.factory(seats=2, tablename=name)
+        expected = name
+        result = t.name
+        self.assertEqual(expected, result)
+
     def test_factory_2seat_Tablehas2seats(self):
         t = table_factory.factory(seats=2)
         expected = 2
@@ -55,18 +62,6 @@ class TestTableFactory(unittest.TestCase):
         t = table_factory.factory(seats=3)
         expected = 3
         result = len(t.get_players())
-        self.assertEqual(expected, result)
-
-    def test_factory_hero_heroseat0(self):
-        name = 'Octavia'
-        t = table_factory.factory(seats=2, heroname=name, heroseat=0)
-        result = str(t.seats[0].player)
-        self.assertEqual(name, result)
-
-    def test_factory_hero_herohasbankminusstack(self):
-        t = table_factory.factory(seats=2, heroname='Octavia')
-        expected = table_factory.DEPOSIT - table_factory.DEF_STACK
-        result = t.seats[0].player.bank
         self.assertEqual(expected, result)
 
     def test_factory_2stepstacks_seat0has100(self):

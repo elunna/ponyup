@@ -10,6 +10,20 @@ class TestSessionFactory(unittest.TestCase):
     def test_factory_noseatspassed_raisesException(self):
         self.assertRaises(ValueError, session_factory.factory)
 
+    def test_factory_hero_heroseat0(self):
+        name = 'Octavia'
+        s = session_factory.factory(seats=2, game="FIVE CARD STUD",
+                                    heroname=name, heroseat=0)
+        result = str(s._table.seats[0].player)
+        self.assertEqual(name, result)
+
+    def test_factory_hero_herohasbankminusstack(self):
+        s = session_factory.factory(seats=2, game="FIVE CARD STUD",
+                                    heroname='Octavia', heroseat=0)
+        expected = table_factory.DEPOSIT - table_factory.DEF_STACK
+        result = s._table.seats[0].player.bank
+        self.assertEqual(expected, result)
+
     """
     Tests for make_playerpool(**new_config)
     """
