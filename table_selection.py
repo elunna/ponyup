@@ -27,8 +27,8 @@ tables = (
     #  Game('Apple Acres', seats=8, level=2, game="FIVE CARD DRAW"),
     #  Game('Ponyville Schoolhouse', seats=8, level=3, game="FIVE CARD DRAW"),
     #  Game('Wonderbolt Academy', seats=8, level=5, game="FIVE CARD DRAW"),
-    Game('Rainbow Factory', seats=8, level=8, game="FIVE CARD DRAW"),
-    Game('Mirror Pool', seats=8, level=10, game="FIVE CARD DRAW"),
+    #  Game('Rainbow Factory', seats=8, level=8, game="FIVE CARD DRAW"),
+    #  Game('Mirror Pool', seats=8, level=10, game="FIVE CARD DRAW"),
 
     # ### 5-card stud
     # HU
@@ -50,14 +50,14 @@ tables = (
     #  Game('San Palomino Desert', seats=6, level=3, game="FIVE CARD STUD"),
     #  Game('Dragon Lands', seats=6, level=5, game="FIVE CARD STUD"),
     Game('Winsome Falls', seats=6, level=8, game="FIVE CARD STUD"),
-    Game('Tenochtitlan Basin', seats=6, level=8, game="FIVE CARD STUD"),
+    Game('Tenochtitlan Basin', seats=6, level=10, game="FIVE CARD STUD"),
 
     # 8max
     #  Game('Mount Everhoof', seats=8, level=2, game="FIVE CARD STUD"),
     #  Game('Ghastly Gorge', seats=8, level=3, game="FIVE CARD STUD"),
     #  Game('Hollow Shades', seats=8, level=5, game="FIVE CARD STUD"),
-    Game('Dodge Junction', seats=8, level=8, game="FIVE CARD STUD"),
-    Game('Tartarus', seats=8, level=10, game="FIVE CARD STUD"),
+    #  Game('Dodge Junction', seats=8, level=8, game="FIVE CARD STUD"),
+    #  Game('Tartarus', seats=8, level=10, game="FIVE CARD STUD"),
 )
 
 # 'CMC Clubhouse' in [n.name for n in l]
