@@ -26,6 +26,7 @@ class Session():
         """
         self.gametype = gametype
         self.rounds = 1
+        self.tablename = None
         self._table = table
         self.streets = games.GAMES[gametype]
         self.blinds = blinds

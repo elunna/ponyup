@@ -1,6 +1,6 @@
 import blinds
-import stud
 import draw5
+import stud
 import table_factory
 
 
@@ -12,7 +12,7 @@ def factory(**new_config):
         'table': None,
         'heroname': None,  # If there is a hero, they will be placed at the hero seat.
         'heroseat': None,
-        'level': 0,
+        'level': 1,
         'names': 'bob',
     }
     config.update(new_config)
@@ -36,4 +36,6 @@ def factory(**new_config):
     else:
         raise ValueError('Game unknown to session!')
 
+    # Set tablename for the session.
+    sesh.tablename = config['tablename']
     return sesh
