@@ -6,9 +6,13 @@ class Pot():
         self.stacks = table.stackdict()
 
     def __add__(self, other):
+        if other < 0:
+            raise ValueError('Cannot add a negative amount to pot!')
         return self.pot + other
 
     def __iadd__(self, other):
+        if other < 0:
+            raise ValueError('Cannot add a negative amount to pot!')
         self.pot += other
         return self
 

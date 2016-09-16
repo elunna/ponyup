@@ -42,6 +42,11 @@ class TestPots(unittest.TestCase):
         result = self.p
         self.assertEqual(expected, result)
 
+    # Cannot add a negative amount
+    def test_add_neg10_raisesException(self):
+        bet = -10
+        self.assertRaises(ValueError, self.p.__add__, bet)
+
     """
     Tests for __iadd__(amt)
     """
@@ -53,6 +58,9 @@ class TestPots(unittest.TestCase):
         self.assertEqual(expected, result)
 
     # Cannot add a negative amount
+    def test_iadd_neg10_raisesException(self):
+        bet = -10
+        self.assertRaises(ValueError, self.p.__iadd__, bet)
 
     """
     Tests for invested(self, seat):
