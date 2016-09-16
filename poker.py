@@ -62,10 +62,12 @@ class Round():
                 if handreq and not s.has_hand():
                     continue
                 c = self.d.deal()
+                s.hand.add(c)
                 if faceup is True:
                     c.hidden = False
-                    self.log('{} was dealt [{}]'.format(s.player, c), echo=False)
-                s.hand.add(c)
+
+                    if s is not self.hero:
+                        self.log('{} was dealt [{}]'.format(s.player, c), echo=False)
 
     def show_cards(self):
         """
