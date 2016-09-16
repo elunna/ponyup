@@ -254,7 +254,7 @@ class TestPoker(unittest.TestCase):
     def test_postbringin_seat5_returnsString(self):
         self.setUp_stud()
         tools.deal_stud5(self.r._table, matchingranks=0)
-        expected = 'bob5 brings it in for $1\n'
+        expected = 'bob5 brings it in for $1'
         self.r._table.set_bringin()
         result = self.r.post_bringin()
         self.assertEqual(expected, result)
