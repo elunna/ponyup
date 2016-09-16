@@ -4,71 +4,37 @@ import card
 
 
 class TestWar(unittest.TestCase):
+
+    def setUp(self):
+        self.w = war.War()
     """
-    Tests for get_players():
+    Tests for __init__()
     """
-    def test_getplayers_bothareequalsize(self):
-        p = war.get_players()
+    # Make sure the decks are shuffled???
+
+    # make sure both players start with 27 cards
+    def test_init_player1_has27cards(self):
+        expected = 27
+        result = len(self.w.players[1])
+        self.assertEqual(expected, result)
+
+    def test_init_player2_has27cards(self):
+        expected = 27
+        result = len(self.w.players[2])
+        self.assertEqual(expected, result)
+
+    # Make sure both players have equal decks
+    def test_init_bothareequalsize(self):
         expected = True
-        result = len(p[0]) == len(p[1])
+        result = len(self.w.players[1]) == len(self.w.players[2])
         self.assertEqual(expected, result)
 
     """
     Tests for get_gamestate(players)
     """
-    def test_get_gamestate_tie_returns0(self):
-        p = [[], []]
-        expected = 0
-        result = war.get_gamestate(p)
-        self.assertEqual(expected, result)
-
-    def test_get_gamestate_player2nocards_returns1(self):
-        p = war.get_players()
-        p[1] = []
-        expected = 1
-        result = war.get_gamestate(p)
-        self.assertEqual(expected, result)
-
-    def test_get_gamestate_player1nocards_returns2(self):
-        p = war.get_players()
-        p[0] = []
-        expected = 2
-        result = war.get_gamestate(p)
-        self.assertEqual(expected, result)
-
-    def test_get_gamestate_bothhavecards_returnsneg1(self):
-        p = war.get_players()
-        expected = -1
-        result = war.get_gamestate(p)
-        self.assertEqual(expected, result)
-
     """
     Tests for get_winner(players)
     """
-    def test_GetWinner_player1win_return1(self):
-        hi = card.Card('A', 's')
-        lo = card.Card('2', 's')
-        p = [[hi], [lo]]
-        expected = 1
-        result = war.get_winner(p)
-        self.assertEqual(expected, result)
-
-    def test_GetWinner_player2win_return2(self):
-        hi = card.Card('A', 's')
-        lo = card.Card('2', 's')
-        p = [[lo], [hi]]
-        expected = 2
-        result = war.get_winner(p)
-        self.assertEqual(expected, result)
-
-    def test_GetWinner_tie_return0(self):
-        c1 = card.Card('A', 's')
-        c2 = card.Card('A', 'c')
-        p = [[c1], [c2]]
-        expected = 0
-        result = war.get_winner(p)
-        self.assertEqual(expected, result)
-
     """
     Tests for display_cards(cardlist)
     """
@@ -107,7 +73,3 @@ class TestWar(unittest.TestCase):
     """
     Tests for gameloop(players)
     """
-
-
-if __name__ == "__main__":
-    unittest.main()

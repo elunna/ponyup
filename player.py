@@ -1,6 +1,7 @@
-import names
-import random
 import draw5_plyr
+import names
+import pickle
+import random
 import stud5_plyr
 
 TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
@@ -23,6 +24,11 @@ class Player():
         Returns the player's name.
         """
         return '{}'.format(self.name)
+
+    def data(self):
+        _str = 'Data for player: {}'.format(self.name)
+
+        return _str
 
     def __repr__(self):
         """
@@ -93,3 +99,33 @@ def factory(name, game, playertype='random'):
         p.strategies = None
 
     return p
+
+
+def load_player(name):
+    """
+    Gets the username, checks for any previous player info and loads the player. If no player
+    file it creates a new one. Returns a Player object.
+    """
+    userfile = str(name) + '.dat'
+    # check if they have a file
+    try:
+        with open(userfile, 'rb') as f:
+            user = pickle.load(f)
+            return user
+
+    except IOError:
+        print('Creating a new player file.')
+        return Player(name, playertype="HUMAN")
+
+
+def save_user(user):
+    """
+    Saves the players current stats to file.
+    """
+    userfile = user.name + '.dat'
+
+    try:
+        with open(userfile, 'wb') as f:
+            pickle.dump(user, f)
+    except IOError:
+        print('An error occurred while writing, aborting program!')

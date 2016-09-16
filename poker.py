@@ -25,6 +25,7 @@ class Round():
         self.d = deck.Deck()
         self.d.shuffle(17)  # Shuffle 17 times for good measure.
         self.DECKSIZE = len(self.d)
+        self.exposed = []
 
         self.check_integrity_pre()
 
@@ -68,6 +69,8 @@ class Round():
 
                     if s is not self.hero:
                         self.log('{} was dealt [{}]'.format(s.player, c), echo=False)
+                    self.exposed.append(c)
+                s.hand.add(c)
 
     def show_cards(self):
         """
@@ -89,6 +92,9 @@ class Round():
         operation was successful, False if it didn't.
         """
         self.muck.append(seat.hand.discard(c))
+
+    def burn(self):
+        self.muck.append(self.d.deal())
 
     def muck_all_cards(self):
         """
@@ -311,3 +317,9 @@ class Round():
         # The sum of all sidepots should equal the potsize.
 
         return True
+
+    def exposed_cards(self):
+        exposed = []
+        for s in self._table:
+            exposed.extend(s.hand.get_upcards())
+        return exposed
