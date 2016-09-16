@@ -9,6 +9,7 @@ import table_factory
 def factory(**new_config):
     config = {
         'seats': None,
+        'poolsize': 100,
         'game': None,
         'tablename': 'default',
         'table': None,
@@ -18,6 +19,8 @@ def factory(**new_config):
         'names': 'bob',
     }
     config.update(new_config)
+
+    playerpool = make_playerpool(quantity=config['poolsize'])
 
     # Construct the table
     t = table_factory.factory(
@@ -40,6 +43,7 @@ def factory(**new_config):
 
     # Set tablename for the session.
     sesh.tablename = config['tablename']
+    sesh.playerpool = playerpool
     return sesh
 
 

@@ -20,7 +20,7 @@ It is responsible for:
 
 
 class Session():
-    def __init__(self, gametype, table, blinds, hero=None):
+    def __init__(self, gametype, table, blinds, playerpool=None):
         """
         Initialize the poker Session settings.
         """
@@ -32,6 +32,7 @@ class Session():
         self.blinds = blinds
         self.options = options.OPTIONS
         self.hero = self.find_hero()
+        self.playerpool = playerpool
 
     def __str__(self):
         """
