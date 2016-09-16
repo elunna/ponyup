@@ -90,6 +90,9 @@ class Round():
         """
         self.muck.append(seat.hand.discard(c))
 
+    def burn(self):
+        self.muck.append(self.d.deal())
+
     def muck_all_cards(self):
         """
         Muck all player hands, and muck the contents of the deck.

@@ -118,6 +118,27 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
+    Tests for burn()
+    """
+    # Burn 1 card, deck is 1 less
+    def test_burn_decksize_decreased1(self):
+        decksize = len(self.r.d)
+        self.r.burn()
+        expected = 1
+        result = decksize - len(self.r.d)
+        self.assertEqual(expected, result)
+
+    # Burn 1 card, muck is 1 more
+    def test_burn_mucksize_increased1(self):
+        mucksize = len(self.r.muck)
+        self.r.burn()
+        expected = 1
+        result = len(self.r.muck) - mucksize
+        self.assertEqual(expected, result)
+
+    # Burn, empty deck, nothing happens
+
+    """
     Tests for muck_all_cards()
     """
     # 6 players, deal 1 - no cardholders after running
@@ -254,7 +275,7 @@ class TestPoker(unittest.TestCase):
     def test_postbringin_seat5_returnsString(self):
         self.setUp_stud()
         tools.deal_stud5(self.r._table, matchingranks=0)
-        expected = 'bob5 brings it in for $1\n'
+        expected = 'bob5 brings it in for $1'
         self.r._table.set_bringin()
         result = self.r.post_bringin()
         self.assertEqual(expected, result)
