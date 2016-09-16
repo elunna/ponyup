@@ -23,6 +23,7 @@ TIE = 0
 PLAYER1WIN = 1
 PLAYER2WIN = 2
 PLAYING = -1
+WIDTH = 80
 
 WAR = {
     1: 'WAR',
@@ -57,6 +58,12 @@ class War():
         return 'Round {}: Player 1 = {} Player2 = {}'.format(
             self.rounds, len(self.players[1]), len(self.players[2]))
 
+    def decks(self):
+        # Show player 1's deck
+        print('1: {}'.format('#' * len(self.players[1])))
+        # Show player 2's deck
+        print('{}:2'.format('#' * len(self.players[2])).rjust(WIDTH))
+
     def errcheck(self):
         if len(self.players[1]) + len(self.players[2]) != self.decksize:
             raise Exception('Deck corruption, player decks do not have correct counts!')
@@ -67,7 +74,8 @@ class War():
         """
         while True:
             self.rounds += 1
-            print(self)
+            #  print(self)
+            self.decks()
             self.pause()
             self.playround()
             if self.shuffle_between_rounds:
