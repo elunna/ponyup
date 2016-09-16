@@ -70,7 +70,6 @@ class Round():
                     if s is not self.hero:
                         self.log('{} was dealt [{}]'.format(s.player, c), echo=False)
                     self.exposed.append(c)
-                s.hand.add(c)
 
     def show_cards(self):
         """
