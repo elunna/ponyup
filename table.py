@@ -148,7 +148,7 @@ class Table():
         return [s for s in self if s.occupied() and s.has_chips() is False]
 
     def get_free_seats(self):
-        return [s.NUM for s in self if s.vacant()]
+        return [s for s in self if s.vacant()]
 
     def get_playerdict(self):
         """
