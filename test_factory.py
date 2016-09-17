@@ -8,7 +8,7 @@ class TestTableFactory(unittest.TestCase):
         self.pool = factory.make_playerpool(quantity=10)
 
     """
-    Tests for factory(**new_config)
+    Tests for table_factory(**new_config)
     """
     def test_tablefactory_noseatspassed_raisesException(self):
         self.assertRaises(ValueError, factory.table_factory)
@@ -26,8 +26,14 @@ class TestTableFactory(unittest.TestCase):
         result = t.name
         self.assertEqual(expected, result)
 
+    def test_tablefactory_2seat_Poolhas2less(self):
+        poolsize = len(self.pool)
+        factory.table_factory(seats=2, playerpool=self.pool)
+        expected = 2
+        result = poolsize - len(self.pool)
+        self.assertEqual(expected, result)
+
     def test_tablefactory_2seat_Tablehas2seats(self):
-        #  import pdb; pdb.set_trace() #BREAKPOINT<C-C.
         t = factory.table_factory(seats=2, playerpool=self.pool)
         expected = 2
         result = len(t)
@@ -132,10 +138,16 @@ class TestSessionFactory(unittest.TestCase):
         self.h.deposit(factory.CPU_BANK_BITS)
 
     """
-    Tests for factory(**new_config)
+    Tests for session_factory(**new_config)
     """
     def test_sessionfactory_noseatspassed_raisesException(self):
         self.assertRaises(ValueError, factory.session_factory)
+
+    def test_sessionfactory_2seat_Poolhas2less(self):
+        s = factory.session_factory(seats=2, game="FIVE CARD STUD")
+        expected = 2
+        result = factory.DEFAULT_POOL - len(s.playerpool)
+        self.assertEqual(expected, result)
 
     def test_sessionfactory_hero_defaultseat_seat0(self):
         s = factory.session_factory(seats=2, game="FIVE CARD STUD", hero=self.h)

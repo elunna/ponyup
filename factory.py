@@ -9,6 +9,7 @@ import table
 CPU_BANK_BITS = 10000
 DEF_STACK = 1000
 DEFAULT_BB = 100
+DEFAULT_POOL = 100
 STEP = 100
 
 
@@ -85,7 +86,7 @@ def table_factory(**new_config):
 def session_factory(**new_config):
     config = {
         'seats': None,
-        'poolsize': 100,
+        'poolsize': DEFAULT_POOL,
         'game': None,
         'tablename': 'default',
         'table': None,
