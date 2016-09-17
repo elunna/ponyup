@@ -155,8 +155,14 @@ def title(txt):
     return txt.center(70)
 
 
-def color_name(name):
-    return '{:>25}: {}'.format(color_setting('Name'), color_param(name))
+def color_name(player):
+    if player is None:
+        ptext = ''
+    else:
+        ptext = '{}(${} in bank)'.format(color_param(player), player.bank)
+    _str = ''
+    _str += '{:>25}: {}'.format(color_setting('Name'), ptext)
+    return _str
 
 
 def color_game(GAME):
