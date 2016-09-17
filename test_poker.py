@@ -2,7 +2,7 @@ import unittest
 import blinds
 import card
 import poker
-import session_factory
+import factory
 import tools
 
 
@@ -12,11 +12,11 @@ class TestPoker(unittest.TestCase):
     """
     def setUp(self, lvl=2, players=6):
         # Make a 6 player table
-        self.g = session_factory.factory(seats=players, game="FIVE CARD DRAW", level=lvl)
+        self.g = factory.session_factory(seats=players, game="FIVE CARD DRAW", level=lvl)
         self.r = poker.Round(self.g)
 
     def setUp_stud(self, lvl=2, players=6):
-        self.g = session_factory.factory(seats=players, game="FIVE CARD STUD", level=lvl)
+        self.g = factory.session_factory(seats=players, game="FIVE CARD STUD", level=lvl)
         self.r = poker.Round(self.g)
 
     """

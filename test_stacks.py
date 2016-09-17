@@ -1,12 +1,12 @@
 import unittest
 import stacks
-import table_factory
+import factory
 import tools
 
 
 class TestStacks(unittest.TestCase):
     def setUp(self, _seats=6):
-        self.t = table_factory.factory(seats=_seats, stepstacks=True)
+        self.t = factory.table_factory(seats=_seats, stepstacks=True)
         tools.deal_random_cards(self.t, 1)
 
     """

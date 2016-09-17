@@ -3,7 +3,7 @@ import card
 import table
 import player
 import tools
-import table_factory
+import factory
 
 
 class TestTable(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestTable(unittest.TestCase):
     Setup a table filled with 6 players for testing.
     """
     def setUp(self, players=6, rm=None, btn_moved=1, setblinds=False):
-        self.t = table_factory.factory(seats=players, remove=rm)
+        self.t = factory.table_factory(seats=players, remove=rm)
 
         for i in range(btn_moved):
             self.t.move_button()
@@ -40,7 +40,7 @@ class TestTable(unittest.TestCase):
         self.assertRaises(ValueError, table.Table, '11')
 
     def test_init_Dtoken_returnsNeg1(self):
-        t = table_factory.factory(seats=6)
+        t = factory.table_factory(seats=6)
         expected = -1
         result = t.TOKENS['D']
         self.assertEqual(expected, result)
@@ -533,7 +533,7 @@ class TestTable(unittest.TestCase):
     Tests for stacklist(table)
     """
     def test_stacklist_6players_returns4stacks(self):
-        t = table_factory.factory(seats=6, stepstacks=True)
+        t = factory.table_factory(seats=6, stepstacks=True)
         expected = [100, 200, 300, 400, 500, 600]
         result = t.stacklist()
         self.assertEqual(expected, result)

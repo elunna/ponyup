@@ -1,5 +1,5 @@
 import unittest
-import session_factory
+import factory
 
 
 class TestSessions(unittest.TestCase):
@@ -8,7 +8,7 @@ class TestSessions(unittest.TestCase):
     Tests for clear_broke_players()
     """
     def test_clearbrokeplayers(self):
-        s = session_factory.factory(seats=6, game='FIVE CARD DRAW', level=1)
+        s = factory.session_factory(seats=6, game='FIVE CARD DRAW', level=1)
         p = s._table.seats[0]
         p.stack = 0
         expected = []

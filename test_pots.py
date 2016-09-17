@@ -1,7 +1,7 @@
 import unittest
 import evaluator
 import pots
-import table_factory
+import factory
 import tools
 
 
@@ -11,13 +11,13 @@ class TestPots(unittest.TestCase):
     """
     def setUp(self, level=2, players=6):
         # Make a 6 player table
-        self.t = table_factory.factory(seats=players)
+        self.t = factory.table_factory(seats=players)
         self.p = pots.Pot(self.t)
         # Deal cards to all players
         tools.deal_random_cards(self.t, 2)
 
     def setup_allins(self, _seats):
-        self.t = table_factory.factory(seats=_seats, stepstacks=True)
+        self.t = factory.table_factory(seats=_seats, stepstacks=True)
         self.p = pots.Pot(self.t)
 
         # Deal cards to all players
@@ -28,7 +28,7 @@ class TestPots(unittest.TestCase):
             self.p += s.bet(bet)
 
     def get_generic_table(self, seats=6):
-        return table_factory.factory(
+        return factory.table_factory(
                 seats=seats, heroname='octavia', stepstacks=True
         )
 

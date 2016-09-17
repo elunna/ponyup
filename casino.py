@@ -7,7 +7,7 @@ import console
 import lobby
 import os
 import player
-import session_factory
+import factory
 
 HERO = None
 GAME = lobby.default()
@@ -87,7 +87,7 @@ def play_poker():
         pause()
         return
 
-    g = session_factory.factory(
+    g = factory.session_factory(
         seats=GAME.seats,
         game=GAME.game,
         tablename=GAME.tablename,

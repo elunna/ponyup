@@ -1,6 +1,6 @@
 import unittest
 import betting
-import session_factory
+import factory
 import tools
 
 
@@ -10,7 +10,7 @@ class TestBetting(unittest.TestCase):
     Default level is $2/$4.
     """
     def setUp(self, lvl=2, players=6, street=1):
-        g = session_factory.factory(seats=players, game="FIVE CARD DRAW", level=lvl)
+        g = factory.session_factory(seats=players, game="FIVE CARD DRAW", level=lvl)
 
         g._table.move_button()
         g._table.set_blinds()
@@ -25,7 +25,7 @@ class TestBetting(unittest.TestCase):
         self.br = betting.BettingRound(self.r)
 
     def setUp_shorty(self, shortstack, lvl=2, players=6, street=1):
-        g = session_factory.factory(seats=players, game="FIVE CARD DRAW", level=lvl)
+        g = factory.session_factory(seats=players, game="FIVE CARD DRAW", level=lvl)
         # Sets seat 1(we'll use as the SB) as the short stack amount for easy testing.
         g._table.seats[1].stack = shortstack
         g._table.move_button()
@@ -43,7 +43,7 @@ class TestBetting(unittest.TestCase):
         """
         Setup a 5 card stud game for testing.
         """
-        g = session_factory.factory(seats=players, game="FIVE CARD STUD", level=lvl)
+        g = factory.session_factory(seats=players, game="FIVE CARD STUD", level=lvl)
         self.r = g.new_round()
 
         for i in range(street - 1):  # Adjust which street to test.
