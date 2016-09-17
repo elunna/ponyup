@@ -18,6 +18,10 @@ It is responsible for:
 
 """
 
+ENTER_CHANCE = 10.0     # as a percent
+LEAVE_CHANCE = 2.0      # as a percent
+REBUY_CHANCE = 50.0     # as a percent
+
 
 class Session():
     def __init__(self, gametype, table, blinds, playerpool=None):
@@ -66,6 +70,12 @@ class Session():
             _str += '{} left the table with no money!\n'.format(seat.player)
         return _str
 
+    def table_maintainance(self):
+        if self.repopulate():
+            return
+        else:
+            self.yank_from_table()
+
     def repopulate(self):
         """
         If there are free seats, we'll take a random chance that a new player will occupy a
@@ -77,10 +87,9 @@ class Session():
         loneplayer = (len(self._table) - len(freeseats)) == 1
 
         if not freeseats:
-            return
+            return False
 
-        CHANCE = 10.0   # as a percent
-        freshmeat = random.randint(1, 100) <= CHANCE
+        freshmeat = random.randint(1, 100) <= ENTER_CHANCE
 
         if loneplayer or freshmeat:
             newplayer = self.yank_from_pool()
@@ -88,6 +97,29 @@ class Session():
             print('{} has entered the game and taken seat {}.'.format(
                 newplayer.name, newseat.NUM))
             newseat.sitdown(newplayer)
+        return True
+
+    def yank_from_table(self):
+        """
+        Makes a random player (not including the hero) standup and leave the table.
+        """
+        # If there are only 2 players, ignore this.
+        if len(self._table.get_player()) == 2:
+            return False
+        runaway = random.randint(1, 100) <= LEAVE_CHANCE
+        if runaway:
+            while True:
+                s = random.choice(self._table.get_player())
+                if s.player.is_human():
+                    # This is the human hero player - don't remove.
+                    continue
+                else:
+                    # Make the random player leave
+                    s.standup()
+                    return True
+
+    def return_to_pool(self, player):
+        self.playerpool.append(player)
 
     def yank_from_pool(self):
         if len(self.playerpool) == 0:

@@ -101,14 +101,14 @@ def play_poker():
     while playing:
         os.system('clear')
         g.play()
-        # Save the player after every round.
-        player.save_player(HERO)
+        g.table_maintainance()  # Perform in-between game activities
+
         choice = input('keep playing? > ')
         if choice.lower() == 'n':
             playing = False
             g.find_hero().standup()
-
-    return
+            # Save the players game.
+            player.save_player(HERO)
 
 
 def exitgracefully():
