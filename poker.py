@@ -59,7 +59,7 @@ class Round():
         dealt face-up, otherwise they are face-down.
         """
         for i in range(qty):
-            for s in self._table:
+            for s in self._table.get_players():
                 if handreq and not s.has_hand():
                     continue
                 c = self.d.deal()
