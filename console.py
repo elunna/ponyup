@@ -170,7 +170,7 @@ def color_game(GAME):
     _str = ''
     _str += FMT.format(color_setting('Table Name'), color_param(GAME.tablename))
     _str += FMT.format(color_setting('Game'), color_param(GAME.game))
-    _str += FMT.format(color_setting('Stakes'), color_param(lobby.stakes(GAME)))
+    _str += FMT.format(color_setting('Stakes'), color_param(GAME.blinds.stakes()))
     _str += FMT.format(color_setting('Seats'), color_param(GAME.seats))
 
     return _str

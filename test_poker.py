@@ -10,13 +10,14 @@ class TestPoker(unittest.TestCase):
     """
     Setup a session and round, with a table filled with 6 players.
     """
-    def setUp(self, lvl=2, players=6):
+    def setUp(self, lvl=1, players=6):
         # Make a 6 player table
         self.g = factory.session_factory(seats=players, game="FIVE CARD DRAW", level=lvl)
         self.r = poker.Round(self.g)
 
-    def setUp_stud(self, lvl=2, players=6):
-        self.g = factory.session_factory(seats=players, game="FIVE CARD STUD", level=lvl)
+    def setUp_stud(self, lvl=1, players=6):
+        b = blinds.Blinds(lvl, bringin=True)
+        self.g = factory.session_factory(seats=players, game="FIVE CARD STUD", blinds=b)
         self.r = poker.Round(self.g)
 
     """
@@ -182,7 +183,7 @@ class TestPoker(unittest.TestCase):
     """
     # 6 players ante 1. Pot == 6.
     def test_postantes_6players_potequals60(self):
-        self.r.blinds = blinds.BlindsAnte(level=4)
+        self.r.blinds = blinds.Blinds(level=2, antes=True)
         self.r.post_antes()
         expected = 6
         result = self.r.pot
@@ -190,7 +191,7 @@ class TestPoker(unittest.TestCase):
 
     # Initial stacks=1000. Ante=1. After ante are 999.
     def test_postantes_6players_stacksequal999(self):
-        self.r.blinds = blinds.BlindsAnte(level=4)
+        self.r.blinds = blinds.Blinds(level=2, antes=True)
         self.r.post_antes()
         expected = 999
         for s in self.r._table:
@@ -246,7 +247,7 @@ class TestPoker(unittest.TestCase):
 
     # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_6players_returnsString(self):
-        self.setUp(lvl=2)
+        self.setUp(lvl=1)
         self.r._table.TOKENS['D'] = -1
         self.r._table.move_button()
         self.r._table.set_blinds()

@@ -1,4 +1,3 @@
-import blind_structures
 import table_selection
 """
 This lobby listing is a list of all the available cash tables a pony can play
@@ -27,23 +26,11 @@ def sort_by_name(L):
 
 
 def sort_by_level(L):
-    return sorted(L, key=lambda x: x.level)
+    return sorted(L, key=lambda x: x.blinds.level)
 
 
 def sort_by_seats(L):
     return sorted(L, key=lambda x: x.seats)
-
-
-def stakes(gametuple):
-    """
-    Return the small bet and big bet sizes.
-    """
-    if gametuple.game == "FIVE CARD STUD":
-        sb = blind_structures.ante[gametuple.level][0]
-        return '${}/${}'.format(sb, sb*2)
-    elif gametuple.game == "FIVE CARD DRAW":
-        sb = blind_structures.no_ante[gametuple.level][0]
-        return '${}/${}'.format(sb, sb*2)
 
 
 def numbered_list(L):
@@ -52,6 +39,5 @@ def numbered_list(L):
     print(fmt_str.format('Pick#', 'Game', 'Seats', 'Stakes', 'Table Name'))
 
     for i, gt in enumerate(L):
-        _stakes = stakes(gt)
-        _str += (fmt_str.format(i, gt.game.title(), gt.seats, _stakes, gt.tablename))
+        _str += (fmt_str.format(i, gt.game.title(), gt.seats, gt.blinds.stakes(), gt.tablename))
     return _str

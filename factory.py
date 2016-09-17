@@ -93,6 +93,7 @@ def session_factory(**new_config):
         'hero': None,  # If there is a hero, they will be placed at the hero seat.
         'heroseat': 0,
         'level': 1,
+        'blinds': None,
         'names': 'bob',
         'deposit': CPU_BANK_BITS
     }
@@ -118,12 +119,17 @@ def session_factory(**new_config):
         heroseat.sitdown(hero)
         heroseat.buy_chips(DEF_STACK)
 
+    # Configure blinds
+    if config['blinds']:
+        b = config['blinds']
+    else:
+        # Make generic sb/bb blind structure using the level
+        b = blinds.Blinds(config['level'])
+
     if config['game'] == 'FIVE CARD STUD':
-        b = blinds.Blinds(config['level'], blinds=False, antes=True, bringin=True)
         sesh = stud.Stud5Session(config['game'], table=t, blinds=b)
 
     elif config['game'] == 'FIVE CARD DRAW':
-        b = blinds.Blinds(config['level'])
         sesh = draw5.Draw5Session(config['game'], table=t, blinds=b)
     else:
         raise ValueError('Game unknown to session!')

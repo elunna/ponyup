@@ -6,7 +6,17 @@ class Blinds():
         """
         Initialize the Blinds object with a given blind structure.
         """
-        self.set_level(level, blinds, bringin, antes)
+        self.blinds = blinds
+        self.bringin = bringin
+        self.antes = antes
+
+        if bringin:
+            # We won't allow setting both blinds and bringin.
+            # Bringin will take priority and trigger antes.
+            self.antes = True
+
+        self.SMBET, self.BB, self.SB, self.BRINGIN, self.ANTE = 0, 0, 0, 0, 0
+        self.set_level(level)
 
     def fmtnum(self, num):
         if num % 1 > 0:
@@ -29,7 +39,7 @@ class Blinds():
             _str += 'SB: ${}, BB: ${}\n'.format(self.fmtnum(self.SB), self.fmtnum(self.BB))
         return _str
 
-    def stakes(self):
+    def stakes(self, lvl=None):
         """
         Returns the stakes, as in the small bet/big bet amounts. For games that only use blinds
         (without antes), we calculate the amounts by using the Big Blind as the small bet, and
@@ -37,7 +47,13 @@ class Blinds():
         """
         return '${}/${}'.format(self.BB, self.BB * 2)
 
-    def set_level(self, level, blinds=True, bringin=False, antes=False):
+    def cleannum(self, num):
+        if num % 1 > 0:
+            return num
+        else:
+            return int(num)
+
+    def set_level(self, level):
         """
         Set the blind level, if valid.
         Default to regular blinds only.
@@ -48,20 +64,14 @@ class Blinds():
         self.level = level
         self.SMBET = stakes[level]
 
-        if blinds:
-            self.SB, self.BB = stakes[level] / 2, stakes[level]
-        else:
-            self.SB, self.BB = 0, 0
+        if self.blinds:
+            self.SB, self.BB = self.cleannum(stakes[level] / 2), stakes[level]
 
-        if bringin:
-            self.BRINGIN = stakes[level] / 2
-        else:
-            self.BRINGIN = 0
+        if self.bringin:
+            self.BRINGIN = self.cleannum(stakes[level] / 2)
 
-        if antes:
-            self.ANTE = stakes[level] / 4
-        else:
-            self.ANTE = 0
+        if self.antes:
+            self.ANTE = self.cleannum(stakes[level] / 4)
 
     def big_blinds(self, stack):
         """
@@ -123,9 +133,9 @@ stakes = {
 }
 
 
-def levels():
+def levels(bet_dict=stakes):
     """
     Returns a listing of all the available blind levels in the structure.
     """
-    for k, v in sorted(stakes.items()):
+    for k, v in sorted(bet_dict):
         print('\tLevel {:3}: ${}/${}'.format(k, v, v * 2))
