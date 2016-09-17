@@ -1,21 +1,18 @@
-from collections import namedtuple
 import math
-import blind_structures
-
-Level = namedtuple('Level', ['BB', 'SB', 'ANTE', 'BRINGIN'])
 
 
 class Blinds():
-    def __init__(self, level=1, structure=None):
+    def __init__(self, level=1, blinds=True, bringin=False, antes=False):
         """
         Initialize the Blinds object with a given blind structure.
         """
-        if structure is None:
-            raise ValueError("Need a blind structure!")
-        else:
-            self.structure = structure
+        self.set_level(level, blinds, bringin, antes)
 
-        self.set_level(level)
+    def fmtnum(self, num):
+        if num % 1 > 0:
+            return '{:.2f}'.format(num)
+        else:
+            return '{}'.format(int(num))
 
     def __str__(self):
         """
@@ -24,20 +21,12 @@ class Blinds():
         """
         _str = ''
         if self.ANTE:
-            _str += 'Ante: $'
-            if self.ANTE % 1 > 0:
-                _str += '{:.2f}\n'.format(self.ANTE)
-            else:
-                _str += '{}\n'.format(self.ANTE)
+            _str += 'Ante: ${}, '.format(self.fmtnum(self.ANTE))
 
         if self.BRINGIN:
-            _str += 'Bringin: $'
-            if self.BRINGIN % 1 > 0:
-                _str += '{:.2f}\n'.format(self.BRINGIN)
-            else:
-                _str += '{}\n'.format(self.BRINGIN)
+            _str += 'Bringin: ${}\n'.format(self.fmtnum(self.BRINGIN))
         if self.SB != self.BB:
-            _str += 'SB: ${}, BB: ${}\n'.format(self.SB, self.BB)
+            _str += 'SB: ${}, BB: ${}\n'.format(self.fmtnum(self.SB), self.fmtnum(self.BB))
         return _str
 
     def stakes(self):
@@ -48,26 +37,31 @@ class Blinds():
         """
         return '${}/${}'.format(self.BB, self.BB * 2)
 
-    def set_level(self, level):
+    def set_level(self, level, blinds=True, bringin=False, antes=False):
         """
         Set the blind level, if valid.
+        Default to regular blinds only.
         """
-        if level < 1 or level > len(self.structure):
+        if level not in stakes.keys():
             raise ValueError('level is out of bounds!')
 
         self.level = level
-        leveltuple = tuple_to_level(self.structure[level])
-        self.BB = leveltuple.BB
-        self.SB = leveltuple.SB
-        self.ANTE = leveltuple.ANTE
-        self.BRINGIN = leveltuple.BRINGIN
+        self.SMBET = stakes[level]
 
-    def levels(self):
-        """
-        Returns a listing of all the available blind levels in the structure.
-        """
-        for k, v in sorted(self.structure.items()):
-            print('\tLevel {:3}: ${}/${}'.format(k, v.BB, v.BB * 2))
+        if blinds:
+            self.SB, self.BB = stakes[level] / 2, stakes[level]
+        else:
+            self.SB, self.BB = 0, 0
+
+        if bringin:
+            self.BRINGIN = stakes[level] / 2
+        else:
+            self.BRINGIN = 0
+
+        if antes:
+            self.ANTE = stakes[level] / 4
+        else:
+            self.ANTE = 0
 
     def big_blinds(self, stack):
         """
@@ -106,32 +100,32 @@ class Blinds():
             return 0
 
 
-class BlindsAnte(Blinds):
-    def __init__(self, level=1):
-        super().__init__(level, structure=blind_structures.ante)
-
-
-class BlindsNoAnte(Blinds):
-    def __init__(self, level=1):
-        super().__init__(level, structure=blind_structures.no_ante)
-
-
-def tuple_to_level(lev):
-    if len(lev) == 2:
-        # There is only SB and BB
-        return Level(BB=lev[0], SB=lev[1], BRINGIN=0, ANTE=0)
-    elif len(lev) == 3:
-        # There is SB, BB, and antes
-        return Level(BB=lev[0], SB=lev[1], BRINGIN=0, ANTE=lev[2])
-    elif len(lev) == 4:
-        # There is SB, BB, bringin, and antes
-        return Level(BB=lev[0], SB=lev[1], BRINGIN=lev[2], ANTE=lev[3])
-    else:
-        raise ValueError('Tuple needs to be 2-4 elements to be converted to a Level!')
-
-
 def round_number(num):
     if num % 1 >= 0.5:
         return math.ceil(num)
     else:
         return math.floor(num)
+
+"""
+Stakes as listed out by big blind(or small bet)
+"""
+stakes = {
+    1: 2,
+    2: 4,
+    3: 8,
+    4: 15,
+    5: 30,
+    6: 50,
+    7: 100,
+    8: 200,
+    9: 500,
+    10: 1000,
+}
+
+
+def levels():
+    """
+    Returns a listing of all the available blind levels in the structure.
+    """
+    for k, v in sorted(stakes.items()):
+        print('\tLevel {:3}: ${}/${}'.format(k, v, v * 2))

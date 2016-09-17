@@ -119,11 +119,11 @@ def session_factory(**new_config):
         heroseat.buy_chips(DEF_STACK)
 
     if config['game'] == 'FIVE CARD STUD':
-        b = blinds.BlindsAnte(config['level'])
+        b = blinds.Blinds(config['level'], blinds=False, antes=True, bringin=True)
         sesh = stud.Stud5Session(config['game'], table=t, blinds=b)
 
     elif config['game'] == 'FIVE CARD DRAW':
-        b = blinds.BlindsNoAnte(config['level'])
+        b = blinds.Blinds(config['level'])
         sesh = draw5.Draw5Session(config['game'], table=t, blinds=b)
     else:
         raise ValueError('Game unknown to session!')
