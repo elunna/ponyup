@@ -73,12 +73,26 @@ class Session():
         add a new player to play. Otherwise, the chance a new player will arrive will be rather
         low, ~5-10%, to give some variety in the game play.
         """
-        CHANCE = 10.0   # as a percent
         freeseats = self._table.get_free_seats()
+        loneplayer = (len(self._table) - len(freeseats)) == 1
 
-        if freeseats:
-            result = random.randint(1, 100)
-            if result <= CHANCE:
-                print('Free seat! Repopulating!')
-                pass
-                #  newplayer = player.factory(names.
+        if not freeseats:
+            return
+
+        CHANCE = 10.0   # as a percent
+        freshmeat = random.randint(1, 100) <= CHANCE
+
+        if loneplayer or freshmeat:
+            newplayer = self.yank_from_pool()
+            newseat = random.choice(freeseats)
+            print('{} has entered the game and taken seat {}.'.format(
+                newplayer.name, newseat.NUM))
+            newseat.sitdown(newplayer)
+
+    def yank_from_pool(self):
+        if len(self.playerpool) == 0:
+            return False
+        else:
+            p = random.choice(self.playerpool)
+            self.playerpool.remove(p)
+            return p
