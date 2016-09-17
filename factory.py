@@ -98,7 +98,10 @@ def session_factory(**new_config):
     }
 
     config.update(new_config)
-    pool = make_playerpool(quantity=config['poolsize'], game=config['game'])
+    pool = make_playerpool(
+        quantity=config['poolsize'],
+        game=config['game'],
+        names=config['names'])
 
     # Construct the table
     t = table_factory(
