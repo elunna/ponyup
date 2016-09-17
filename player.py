@@ -7,7 +7,7 @@ import stud5_plyr
 
 TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
 DATADIR = 'data/'
-HUMAN_BANK_BITS = 100
+HUMAN_BANK_BITS = 1000
 
 
 class Player():
