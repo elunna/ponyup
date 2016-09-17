@@ -104,8 +104,9 @@ def play_poker():
         # Save the player after every round.
         player.save_player(HERO)
         choice = input('keep playing? > ')
-        if choice.lower() == 'n' or choice == 0:
+        if choice.lower() == 'n':
             playing = False
+            g.find_hero().standup()
 
     return
 
