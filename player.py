@@ -7,7 +7,7 @@ import stud5_plyr
 
 TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
 DATADIR = 'data/'
-BITS = 10000
+HUMAN_BANK_BITS = 100
 
 
 class Player():
@@ -143,10 +143,10 @@ def create_player(name):
     if player_exists(name):
         print('That player already exists!')
     else:
-        print('Creating player named {}, with ${} bits'.format(name, BITS))
+        print('Creating player named {}, with ${} bits'.format(name, HUMAN_BANK_BITS))
         try:
             p = Player(name, playertype="HUMAN")
-            p.deposit(BITS)
+            p.deposit(HUMAN_BANK_BITS)
             save_player(p)
             return p
         except ValueError:

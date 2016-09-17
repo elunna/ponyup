@@ -1,52 +1,43 @@
-import player
 import table
-import names
 import random
+import session_factory
 
-DEPOSIT = 10000
 DEF_STACK = 1000
+DEFAULT_BB = 100
 STEP = 100
 
 
 def factory(**new_config):
     config = {
         'seats': None,
-        'game': None,
         'tablename': 'default',
-        'types': 'random',  # Player types
-        'names': 'bob',  # Player names, can be 'random'
-        'empty': False,
+        'playerpool': None,
         'heroseat': None,
-        'deposit': DEPOSIT,
         'stack': DEF_STACK,
         'stepstacks': False,
         'variance': None,   # A percentage that the stack size can randomly vary.
         'remove': None,
+        'bb': None
     }
-
     config.update(new_config)
-    SEATS = config['seats']
-    t = table.Table(SEATS)
-    t.name = config['tablename']
 
-    if config['empty']:
-        return t
+    tbl = table.Table(config['seats'])
+    tbl.name = config['tablename']
 
-    # Create a list of players
-    if config['names'] == 'random':
-        # Generate random names
-        nameset = names.random_names(SEATS)
+    # If playerpool is none, use a default playerpool.
+    if config['playerpool'] is None:
+        pool = session_factory.make_playerpool(quantity=10)
+
+    elif len(config['playerpool']) < config['seats']:
+        raise Exception('The playerpool doesn\'t have another players to cover the table!')
     else:
-        nameset = [config['names'] + str(i) for i in range(SEATS)]
+        pool = config['playerpool']
 
     # Fund and Seat the players
-    for i, s in enumerate(t):
+    for i, s in enumerate(tbl):
         if i == config['heroseat']:
             continue  # Save this seat for the hero.
-        p = player.factory(nameset[i], config['game'], config['types'])
-
-        p.deposit(config['deposit'])
-        s.sitdown(p)
+        s.sitdown(pool.pop(0))
 
     # Players buyin to the table.
     # There are a few different ways to set stack sizes.
@@ -60,7 +51,7 @@ def factory(**new_config):
 
     # *** Player buyins ***
     # Go through all the seats
-    for i, s in enumerate(t):
+    for i, s in enumerate(tbl):
         # Check if the seat is occupied or vacant.
         if s.vacant():
             continue
@@ -76,11 +67,11 @@ def factory(**new_config):
         # Random variations
         if config['variance']:
             hilimit = int(s.stack * config['variance'])
-            offset = random.randint(0, hilimit)
+            offset = random.randint(-hilimit, hilimit)
             s.stack -= offset
 
     # Removes a player from the table, if specified.
     if config['remove'] is not None:
-        t.pop(config['remove'])
+        tbl.pop(config['remove'])
 
-    return t
+    return tbl

@@ -5,6 +5,8 @@ import player
 import stud
 import table_factory
 
+CPU_BANK_BITS = 10000
+
 
 def factory(**new_config):
     config = {
@@ -17,18 +19,18 @@ def factory(**new_config):
         'heroseat': 0,
         'level': 1,
         'names': 'bob',
-        'deposit': table_factory.DEPOSIT
+        'deposit': CPU_BANK_BITS
     }
+
     config.update(new_config)
-    playerpool = make_playerpool(quantity=config['poolsize'])
+    pool = make_playerpool(quantity=config['poolsize'], game=config['game'])
 
     # Construct the table
     t = table_factory.factory(
         seats=config['seats'],
+        playerpool=pool,
         heroseat=(config['heroseat'] if config['hero'] is not None else None),
-        game=config['game'],
         tablename=config['tablename'],
-        names=config['names'],
     )
 
     # Create and place the hero player.
@@ -48,8 +50,8 @@ def factory(**new_config):
     else:
         raise ValueError('Game unknown to session!')
 
-    # Set tablename for the session.
-    sesh.playerpool = playerpool
+    # Set the session playerpool - the players in the table should have been popped out.
+    sesh.playerpool = pool
     return sesh
 
 
@@ -59,7 +61,7 @@ def make_playerpool(**new_config):
         'game': None,
         'types': 'random',  # Player types
         'names': 'bob',  # Player names, can be 'random'
-        'deposit': table_factory.DEPOSIT,
+        'deposit': CPU_BANK_BITS,
         'variance': None,   # A percentage that the deposit can randomly vary.
     }
     config.update(new_config)

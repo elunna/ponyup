@@ -8,7 +8,7 @@ class TestSessionFactory(unittest.TestCase):
     def setUp(self):
         # Make a default hero
         self.h = player.Player('Octavia', playertype="HUMAN")
-        self.h.deposit(table_factory.DEPOSIT)
+        self.h.deposit(session_factory.CPU_BANK_BITS)
 
     """
     Tests for factory(**new_config)
@@ -30,7 +30,7 @@ class TestSessionFactory(unittest.TestCase):
 
     def test_factory_hero_herohasbankminusstack(self):
         s = session_factory.factory(seats=2, game="FIVE CARD STUD", hero=self.h)
-        expected = table_factory.DEPOSIT - table_factory.DEF_STACK
+        expected = session_factory.CPU_BANK_BITS - table_factory.DEF_STACK
         result = s._table.seats[0].player.bank
         self.assertEqual(expected, result)
 
@@ -51,7 +51,7 @@ class TestSessionFactory(unittest.TestCase):
     # 1 player has the DEPOSIT amt
     def test_makeplayerpool_qty1_hasbank(self):
         pool = session_factory.make_playerpool(quantity=1)
-        expected = table_factory.DEPOSIT
+        expected = session_factory.CPU_BANK_BITS
         result = pool[0].bank
         self.assertEqual(expected, result)
 

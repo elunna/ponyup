@@ -5,7 +5,7 @@ import evaluator
 import random
 import seat
 
-VALID_SIZES = list(range(1, 10))
+VALID_SIZES = list(range(2, 10))
 
 
 class Table():

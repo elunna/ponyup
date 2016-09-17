@@ -13,10 +13,10 @@ class TestTableFactory(unittest.TestCase):
     def test_factory_noseatspassed_raisesException(self):
         self.assertRaises(ValueError, table_factory.factory)
 
-    def test_factory_noplayerpool_emptyTable(self):
+    def test_factory_noplayerpool_defaultplayersused(self):
         t = table_factory.factory(seats=2)
-        expected = []
-        result = t.get_players()
+        expected = 2
+        result = len(t.get_players())
         self.assertEqual(expected, result)
 
     def test_factory_namedPonyville_hasName(self):
