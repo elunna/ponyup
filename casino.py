@@ -40,7 +40,7 @@ def create_player():
 def delete_player():
     name = console.pick_name()
     player.del_player(name)
-    if name == HERO.name:
+    if HERO is not None and name == HERO.name:
         global HERO
         HERO = None
     pause()
@@ -101,6 +101,8 @@ def play_poker():
     while playing:
         os.system('clear')
         g.play()
+        # Save the player after every round.
+        player.save_player(HERO)
         choice = input('keep playing? > ')
         if choice.lower() == 'n' or choice == 0:
             playing = False
