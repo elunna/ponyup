@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-Game = namedtuple('Game', ['tablename', 'seats', 'blinds', 'game'])
+Game = namedtuple('Game', ['tablename', 'seats', 'level', 'game'])
 Street = namedtuple('Street', ['name', 'betsize'])
 
 GAMES = {

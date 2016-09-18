@@ -97,7 +97,7 @@ def play_poker():
         seats=GAME.seats,
         game=GAME.game,
         tablename=GAME.tablename,
-        blinds=GAME.blinds,
+        level=GAME.level,
         hero=HERO,
         names='random',
         herobuyin=buyin

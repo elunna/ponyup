@@ -16,8 +16,7 @@ class TestPoker(unittest.TestCase):
         self.r = poker.Round(self.g)
 
     def setUp_stud(self, lvl=1, players=6):
-        b = blinds.Blinds(lvl, bringin=True)
-        self.g = factory.session_factory(seats=players, game="FIVE CARD STUD", blinds=b)
+        self.g = factory.session_factory(seats=players, game="FIVE CARD STUD", level=lvl)
         self.r = poker.Round(self.g)
 
     """

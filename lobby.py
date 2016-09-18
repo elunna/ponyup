@@ -1,3 +1,4 @@
+import blinds
 import table_selection
 """
 This lobby listing is a list of all the available cash tables a pony can play
@@ -31,7 +32,7 @@ def sort_by_name(L):
 
 
 def sort_by_stakes(L):
-    return sorted(L, key=lambda x: x.blinds.level)
+    return sorted(L, key=lambda x: x.level)
 
 
 def sort_by_seats(L):
@@ -44,5 +45,6 @@ def numbered_list(L):
     print(fmt_str.format('Pick#', 'Game', 'Seats', 'Stakes', 'Table Name'))
 
     for i, gt in enumerate(L):
-        _str += (fmt_str.format(i, gt.game.title(), gt.seats, gt.blinds.stakes(), gt.tablename))
+        _str += (fmt_str.format(i, gt.game.title(), gt.seats, blinds.get_stakes(gt.level),
+                                gt.tablename))
     return _str

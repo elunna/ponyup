@@ -133,6 +133,10 @@ stakes = {
 }
 
 
+def get_stakes(lev):
+    return '${}/${}'.format(stakes[lev], stakes[lev]*2)
+
+
 def levels(bet_dict=stakes):
     """
     Returns a listing of all the available blind levels in the structure.

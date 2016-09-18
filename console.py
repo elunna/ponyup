@@ -1,3 +1,4 @@
+import blinds
 import card
 import colors
 import lobby
@@ -190,7 +191,7 @@ def color_game(GAME):
     _str = ''
     _str += FMT.format(color_setting('Table Name'), color_param(GAME.tablename))
     _str += FMT.format(color_setting('Game'), color_param(GAME.game))
-    _str += FMT.format(color_setting('Stakes'), color_param(GAME.blinds.stakes()))
+    _str += FMT.format(color_setting('Stakes'), color_param(blinds.get_stakes(GAME.level)))
     _str += FMT.format(color_setting('Seats'), color_param(GAME.seats))
 
     return _str
@@ -258,11 +259,12 @@ def right_align(txt):
 
 
 def get_buyin(game, hero):
-    minbuyin = game.blinds.SMBET * 10
+    minbuyin = blinds.stakes[game.level] * 10
     if hero.bank < minbuyin:
         print('Sorry, you don\'t have enough chips to buyin to this game!')
         return None
-    print('The minimum buy-in for {} is {} bits.'.format(game.blinds.stakes(), minbuyin))
+    print('The minimum buy-in for {} is {} bits.'.format(
+        blinds.get_stakes(game.level), minbuyin))
     print('How much do you want to buyin for? (Minimum={})'.format(minbuyin))
 
     choice = prompt(':>')

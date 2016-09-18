@@ -1,6 +1,5 @@
 import unittest
 import betting
-import blinds
 import factory
 import tools
 
@@ -44,8 +43,7 @@ class TestBetting(unittest.TestCase):
         """
         Setup a 5 card stud game for testing.
         """
-        b = blinds.Blinds(lvl, bringin=True)
-        g = factory.session_factory(seats=players, game="FIVE CARD STUD", blinds=b)
+        g = factory.session_factory(seats=players, game="FIVE CARD STUD", level=lvl)
         self.r = g.new_round()
 
         for i in range(street - 1):  # Adjust which street to test.
