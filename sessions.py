@@ -104,12 +104,12 @@ class Session():
         Makes a random player (not including the hero) standup and leave the table.
         """
         # If there are only 2 players, ignore this.
-        if len(self._table.get_player()) == 2:
+        if len(self._table.get_players()) == 2:
             return False
         runaway = random.randint(1, 100) <= LEAVE_CHANCE
         if runaway:
             while True:
-                s = random.choice(self._table.get_player())
+                s = random.choice(self._table.get_players())
                 if s.player.is_human():
                     # This is the human hero player - don't remove.
                     continue

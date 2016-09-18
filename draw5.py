@@ -40,6 +40,6 @@ class Draw5Session(sessions.Session):
         self.rounds += 1
 
         # Write handhistory to file
-        r.hh.write_to_file('logs/draw5.log')
+        r.hh.write_to_file()
 
         self.clear_broke_players()

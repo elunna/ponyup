@@ -38,4 +38,4 @@ class Stud5Session(sessions.Session):
         r.cleanup()
         self.rounds += 1
 
-        r.hh.write_to_file('logs/stud5.log')
+        r.hh.write_to_file()

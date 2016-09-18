@@ -6,6 +6,7 @@ import deck
 import evaluator
 import handhistory
 import pots
+import random
 
 
 class Round():
@@ -14,6 +15,7 @@ class Round():
         Initialize the next round of Poker.
         """
         self.gametype = session.gametype
+        self.gameid = random.randint(100000000, 999999999)
         self.blinds = session.blinds
         self.streets = session.streets
         self._table = session._table
