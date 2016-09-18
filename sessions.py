@@ -115,6 +115,7 @@ class Session():
                     # This is the human hero player - don't remove.
                     continue
                 else:
+                    print('{} has left the table..'.format(s.player))
                     # Make the random player leave
                     s.standup()
                     return True
