@@ -92,6 +92,7 @@ def session_factory(**new_config):
         'table': None,
         'hero': None,  # If there is a hero, they will be placed at the hero seat.
         'heroseat': 0,
+        'herobuyin': None,
         'level': 1,
         'blinds': None,
         'names': 'bob',
@@ -117,7 +118,7 @@ def session_factory(**new_config):
         hero = config['hero']
         heroseat = t.seats[config['heroseat']]
         heroseat.sitdown(hero)
-        heroseat.buy_chips(DEF_STACK)
+        heroseat.buy_chips(config['herobuyin'])
 
     # Configure blinds
     if config['blinds']:
