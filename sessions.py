@@ -1,4 +1,5 @@
 import games
+import factory
 import poker
 import options
 import random
@@ -66,8 +67,8 @@ class Session():
         broke_players = self._table.get_broke_players()
         _str = ''
         for seat in broke_players:
-            seat.standup()
             _str += '{} left the table with no money!\n'.format(seat.player)
+            seat.standup()
         return _str
 
     def table_maintainance(self):
@@ -98,6 +99,7 @@ class Session():
             print('{} has entered the game and taken seat {}.'.format(
                 newplayer.name, newseat.NUM))
             newseat.sitdown(newplayer)
+            newseat.buy_chips(factory.random_stack(self.blinds.SMBET))
         return True
 
     def yank_from_table(self):

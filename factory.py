@@ -130,7 +130,7 @@ def session_factory(**new_config):
         heroseat=(config['heroseat'] if config['hero'] is not None else None),
         tablename=config['tablename'],
         varystacks=config['varystacks'],
-        bb=sesh.blinds.SMBET
+        bb=sesh.blinds.SMBET * 2
     )
 
     # Create and place the hero player.
