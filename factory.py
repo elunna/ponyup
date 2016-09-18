@@ -141,7 +141,6 @@ def make_playerpool(**new_config):
         'types': 'random',  # Player types
         'names': 'bob',  # Player names, can be 'random'
         'deposit': CPU_BANK_BITS,
-        'variance': None,   # A percentage that the deposit can randomly vary.
     }
     config.update(new_config)
     qty = config['quantity']
