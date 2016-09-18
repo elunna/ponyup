@@ -9,6 +9,8 @@ CPU_BANK_BITS = 10000
 DEF_STACK = 1000
 DEFAULT_BB = 100
 DEFAULT_POOL = 100
+MIN_BB = 5
+MAX_BB = 50
 STEP = 100
 
 
@@ -20,9 +22,9 @@ def table_factory(**new_config):
         'heroseat': None,
         'stack': DEF_STACK,
         'stepstacks': False,
-        'variance': None,   # A percentage that the stack size can randomly vary.
         'remove': None,
-        'bb': None
+        'bb': None,
+        'varystacks': False
     }
     config.update(new_config)
 
@@ -64,13 +66,16 @@ def table_factory(**new_config):
         # Buy chips based on the parameter preference
         if config['stepstacks']:
             s.buy_chips(STEP * (i + 1))
+        elif config['varystacks']:
+            # Get a different stacksize(in BB's) for each player
+            s.buy_chips(random_stack(config['bb']))
+
         elif config['stack']:
             s.buy_chips(config['stack'])
         else:
             s.buy_chips(DEF_STACK)
 
         # Random variations
-        if config['variance']:
             hilimit = int(s.stack * config['variance'])
             offset = random.randint(-hilimit, hilimit)
             s.stack -= offset
@@ -94,7 +99,8 @@ def session_factory(**new_config):
         'herobuyin': None,
         'level': 1,
         'names': 'bob',
-        'deposit': CPU_BANK_BITS
+        'deposit': CPU_BANK_BITS,
+        'varystacks': False
     }
 
     config.update(new_config)
@@ -113,7 +119,8 @@ def session_factory(**new_config):
     pool = make_playerpool(
         quantity=config['poolsize'],
         game=config['game'],
-        names=config['names']
+        names=config['names'],
+        varystacks=config['varystacks']
     )
 
     # Construct the table
@@ -122,6 +129,8 @@ def session_factory(**new_config):
         playerpool=pool,
         heroseat=(config['heroseat'] if config['hero'] is not None else None),
         tablename=config['tablename'],
+        varystacks=config['varystacks'],
+        bb=sesh.blinds.SMBET
     )
 
     # Create and place the hero player.
@@ -171,3 +180,8 @@ def make_playerpool(**new_config):
         p.deposit(config['deposit'])
 
     return playerpool
+
+
+def random_stack(bb):
+    bigblinds = random.randint(MIN_BB, MAX_BB)
+    return bigblinds * bb

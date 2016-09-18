@@ -100,7 +100,8 @@ def play_poker():
         level=GAME.level,
         hero=HERO,
         names='random',
-        herobuyin=buyin
+        herobuyin=buyin,
+        varystacks=True
     )
 
     playing = True
