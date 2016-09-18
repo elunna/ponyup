@@ -143,9 +143,12 @@ def display_table(table, hero=None):
         else:
             _str += ' '*7
 
-        _str += '{:20}'.format(str(s.player))
-
-        _str += color_chips('{:<16}'.format(s.stack))
+        if s.occupied():
+            _str += '{:20}'.format(str(s.player))
+            _str += color_chips('{:<16}'.format(s.stack))
+        else:
+            # Don't show anything for vacant seats.
+            _str += '{:20}{:16}'.format('', '')
 
         # Display hand if available
         if s == hero:
