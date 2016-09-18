@@ -14,7 +14,12 @@ def default():
 def sorted_by_game_and_lev():
     drawgames = get_game(lobbylist, "FIVE CARD DRAW")
     studgames = get_game(lobbylist, "FIVE CARD STUD")
-    return sort_by_level(drawgames) + sort_by_level(studgames)
+    return sort_by_stakes(drawgames) + sort_by_stakes(studgames)
+
+
+def available_games():
+    gamelist = set([g.game for g in lobbylist])
+    return list(gamelist)
 
 
 def get_game(L, game):
@@ -25,7 +30,7 @@ def sort_by_name(L):
     return sorted(L, key=lambda x: x.name)
 
 
-def sort_by_level(L):
+def sort_by_stakes(L):
     return sorted(L, key=lambda x: x.blinds.level)
 
 

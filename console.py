@@ -46,18 +46,35 @@ def prompt(p=''):
 
 
 def pick_game():
-    tables = lobby.sorted_by_game_and_lev()
+    gamelist = lobby.available_games()
+    print('Pick one of these games')
+    for i, g in enumerate(gamelist):
+        print('{}: {}'.format(i, g))
+
+    valid_choices = list(range(len(gamelist)))
+    print('What game do you want to play?')
+    game = gamelist[get_menu_number(valid_choices)]
+    return pick_table(game)
+
+
+def pick_table(game):
+    tables = lobby.sort_by_stakes(lobby.get_game(lobby.lobbylist, game))
+
     print(lobby.numbered_list(tables))
     valid_choices = list(range(len(tables)))
+    print('What game do you want to play?')
+    return tables[get_menu_number(valid_choices)]
 
+
+def get_menu_number(validchoices):
     while True:
-        choice = prompt('What game do you want to play?')
+        choice = prompt()
         if choice is None:
             pass
         elif is_integer(choice) is False:
             print('Please enter a number for your selection!')
-        elif int(choice) in valid_choices:
-            return tables[int(choice)]
+        elif int(choice) in validchoices:
+            return int(choice)
         else:
             print('Selection not available, try again.')
 
