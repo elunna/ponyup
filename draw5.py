@@ -41,5 +41,3 @@ class Draw5Session(sessions.Session):
 
         # Write handhistory to file
         r.hh.write_to_file()
-
-        self.clear_broke_players()
