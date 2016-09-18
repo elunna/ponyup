@@ -252,3 +252,26 @@ def show_hands(table, color=True):
 def right_align(txt):
     for l in txt.split('\n'):
         print(l.rjust(DISPLAYWIDTH))
+
+
+def get_buyin(game, hero):
+    minbuyin = game.blinds.SMBET * 10
+    if hero.bank < minbuyin:
+        print('Sorry, you don\'t have enough chips to buyin to this game!')
+        return None
+    print('The minimum buy-in for {} is {} bits.'.format(game.blinds.stakes(), minbuyin))
+    print('How much do you want to buyin for? (Minimum={})'.format(minbuyin))
+
+    choice = prompt(':>')
+    if is_integer(choice):
+        if int(choice) < minbuyin:
+            print('Not enough!')
+            return None
+        elif int(choice) > hero.bank:
+            print('This is more chips than you can afford!')
+            return None
+        else:
+            return int(choice)
+    else:
+        print('Invalid input!')
+        return None

@@ -87,6 +87,12 @@ def play_poker():
         pause()
         return
 
+    # Let the hero buyin to the game.
+    buyin = console.get_buyin(GAME, HERO)
+    if buyin is None:
+        print('Something went wrong with the buyin.')
+        return
+
     g = factory.session_factory(
         seats=GAME.seats,
         game=GAME.game,
@@ -94,6 +100,7 @@ def play_poker():
         blinds=GAME.blinds,
         hero=HERO,
         names='random',
+        herobuyin=buyin
     )
 
     playing = True
