@@ -71,6 +71,7 @@ class Session():
         return _str
 
     def table_maintainance(self):
+        print(self.clear_broke_players())
         if self.repopulate():
             return
         else:
