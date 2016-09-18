@@ -1,7 +1,12 @@
+import blinds
 import sessions
 
 
 class Stud5Session(sessions.Session):
+    def __init__(self):
+        super().__init__(gametype="FIVE CARD STUD")
+        self.blinds = blinds.Blinds(bringin=True)
+
     def play(self):
         """
         Play a round of Five Card Draw.

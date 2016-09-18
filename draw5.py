@@ -1,8 +1,13 @@
+import blinds
 import sessions
 import discard
 
 
 class Draw5Session(sessions.Session):
+    def __init__(self):
+        super().__init__(gametype="FIVE CARD DRAW")
+        self.blinds = blinds.Blinds()
+
     def play(self):
         """
         Play a round of Five Card Draw.

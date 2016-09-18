@@ -24,18 +24,18 @@ REBUY_CHANCE = 50.0     # as a percent
 
 
 class Session():
-    def __init__(self, gametype, table, blinds, playerpool=None):
+    def __init__(self, gametype):
         """
         Initialize the poker Session settings.
         """
         self.gametype = gametype
         self.rounds = 1
-        self._table = table
         self.streets = games.GAMES[gametype]
-        self.blinds = blinds
         self.options = options.OPTIONS
-        self.hero = self.find_hero()
-        self.playerpool = playerpool
+        self.blinds = None
+        self._table = None
+        self.playerpool = None
+        self.hero = None
 
     def __str__(self):
         """

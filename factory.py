@@ -1,4 +1,3 @@
-import blinds
 import draw5
 import names
 import player
@@ -99,10 +98,23 @@ def session_factory(**new_config):
     }
 
     config.update(new_config)
+
+    if config['game'] == 'FIVE CARD STUD':
+        sesh = stud.Stud5Session()
+    elif config['game'] == 'FIVE CARD DRAW':
+        sesh = draw5.Draw5Session()
+    else:
+        raise ValueError('Game unknown to session!')
+
+    # Set the blind level
+    sesh.blinds.set_level(config['level'])
+
+    # Make the playerpool
     pool = make_playerpool(
         quantity=config['poolsize'],
         game=config['game'],
-        names=config['names'])
+        names=config['names']
+    )
 
     # Construct the table
     t = table_factory(
@@ -118,18 +130,10 @@ def session_factory(**new_config):
         heroseat = t.seats[config['heroseat']]
         heroseat.sitdown(hero)
         heroseat.buy_chips(config['herobuyin'])
-
-    if config['game'] == 'FIVE CARD STUD':
-        b = blinds.Blinds(config['level'], blinds=False, bringin=True, antes=True)
-        sesh = stud.Stud5Session(config['game'], table=t, blinds=b)
-
-    elif config['game'] == 'FIVE CARD DRAW':
-        b = blinds.Blinds(config['level'])
-        sesh = draw5.Draw5Session(config['game'], table=t, blinds=b)
-    else:
-        raise ValueError('Game unknown to session!')
+        sesh.hero = heroseat
 
     # Set the session playerpool - the players in the table should have been popped out.
+    sesh._table = t
     sesh.playerpool = pool
     return sesh
 
