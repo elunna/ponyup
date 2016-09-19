@@ -169,7 +169,9 @@ def get_value(cards):
 
     ranklist = rank_list(sorted(cards))
 
-    if len(ranklist) == HANDSIZE:
+    if len(ranklist) < 5:
+        return score_pair_hands(cards)
+    elif len(ranklist) == HANDSIZE:
         # Returns the value of a non-pair hand.
         FIVEHIGH, ACEHIGH = 5, 14
 
@@ -189,9 +191,6 @@ def get_value(cards):
             return HANDTYPES['STRAIGHT'] + score_ranklist(ranklist)
         else:
             return HANDTYPES['HIGH CARD'] + score_ranklist(ranklist)
-
-    elif len(ranklist) >= 1:
-        return score_pair_hands(cards)
     else:
         return HANDTYPES['INVALID']
 
