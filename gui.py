@@ -53,12 +53,40 @@ class SplashScreen(tk.Frame):
         author.pack(side=tk.TOP)
 
 
+class MainMenu(tk.Frame):
+    def __init__(self, parent=None):
+        tk.Frame.__init__(self, parent)
+        self.pack()
+        menu = tk.Menu()
+        parent.config(menu=menu)
+
+        gameMenu = tk.Menu(menu)
+        menu.add_cascade(label="File", menu=gameMenu)
+        gameMenu.add_command(label="New Player", command=self.dont)
+        gameMenu.add_command(label="Open Player", command=self.dont)
+        gameMenu.add_command(label="Save Player", command=self.dont)
+        gameMenu.add_command(label="Delete Player", command=self.dont)
+        gameMenu.add_separator()
+        gameMenu.add_command(label="Exit", command=self.dont)
+
+        helpMenu = tk.Menu(menu)
+
+        menu.add_cascade(label="Edit", menu=helpMenu)
+        helpMenu.add_command(label="Help", command=self.dont)
+        helpMenu.add_command(label="Credits", command=self.dont)
+        gameMenu.add_separator()
+        helpMenu.add_command(label="About", command=self.dont)
+
+    def dont(self):
+        print('Octavia cellos')
+        pass
+
 if __name__ == "__main__":
     root = tk.Tk()
     SplashScreen(root).pack()
     QuitButton(root).pack()
-    tk.Button(text='Poker', command=(lambda: mb.showerror('Pokerz', errmsg))).pack(fill=tk.X)
+    MainMenu(root).pack()
 
-    buttons = tk.Frame()
+    tk.Button(text='Poker', command=(lambda: mb.showerror('Pokerz', errmsg))).pack(fill=tk.X)
 
     root.mainloop()
