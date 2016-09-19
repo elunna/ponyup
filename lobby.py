@@ -1,5 +1,4 @@
 from collections import namedtuple
-import blinds
 import sqlite3
 
 """
@@ -55,6 +54,5 @@ def numbered_list(L):
     print(fmt_str.format('Pick#', 'Game', 'Seats', 'Stakes', 'Table Name'))
 
     for i, gt in enumerate(L):
-        _str += (fmt_str.format(i, gt.game.title(), gt.seats, blinds.get_stakes(gt.level),
-                                gt.tablename))
+        _str += (fmt_str.format(i, gt.game.title(), gt.seats, gt.stakes, gt.tablename))
     return _str
