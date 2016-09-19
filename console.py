@@ -265,18 +265,17 @@ def get_buyin(game, hero):
         return None
     print('The minimum buy-in for {} is {} bits.'.format(
         blinds.get_stakes(game.level), minbuyin))
-    print('How much do you want to buyin for? (Minimum={})'.format(minbuyin))
 
-    choice = prompt(':>')
-    if is_integer(choice):
-        if int(choice) < minbuyin:
-            print('Not enough!')
-            return None
-        elif int(choice) > hero.bank:
-            print('This is more chips than you can afford!')
-            return None
+    while True:
+        print('How much do you want to buyin for? (Minimum={})'.format(minbuyin))
+
+        choice = prompt()
+        if is_integer(choice):
+            if int(choice) < minbuyin:
+                print('Not enough!\n')
+            elif int(choice) > hero.bank:
+                print('This is more chips than you can afford!\n')
+            else:
+                return int(choice)
         else:
-            return int(choice)
-    else:
-        print('Invalid input!')
-        return None
+            print('Invalid input!\n')

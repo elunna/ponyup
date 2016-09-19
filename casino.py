@@ -87,11 +87,7 @@ def play_poker():
         pause()
         return
 
-    # Let the hero buyin to the game.
     buyin = console.get_buyin(GAME, HERO)
-    if buyin is None:
-        print('Something went wrong with the buyin.')
-        return
 
     g = factory.session_factory(
         seats=GAME.seats,
@@ -103,19 +99,21 @@ def play_poker():
         herobuyin=buyin,
         varystacks=True
     )
-
     playing = True
 
     while playing:
         os.system('clear')
         g.play()
+        # Check if hero went broke
+        if g.find_hero().stack == 0:
+            buyin = console.get_buyin(GAME, HERO)
+
         g.table_maintainance()  # Perform in-between game activities
 
         choice = input('keep playing? > ')
         if choice.lower() == 'n':
             playing = False
             g.find_hero().standup()
-            # Save the players game.
             player.save_player(HERO)
 
 
