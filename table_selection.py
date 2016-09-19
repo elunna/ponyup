@@ -1,3 +1,5 @@
+import blinds
+import sqlite3
 from games import Game
 
 # TABLENAME | TABLE SIZE | STAKES | GAME
@@ -58,3 +60,23 @@ tables = (
 )
 
 # 'CMC Clubhouse' in [n.name for n in l]
+
+
+def make_db():
+    conn = sqlite3.connect('lobby.db')
+    c = conn.cursor()
+
+    c.execute('CREATE TABLE IF NOT EXISTS games(name TEXT, game TEXT, seats INTEGER, level INTEGER, stakes TEXT, format TEXT)')
+
+    # Build a database from the existing dictionary.
+    for g in tables:
+        stakes = blinds.get_stakes(g.level)
+        c.execute("INSERT INTO games VALUES(?, ?, ?, ?, ?, ?)", (g.tablename, g.game, g.seats, g.level, stakes, 'CASH'))
+
+    # Anytime we change something, we need to commit to save.
+    conn.commit()
+    c.close()
+    conn.close()
+
+if __name__ == "__main__":
+    make_db()
