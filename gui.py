@@ -20,18 +20,22 @@ class QuitButton(tk.Frame):
         else:
             mb.showinfo('No', 'Quit has been cancelled')
 
+
+class SplashScreen(tk.Frame):
+    def __init__(self, parent=None):
+        tk.Frame.__init__(self, parent)
+        self.pack()
+        labelfont = ('times', 20, 'bold')
+        title = tk.Label(root, text='Pycard$ by Erik Lunna')
+        title.config(bg='black', fg='yellow')
+        title.config(font=labelfont)
+        title.config(height=3, width=30)
+        title.pack(side=tk.TOP)
+
+
 if __name__ == "__main__":
-
     root = tk.Tk()
-    labelfont = ('times', 20, 'bold')
-
-    title = tk.Label(root, text='Pycard$ by Erik Lunna')
-    title.config(bg='black', fg='yellow')
-    title.config(font=labelfont)
-    title.config(height=3, width=30)
-    title.pack(side=tk.TOP)
-
-    #  tk.Button(text='Quit', command=callback).pack(fill=tk.X)
+    SplashScreen(root).pack()
     QuitButton(root).pack()
     tk.Button(text='Poker', command=(lambda: mb.showerror('Pokerz', errmsg))).pack(fill=tk.X)
 
