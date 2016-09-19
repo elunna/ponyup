@@ -5,7 +5,7 @@ import sqlite3
 This lobby listing is a list of all the available cash tables a pony can play
 at. Each has: Table name, seats, stakes level, game type.
 """
-Game = namedtuple('Game', ['tablename', 'seats', 'level', 'stakes', 'game', 'format'])
+Game = namedtuple('Game', ['tablename', 'game', 'seats', 'level', 'stakes',  'format'])
 DEFAULT_TABLE = 'Wonderbolt Academy'
 DB = 'lobby.db'
 
@@ -22,18 +22,18 @@ class Lobby():
         c.close()
         conn.close()
 
+    def default(self):
+        for t in self.tables:
+            if t.tablename == DEFAULT_TABLE:
+                return t
+        else:
+            return None
 
-def default():
-    return DEFAULT_TABLE
+    def available_games(self):
+        return list(set([g.game for g in self.tables]))
 
-
-def available_games(L):
-    gamelist = set([g.game for g in L])
-    return list(gamelist)
-
-
-def get_game(L, game):
-    return [x for x in L if x.game == game]
+    def get_game(self, game):
+        return [x for x in self.tables if x.game == game]
 
 
 def sort_by_name(L):

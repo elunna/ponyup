@@ -10,7 +10,8 @@ import player
 import factory
 
 HERO = None
-GAME = lobby.default()
+LOBBY = lobby.Lobby()
+GAME = LOBBY.default()
 
 # Define menu opions
 options = {}
@@ -48,7 +49,7 @@ def delete_player():
 
 def pick_game():
     global GAME
-    GAME = console.pick_game()
+    GAME = console.pick_game(LOBBY)
 
 
 def logo():

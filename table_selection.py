@@ -1,6 +1,7 @@
+from collections import namedtuple
 import blinds
 import sqlite3
-from games import Game
+Game = namedtuple('Game', ['tablename', 'seats', 'level', 'game'])
 
 # TABLENAME | TABLE SIZE | STAKES | GAME
 tables = (
@@ -69,14 +70,21 @@ def make_db():
     c.execute('CREATE TABLE IF NOT EXISTS games(name TEXT, game TEXT, seats INTEGER, level INTEGER, stakes TEXT, format TEXT)')
 
     # Build a database from the existing dictionary.
-    for g in tables:
-        stakes = blinds.get_stakes(g.level)
-        c.execute("INSERT INTO games VALUES(?, ?, ?, ?, ?, ?)", (g.tablename, g.game, g.seats, g.level, stakes, 'CASH'))
+    for gt in tables:
+        stakes = blinds.get_stakes(gt.level)
+        c.execute("INSERT INTO games VALUES(?, ?, ?, ?, ?, ?)", (gt.tablename, gt.game, gt.seats, gt.level, stakes, 'CASH'))
 
+    print_db(c)
     # Anytime we change something, we need to commit to save.
     conn.commit()
     c.close()
     conn.close()
+
+
+def print_db(db_cursor):
+    rows = db_cursor.execute('SELECT * from games')
+    for r in rows:
+        print(r)
 
 if __name__ == "__main__":
     make_db()
