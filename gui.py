@@ -81,6 +81,13 @@ class MainMenu(tk.Frame):
         print('Octavia cellos')
         pass
 
+
+class Lobby(tk.Frame):
+    def __init__(self, parent=None):
+        tk.Frame.__init__(self, parent)
+        self.pack()
+        pass
+
 if __name__ == "__main__":
     root = tk.Tk()
     SplashScreen(root).pack()
