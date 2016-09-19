@@ -26,7 +26,7 @@ class SplashScreen(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.pack()
         labelfont = ('times', 20, 'bold')
-        title = tk.Label(root, text='PonyUp Poker')
+        title = tk.Label(self, text='PonyUp Poker')
         title.config(bg='black', fg='yellow')
         title.config(font=labelfont)
         title.config(height=2, width=30)
@@ -40,15 +40,15 @@ class SplashScreen(tk.Frame):
             'width': 30,
         }
 
-        title2 = tk.Label(root, text='Card Room')
+        title2 = tk.Label(self, text='Card Room')
         title2.config(smconf)
         title2.pack(side=tk.TOP)
 
-        credits = tk.Label(root, text='AoristTwilist Productions(2016)')
+        credits = tk.Label(self, text='AoristTwilist Productions(2016)')
         credits.config(smconf)
         credits.pack(side=tk.TOP)
 
-        author = tk.Label(root, text='Author: Erik Lunna')
+        author = tk.Label(self, text='Author: Erik Lunna')
         author.config(smconf)
         author.pack(side=tk.TOP)
 
