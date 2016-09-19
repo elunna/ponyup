@@ -6,7 +6,7 @@ This lobby listing is a list of all the available cash tables a pony can play
 at. Each has: Table name, seats, stakes level, game type.
 """
 Game = namedtuple('Game', ['tablename', 'game', 'seats', 'level', 'stakes',  'format'])
-DEFAULT_TABLE = 'Wonderbolt Academy'
+DEFAULT_TABLE = 'Twilight\'s Lab'
 DB = 'lobby.db'
 
 
