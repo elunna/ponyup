@@ -1,25 +1,35 @@
+from collections import namedtuple
 import blinds
-import table_selection
+import sqlite3
+
 """
 This lobby listing is a list of all the available cash tables a pony can play
 at. Each has: Table name, seats, stakes level, game type.
 """
-lobbylist = table_selection.tables
-DEFAULT_TABLE = 0
+Game = namedtuple('Game', ['tablename', 'seats', 'level', 'stakes', 'game', 'format'])
+DEFAULT_TABLE = 'Wonderbolt Academy'
+DB = 'lobby.db'
+
+
+class Lobby():
+    def __init__(self):
+        # Import the database to Game namedtuples
+        conn = sqlite3.connect(DB)
+        c = conn.cursor()
+        self.tables = []
+        games = c.execute('SELECT * from games')
+        for g in games:
+            self.tables.append(Game(*g))
+        c.close()
+        conn.close()
 
 
 def default():
-    return lobbylist[DEFAULT_TABLE]
+    return DEFAULT_TABLE
 
 
-def sorted_by_game_and_lev():
-    drawgames = get_game(lobbylist, "FIVE CARD DRAW")
-    studgames = get_game(lobbylist, "FIVE CARD STUD")
-    return sort_by_stakes(drawgames) + sort_by_stakes(studgames)
-
-
-def available_games():
-    gamelist = set([g.game for g in lobbylist])
+def available_games(L):
+    gamelist = set([g.game for g in L])
     return list(gamelist)
 
 
@@ -28,7 +38,7 @@ def get_game(L, game):
 
 
 def sort_by_name(L):
-    return sorted(L, key=lambda x: x.name)
+    return sorted(L, key=lambda x: x.tablename)
 
 
 def sort_by_stakes(L):
