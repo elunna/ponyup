@@ -2,17 +2,16 @@
 import combos
 import deck
 import evaluator
-import pokerhands
+import tools
 
 # Minimum rank threshold to reach for improvement
-#  RANK = pokerhands.PAIR_JJ
-#  RANK = pokerhands.TWOPAIR_22
-#  RANK = pokerhands.STRAIGHT
-RANK = pokerhands.TRIPS
+#  RANK = tools.PAIR_JJ
+#  RANK = tools.TWOPAIR_22
+#  RANK = tools.STRAIGHT
+RANK = tools.TRIPS
 
 
 def find_best_discard(cards):
-
     # Create a new deck
     d = deck.Deck()
 
@@ -35,6 +34,7 @@ def find_best_discard(cards):
         # Discard those cards from the original hand
         hand = rm_discards(cards, dc)
 
+        # N is the number of discards.
         N = len(dc)
 
         # Get ALL complementary combos of length N from the deck.
@@ -42,9 +42,20 @@ def find_best_discard(cards):
 
         improves = 0
 
+        #  print('Redraw combos: {}'.format(redraw_combos))
+        #  print('Redraw qty: {}'.format(len(redraw_combos)))
+        #  print('hand {}'.format(hand))
+        #  input('...')
+
         # Find how many combos improve the value of the hand to the threshold.
         for r in redraw_combos:
-            newhand = hand.extend(list(r))
+            #  print('R = {}'.format(r))
+            newhand = hand[:]
+            newhand.extend(list(r))
+
+            #  print('newhand {}'.format(newhand))
+            #  print(newhand)
+
             if evaluator.get_value(newhand) > RANK:
                 improves += 1
 
@@ -64,9 +75,10 @@ def rm_discards(cards, discards):
     return cards
 
 if __name__ == "__main__":
-    h = pokerhands.make('OESD', hidden=False)
+    h = tools.make('OESD', hidden=False)
     print(h)
     d, c = find_best_discard(h)
 
     print('The best discard for {} is {}.'.format(h, d))
-    print('There is a {}% chance of improving to {}'.format(c, evaluator.get_type(RANK)))
+    print('There is a {}% chance of improving to {} or better'.format(
+        c, evaluator.get_type(RANK)))
