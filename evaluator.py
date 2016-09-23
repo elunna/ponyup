@@ -292,10 +292,7 @@ def suit_dict(cards):
     """
     suits = {}
     for c in cards:
-        if c.suit in suits:
-            suits[c.suit] += 1
-        else:
-            suits[c.suit] = 1
+        suits[c.suit] = suits.get(c.suit, 0) + 1
     return suits
 
 
