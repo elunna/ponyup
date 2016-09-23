@@ -303,11 +303,8 @@ def suitedcard_dict(cards):
     """
     suits = {}
     for c in cards:
-        if c.suit in suits:
-            suits[c.suit].append(c)
-        else:
-            suits[c.suit] = []
-            suits[c.suit].append(c)
+        key = c.suit
+        suits.setdefault(key, []).append(c)  # Dict grouping
     return suits
 
 
