@@ -271,10 +271,7 @@ def rank_dict(cards):
     """
     ranks = {}
     for c in cards:
-        if c.rank in ranks:
-            ranks[c.rank] += 1
-        else:
-            ranks[c.rank] = 1
+        ranks[c.rank] = ranks.get(c.rank, 0) + 1
     return ranks
 
 
