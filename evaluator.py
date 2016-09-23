@@ -312,11 +312,7 @@ def count_suit(cards, suit):
     """
     Counts how many cards of the given suit occur in the card list.
     """
-    count = 0
-    for c in cards:
-        if c.suit == suit:
-            count += 1
-    return count
+    return sum(1 for c in cards if c.suit == suit)
 
 
 def get_gap(card1, card2):
