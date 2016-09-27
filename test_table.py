@@ -76,7 +76,7 @@ class TestTable(unittest.TestCase):
     def test_next_newTable_getsseat0(self):
         expected = 'bob0'
         iterator = self.t.__iter__()
-        result = str(iterator.__next__())
+        result = str(next(iterator))
         self.assertEqual(expected, result)
 
     # Test that it goes to the next player.
@@ -92,7 +92,8 @@ class TestTable(unittest.TestCase):
         self.setUp(rm=0)
         iterator = self.t.__iter__()
         expected = 0
-        result = iterator.__next__().NUM
+        #  result = iterator.__next__().NUM
+        result = next(iterator).NUM
         self.assertEqual(expected, result)
 
     """
