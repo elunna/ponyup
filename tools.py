@@ -91,9 +91,9 @@ HANDS = {
 
 
 def to_card(string):
-    if len(string) != 2:
-        raise Exception('String must be exactly 2 characters to convert to a card!')
-    return card.Card(string[0], string[1])
+    c = card.Card(*string)
+    c.hidden = False
+    return c
 
 
 def convert_to_cards(strings):
@@ -181,7 +181,9 @@ def deal_random_cards(table, qty=5):
 def get_cards(qty):
     d, cards = deck.Deck(), []
     for i in range(qty):
-        cards.append(d.deal())
+        c = d.deal()
+        c.hidden = False
+        cards.append(c)
     return cards
 
 
