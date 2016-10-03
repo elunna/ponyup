@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 
 from __future__ import print_function
-import colors
-import combos
-import console
-import lobby
 import os
-import player
-import factory
+from ponyup import colors
+from ponyup import combos
+from ponyup import console
+from ponyup import lobby
+from ponyup import player
+from ponyup import factory
 
 HERO = None
 LOBBY = lobby.Lobby()
 GAME = LOBBY.default()
+LOGO = 'data/logo2.txt'
 
 # Define menu opions
 options = {}
@@ -54,7 +55,7 @@ def pick_game():
 
 def logo():
     txt = ''
-    with open('logo2.txt') as f:
+    with open(LOGO) as f:
         for c in f.read():
             if c == '$':
                 txt += colors.color(c, 'yellow')
