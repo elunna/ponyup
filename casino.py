@@ -153,6 +153,8 @@ def play_poker():
             g.find_hero().standup()
             _logger.debug('Saving the player info to file.')
             player.save_player(HERO)
+        else:
+            _logger.debug('Player elected to continue playing.')
 
 
 def exitgracefully():
