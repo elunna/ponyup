@@ -10,8 +10,8 @@ from ponyup import player
 from ponyup import factory
 from ponyup import logger
 
-
-HERO = None
+DEFAULT_PLAYER = 'luna'
+HERO = player.load_player(DEFAULT_PLAYER)
 LOBBY = lobby.Lobby()
 GAME = LOBBY.default()
 LOGO = 'data/logo2.txt'
