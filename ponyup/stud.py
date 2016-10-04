@@ -28,7 +28,7 @@ class Stud5Session(sessions.Session):
                 print(r.post_bringin())
             else:
                 r.deal_cards(1, faceup=True, handreq=True)
-                high = r.table.highhand()
+                high = r.highhand()
 
                 print('{} has high hand and will act first.'.format(r.table.seats[high]))
 
