@@ -2,6 +2,9 @@ from __future__ import print_function
 from ponyup import card
 from ponyup import console
 from ponyup import evaluator as ev
+from ponyup import logger
+
+_logger = logger.get_logger(__name__)
 
 
 def auto_discard(hand, max_discards=5):
@@ -11,17 +14,24 @@ def auto_discard(hand, max_discards=5):
     keeping the higher and more valuable cards) until we reach the allowable number.
     # hand is a Hand object
     """
+    _logger.debug('auto_discard for {}.'.format(hand))
+
     ranklist = ev.rank_list(hand.cards)
+
     if hand.rank() == 'HIGH CARD':
-        # Process any available draws
+        _logger.debug('Hand is a draw-type hand, finding best discard.')
         discards = draw_discards(sorted(hand.cards[:]), ranklist)
     else:
+        _logger.debug('Hand is a made-hand, finding best discard.')
         discards = made_hand_discards(hand, ranklist)
 
     while len(discards) > max_discards:
+        _logger.debug('The quantity of discards is greater than the max allowed discards.')
         lowcard = min(discards)
+        _logger.debug('Pruning 1 card from the discards.')
         discards.remove(lowcard)
 
+    _logger.debug('Returning these discards: {}.'.format(discards))
     return discards
 
 
@@ -108,6 +118,7 @@ def discard_phase(_round):
     """
     title = 'Discard Phase:'
     _round.log(title, decorate=True, echo=False)
+    _logger.info(_round.decorate(title))
     console.right_align(title)
 
     cardholders = _round.table.get_players(hascards=True)
@@ -116,6 +127,7 @@ def discard_phase(_round):
         max_discards = (5 if len(_round.d) >= 5 else len(_round.d))
         if max_discards == 0:
             _round.log('Deck has been depleted!')
+            _logger.info('Deck has been depleted!')
             break
 
         if s.player.is_human():
@@ -125,8 +137,10 @@ def discard_phase(_round):
 
         if discards:
             d_txt = '{} discards {} cards'.format(str(s), len(discards))
+            _logger.info('{} discards {} cards'.format(str(s), len(discards)))
         else:
             d_txt = '{} stands pat.'.format(str(s))
+            _logger.info('{} stands pat.'.format(str(s)))
 
         _round.log(d_txt, echo=False)  # Log it
         console.right_align(d_txt)  # Print it

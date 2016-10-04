@@ -59,6 +59,14 @@ class Round():
             _logger.error('Error - {} attribute not in self.session'.format(name))
             raise AttributeError("Child' object has no attribute {}".format(name))
 
+    @classmethod
+    def decorate(self, text):
+        #  L, R = '/)(\ ', ' /)(\'
+        #  L, R = '(\/) ', ' (\/)'
+        #  L, R = '~~(\ ', ' /)~~'
+        L, R = '~~/) ', ' (\~~'
+        return '\n' + L + text + R + '\n'
+
     def log(self, txt, echo=True, decorate=False):
         if decorate:
             txt = handhistory.decorate(txt)
