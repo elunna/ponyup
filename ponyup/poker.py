@@ -52,7 +52,7 @@ class Round():
 
     def log_holecards(self):
         self.log('Hole Cards', decorate=True, echo=False)
-        hero = self.hero
+        hero = self.find_hero()
         cards = hero.hand.peek()
         self.log('{}: [{}]'.format(hero, cards.strip()), echo=False)
 
@@ -70,7 +70,7 @@ class Round():
                 if faceup is True:
                     c.hidden = False
 
-                    if s is not self.hero:
+                    if s is not self.find_hero():
                         self.log('{} was dealt [{}]'.format(s.player, c), echo=False)
                     self.exposed.append(c)
 
@@ -188,7 +188,7 @@ class Round():
         """
         Run through a round of betting. Returns a victor if it exists.
         """
-        print(console.display_table(self.table, self.hero))
+        print(console.display_table(self.table, self.find_hero()))
         br = betting.BettingRound(self)
 
         for p in br:

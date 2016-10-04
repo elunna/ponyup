@@ -35,7 +35,6 @@ class Session():
         self.streets = games.GAMES[gametype]
         self.blinds = None
         self.table = None
-        self.hero = None
 
         self.rounds = 1
         self.options = options.OPTIONS
