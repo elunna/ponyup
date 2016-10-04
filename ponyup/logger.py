@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import logging
 
-FILENAME = 'data/poker.log'
+FILENAME = 'logs/poker.log'
 
 
 def get_logger(name, filename=FILENAME):
