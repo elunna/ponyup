@@ -22,10 +22,11 @@ def get_logger(name, filename=DEBUG_FILE):
     ch.setLevel(logging.INFO)
 
     # Setup formatting
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    debug_fh.setFormatter(formatter)
-    info_fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
+    debug_fmt = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    info_fmt = logging.Formatter('%(message)s')
+    debug_fh.setFormatter(debug_fmt)
+    info_fh.setFormatter(info_fmt)
+    ch.setFormatter(debug_fmt)
 
     # Add handlers to logger
     logger.addHandler(debug_fh)
