@@ -40,6 +40,9 @@ class Round():
         _logger.debug('Round - deck: {}'.format(self.d))
         _logger.debug('Round - exposed: {}'.format(self.exposed))
 
+        _logger.info(logger.round_header(self))
+        _logger.info(self.table.player_listing())
+
     def __str__(self):
         """
         Return info about the current round.

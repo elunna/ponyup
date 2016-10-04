@@ -1,8 +1,9 @@
-#!/usr/bin/env python3
+import datetime
 import logging
 
 DEBUG_FILE = 'logs/debug.log'
 INFO_FILE = 'logs/info.log'
+LOGDIR = 'logs/'
 
 
 def get_logger(name, filename=DEBUG_FILE):
@@ -33,3 +34,29 @@ def get_logger(name, filename=DEBUG_FILE):
     logger.addHandler(info_fh)
     #  logger.addHandler(ch)
     return logger
+
+
+def hh_logname(session):
+    dt = datetime.datetime
+    stakes = '${}-${}'.format(session.blinds.SMBET, session.blinds.SMBET * 2)
+    filename = 'HH_{}_-_{}_{}_{}(Pony Bits)'.format(
+        dt.now().strftime('%Y%m%d'),
+        session.table.name,
+        session.gametype,
+        stakes
+    )
+    return LOGDIR + filename
+
+
+def round_header(_round):
+    dt = datetime.datetime
+    date = dt.today()
+    time = dt.now().strftime('%Y-%m-%d %H:%M:%S')
+    header = 'PonyUp Poker Game ID# {}: Table {} - {} - {} - {}\n'.format(
+        _round.gameid,
+        _round.table.name,
+        _round.blinds.stakes(),
+        _round.gametype,
+        time,
+        date)
+    return header

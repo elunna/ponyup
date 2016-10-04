@@ -39,7 +39,6 @@ class Session():
         self.rounds = 1
         self.options = options.OPTIONS
         self.playerpool = None
-        _logger.debug('Initialized a new Session.')
 
     def __str__(self):
         """
@@ -51,7 +50,8 @@ class Session():
 
     def new_round(self):
         _logger.debug('Created a new Round from this Session.')
-        return poker.Round(self)
+        r = poker.Round(self)
+        return r
 
     def play(self):
         """
