@@ -43,6 +43,3 @@ class Draw5Session(sessions.Session):
 
         r.cleanup()
         self.rounds += 1
-
-        # Write handhistory to file
-        r.hh.write_to_file()

@@ -22,10 +22,10 @@ class HandHistory():
     def __init__(self, _round):
         self.dt = datetime.datetime
         self.r = _round
+        self.filename = self.generate_filename()
         self.text = ''
         self.write_header()
         self.write_player_list()
-        self.filename = self.generate_filename()
 
     def generate_filename(self):
         stakes = '${}-${}'.format(self.r.blinds.SMBET, self.r.blinds.SMBET * 2)
@@ -47,25 +47,21 @@ class HandHistory():
             self.r.gametype,
             time,
             date)
-        self.text += header
+        self.log(header)
 
     def button(self):
-        self.text += 'Seat {} has the button.\n'.format(self.r.table.TOKENS['D'])
+        self.log('Seat {} has the button.\n'.format(self.r.table.TOKENS['D']))
 
     def write_player_list(self):
-        self.text += self.r.table.player_listing()
+        self.log(self.r.table.player_listing())
 
     def write_tokens(self):
         # Note who has the button, SB, BB, bringin, etc.
         pass
 
     def log(self, text):
-        self.text += text + '\n'
-
-    def write_to_file(self):
         with open(self.filename, 'a') as f:
-            for l in self.text:
-                f.write(l)
+            f.write(text + '\n')
 
 
 def decorate(text):
