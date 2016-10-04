@@ -13,27 +13,45 @@ DB = 'data/lobby.db'
 class Lobby():
     def __init__(self):
         # Import the database to Game namedtuples
-        conn = sqlite3.connect(DB)
-        c = conn.cursor()
-        self.tables = []
-        games = c.execute('SELECT * from games')
-        for g in games:
-            self.tables.append(Game(*g))
-        c.close()
-        conn.close()
+        self.conn = sqlite3.connect(DB)
+        self.c = self.conn.cursor()
+
+    def shutdown(self):
+        self.c.close()
+        self.conn.close()
 
     def default(self):
-        for t in self.tables:
+        for t in self.all_tables():
             if t.tablename == DEFAULT_TABLE:
                 return t
         else:
             return None
 
-    def available_games(self):
-        return list(set([g.game for g in self.tables]))
+    def all_tables(self):
+        return [Game(*g) for g in self.c.execute('SELECT * FROM games')]
 
-    def get_game(self, game):
-        return [x for x in self.tables if x.game == game]
+    def get_gametypes(self):
+        return list(set([t.game for t in self.all_tables()]))
+
+    def filter_by_game(self, game):
+        games = self.c.execute('SELECT * FROM games WHERE game="{}"'.format(game))
+        return [Game(*g) for g in games]
+
+    def filter_by_seats(self, seats):
+        games = self.c.execute('SELECT * FROM games WHERE seats={}'.format(seats))
+        return [Game(*g) for g in games]
+
+    def filter_by_level(self, level):
+        games = self.c.execute('SELECT * FROM games WHERE level={}'.format(level))
+        return [Game(*g) for g in games]
+
+    def filter_by_stakes(self, stakes):
+        games = self.c.execute('SELECT * FROM games WHERE stakes="{}"'.format(stakes))
+        return [Game(*g) for g in games]
+
+    def filter_by_format(self, format):
+        games = self.c.execute('SELECT * FROM games WHERE format="{}"'.format(format))
+        return [Game(*g) for g in games]
 
 
 def sort_by_name(L):

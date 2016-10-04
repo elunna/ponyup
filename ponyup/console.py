@@ -47,7 +47,7 @@ def prompt(p=''):
 
 
 def pick_game(_lobby):
-    gamelist = _lobby.available_games()
+    gamelist = _lobby.get_gametypes()
     print('Pick one of these games')
     for i, g in enumerate(gamelist):
         print('{}: {}'.format(i, g))
@@ -56,7 +56,7 @@ def pick_game(_lobby):
     print('What game do you want to play?')
     game = gamelist[get_menu_number(valid_choices)]
 
-    tables = lobby.sort_by_stakes(_lobby.get_game(game))
+    tables = lobby.sort_by_stakes(_lobby.filter_by_game(game))
 
     print(lobby.numbered_list(tables))
     valid_choices = list(range(len(tables)))
