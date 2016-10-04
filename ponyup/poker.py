@@ -14,12 +14,7 @@ class Round():
         """
         Initialize the next round of Poker.
         """
-        self.gametype = session.gametype
-        self.streets = session.streets
-        self.blinds = session.blinds
-        self.table = session.table
-        self.hero = session.hero
-
+        self.sesh = session
         self.gameid = random.randint(100000000, 999999999)
         self.street = 0
         self.pot = pots.Pot(self.table)
@@ -31,7 +26,6 @@ class Round():
         self.exposed = []
 
         self.check_integrity_pre()
-
         self.hh = handhistory.HandHistory(self)
 
     def __str__(self):
@@ -42,6 +36,12 @@ class Round():
         _str += 'Potsize: {}'.format(self.pot)
         _str += 'Street: {}'.format(self.street)
         return _str
+
+    def __getattr__(self, name):
+        try:
+            return getattr(self.sesh, name)
+        except AttributeError:
+            raise AttributeError("Child' object has no attribute {}".format(name))
 
     def log(self, txt, echo=True, decorate=False):
         if decorate:
