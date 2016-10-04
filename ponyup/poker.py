@@ -17,12 +17,12 @@ class Round():
         self.gametype = session.gametype
         self.streets = session.streets
         self.blinds = session.blinds
-        self._table = session._table
+        self.table = session.table
         self.hero = session.hero
 
         self.gameid = random.randint(100000000, 999999999)
         self.street = 0
-        self.pot = pots.Pot(self._table)
+        self.pot = pots.Pot(self.table)
 
         self.muck = []
         self.d = deck.Deck()
@@ -62,7 +62,7 @@ class Round():
         dealt face-up, otherwise they are face-down.
         """
         for i in range(qty):
-            for s in self._table.get_players():
+            for s in self.table.get_players():
                 if handreq and not s.has_hand():
                     continue
                 c = self.d.deal()
@@ -78,14 +78,14 @@ class Round():
         """
         Unhides all player hands.
         """
-        for s in self._table.get_players(hascards=True):
+        for s in self.table.get_players(hascards=True):
             s.hand.unhide()
 
     def sortcards(self):
         """
         Sort all cards in all players hands.
         """
-        for s in self._table:
+        for s in self.table:
             s.hand.sort()
 
     def discard(self, seat, c):
@@ -103,7 +103,7 @@ class Round():
         Muck all player hands, and muck the contents of the deck.
         """
         # Clear hands
-        for s in self._table:
+        for s in self.table:
             self.muck.extend(s.fold())
         # Add the remainder of the deck
         while len(self.d) > 0:
@@ -114,7 +114,7 @@ class Round():
         All players bet the ante amount and it's added to the pot.
         """
         actions = ''
-        for s in self._table:
+        for s in self.table:
             actions += '{} posts ${} ante.\n'.format(s, self.blinds.ANTE)
             self.pot += s.bet(self.blinds.ANTE)
 
@@ -126,14 +126,14 @@ class Round():
         Gets the small and big blind positions from the table and makes each player bet the
         appropriate mount to the pot. Returns a string describing what the blinds posted.
         """
-        if self._table.TOKENS['D'] == -1:
+        if self.table.TOKENS['D'] == -1:
             raise Exception('Button has not been set yet!')
 
-        if len(self._table.get_players()) < 2:
+        if len(self.table.get_players()) < 2:
             raise ValueError('Not enough players to play!')
             exit()
-        sb = self._table.seats[self._table.TOKENS['SB']]
-        bb = self._table.seats[self._table.TOKENS['BB']]
+        sb = self.table.seats[self.table.TOKENS['SB']]
+        bb = self.table.seats[self.table.TOKENS['BB']]
 
         # Bet the SB and BB amounts and add to the pot
         self.pot += sb.bet(self.blinds.SB)
@@ -150,7 +150,7 @@ class Round():
         Gets the player who must post the bringin amount, adds their bet to the pot, and
         returns a string describing what the blinds posted.
         """
-        table = self._table
+        table = self.table
         bi = table.TOKENS['BI']
         if bi == -1:
             raise Exception('Bringin has not been set on the table!')
@@ -209,7 +209,7 @@ class Round():
         return self.streets[self.street]
 
     def one_left(self):
-        cardholders = self._table.get_players(hascards=True)
+        cardholders = self.table.get_players(hascards=True)
         if len(cardholders) == 1:
             return cardholders.pop()
         else:
@@ -219,7 +219,7 @@ class Round():
         """
         Run through a round of betting. Returns a victor if it exists.
         """
-        print(console.display_table(self._table, self.hero))
+        print(console.display_table(self.table, self.hero))
         br = betting.BettingRound(self)
 
         for p in br:
@@ -240,8 +240,8 @@ class Round():
         than 1 is left, the betting is over. Returns True if there is no more betting, False
         otherwise.
         """
-        hands = len(self._table.get_players(hascards=True))
-        broke = len(self._table.get_broke_players())
+        hands = len(self.table.get_players(hascards=True))
+        broke = len(self.table.get_broke_players())
         if hands - broke <= 1:
             return True
         else:
@@ -271,8 +271,8 @@ class Round():
         console.right_align(title)
         self.show_cards()
 
-        self.log(console.show_hands(self._table, color=False), echo=False)
-        console.right_align((console.show_hands(self._table, color=True)))
+        self.log(console.show_hands(self.table, color=False), echo=False)
+        console.right_align((console.show_hands(self.table, color=True)))
 
         award_txt = self.pot.allocate_money_to_winners()
         self.log(award_txt, echo=False)
@@ -295,7 +295,7 @@ class Round():
         if len(self.muck) != 0:
             return False
         # Check that no players have cards.
-        if len(self._table.get_players(hascards=True)) > 0:
+        if len(self.table.get_players(hascards=True)) > 0:
             return False
         # Check that the pot is 0.
         if self.pot != 0:
@@ -314,7 +314,7 @@ class Round():
         if len(self.muck) != self.DECKSIZE:
             return False
         # Check that all players have folded.
-        if len(self._table.get_players(hascards=True)) > 0:
+        if len(self.table.get_players(hascards=True)) > 0:
             return False
         # The sum of all sidepots should equal the potsize.
 
@@ -322,6 +322,6 @@ class Round():
 
     def exposed_cards(self):
         exposed = []
-        for s in self._table:
+        for s in self.table:
             exposed.extend(s.hand.get_upcards())
         return exposed

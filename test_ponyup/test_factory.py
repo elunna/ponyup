@@ -153,21 +153,21 @@ class TestSessionFactory(unittest.TestCase):
         s = factory.session_factory(seats=2, game="FIVE CARD STUD",
                                     hero=self.h, herobuyin=factory.DEF_STACK)
         expected = 0
-        result = s._table.get_index(self.h)
+        result = s.table.get_index(self.h)
         self.assertEqual(expected, result)
 
     def test_sessionfactory_hero_defaultseat_seat0hashero(self):
         s = factory.session_factory(seats=2, game="FIVE CARD STUD",
                                     hero=self.h, herobuyin=factory.DEF_STACK)
         expected = self.h.name
-        result = str(s._table.seats[0].player)
+        result = str(s.table.seats[0].player)
         self.assertEqual(expected, result)
 
     def test_sessionfactory_hero_herohasbankminusstack(self):
         s = factory.session_factory(seats=2, game="FIVE CARD STUD",
                                     hero=self.h, herobuyin=factory.DEF_STACK)
         expected = factory.CPU_BANK_BITS - factory.DEF_STACK
-        result = s._table.seats[0].player.bank
+        result = s.table.seats[0].player.bank
         self.assertEqual(expected, result)
 
 

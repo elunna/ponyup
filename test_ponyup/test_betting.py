@@ -12,9 +12,9 @@ class TestBetting(unittest.TestCase):
     def setUp(self, lvl=1, players=6, street=1):
         g = factory.session_factory(seats=players, game="FIVE CARD DRAW", level=lvl)
 
-        g._table.move_button()
-        g._table.set_blinds()
-        self.assertEqual(g._table.TOKENS['D'], 0)  # verify the button is 0
+        g.table.move_button()
+        g.table.set_blinds()
+        self.assertEqual(g.table.TOKENS['D'], 0)  # verify the button is 0
         self.r = g.new_round()
 
         for i in range(street - 1):  # Adjust which street to test.
@@ -27,10 +27,10 @@ class TestBetting(unittest.TestCase):
     def setUp_shorty(self, shortstack, lvl=1, players=6, street=1):
         g = factory.session_factory(seats=players, game="FIVE CARD DRAW", level=lvl)
         # Sets seat 1(we'll use as the SB) as the short stack amount for easy testing.
-        g._table.seats[1].stack = shortstack
-        g._table.move_button()
-        g._table.set_blinds()
-        self.assertEqual(g._table.TOKENS['D'], 0)  # verify the button is 0
+        g.table.seats[1].stack = shortstack
+        g.table.move_button()
+        g.table.set_blinds()
+        self.assertEqual(g.table.TOKENS['D'], 0)  # verify the button is 0
         self.r = g.new_round()
 
         for i in range(street - 1):  # Adjust which street to test.
@@ -49,9 +49,9 @@ class TestBetting(unittest.TestCase):
         for i in range(street - 1):  # Adjust which street to test.
             self.r.next_street()
 
-        tools.deal_5stud_test_hands(self.r._table)
+        tools.deal_5stud_test_hands(self.r.table)
         self.r.post_antes()
-        self.r._table.set_bringin()
+        self.r.table.set_bringin()
         self.br = betting.BettingRound(self.r)
 
     """
@@ -690,7 +690,7 @@ class TestBetting(unittest.TestCase):
     # 6 players, new table. Preflop. BTN=0, SB=1, BB=2. bettor should be 3.
     def test_getbettor_6plyr_predraw_returnsseat3(self):
         bettor = 3
-        expected = self.r._table.seats[bettor]
+        expected = self.r.table.seats[bettor]
         result = self.br.get_bettor()
         self.assertEqual(expected, result)
 
@@ -698,7 +698,7 @@ class TestBetting(unittest.TestCase):
     def test_getbettor_6plyr_postdraw_returnsseat1(self):
         self.setUp(street=2)
         bettor = 1
-        expected = self.r._table.seats[bettor]
+        expected = self.r.table.seats[bettor]
         result = self.br.get_bettor()
         self.assertEqual(expected, result)
 
@@ -706,7 +706,7 @@ class TestBetting(unittest.TestCase):
     def test_getbettor_2plyr_predraw_returnsseat0(self):
         self.setUp(players=2)
         bettor = 0
-        expected = self.r._table.seats[bettor]
+        expected = self.r.table.seats[bettor]
         result = self.br.get_bettor()
         self.assertEqual(expected, result)
 
@@ -714,7 +714,7 @@ class TestBetting(unittest.TestCase):
     def test_getbettor_2plyr_postdraw_returnsseat1(self):
         self.setUp(players=2, street=2)
         bettor = 1
-        expected = self.r._table.seats[bettor]
+        expected = self.r.table.seats[bettor]
         result = self.br.get_bettor()
         self.assertEqual(expected, result)
 
@@ -758,7 +758,7 @@ class TestBetting(unittest.TestCase):
     # 6 players, new table. Predraw. BTN=0, SB=1, BB=2. closer should be 2.
     def test_getcloser_6plyr_predraw_returnsseat2(self):
         closer = 2
-        expected = self.r._table.seats[closer]
+        expected = self.r.table.seats[closer]
         result = self.br.get_closer()
         self.assertEqual(expected, result)
 
@@ -766,7 +766,7 @@ class TestBetting(unittest.TestCase):
     def test_getcloser_6plyr_postdraw_returnsseat0(self):
         self.setUp(street=2)
         closer = 0
-        expected = self.r._table.seats[closer]
+        expected = self.r.table.seats[closer]
         result = self.br.get_closer()
         self.assertEqual(expected, result)
 
@@ -774,7 +774,7 @@ class TestBetting(unittest.TestCase):
     def test_getcloser_2plyr_predraw_returnsseat1(self):
         self.setUp(players=2)
         closer = 1
-        expected = self.r._table.seats[closer]
+        expected = self.r.table.seats[closer]
         result = self.br.get_closer()
         self.assertEqual(expected, result)
 
@@ -782,7 +782,7 @@ class TestBetting(unittest.TestCase):
     def test_getcloser_2plyr_postdraw_returnsseat0(self):
         self.setUp(players=2, street=2)
         closer = 0
-        expected = self.r._table.seats[closer]
+        expected = self.r.table.seats[closer]
         result = self.br.get_closer()
         self.assertEqual(expected, result)
 

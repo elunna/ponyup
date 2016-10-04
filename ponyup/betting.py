@@ -195,22 +195,22 @@ class BettingRound():
         return self.bettor == self.closer
 
     def set_closer(self):
-        self.closer = self.r._table.next_player(self.bettor, -1, hascards=True)
+        self.closer = self.r.table.next_player(self.bettor, -1, hascards=True)
 
     def set_bettors_w_blinds(self):
-        if self.r._table.TOKENS['D'] == -1:
+        if self.r.table.TOKENS['D'] == -1:
             raise Exception('Cannot set bettor or closer in the if button isn\'t set!')
 
         if self.r.street == 0:
-            self.bettor = self.r._table.next_player(self.r._table.TOKENS['BB'])
+            self.bettor = self.r.table.next_player(self.r.table.TOKENS['BB'])
         else:
-            self.bettor = self.r._table.next_player(self.r._table.TOKENS['D'], hascards=True)
+            self.bettor = self.r.table.next_player(self.r.table.TOKENS['D'], hascards=True)
 
     def set_bettors_w_antes(self):
         if self.r.street == 0:
-            self.bettor = self.r._table.TOKENS['BI']
+            self.bettor = self.r.table.TOKENS['BI']
         else:
-            self.bettor = self.r._table.highhand()
+            self.bettor = self.r.table.highhand()
 
     def set_betsize(self):
         if self.r.street > len(self.r.streets):
@@ -220,7 +220,7 @@ class BettingRound():
 
     def get_bet(self):
         bet = 0
-        for s in self.r._table:
+        for s in self.r.table:
             i = self.invested(s)
             if i > bet:
                 bet = i
@@ -236,26 +236,26 @@ class BettingRound():
         """
         Returns the current active bettor.
         """
-        return self.r._table.seats[self.bettor]
+        return self.r.table.seats[self.bettor]
 
     def next_bettor(self):
-        self.bettor = self.r._table.next_player(self.bettor, hascards=True)
+        self.bettor = self.r.table.next_player(self.bettor, hascards=True)
 
     def get_closer(self):
         """
         Returns the player who will close the betting.
         """
-        return self.r._table.seats[self.closer]
+        return self.r.table.seats[self.closer]
 
     def reopened_closer(self, bettor):
         # It's a bet or raise, so we'll need to reset last better.
-        return self.r._table.next_player(bettor, -1, hascards=True)
+        return self.r.table.next_player(bettor, -1, hascards=True)
 
     def set_stacks(self):
         if self.r.street == 0:
             self.stacks = self.pot.stacks
         elif self.r.street > 0:
-            self.stacks = self.r._table.stackdict()
+            self.stacks = self.r.table.stackdict()
 
 
 def spacing(level):

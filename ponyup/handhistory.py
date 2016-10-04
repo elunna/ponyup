@@ -31,7 +31,7 @@ class HandHistory():
         stakes = '${}-${}'.format(self.r.blinds.SMBET, self.r.blinds.SMBET * 2)
         filename = 'HH_{}_-_{}_{}_{}(Pony Bits)'.format(
             self.dt.now().strftime('%Y%m%d'),
-            self.r._table.name,
+            self.r.table.name,
             self.r.gametype,
             stakes
         )
@@ -42,7 +42,7 @@ class HandHistory():
         time = self.dt.now().strftime('%Y-%m-%d %H:%M:%S')
         header = 'PonyUp Poker Game ID# {}: Table {} - {} - {} - {}\n'.format(
             self.r.gameid,
-            self.r._table.name,
+            self.r.table.name,
             self.r.blinds.stakes(),
             self.r.gametype,
             time,
@@ -50,10 +50,10 @@ class HandHistory():
         self.text += header
 
     def button(self):
-        self.text += 'Seat {} has the button.\n'.format(self.r._table.TOKENS['D'])
+        self.text += 'Seat {} has the button.\n'.format(self.r.table.TOKENS['D'])
 
     def write_player_list(self):
-        self.text += self.r._table.player_listing()
+        self.text += self.r.table.player_listing()
 
     def write_tokens(self):
         # Note who has the button, SB, BB, bringin, etc.

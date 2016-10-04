@@ -34,7 +34,7 @@ class Session():
         self.gametype = gametype
         self.streets = games.GAMES[gametype]
         self.blinds = None
-        self._table = None
+        self.table = None
         self.hero = None
 
         self.rounds = 1
@@ -46,7 +46,7 @@ class Session():
         """
         Return info about the current Session.
         """
-        _str = '{} -- {} {}\n'.format(self._table.name, self.blinds.stakes(), self.gametype)
+        _str = '{} -- {} {}\n'.format(self.table.name, self.blinds.stakes(), self.gametype)
         _str += 'Round: {}\n'.format(self.rounds)
         return _str
 
@@ -62,7 +62,7 @@ class Session():
 
     def find_hero(self):
         _logger.debug('Attempting to find the hero player in the Session\'s table.')
-        for s in self._table:
+        for s in self.table:
             if s.player.is_human():
                 _logger.debug('Found the hero player: Seat {}, name: {}'.format(s.NUM, s.player))
                 return s
@@ -72,7 +72,7 @@ class Session():
         Remove all the seats that have 0 chips. Return a string showing what happened.
         """
         _logger.debug('Finding all broke players.')
-        broke_players = self._table.get_broke_players()
+        broke_players = self.table.get_broke_players()
         _str = ''
         _logger.debug('Clearing all broke players from the Session Table.')
         for seat in broke_players:
@@ -102,9 +102,9 @@ class Session():
         low, ~5-10%, to give some variety in the game play.
         """
         _logger.debug('Checking how many free seats there are.')
-        freeseats = self._table.get_free_seats()
+        freeseats = self.table.get_free_seats()
         _logger.debug('Checking if only one player is at the table.')
-        loneplayer = (len(self._table) - len(freeseats)) == 1
+        loneplayer = (len(self.table) - len(freeseats)) == 1
 
         if not freeseats:
             _logger.debug('The table is full.')
@@ -134,7 +134,7 @@ class Session():
         Makes a random player (not including the hero) standup and leave the table.
         """
         # If there are only 2 players, ignore this.
-        if len(self._table.get_players()) == 2:
+        if len(self.table.get_players()) == 2:
             _logger.debug('There are only 2 players at the table, cannot make any randomly leave.')
             return False
 
@@ -146,7 +146,7 @@ class Session():
             _logger.debug('Starting a loop to choose the leaver.')
             while True:
                 _logger.debug('Randomly choose a player to leave.')
-                s = random.choice(self._table.get_players())
+                s = random.choice(self.table.get_players())
                 if s.player.is_human():
                     _logger.debug('Seat chosen in the human hero - ignoring.')
                     # This is the human hero player - don't remove.

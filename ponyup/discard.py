@@ -110,7 +110,7 @@ def discard_phase(_round):
     _round.log(title, decorate=True, echo=False)
     console.right_align(title)
 
-    cardholders = _round._table.get_players(hascards=True)
+    cardholders = _round.table.get_players(hascards=True)
 
     for s in cardholders:
         max_discards = (5 if len(_round.d) >= 5 else len(_round.d))

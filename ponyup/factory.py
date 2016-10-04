@@ -141,7 +141,7 @@ def session_factory(**new_config):
         sesh.hero = heroseat
 
     # Set the session playerpool - the players in the table should have been popped out.
-    sesh._table = t
+    sesh.table = t
     sesh.playerpool = pool
     return sesh
 
