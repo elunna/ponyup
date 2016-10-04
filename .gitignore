@@ -1,10 +1,14 @@
 __pycache__/*
 todo_list.txt
 *.pyc
+*.log
+globalnames
+
 old/*
 logs/*
 data/*
 .ropeproject/*
+
 ponyup/.ropeproject/*
 ponyup/.ropeproject/globalnames
 test_ponyup/.ropeproject/*
