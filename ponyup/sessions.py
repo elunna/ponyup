@@ -32,13 +32,14 @@ class Session():
         Initialize the poker Session settings.
         """
         self.gametype = gametype
-        self.rounds = 1
         self.streets = games.GAMES[gametype]
-        self.options = options.OPTIONS
         self.blinds = None
         self._table = None
-        self.playerpool = None
         self.hero = None
+
+        self.rounds = 1
+        self.options = options.OPTIONS
+        self.playerpool = None
         _logger.debug('Initialized a new Session.')
 
     def __str__(self):
