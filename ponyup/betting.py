@@ -210,7 +210,7 @@ class BettingRound():
         if self.r.street == 0:
             self.bettor = self.r.table.TOKENS['BI']
         else:
-            self.bettor = self.r.table.highhand()
+            self.bettor = self.r.highhand()
 
     def set_betsize(self):
         if self.r.street > len(self.r.streets):
