@@ -25,7 +25,7 @@ menu['q'] = ('(Q)uit', 'exit()')
 
 # Define menu opions
 options = {}
-options['m'] = ('(M)athematical Analysis', 'print(view_combos())')
+options['m'] = ('(M)athematical Analysis', 'view_combos()')
 options['p'] = ('(P)lay Poker!', 'play_poker()')
 options['l'] = ('(L)oad Player', 'load_player()')
 options['n'] = ('(N)ew Player', 'create_player()')
@@ -58,10 +58,13 @@ def is_integer(num):
 
 
 def pick_name():
+    _logger.debug('pick_name')
     while True:
         name = prompt('Username?')
         if name is None:
             pass
+        elif name == '':
+            return None
         elif not names.is_validname(name):
             print('Name must be between {} and {} characters long.'.format(
                 names.MIN_LEN, names.MAX_LEN))
@@ -69,41 +72,47 @@ def pick_name():
             print('Name cannot have any of these characters: {}'.format(
                 names.INVALID_CHARACTERS))
         else:
+            _logger.debug('pick_name input: "{}"'.format(name))
             return name
 
 
 def load_player():
     _logger.debug('load_player')
     name = pick_name()
-    _logger.debug('Player entered {}'.format(name))
     global HERO
     HERO = player.load_player(name)
-    _logger.debug('Loaded player')
+    if HERO:
+        _logger.debug('Loaded player')
+    else:
+        _logger.debug('Player load error.')
     pause()
 
 
 def create_player():
     _logger.debug('create_player')
     name = pick_name()
-    _logger.debug('Player entered {}'.format(name))
     global HERO
     HERO = player.create_player(name)
-    _logger.debug('Created player')
+    if HERO:
+        _logger.debug('Created player {}'.format(name))
+    else:
+        _logger.debug('Create player failed.')
     pause()
 
 
 def delete_player():
     _logger.debug('delete_player')
     name = pick_name()
-    _logger.debug('Player entered {}'.format(name))
-    player.del_player(name)
-    if HERO is not None and name == HERO.name:
-        _logger.debug('Renaming the HERO variable to None because the player deleted the current player')
-        global HERO
-        HERO = None
+    result = player.del_player(name)
+    if result:
+        if HERO is not None and name == HERO.name:
+            _logger.debug('Renaming the HERO variable to None because the player deleted the current player')
+            global HERO
+            HERO = None
+        else:
+            _logger.debug('Player deleted a player other than the current HERO.')
     else:
-        _logger.debug('Player deleted a player other than the current HERO.')
-
+        _logger.debug('Delete player failed.')
     pause()
 
 
@@ -133,7 +142,6 @@ def get_menu_number(validchoices):
 
 
 def logo():
-    _logger.debug('Printing out the logo')
     txt = ''
     with open(LOGO) as f:
         for l in f.readlines():
@@ -145,7 +153,6 @@ def logo():
 
 
 def menu_str():
-    _logger.debug('Printing out the menu')
     _str = ''
     for o in sorted(options.keys()):
         _str += '{}\n'.format(options[o][0])
@@ -158,11 +165,12 @@ def view_combos():
     _str += "Calculating different possibilities for combinations in a standard 52-card deck:"
     for i in range(1, 52):
         _str += '{} card: {} combos.\n'.format(i, combos.n_choose_k(52, i))
-    return _str
+    print(_str)
+    pause()
 
 
 def play_poker():
-    _logger.debug('Preparing to play the selected game.')
+    _logger.debug('Preparing poker game.')
     if HERO is None:
         print('You need to load or create a player first!')
         pause()
@@ -222,7 +230,7 @@ def exitgracefully():
 
 
 def pause():
-    _logger.debug('Pausing the game. Waiting for a keypress.')
+    _logger.debug('Waiting for a keypress.')
     input('Press any key to continue...')
 
 
@@ -247,22 +255,17 @@ def main_menu():
 
 
 def process_user_choice():
-    _logger.debug('Getting user input.')
     choice = input(':> ')
 
     _logger.debug('Hero entered {}.'.format(choice))
     choice = choice.lower()
 
     if choice in options:
-        _logger.debug('User input was valid, processing option.')
+        _logger.debug('Valid input, processing option.')
         exec(options[choice][1])
     else:
-        _logger.debug('User input was not valid.')
+        _logger.debug('Input not valid.')
         print('Not a valid option!')
-
-    if choice == 'm':
-        _logger.debug('User looked at math combinations, pausing.')
-        pause()
 
 
 def get_buyin(game, hero):

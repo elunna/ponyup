@@ -114,14 +114,12 @@ def load_player(name):
     file it creates a new one. Returns a Player object.
     """
     userfile = mk_filename(name)
-    # check if they have a file
     try:
         with open(userfile, 'rb') as f:
             plyr = pickle.load(f)
             return plyr
-
     except IOError:
-        print('No player file found for that name!')
+        return None
 
 
 def player_exists(name):
@@ -133,24 +131,25 @@ def del_player(name):
         print('Are you sure you want to delete player: {}?'.format(name))
         choice = input('[y/n] :> ')
         if choice.lower().startswith('y'):
-            os.remove(mk_filename(name))
-            print('Deleted the player...')
+            try:
+                os.remove(mk_filename(name))
+                return True
+            except Exception:
+                return False
     else:
-        print('That player doesn\'t exist!')
+        return False
 
 
 def create_player(name):
     if player_exists(name):
-        print('That player already exists!')
+        return None
     else:
-        print('Creating player named {}, with ${} bits'.format(name, HUMAN_BANK_BITS))
         try:
             p = Player(name, playertype="HUMAN")
             p.deposit(HUMAN_BANK_BITS)
             save_player(p)
             return p
         except ValueError:
-            print('Name is not valid. Player creation aborted!')
             return None
 
 
@@ -163,5 +162,6 @@ def save_player(plyr):
     try:
         with open(userfile, 'wb') as f:
             pickle.dump(plyr, f)
+            return True
     except IOError:
-        print('An error occurred while writing, aborting program!')
+        return False
