@@ -93,3 +93,58 @@ class Deck():
         """
         for c in self.cards:
             c.hidden = False
+
+
+class Deck1Joker(Deck):
+    """
+    Creates a deck with one Joker.
+    """
+    def __init__(self):
+        super().__init__()
+        self.cards.append(card.JOKER1)
+
+
+class Deck2Joker(Deck):
+    """
+    Creates a deck with two Jokers.
+    """
+    def __init__(self):
+        super().__init__()
+        self.cards.append(card.JOKER1)
+        self.cards.append(card.JOKER2)
+
+
+class PiquetDeck(Deck):
+    """
+    Creates a 48 card Pinochle deck with 2 of each rank: 9, T, J, Q, K, A.
+    """
+    def __init__(self):
+        pinochle_cards = ['7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
+        self.cards = [card.Card(r, s[0])
+                      for s in card.SUITS for r in card.RANKS if r in pinochle_cards]
+
+
+class PinochleDeck(Deck):
+    """
+    Creates a 48 card Pinochle deck with 2 of each rank: 9, T, J, Q, K, A.
+    """
+    def __init__(self):
+        pinochle_cards = ['9', 'T', 'J', 'Q', 'K', 'A']
+        c = [card.Card(r, s[0]) for s in card.SUITS for r in card.RANKS if r in pinochle_cards]
+
+        self.cards = c + c
+
+
+class BlackjackDeck(Deck):
+    """
+    Creates a blackjack deck with the specified number of 'shoes' included. 4 shoes is the most
+    common size for a Las Vegas blackjack deck.
+    """
+    def __init__(self, shoes=4):
+        if shoes < 1:
+            raise ValueError('BlackjackDeck must be passed a value of 1 or more for shoes!')
+
+        super().__init__()
+        cardset = self.cards[:]
+        for i in range(shoes - 1):
+            self.cards.extend(cardset)

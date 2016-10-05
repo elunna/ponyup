@@ -68,3 +68,8 @@ class Card:
         This is how human/hero's are able to view hidden cards.
         """
         return self.rank + self.suit
+
+
+# Define the Joker cards
+JOKER1 = Card('Z', 's')
+JOKER2 = Card('Z', 'c')

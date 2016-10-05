@@ -2,19 +2,16 @@ from ponyup import card
 from ponyup import deck
 from ponyup import evaluator
 
-JOKER1 = card.Card('Z', 's')
-JOKER2 = card.Card('Z', 'c')
-
 
 def pick_joker(cards):
     """
     Picks the best card for the joker to represent for a group of cards.
     """
     # If the Joker is in the pile of cards, remove it for analysis.
-    if JOKER1 in cards:
-        cards.remove(JOKER1)
-    if JOKER2 in cards:
-        cards.remove(JOKER2)
+    if card.JOKER1 in cards:
+        cards.remove(card.JOKER1)
+    if card.JOKER2 in cards:
+        cards.remove(card.JOKER2)
 
     if len(cards) > 4:
         raise ValueError('Hand is too large to analyze for joker. Must be 1-4 without joker.')

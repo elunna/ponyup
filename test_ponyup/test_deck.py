@@ -1,7 +1,6 @@
 import unittest
 from ponyup import deck
 from ponyup import card
-from ponyup import joker
 from ponyup import tools
 
 
@@ -45,7 +44,7 @@ class TestDeck(unittest.TestCase):
 
     def test_contains_JokerinStandardDeck_returnsFalse(self):
         d = deck.Deck()
-        c = joker.JOKER1
+        c = card.JOKER1
         expected = False
         result = c in d
         self.assertEqual(expected, result)
@@ -164,3 +163,126 @@ class TestDeck(unittest.TestCase):
         d.unhide()
         self.assertTrue(d.cards[0].hidden is False)
         self.assertTrue(d.cards[1].hidden is False)
+
+
+class TestDeck1Joker(unittest.TestCase):
+    """
+    Tests for subclasses
+    """
+    def test_init_Deck1Joker_size53(self):
+        d = deck.Deck1Joker()
+        expected = 53
+        result = len(d)
+        self.assertEqual(expected, result)
+
+    def test_init_Deck1Joker_containsZs(self):
+        d = deck.Deck1Joker()
+        joker = card.Card('Z', 's')
+        expected = True
+        #  result = d.contains(joker)
+        result = joker in d
+        self.assertEqual(expected, result)
+
+
+class TestDeck2Joker(unittest.TestCase):
+    """
+    Tests for __init__()
+    """
+    def test_init_Deck2Joker_size54(self):
+        d = deck.Deck2Joker()
+        expected = 54
+        result = len(d)
+        self.assertEqual(expected, result)
+
+    def test_init_Deck2Joker_containsZsZc(self):
+        d = deck.Deck2Joker()
+        joker1 = card.Card('Z', 's')
+        joker2 = card.Card('Z', 'c')
+        expected = True
+        #  result = d.contains(joker1) and d.contains(joker2)
+        result = joker1 in d and joker2 in d
+        self.assertEqual(expected, result)
+
+
+class TestPiquetDeck(unittest.TestCase):
+    """
+    Tests for __init__()
+    """
+    def test_init_PiquetDeck_size32(self):
+        d = deck.PiquetDeck()
+        expected = 32
+        result = len(d)
+        self.assertEqual(expected, result)
+
+    def test_init_PiquetDeck_4Aces(self):
+        d = deck.PiquetDeck()
+        expected = 4
+        result = 0
+        for c in d.cards:
+            if c.rank == 'A':
+                result += 1
+        self.assertEqual(expected, result)
+
+    def test_init_PiquetDeck_1AceSpades(self):
+        d = deck.PiquetDeck()
+        c = card.Card('A', 's')
+        expected = 1
+        result = d.cards.count(c)
+        self.assertEqual(expected, result)
+
+
+class TestPinochleDeck(unittest.TestCase):
+    """
+    Tests for __init__()
+    """
+    def test_init_PinochleDeck_size48(self):
+        d = deck.PinochleDeck()
+        expected = 48
+        result = len(d)
+        self.assertEqual(expected, result)
+
+    def test_init_PinochleDeck_8Aces(self):
+        d = deck.PinochleDeck()
+        expected = 8
+        result = 0
+        for c in d.cards:
+            if c.rank == 'A':
+                result += 1
+        self.assertEqual(expected, result)
+
+    def test_init_PinochleDeck_2AceSpades(self):
+        c = card.Card('A', 's')
+        d = deck.PinochleDeck()
+        expected = 2
+        result = d.cards.count(c)
+        self.assertEqual(expected, result)
+
+
+class TestBlackjackDeck(unittest.TestCase):
+    """
+    Tests for __init__
+    """
+    def test_init_0shoes_raiseException(self):
+        self.assertRaises(ValueError, deck.BlackjackDeck, 0)
+
+    def test_init_negshoes_raiseException(self):
+        self.assertRaises(ValueError, deck.BlackjackDeck, -1)
+
+    def test_init_4shoes_208cards(self):
+        d = deck.BlackjackDeck(4)
+        expected = 208
+        result = len(d)
+        self.assertEqual(expected, result)
+
+    def test_init_4shoes_4AceSpaces(self):
+        d = deck.BlackjackDeck(4)
+        c = card.Card('A', 's')
+        expected = 4
+        result = d.cards.count(c)
+        self.assertEqual(expected, result)
+
+    def test_init_6shoes_312cards(self):
+        d = deck.BlackjackDeck(6)
+        expected = 312
+        result = len(d)
+        self.assertEqual(expected, result)

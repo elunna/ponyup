@@ -5,7 +5,7 @@ import random
 import sys
 import time
 from ponyup import console
-from ponyup import deck2joker
+from ponyup import deck
 
 """
 Simulates a standard game of War. Players each start with a 27 card stack, 2 jokers included.
@@ -46,7 +46,7 @@ class War():
         self.warcount = {}
         self.delay = .05
         #  self.delay = .15
-        d = deck2joker.Deck2Joker()
+        d = deck.Deck2Joker()
         self.decksize = len(d)
 
         d.shuffle(100)
