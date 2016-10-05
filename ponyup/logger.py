@@ -6,13 +6,13 @@ INFO_FILE = 'logs/info.log'
 LOGDIR = 'logs/'
 
 
-def get_logger(name, filename=DEBUG_FILE):
+def get_logger(name):
     # Logger setup
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
 
     # Setup file handlers
-    debug_fh = logging.FileHandler(filename)
+    debug_fh = logging.FileHandler(DEBUG_FILE)
     debug_fh.setLevel(logging.DEBUG)
 
     info_fh = logging.FileHandler(INFO_FILE)
@@ -25,9 +25,10 @@ def get_logger(name, filename=DEBUG_FILE):
     # Setup formatting
     debug_fmt = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     info_fmt = logging.Formatter('%(message)s')
+
     debug_fh.setFormatter(debug_fmt)
     info_fh.setFormatter(info_fmt)
-    ch.setFormatter(debug_fmt)
+    ch.setFormatter(info_fmt)
 
     # Add handlers to logger
     logger.addHandler(debug_fh)

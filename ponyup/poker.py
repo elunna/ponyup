@@ -40,6 +40,7 @@ class Round():
 
         _logger.info(logger.round_header(self))
         _logger.info(self.table.player_listing())
+        _logger.info('Seat {} has the button.\n'.format(self.table.TOKENS['D']))
 
     def __str__(self):
         """
@@ -75,7 +76,7 @@ class Round():
     def log_holecards(self):
         _logger.debug('Logging the hero\'s hole cards.')
         self.log('Hole Cards', decorate=True, echo=False)
-        _logger.info('Hole Cards')
+        _logger.info(self.decorate('Hole Cards'))
 
         hero = self.find_hero()
         _logger.debug('Hero is: {}'.format(hero.player))
@@ -318,7 +319,7 @@ class Round():
         """
         sd_text = ''
 
-        title = 'Showdown!'
+        title = self.decorate('Showdown!')
         _logger.info(title)
         self.log(title, decorate=True, echo=False)
         sd_text += title

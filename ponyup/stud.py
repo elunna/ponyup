@@ -38,7 +38,7 @@ class Stud5Session(sessions.Session):
             if r.found_winner():
                 break
         else:
-            r.showdown()
+            print(r.showdown())
 
         r.cleanup()
         self.rounds += 1
