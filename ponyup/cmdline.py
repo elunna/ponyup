@@ -9,15 +9,6 @@ DEFAULT_PLAYER = 'luna'
 LOGO = 'data/logo2.txt'
 
 
-def logo():
-    txt = ''
-    with open(LOGO) as f:
-        for l in f.readlines():
-            txt += l
-    txt += '\n' + '~'*70 + '\n'
-    return txt
-
-
 class Game(cmd.Cmd):
     def __init__(self):
         cmd.Cmd.__init__(self)
@@ -86,6 +77,10 @@ class Game(cmd.Cmd):
         """
         View the available games.
         """
+        sub_cmd = GameSelection()
+        sub_cmd.cmdloop()
+        if sub_cmd.game:
+            self.game = sub_cmd.game
 
     def do_combos(self, args):
         """
@@ -101,3 +96,46 @@ class Game(cmd.Cmd):
         """
         Go to game options
         """
+
+
+class GameSelection(cmd.Cmd):
+    def __init__(self):
+        cmd.Cmd.__init__(self)
+        self.prompt = "games:> "
+        self.game = None
+        self.tables = lobby.sort_by_stakes(lobby.Lobby().all_tables())
+        self.valid_choices = list(range(len(self.tables)))
+
+        print(lobby.numbered_list(self.tables))
+
+    def precmd(self, args):
+        if is_integer(args):
+            i = int(args)
+            if i in self.valid_choices:
+                self.game = self.tables[i]
+        return args
+
+    def onecmd(self, args):
+        if self.game or args.lower().startswith('q'):
+            return True
+
+
+def logo():
+    txt = ''
+    with open(LOGO) as f:
+        for l in f.readlines():
+            txt += l
+    txt += '\n' + '~'*70 + '\n'
+    return txt
+
+
+def is_integer(num):
+    """
+    Returns True if the num argument is an integer, and False if it is not.
+    """
+    try:
+        num = float(num)
+    except:
+        return False
+
+    return num.is_integer()
