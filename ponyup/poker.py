@@ -3,7 +3,6 @@ import random
 from ponyup import betting
 from ponyup import deck
 from ponyup import evaluator
-from ponyup import handhistory
 from ponyup import logger
 from ponyup import pots
 
@@ -29,7 +28,6 @@ class Round():
         self.exposed = []
 
         self.check_integrity_pre()
-        self.hh = handhistory.HandHistory(self)
 
         _logger.debug('Round - gameid: {}'.format(self.gameid))
         _logger.debug('Round - street: {}'.format(self.street))
@@ -40,7 +38,7 @@ class Round():
 
         _logger.info(logger.round_header(self))
         _logger.info(self.table.player_listing())
-        _logger.info('Seat {} has the button.\n'.format(self.table.TOKENS['D']))
+        _logger.info('Seat {} has the button.'.format(self.table.TOKENS['D']))
 
     def __str__(self):
         """
@@ -64,25 +62,15 @@ class Round():
         #  L, R = '(\/) ', ' (\/)'
         #  L, R = '~~(\ ', ' /)~~'
         L, R = '~~/) ', ' (\~~'
-        return '\n' + L + text + R + '\n'
-
-    def log(self, txt, echo=True, decorate=False):
-        if decorate:
-            txt = handhistory.decorate(txt)
-        if echo:
-            print(txt)
-        self.hh.log(txt)
+        return '\n' + L + text + R
 
     def log_holecards(self):
-        _logger.debug('Logging the hero\'s hole cards.')
-        self.log('Hole Cards', decorate=True, echo=False)
         _logger.info(self.decorate('Hole Cards'))
 
         hero = self.find_hero()
         _logger.debug('Hero is: {}'.format(hero.player))
 
         cards = hero.hand.peek()
-        self.log('{}: [{}]'.format(hero, cards.strip()), echo=False)
         _logger.info('{}: [{}]'.format(hero, cards.strip()))
 
     def deal_cards(self, qty, faceup=False, handreq=False):
@@ -103,7 +91,6 @@ class Round():
                     c.hidden = False
 
                     if s is not self.find_hero():
-                        self.log('{} was dealt [{}]'.format(s.player, c), echo=False)
                         _logger.info('{} was dealt [{}]'.format(s.player, c))
                     self.exposed.append(c)
 
@@ -164,7 +151,6 @@ class Round():
             actions += '{} posts ${} ante.\n'.format(s, self.blinds.ANTE)
             self.pot += s.bet(self.blinds.ANTE)
 
-        self.log(actions, echo=False)
         return actions
 
     def post_blinds(self):
@@ -192,7 +178,6 @@ class Round():
         actions += '{} posts ${}\n'.format(sb, self.blinds.SB)
         actions += '{} posts ${}'.format(bb, self.blinds.BB)
 
-        self.log(actions, echo=False)
         return actions
 
     def post_bringin(self):
@@ -215,7 +200,6 @@ class Round():
         action = ''
         action += '{} brings it in for ${}'.format(seat.player, self.blinds.BRINGIN)
 
-        self.log(action, echo=False)
         return action
 
     def next_street(self):
@@ -270,8 +254,6 @@ class Round():
 
             print(space, act_str)
 
-            # Log every action
-            self.hh.log(act_str)
             _logger.info(act_str)
 
         print('Pot: ${}'.format(self.pot))
@@ -309,7 +291,6 @@ class Round():
 
             awardtext = pots.award_pot(victor, self.pot.pot)
             _logger.info(awardtext)
-            self.log(awardtext)
             return True
 
     def showdown(self):
@@ -321,18 +302,15 @@ class Round():
 
         title = self.decorate('Showdown!')
         _logger.info(title)
-        self.log(title, decorate=True, echo=False)
         sd_text += title
 
         revealed = self.show_cards()
-        self.log(revealed, echo=False)
         sd_text += revealed
 
         _logger.debug('Calculating pots and sidepots.')
         award_txt = self.pot.allocate_money_to_winners()
 
         _logger.info(award_txt)
-        self.log(award_txt, echo=False)
         sd_text += award_txt
 
         return sd_text

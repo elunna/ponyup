@@ -17,7 +17,6 @@ class Draw5Session(sessions.Session):
         r = self.new_round()
         print(self)
 
-        r.hh.button()
         r.table.set_blinds()
         print(r.post_blinds())
         r.deal_cards(DEALT)
@@ -29,8 +28,6 @@ class Draw5Session(sessions.Session):
                 discard.discard_phase(r)
                 r.sortcards()
                 r.log_holecards()
-
-            r.log(r.get_street().name, echo=False, decorate=True)
 
             if not r.betting_over():
                 r.betting_round()

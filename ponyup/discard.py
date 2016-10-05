@@ -116,7 +116,6 @@ def discard_phase(_round):
     Returns a list of all the discards (ie:"muck" cards)
     """
     title = 'Discard Phase:'
-    _round.log(title, decorate=True, echo=False)
     _logger.info(_round.decorate(title))
 
     cardholders = _round.table.get_players(hascards=True)
@@ -124,7 +123,6 @@ def discard_phase(_round):
     for s in cardholders:
         max_discards = (5 if len(_round.d) >= 5 else len(_round.d))
         if max_discards == 0:
-            _round.log('Deck has been depleted!')
             _logger.info('Deck has been depleted!')
             break
 
@@ -140,7 +138,6 @@ def discard_phase(_round):
             d_txt = '{} stands pat.'.format(str(s))
             _logger.info('{} stands pat.'.format(str(s)))
 
-        _round.log(d_txt, echo=False)  # Log it
         print(d_txt)
 
         # Discard

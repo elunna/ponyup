@@ -16,7 +16,6 @@ class Stud5Session(sessions.Session):
         print(r.post_antes())
 
         for s in self.streets:
-            r.log(r.get_street().name, decorate=True, echo=False)
             if r.street == 0:
                 # 1 face down, 1 up
                 r.deal_cards(1)
