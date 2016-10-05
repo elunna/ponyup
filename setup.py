@@ -6,7 +6,7 @@ NAME_FILE = 'data/ponynames.txt'
 DB = 'data/game.db'
 
 
-def tables_table(cursor):
+def mk_tables_table(cursor):
     cursor.execute('CREATE TABLE IF NOT EXISTS games(name TEXT, game TEXT, seats INTEGER, level INTEGER, stakes TEXT, format TEXT)')
 
     # Build a database from the existing dictionary.
@@ -17,12 +17,20 @@ def tables_table(cursor):
     conn.commit()
 
 
-def names_table(cursor, namelist):
+def mk_names_table(cursor, namelist):
     cursor.execute('CREATE TABLE IF NOT EXISTS ponies(name TEXT NOT NULL)')
 
     for n in namelist:
         cursor.execute("INSERT INTO ponies VALUES(?)", (n, ))
 
+    conn.commit()
+
+
+def mk_players_table(cursor):
+    """
+    Make the initial players table for the database.
+    """
+    c.execute('CREATE TABLE IF NOT EXISTS players(name TEXT NOT NULL, bank INTEGER NOT NULL)')
     conn.commit()
 
 
@@ -45,10 +53,13 @@ if __name__ == "__main__":
 
     # Import the pony-names into the database.
     names = read_names_from_file()
-    names_table(c, names)
+    mk_names_table(c, names)
 
     # Import the lobby tables into the database.
-    tables_table(c)
+    mk_tables_table(c)
+
+    # Create an empty players table.
+    mk_players_table(c)
 
     c.close()
     conn.close()
