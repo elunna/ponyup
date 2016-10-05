@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-
-
 """
-Run all the tests in the project.
+Runs the console version.
 """
+
+from ponyup import console
+
 
 if __name__ == "__main__":
-
+    console.gameloop()

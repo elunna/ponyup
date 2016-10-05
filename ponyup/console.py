@@ -1,38 +1,37 @@
+#!/usr/bin/env python3
+
+from __future__ import print_function
+import os
 from ponyup import blinds
-from ponyup import card
-from ponyup import colors
+from ponyup import combos
 from ponyup import lobby
 from ponyup import names
+from ponyup import player
+from ponyup import factory
+from ponyup import logger
 
-"""
-Provides tools for interacting with the user at the text-based console.
-"""
-
+DEFAULT_PLAYER = 'luna'
 DISPLAYWIDTH = 70
+HERO = player.load_player(DEFAULT_PLAYER)
+LOBBY = lobby.Lobby()
+GAME = LOBBY.default()
+LOGO = 'data/logo2.txt'
+_logger = logger.get_logger(__name__)
+
 menu = {}
 menu['h'] = ('(H)elp', 'show_help()')
 menu['o'] = ('(O)ptions', 'show_options()')
 menu['q'] = ('(Q)uit', 'exit()')
 
-
-def is_integer(num):
-    """
-    Returns True if the num argument is an integer, and False if it is not.
-    """
-    try:
-        num = float(num)
-    except:
-        return False
-
-    return num.is_integer()
-
-
-def show_help():
-    print('This is the help menu')
-
-
-def show_options():
-    print('This is the options menu')
+# Define menu opions
+options = {}
+options['m'] = ('(M)athematical Analysis', 'print(view_combos())')
+options['p'] = ('(P)lay Poker!', 'play_poker()')
+options['l'] = ('(L)oad Player', 'load_player()')
+options['n'] = ('(N)ew Player', 'create_player()')
+options['d'] = ('(D)elete Player', 'delete_player()')
+options['g'] = ('(G)ame change', 'pick_game()')
+options['q'] = ('(Q)uit', 'exitgracefully()')
 
 
 def prompt(p=''):
@@ -46,35 +45,16 @@ def prompt(p=''):
         return i
 
 
-def pick_game(_lobby):
-    gamelist = _lobby.get_gametypes()
-    print('Pick one of these games')
-    for i, g in enumerate(gamelist):
-        print('{}: {}'.format(i, g))
+def is_integer(num):
+    """
+    Returns True if the num argument is an integer, and False if it is not.
+    """
+    try:
+        num = float(num)
+    except:
+        return False
 
-    valid_choices = list(range(len(gamelist)))
-    print('What game do you want to play?')
-    game = gamelist[get_menu_number(valid_choices)]
-
-    tables = lobby.sort_by_stakes(_lobby.filter_by_game(game))
-
-    print(lobby.numbered_list(tables))
-    valid_choices = list(range(len(tables)))
-    print('What game do you want to play?')
-    return tables[get_menu_number(valid_choices)]
-
-
-def get_menu_number(validchoices):
-    while True:
-        choice = prompt()
-        if choice is None:
-            pass
-        elif is_integer(choice) is False:
-            print('Please enter a number for your selection!')
-        elif int(choice) in validchoices:
-            return int(choice)
-        else:
-            print('Selection not available, try again.')
+    return num.is_integer()
 
 
 def pick_name():
@@ -92,167 +72,197 @@ def pick_name():
             return name
 
 
-def betmenu(actions):
-    """
-    Display a list of betting options, and get input from the player to pick a valid option.
-    """
-    nice_opts = ['[' + colors.color(v.name[0], 'white', STYLE='BOLD') + ']' +
-                 v.name[1:].lower()
-                 for k, v in sorted(actions.items())]
-    choices = '/'.join(nice_opts)
+def load_player():
+    _logger.debug('load_player')
+    name = pick_name()
+    _logger.debug('Player entered {}'.format(name))
+    global HERO
+    HERO = player.load_player(name)
+    _logger.debug('Loaded player')
+    pause()
 
+
+def create_player():
+    _logger.debug('create_player')
+    name = pick_name()
+    _logger.debug('Player entered {}'.format(name))
+    global HERO
+    HERO = player.create_player(name)
+    _logger.debug('Created player')
+    pause()
+
+
+def delete_player():
+    _logger.debug('delete_player')
+    name = pick_name()
+    _logger.debug('Player entered {}'.format(name))
+    player.del_player(name)
+    if HERO is not None and name == HERO.name:
+        _logger.debug('Renaming the HERO variable to None because the player deleted the current player')
+        global HERO
+        HERO = None
+    else:
+        _logger.debug('Player deleted a player other than the current HERO.')
+
+    pause()
+
+
+def pick_game():
+    _logger.debug('pick_game')
+    tables = lobby.sort_by_stakes(LOBBY.all_tables())
+
+    print(lobby.numbered_list(tables))
+    valid_choices = list(range(len(tables)))
+    print('What game do you want to play?')
+    return tables[get_menu_number(valid_choices)]
+
+    _logger.debug('The game picked was: {}'.format(GAME))
+
+
+def get_menu_number(validchoices):
     while True:
-        choice = prompt('{}?'.format(choices))
+        choice = prompt()
         if choice is None:
-            pass  # They chose a main menu option
-        elif choice.lower() in actions:
-            return actions[choice]
+            pass
+        elif is_integer(choice) is False:
+            print('Please enter a number for your selection!')
+        elif int(choice) in validchoices:
+            return int(choice)
         else:
-            print('Invalid choice, try again.')
+            print('Selection not available, try again.')
 
 
-def display_table(table, hero=None):
-    """
-    Return the string representation of the table, with colors.
-    """
-    _str = '\n'
-    _str = colors.color('{:5}{:7}{:7}{:20}{:<17}{:16}\n'.format(
-        'Seat', 'Blinds', 'Dealer', 'Player', 'Chips', 'Hand'), 'gray', STYLE='BOLD')
+def logo():
+    _logger.debug('Printing out the logo')
+    txt = ''
+    with open(LOGO) as f:
+        for l in f.readlines():
+            txt += l
+    txt += '\n'
+    txt += ('~'*70)
+    txt += '\n'
+    return txt
 
-    for i, s in enumerate(table.seats):
-        if s is None:
-            # No player is occupying the seat
-            _str += '{}\n'.format(i)
-            continue
-        else:
-            _str += '{:<5}'.format(i)
 
-        if table.TOKENS['SB'] == i:
-            _str += colors.color('{:7}'.format('[SB]'), 'lightblue')
-        elif table.TOKENS['BB'] == i:
-            _str += colors.color('{:7}'.format('[BB]'), 'blue')
-        elif table.TOKENS['BI'] == i:
-            _str += colors.color('{:7}'.format('[BI]'), 'lightblue')
-        else:
-            _str += ' '*7
-
-        if table.TOKENS['D'] == i:
-            _str += colors.color('{:7}'.format('[D]'), 'purple')
-        else:
-            _str += ' '*7
-
-        if s.occupied():
-            _str += '{:20}'.format(str(s.player))
-            _str += color_chips('{:<16}'.format(s.stack))
-        else:
-            # Don't show anything for vacant seats.
-            _str += '{:20}{:16}'.format('', '')
-
-        # Display hand if available
-        if s == hero:
-            _str += '{:16}'.format(color_cards(s.hand.peek()))
-        elif s.hand is not None:
-            _str += '{:16}'.format(color_cards(str(s.hand)))
-        _str += '\n'
-
+def menu_str():
+    _logger.debug('Printing out the menu')
+    _str = ''
+    for o in sorted(options.keys()):
+        _str += '{}\n'.format(options[o][0])
     return _str
 
 
-@colors.colorit("WHITE")
-def color_setting(p):
-    return p
+def view_combos():
+    _logger.debug('Printing out the card combinations in the deck.')
+    _str = ''
+    _str += "Calculating different possibilities for combinations in a standard 52-card deck:"
+    for i in range(1, 52):
+        _str += '{} card: {} combos.\n'.format(i, combos.n_choose_k(52, i))
+    return _str
 
 
-@colors.colorit("PURPLE")
-def color_param(p):
-    return p
+def play_poker():
+    _logger.debug('Preparing to play the selected game.')
+    if HERO is None:
+        print('You need to load or create a player first!')
+        pause()
+        return
+
+    _logger.debug('Getting the buyin from the player')
+    rebuy = get_buyin(GAME, HERO)
+    _logger.debug('The buyin selected was: {}'.format(rebuy))
+
+    _logger.debug('Constructing the session from a factory.')
+    g = factory.session_factory(
+        seats=GAME.seats,
+        game=GAME.game,
+        tablename=GAME.tablename,
+        level=GAME.level,
+        hero=HERO,
+        names='random',
+        herobuyin=rebuy,
+        varystacks=True
+    )
+    playing = True
+
+    while playing:
+        _logger.debug('Clearing the screen.')
+        os.system('clear')
+        _logger.debug('Play a round of the selected session game.')
+        g.play()
+        # Check if hero went broke
+        _logger.debug('Check if the hero went broke.')
+        if g.find_hero().stack == 0:
+            _logger.debug('Hero went broke, offer them the option to rebuy back in.')
+            rebuy = get_buyin(GAME, HERO)
+
+            _logger.debug('Hero entered {} for rebuy.'.format(rebuy))
+
+        _logger.debug('Perform in-between game activities')
+        g.table_maintainance()
+
+        _logger.debug('Offer the player the option to keep playing the session or quit.')
+        choice = input('keep playing? > ')
+        _logger.debug('Player entered {}'.format(choice))
+        if choice.lower() == 'n':
+            _logger.debug('Setting playing to False.')
+            playing = False
+            _logger.debug('Removing the hero from the table.')
+            g.find_hero().standup()
+            _logger.debug('Saving the player info to file.')
+            player.save_player(HERO)
+        else:
+            _logger.debug('Player elected to continue playing.')
 
 
-@colors.colorit("WHITE")
-def title(txt):
-    return txt.center(70)
+def exitgracefully():
+    _logger.debug('Exiting the program.')
+    print('Bye!')
+    exit()
 
 
-def color_name(player):
-    if player is None:
-        ptext = ''
+def pause():
+    _logger.debug('Pausing the game. Waiting for a keypress.')
+    input('Press any key to continue...')
+
+
+def player_info(p):
+    if HERO:
+        return '{}(${} in bank)'.format(str(HERO), HERO.bank)
     else:
-        ptext = '{}(${} in bank)'.format(color_param(player), player.bank)
-    _str = ''
-    _str += '{:>25}: {}'.format(color_setting('Name'), ptext)
-    return _str
+        return ''
 
 
-def color_game(GAME):
-    FMT = '{:>25}: {}\n'
-    _str = ''
-    _str += FMT.format(color_setting('Table Name'), color_param(GAME.tablename))
-    _str += FMT.format(color_setting('Game'), color_param(GAME.game))
-    _str += FMT.format(color_setting('Stakes'), color_param(blinds.get_stakes(GAME.level)))
-    _str += FMT.format(color_setting('Seats'), color_param(GAME.seats))
-
-    return _str
-
-
-def color_cards(cards):
-    """
-    Process card text to color representation
-    """
-    _str = ''
-    for c in cards.split():
-        if c == 'Xx':
-            _str += colors.color(c, 'PURPLE') + ' '
-        else:
-            _str += colors.color(c, card.COLORS[c[1]]) + ' '
-    return _str.strip()
+def main_menu():
+    os.system('clear')
+    print(logo())
+    print('-=- Settings -=-'.center(DISPLAYWIDTH))
+    print('{:15} {}'.format('Player:', player_info(HERO)))
+    print('{:15} {}'.format('Table Name:', GAME.tablename))
+    print('{:15} {}'.format('Game:', GAME.game))
+    print('{:15} {}'.format('Stakes:', blinds.get_stakes(GAME.level)))
+    print('{:15} {}'.format('Seats:', GAME.seats))
+    print('-=- Main Menu Options -=-'.center(DISPLAYWIDTH))
+    print(menu_str())
 
 
-@colors.colorit("YELLOW")
-def color_chips(amt):
-    return '$' + amt
+def process_user_choice():
+    _logger.debug('Getting user input.')
+    choice = input(':> ')
 
+    _logger.debug('Hero entered {}.'.format(choice))
+    choice = choice.lower()
 
-def print_pot(pot):
-    txt = color_chips(str(pot)).strip()
-    print('Pot: {}'.format(txt).rjust(84))
-
-
-def print_action(space, act_str):
-    mstart = act_str.find('$')
-    chips = color_chips(act_str[mstart+1:])
-
-    if 'fold' in act_str:
-        print('{}{}'.format(space, colors.color(act_str, 'PURPLE')))
-    elif 'check' in act_str:
-        print('{}{}'.format(space, colors.color(act_str, 'WHITE')))
-    elif 'allin' in act_str:
-        print('{}{}'.format(space, colors.color(act_str, 'WHITE')))
-    elif 'call' in act_str:
-        print('{}{}{}'.format(space, colors.color(act_str[:mstart], 'WHITE'), chips))
-    elif 'bet' in act_str:
-        print('{}{}{}'.format(space, colors.color(act_str[:mstart], 'RED'), chips))
-    elif 'raise' in act_str:
-        print('{}{}{}'.format(space, colors.color(act_str[:mstart], 'RED'), chips))
-
-
-def show_hands(table, color=True):
-    """
-    We might not want color for logging hand histories.
-    """
-    _str = ''
-    if color:
-        for s in table.get_players(hascards=True):
-            _str += '{:29}{:>20} shows {}\n'.format('', str(s), color_cards(str(s.hand)))
+    if choice in options:
+        _logger.debug('User input was valid, processing option.')
+        exec(options[choice][1])
     else:
-        for s in table.get_players(hascards=True):
-            _str += '{:20} shows {}\n'.format(str(s), str(s.hand))
+        _logger.debug('User input was not valid.')
+        print('Not a valid option!')
 
-    return _str
-
-
-def right_align(txt):
-    for l in txt.split('\n'):
-        print(l.rjust(DISPLAYWIDTH))
+    if choice == 'm':
+        _logger.debug('User looked at math combinations, pausing.')
+        pause()
 
 
 def get_buyin(game, hero):
@@ -276,3 +286,17 @@ def get_buyin(game, hero):
                 return int(choice)
         else:
             print('Invalid input!\n')
+
+
+def right_align(txt):
+    for l in txt.split('\n'):
+        print(l.rjust(DISPLAYWIDTH))
+
+
+def gameloop():
+    _logger.debug('New run of {}'.format(__name__))
+
+    _logger.debug('Starting game loop.')
+    while True:
+        main_menu()
+        process_user_choice()

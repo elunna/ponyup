@@ -1,8 +1,6 @@
 from __future__ import print_function
 import random
 from ponyup import betting
-from ponyup import colors
-from ponyup import console
 from ponyup import deck
 from ponyup import evaluator
 from ponyup import handhistory
@@ -116,6 +114,12 @@ class Round():
         for s in self.table.get_players(hascards=True):
             _logger.debug('Unhiding {}\'s hand.'.format(s.player))
             s.hand.unhide()
+
+        _str = ''
+        for s in self.table.get_players(hascards=True):
+            _str += '{:20} shows {}\n'.format(str(s), str(s.hand))
+        _logger.info(_str)
+        return _str
 
     def sortcards(self):
         """
@@ -242,8 +246,8 @@ class Round():
         """
         Run through a round of betting. Returns a victor if it exists.
         """
-        _logger.debug('Printing console version of table.')
-        print(console.display_table(self.table, self.find_hero()))
+        _logger.debug('Displaying  table.')
+        print(self.table)
 
         _logger.debug('Creating Betting object.')
         br = betting.BettingRound(self)
@@ -252,24 +256,24 @@ class Round():
         for p in br:
             _logger.debug('Getting player decision.')
 
-            o = br.player_decision(p)
-            _logger.debug('Player chose {}.'.format(o))
+            action = br.player_decision(p)
+            _logger.debug('Player chose {}.'.format(action))
 
-            br.process_option(o)
+            br.process_option(action)
             _logger.debug('Processed player option.')
 
-            act_str = br.action_string(o)
+            act_str = br.action_string(action)
             _logger.debug('Created action string for player action.')
 
             space = betting.spacing(br.level())
 
-            console.print_action(space, act_str)
+            print(space, act_str)
 
             # Log every action
             self.hh.log(act_str)
             _logger.info(act_str)
 
-        console.print_pot(self.pot)
+        print('Pot: ${}'.format(self.pot))
 
     def betting_over(self):
         """
@@ -300,8 +304,7 @@ class Round():
             return False
         else:
             _logger.debug('One player left.')
-            oneleft = 'Only one player left!'.rjust(70)
-            print(colors.color(oneleft, 'LIGHTBLUE'))
+            print('Only one player left!'.rjust(70))
 
             awardtext = pots.award_pot(victor, self.pot.pot)
             _logger.info(awardtext)
@@ -313,22 +316,25 @@ class Round():
         Compare all the hands of players holding cards and determine the winner(s). Awards each
         winner the appropriate amount.
         """
+        sd_text = ''
+
         title = 'Showdown!'
-        _logger.debug(title)
+        _logger.info(title)
         self.log(title, decorate=True, echo=False)
-        console.right_align(title)
+        sd_text += title
 
-        _logger.debug('Turning all player hands up.')
-        self.show_cards()
-
-        self.log(console.show_hands(self.table, color=False), echo=False)
-        console.right_align((console.show_hands(self.table, color=True)))
+        revealed = self.show_cards()
+        self.log(revealed, echo=False)
+        sd_text += revealed
 
         _logger.debug('Calculating pots and sidepots.')
         award_txt = self.pot.allocate_money_to_winners()
+
         _logger.info(award_txt)
         self.log(award_txt, echo=False)
-        console.right_align(award_txt)
+        sd_text += award_txt
+
+        return sd_text
 
     def cleanup(self):
         _logger.debug('Cleanup phase.')

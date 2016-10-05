@@ -1,6 +1,5 @@
 from __future__ import print_function
 from ponyup import card
-from ponyup import console
 from ponyup import evaluator as ev
 from ponyup import logger
 
@@ -119,7 +118,6 @@ def discard_phase(_round):
     title = 'Discard Phase:'
     _round.log(title, decorate=True, echo=False)
     _logger.info(_round.decorate(title))
-    console.right_align(title)
 
     cardholders = _round.table.get_players(hascards=True)
 
@@ -143,7 +141,7 @@ def discard_phase(_round):
             _logger.info('{} stands pat.'.format(str(s)))
 
         _round.log(d_txt, echo=False)  # Log it
-        console.right_align(d_txt)  # Print it
+        print(d_txt)
 
         # Discard
         for c in discards:
@@ -155,14 +153,8 @@ def discard_phase(_round):
 
 def discard_menu(hand):
     indices = ''.join(['{:<3}'.format(n) for n in valid_picks(hand)])
-
-    menulen = 14
-    offset = console.DISPLAYWIDTH - menulen
-    txt = ' ' * offset
-    txt += indices + '\n'
-    txt += ' ' * offset
-    txt += console.color_cards(hand.peek()) + '\n'
-
+    txt = indices + '\n'
+    txt += hand.peek() + '\n'
     return txt
 
 
@@ -202,10 +194,8 @@ def human_discard(hand, max_discards=5):
     print(discard_menu(hand))
     while True:
         helpme = ['?', 'h', 'help']
-        c = console.prompt()
-        if c is None:
-            continue  # Prompt processed a menu option
-        elif c in helpme:
+        c = input(':> ')
+        if c in helpme:
             print('')
             print('Enter the cards you want to discard:')
             print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')

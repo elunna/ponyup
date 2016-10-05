@@ -1,8 +1,6 @@
 from __future__ import print_function
 import random
 from ponyup import card
-from ponyup import console
-from ponyup import evaluator
 from ponyup import seat
 
 VALID_SIZES = list(range(2, 10))
@@ -17,7 +15,50 @@ class Table():
         self.seats = [seat.Seat(i) for i in range(size)]
 
     def __str__(self):
-        return console.display_table(self)
+        """
+        Return the string representation of the table, with colors.
+        """
+        _str = '\n'
+        _str = '{:5}{:7}{:7}{:20}{:<17}{:16}\n'.format(
+            'Seat', 'Blinds', 'Dealer', 'Player', 'Chips', 'Hand')
+
+        for i, s in enumerate(self.seats):
+            if s is None:
+                # No player is occupying the seat
+                _str += '{}\n'.format(i)
+                continue
+            else:
+                _str += '{:<5}'.format(i)
+
+            if self.TOKENS['SB'] == i:
+                _str += '{:7}'.format('[SB]')
+            elif self.TOKENS['BB'] == i:
+                _str += '{:7}'.format('[BB]')
+            elif self.TOKENS['BI'] == i:
+                _str += '{:7}'.format('[BI]')
+            else:
+                _str += ' '*7
+
+            if self.TOKENS['D'] == i:
+                _str += '{:7}'.format('[D]')
+            else:
+                _str += ' '*7
+
+            if s.occupied():
+                _str += '{:20}'.format(str(s.player))
+                _str += '{:<16}'.format(s.stack)
+            else:
+                # Don't show anything for vacant seats.
+                _str += '{:20}{:16}'.format('', '')
+
+            # Display hand if available
+            if s.player.is_human():
+                _str += '{:16}'.format(s.hand.peek())
+            elif s.hand is not None:
+                _str += '{:16}'.format(str(s.hand))
+            _str += '\n'
+
+        return _str
 
     def __len__(self):
         """

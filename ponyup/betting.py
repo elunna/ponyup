@@ -1,6 +1,5 @@
 from __future__ import print_function
 from collections import namedtuple
-from ponyup import console
 from ponyup import strategy
 
 Action = namedtuple('Action', ['name', 'cost'])
@@ -51,14 +50,8 @@ class BettingRound():
 
     def player_decision(self, s):
         """
-        Takes in a player p and calculates the cost of the current minimum bet amount for that
-        player, based on how much they have invested so far this round. It takes that cost and
-        passes it to get_options to determine what betting options the player has.
-
-        The next step depends on whether the player is human, or computer, or if they are all-
-        in then they don't have a decision and the betting passes to the next player. If human,
-        they are prompted for their decision. If CPU, they follow an algorithm for making a
-        play. The decision is returned as an Action object.
+        Presents the current bettor with their options and lets them pick one. Returns the
+        Action object they picked.
         """
         options = self.get_options(s)
 
@@ -66,10 +59,26 @@ class BettingRound():
             # Player is allin
             return Action('ALLIN', 0)
         elif s.player.is_human():
-            return console.betmenu(options)
+            return self.betmenu(options)
         else:
             facing = self.cost(s) / self.betsize
             return strategy.makeplay(s, options, self.r.street, self.level(), facing)
+
+    def betmenu(self, actions):
+        """
+        Display a list of betting options, and get input from the player to pick a valid option.
+        """
+        nice_opts = ['[' + v.name[0] + ']' + v.name[1:].lower() for k, v in sorted(actions.items())]
+        choices = '/'.join(nice_opts)
+
+        while True:
+            choice = input('{}?'.format(choices))
+            if choice is None:
+                pass  # They chose a main menu option
+            elif choice.lower() in actions:
+                return actions[choice]
+            else:
+                print('Invalid choice, try again.')
 
     def process_option(self, action):
         """

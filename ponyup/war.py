@@ -4,7 +4,6 @@ from __future__ import print_function
 import random
 import sys
 import time
-from ponyup import console
 from ponyup import deck
 
 """
@@ -123,8 +122,8 @@ class War():
         """
         Returns a string showing the top card of each players pile vs the other.
         """
-        c1 = console.color_cards(self.players[1][0].peek())
-        c2 = console.color_cards(self.players[2][0].peek())
+        c1 = self.players[1][0].peek()
+        c2 = self.players[2][0].peek()
         _str = c1 + c2.rjust(30)
         print(_str.center(WIDTH + 28))
 
@@ -244,7 +243,7 @@ def display_cards(cardlist):
     _str = ''
     for c in cardlist:
         _str += str(c) + ' '
-    return console.color_chips(_str)
+    return _str
 
 
 def get_wartext(level):
