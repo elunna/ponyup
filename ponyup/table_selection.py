@@ -1,10 +1,7 @@
 from collections import namedtuple
-import sqlite3
-from ponyup import blinds
 
 Game = namedtuple('Game', ['tablename', 'seats', 'level', 'game'])
 
-# TABLENAME | TABLE SIZE | STAKES | GAME
 tables = (
     # Headsup
     Game('Twilight\'s Balloon',     seats=2, level=1, game="FIVE CARD DRAW"),
@@ -29,7 +26,6 @@ tables = (
     Game('Sugarcube Corner',        seats=6, level=4, game="FIVE CARD DRAW"),
     Game('Pinkie\'s Party Cave',    seats=6, level=5, game="FIVE CARD DRAW"),
     Game('Cutie Map',               seats=6, level=6, game="FIVE CARD DRAW"),
-
 
     # ### 5-card stud
     # HU
@@ -56,30 +52,3 @@ tables = (
     Game('Dodge Junction',          seats=6, level=5, game="FIVE CARD STUD"),
     Game('Tenochtitlan Basin',      seats=6, level=6, game="FIVE CARD STUD"),
 )
-
-
-def make_db():
-    conn = sqlite3.connect('lobby.db')
-    c = conn.cursor()
-
-    c.execute('CREATE TABLE IF NOT EXISTS games(name TEXT, game TEXT, seats INTEGER, level INTEGER, stakes TEXT, format TEXT)')
-
-    # Build a database from the existing dictionary.
-    for gt in tables:
-        stakes = blinds.get_stakes(gt.level)
-        c.execute("INSERT INTO games VALUES(?, ?, ?, ?, ?, ?)", (gt.tablename, gt.game, gt.seats, gt.level, stakes, 'CASH'))
-
-    print_db(c)
-    # Anytime we change something, we need to commit to save.
-    conn.commit()
-    c.close()
-    conn.close()
-
-
-def print_db(db_cursor):
-    rows = db_cursor.execute('SELECT * from games')
-    for r in rows:
-        print(r)
-
-if __name__ == "__main__":
-    make_db()

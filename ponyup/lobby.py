@@ -7,7 +7,7 @@ at. Each has: Table name, seats, stakes level, game type.
 """
 Game = namedtuple('Game', ['tablename', 'game', 'seats', 'level', 'stakes',  'format'])
 DEFAULT_TABLE = 'Twilight\'s Lab'
-DB = 'data/lobby.db'
+DB = 'data/game.db'
 
 
 class Lobby():

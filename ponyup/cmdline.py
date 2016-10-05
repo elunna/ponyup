@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import cmd
+import textwrap
 from ponyup import blinds
 from ponyup import lobby
+from ponyup import names
 from ponyup import player
 
 DISPLAYWIDTH = 70
@@ -81,6 +83,14 @@ class Game(cmd.Cmd):
         sub_cmd.cmdloop()
         if sub_cmd.game:
             self.game = sub_cmd.game
+
+    def do_names(self, args):
+        """
+        View the stored CPU names.
+        """
+        namelist = ', '.join(names.get_names_from_db())
+        for line in textwrap.wrap(namelist, 80):
+            print(line)
 
     def do_combos(self, args):
         """

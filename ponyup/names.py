@@ -1,6 +1,6 @@
 import random
 import re
-from ponyup import ponynames
+import sqlite3
 """
 Rules for player names:
     Must be 3 to 20 characters long.
@@ -12,6 +12,7 @@ Rules for player names:
 MAX_LEN = 20
 MIN_LEN = 3
 INVALID_CHARACTERS = r"[<>()/{}[\]`'\\]"
+DB = 'data/game.db'
 
 pokerplayers = [
     'Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'Mortensen',
@@ -23,7 +24,18 @@ pokerplayers = [
 ]
 
 
-def random_names(num, namelist=ponynames.getnames()):
+def get_names_from_db():
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+
+    names = [n[0] for n in c.execute('SELECT * FROM ponies')]
+
+    c.close()
+    conn.close()
+    return names
+
+
+def random_names(num, namelist=get_names_from_db()):
     """
     Generate a unique list of names from the names module. num specifies how many names.
     """
