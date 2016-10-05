@@ -3,12 +3,14 @@ import cmd
 import textwrap
 from ponyup import blinds
 from ponyup import lobby
+from ponyup import logger
 from ponyup import names
 from ponyup import player_db
 
 DISPLAYWIDTH = 70
 DEFAULT_PLAYER = 'luna'
 LOGO = 'data/logo2.txt'
+_logger = logger.get_logger(__name__)
 
 
 class Game(cmd.Cmd):

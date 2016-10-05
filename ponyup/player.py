@@ -26,11 +26,6 @@ class Player():
         """
         return '{}'.format(self.name)
 
-    def data(self):
-        _str = 'Data for player: {}'.format(self.name)
-
-        return _str
-
     def __repr__(self):
         """
         Same as str, returns name.
