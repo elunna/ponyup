@@ -9,34 +9,27 @@ def load_player(name):
     Gets the username, checks for any previous player info and loads the player. Returns a
     Player object.
     """
-    conn = sqlite3.connect(DB)
-    c = conn.cursor()
-    rows = c.execute('SELECT * FROM players WHERE name=("{}")'.format(name))
-    players = [(r[0], r[1]) for r in rows]
-
-    if players:
-        p = player.Player(*players[0])
+    p = player_exists(name)
+    if p:
+        p = player.Player(*p)
         print('Loaded player {}'.format(p))
     else:
         print('player not found')
         p = None
-
-    c.close()
-    conn.close()
     return p
 
 
 def new_player(name):
     conn = sqlite3.connect(DB)
     c = conn.cursor()
-    if player_exists(name):
+    p = player_exists(name)
+    if p:
         print('Player already exists in database!')
+        return False
     else:
-        try:
-            c.execute('INSERT INTO players VALUES("{}",{})'.format(name, player.HUMAN_BANK_BITS))
-            #  c.execute("INSERT INTO players VALUES(?,?)", (name, player.HUMAN_BANK_BITS, ))
-        except ValueError:
-            pass
+        c.execute('INSERT INTO players VALUES("{}",{})'.format(name, player.HUMAN_BANK_BITS))
+        print('Created new player {}'.format(name))
+        return True
 
     conn.commit()
     c.close()
@@ -56,7 +49,23 @@ def save_player(plyr):
 
 
 def player_exists(name):
-    pass
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+
+    rows = c.execute('SELECT * FROM players WHERE name=("{}")'.format(name))
+    names = [(r[0], r[1]) for r in rows]
+
+    result = False
+    if len(names) == 0:
+        print('Player not in database.')
+    elif len(names) > 1:
+        raise Exception('Player has more than one entry in the database!')
+    else:
+        result = names[0]
+
+    c.close()
+    conn.close()
+    return result
 
 
 def get_players():
@@ -74,4 +83,16 @@ def get_players():
 
 
 def del_player(name):
-    pass
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    if player_exists(name):
+        c.execute('DELETE FROM players WHERE name = "{}"'.format(name))
+        print('Player {} deleted.'.format(name))
+        return True
+    else:
+        print('Player not found in database.')
+        return False
+
+    conn.commit()
+    c.close()
+    conn.close()
