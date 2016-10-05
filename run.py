@@ -2,9 +2,10 @@
 """
 Runs the console version.
 """
-
-from ponyup import console
+#  from ponyup import console
+from ponyup import cmdline
 
 
 if __name__ == "__main__":
-    console.gameloop()
+    game = cmdline.Game()
+    game.cmdloop()

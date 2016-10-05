@@ -1,11 +1,28 @@
 #!/usr/bin/env python3
 import cmd
+from ponyup import player
+from ponyup import lobby
+DEFAULT_PLAYER = 'luna'
+LOGO = 'data/logo2.txt'
+
+
+def logo():
+    txt = ''
+    with open(LOGO) as f:
+        for l in f.readlines():
+            txt += l
+    txt += '\n' + '~'*70 + '\n'
+    return txt
 
 
 class Game(cmd.Cmd):
     def __init__(self):
         cmd.Cmd.__init__(self)
         self.prompt = "/): "
+        self.intro = logo()
+        self.hero = player.load_player(DEFAULT_PLAYER)
+        self.lobby = lobby.Lobby()
+        self.game = self.lobby.default()
 
     def do_quit(self, args):
         """
@@ -16,11 +33,6 @@ class Game(cmd.Cmd):
     def do_load(self, args):
         """
         Load a player.
-        """
-
-    def do_save(self, args):
-        """
-        Save a player.
         """
 
     def do_new(self, args):
@@ -43,7 +55,7 @@ class Game(cmd.Cmd):
         View game producer credits.
         """
 
-
-if __name__ == "__main__":
-    game = Game()
-    game.cmdloop()
+    def do_options(self, args):
+        """
+        Go to game options
+        """
