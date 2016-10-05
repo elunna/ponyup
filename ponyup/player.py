@@ -9,9 +9,9 @@ HUMAN_BANK_BITS = 1000
 
 
 class Player():
-    def __init__(self, name, playertype=None):
+    def __init__(self, name, bank=0, playertype=None):
         self.set_name(name)
-        self.bank = 0
+        self.bank = bank
 
         if playertype is None:
             # Choose random player type

@@ -10,12 +10,13 @@ def load_player(name):
     Player object.
     """
     p = player_exists(name)
+    print('p = {}'.format(p))
     if p:
         p = player.Player(*p)
         print('Loaded player {}'.format(p))
+        print('{}\'s bank = {}'.format(p, p.bank))
     else:
         print('player not found')
-        p = None
     return p
 
 
@@ -23,17 +24,18 @@ def new_player(name):
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     p = player_exists(name)
+    result = False
     if p:
         print('Player already exists in database!')
-        return False
     else:
         c.execute('INSERT INTO players VALUES("{}",{})'.format(name, player.HUMAN_BANK_BITS))
         print('Created new player {}'.format(name))
-        return True
+        result = True
 
     conn.commit()
     c.close()
     conn.close()
+    return result
 
 
 def save_player(plyr):
@@ -54,8 +56,10 @@ def player_exists(name):
 
     rows = c.execute('SELECT * FROM players WHERE name=("{}")'.format(name))
     names = [(r[0], r[1]) for r in rows]
-
     result = False
+
+    print('names = {}'.format(names))
+
     if len(names) == 0:
         print('Player not in database.')
     elif len(names) > 1:
@@ -63,6 +67,7 @@ def player_exists(name):
     else:
         result = names[0]
 
+    print('result = {}'.format(result))
     c.close()
     conn.close()
     return result
@@ -85,14 +90,15 @@ def get_players():
 def del_player(name):
     conn = sqlite3.connect(DB)
     c = conn.cursor()
+    result = False
     if player_exists(name):
         c.execute('DELETE FROM players WHERE name = "{}"'.format(name))
         print('Player {} deleted.'.format(name))
-        return True
+        result = True
     else:
         print('Player not found in database.')
-        return False
 
     conn.commit()
     c.close()
     conn.close()
+    return result

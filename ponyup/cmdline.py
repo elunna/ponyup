@@ -4,7 +4,7 @@ import textwrap
 from ponyup import blinds
 from ponyup import lobby
 from ponyup import names
-from ponyup import player
+from ponyup import player_db
 
 DISPLAYWIDTH = 70
 DEFAULT_PLAYER = 'luna'
@@ -16,7 +16,7 @@ class Game(cmd.Cmd):
         cmd.Cmd.__init__(self)
         self.prompt = "/): "
         self.intro = logo()
-        self.hero = player.load_player(DEFAULT_PLAYER)
+        self.hero = player_db.load_player(DEFAULT_PLAYER)
         self.lobby = lobby.Lobby()
         self.game = self.lobby.default()
 
@@ -30,35 +30,30 @@ class Game(cmd.Cmd):
         """
         Create a new player.
         """
-        hero = player.create_player(args)
-        if hero:
-            print('Created player {}'.format(hero))
-            self.hero = player.load_player(args)
-        else:
-            print('Create player failed.')
+        if player_db.new_player(args):
+            self.hero = player_db.load_player(args)
+
+    def do_players(self, args):
+        print(player_db.get_players())
 
     def do_load(self, args):
         """
         Load a player.
         """
-        hero = player.load_player(args)
+        hero = player_db.load_player(args)
         if hero:
-            print('{} loaded.'.format(hero))
             self.hero = hero
-        else:
-            print('Player load error.')
 
     def do_del(self, args):
         """
         Delete a player.
         """
-        result = player.del_player(args)
-        if result:
-            print('Player {} deleted.'.format(args))
-            if self.hero is not None and args == self.hero.name:
-                self.hero = None
-        else:
-            print('Delete player error.')
+        if player_db.del_player(args):
+            # Check if we deleted the current player
+            if self.hero is not None:
+                if args == self.hero.name:
+                    # Reset current player
+                    self.hero = None
 
     def do_info(self, args):
         """
