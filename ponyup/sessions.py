@@ -51,6 +51,7 @@ class Session():
     def new_round(self):
         _logger.debug('Created a new Round from this Session.')
         r = poker.Round(self)
+        r.log_hh()
         return r
 
     def play(self):

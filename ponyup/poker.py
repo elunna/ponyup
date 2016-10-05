@@ -1,4 +1,6 @@
 from __future__ import print_function
+import datetime
+import logging
 import random
 from ponyup import betting
 from ponyup import deck
@@ -7,6 +9,8 @@ from ponyup import logger
 from ponyup import pots
 
 _logger = logger.get_logger(__name__)
+LOGDIR = 'logs/'
+MAX_HANDLERS = 3
 
 
 class Round():
@@ -28,17 +32,6 @@ class Round():
         self.exposed = []
 
         self.check_integrity_pre()
-
-        _logger.debug('Round - gameid: {}'.format(self.gameid))
-        _logger.debug('Round - street: {}'.format(self.street))
-        _logger.debug('Round - pot: {}'.format(self.pot))
-        _logger.debug('Round - muck: {}'.format(self.muck))
-        _logger.debug('Round - deck: {}'.format(self.d))
-        _logger.debug('Round - exposed: {}'.format(self.exposed))
-
-        _logger.info(logger.round_header(self))
-        _logger.info(self.table.player_listing())
-        _logger.info('Seat {} has the button.'.format(self.table.TOKENS['D']))
 
     def __str__(self):
         """
@@ -72,6 +65,35 @@ class Round():
 
         cards = hero.hand.peek()
         _logger.info('{}: [{}]'.format(hero, cards.strip()))
+
+    def log_hh(self):
+        dt = datetime.datetime
+        filename = 'HH_{}_-_{}_{}_{}(Pony Bits).log'.format(
+            dt.now().strftime('%Y%m%d'),
+            self.table.name,
+            self.gametype,
+            self.blinds.stakes()
+        )
+        # Check if the handhistory log handler has been made
+        if len(_logger.handlers) < MAX_HANDLERS:
+            hh_file = LOGDIR + filename
+
+            hh_fh = logging.FileHandler(hh_file)
+            hh_fh.setLevel(logging.INFO)
+            fmt = logging.Formatter('%(message)s')
+            hh_fh.setFormatter(fmt)
+            _logger.addHandler(hh_fh)
+
+        _logger.debug('Round - gameid: {}'.format(self.gameid))
+        _logger.debug('Round - street: {}'.format(self.street))
+        _logger.debug('Round - pot: {}'.format(self.pot))
+        _logger.debug('Round - muck: {}'.format(self.muck))
+        _logger.debug('Round - deck: {}'.format(self.d))
+        _logger.debug('Round - exposed: {}'.format(self.exposed))
+
+        _logger.info(logger.round_header(self))
+        _logger.info(self.table.player_listing())
+        _logger.info('Seat {} has the button.'.format(self.table.TOKENS['D']))
 
     def deal_cards(self, qty, faceup=False, handreq=False):
         """

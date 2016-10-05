@@ -45,7 +45,7 @@ class Blinds():
         (without antes), we calculate the amounts by using the Big Blind as the small bet, and
         twice the Big Blind as the big bet.
         """
-        return '${}/${}'.format(self.BB, self.BB * 2)
+        return '${}-${}'.format(self.BB, self.BB * 2)
 
     def cleannum(self, num):
         if num % 1 > 0:
@@ -142,4 +142,4 @@ def levels(bet_dict=stakes):
     Returns a listing of all the available blind levels in the structure.
     """
     for k, v in sorted(bet_dict):
-        print('\tLevel {:3}: ${}/${}'.format(k, v, v * 2))
+        print('\tLevel {:3}: ${}-${}'.format(k, v, v * 2))
