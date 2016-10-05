@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 import cmd
-from ponyup import player
+from ponyup import blinds
 from ponyup import lobby
+from ponyup import player
+
+DISPLAYWIDTH = 70
 DEFAULT_PLAYER = 'luna'
 LOGO = 'data/logo2.txt'
 
@@ -30,15 +33,54 @@ class Game(cmd.Cmd):
         """
         return True
 
-    def do_load(self, args):
-        """
-        Load a player.
-        """
-
     def do_new(self, args):
         """
         Create a new player.
         """
+        hero = player.create_player(args)
+        if hero:
+            print('Created player {}'.format(hero))
+            self.hero = player.load_player(args)
+        else:
+            print('Create player failed.')
+
+    def do_load(self, args):
+        """
+        Load a player.
+        """
+        hero = player.load_player(args)
+        if hero:
+            print('{} loaded.'.format(hero))
+            self.hero = hero
+        else:
+            print('Player load error.')
+
+    def do_del(self, args):
+        """
+        Delete a player.
+        """
+        result = player.del_player(args)
+        if result:
+            print('Player {} deleted.'.format(args))
+            if self.hero is not None and args == self.hero.name:
+                self.hero = None
+        else:
+            print('Delete player error.')
+
+    def do_info(self, args):
+        """
+        View current game info and settings.
+        """
+        print('-=- Game info -=-'.center(DISPLAYWIDTH))
+        playertxt = ''
+        if self.hero:
+            playertxt = '{}(${})'.format(self.hero, self.hero.bank)
+
+        print('{:15} {}'.format('Player:', playertxt))
+        print('{:15} {}'.format('Table Name:', self.game.tablename))
+        print('{:15} {}'.format('Game:', self.game.game))
+        print('{:15} {}'.format('Stakes:', blinds.get_stakes(self.game.level)))
+        print('{:15} {}'.format('Seats:', self.game.seats))
 
     def do_games(self, args):
         """
