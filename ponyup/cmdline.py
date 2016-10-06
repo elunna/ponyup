@@ -213,24 +213,9 @@ class Game(cmd.Cmd):
             varystacks=True,
         )
 
-        playing = True
-        while playing:
-            sesh.play()
-            # Check if hero went broke
-            if sesh.find_hero().stack == 0:
-                rebuy = input('Rebuy?')
-                if not self.valid_buyin(rebuy):
-                    playing = False
-                else:
-                    sesh.find_hero().buy_chips(rebuy)
-
-            sesh.table_maintainance()
-
-            choice = input('keep playing? > ')
-            if choice.lower() == 'n':
-                playing = False
-                sesh.find_hero().standup()
-                self.do_save(None)
+        # Launch a new shell for playing the Session and Rounds
+        sub_cmd = SessionInterpreter(sesh)
+        sub_cmd.cmdloop()
 
     def logo(self):
         txt = ''
@@ -263,6 +248,33 @@ class GameSelection(cmd.Cmd):
     def onecmd(self, args):
         if self.game or args.lower().startswith('q'):
             return True
+
+
+class SessionInterpreter(cmd.Cmd):
+    def __init__(self, session):
+        cmd.Cmd.__init__(self)
+        self.session = session
+        self.playing = True
+
+    def emptyline(self):
+        os.system('clear')
+        self.session.play()
+
+    def postcmd(self, emptyline, stop=False):
+        # Check if hero went broke
+        if self.session.find_hero().stack == 0:
+            rebuy = input('Rebuy?')
+            if not self.valid_buyin(rebuy):
+                self.do_quit()
+            else:
+                self.session.find_hero().buy_chips(rebuy)
+
+        self.session.table_maintainance()
+
+    def do_quit(self, args):
+        self.session.find_hero().standup()
+        self.do_save(None)
+        return True
 
 
 def is_integer(num):
