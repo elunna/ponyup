@@ -6,7 +6,6 @@ This lobby listing is a list of all the available cash tables a pony can play
 at. Each has: Table name, seats, stakes level, game type.
 """
 Game = namedtuple('Game', ['tablename', 'game', 'seats', 'level', 'stakes',  'format'])
-DEFAULT_TABLE = 'Twilight\'s Lab'
 DB = 'data/game.db'
 
 
@@ -20,9 +19,9 @@ class Lobby():
         self.c.close()
         self.conn.close()
 
-    def default(self):
+    def get_game(self, name):
         for t in self.all_tables():
-            if t.tablename == DEFAULT_TABLE:
+            if t.tablename == name:
                 return t
         else:
             return None

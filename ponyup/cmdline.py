@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import cmd
+import json
+import os
 import textwrap
 from ponyup import blinds
 from ponyup import lobby
@@ -10,6 +12,7 @@ from ponyup import player_db
 DISPLAYWIDTH = 70
 DEFAULT_PLAYER = 'luna'
 LOGO = 'data/logo2.txt'
+SETTINGS = 'data/settings.json'
 _logger = logger.get_logger(__name__)
 
 
@@ -17,10 +20,50 @@ class Game(cmd.Cmd):
     def __init__(self):
         cmd.Cmd.__init__(self)
         self.prompt = "/): "
-        self.intro = logo()
-        self.hero = player_db.load_player(DEFAULT_PLAYER)
         self.lobby = lobby.Lobby()
-        self.game = self.lobby.default()
+
+        self.load_settings()
+
+        os.system('clear')
+        self.intro = self.logo()
+
+    def load_settings(self):
+        with open(SETTINGS, 'r') as f:
+            settings = f.read()
+            self.settings = json.loads(settings)
+
+        self.hero = player_db.load_player(self.settings['hero'])
+        self.game = self.lobby.get_game(self.settings['game'])
+
+    def save_settings(self):
+        # Write the game as the new default in the settings
+        with open(SETTINGS, 'w') as f:
+            json.dump(self.settings, f)
+
+    def get_info(self):
+        """
+        Return a string containing the game info.
+        """
+        _str = ''
+        title = '-=- Game info -=-'.center(DISPLAYWIDTH)
+        _str += title + '\n'
+
+        playertxt = ''
+        if self.hero:
+            playertxt = '{}(${})'.format(self.hero, self.hero.bank)
+            _str += '{:15} {}\n'.format('Player:', playertxt)
+        else:
+            _str += '{:15} {}\n'.format('Player:', 'n/a')
+
+        if self.game:
+            _str += '{:15} {}\n'.format('Table Name:', self.game.tablename)
+            _str += '{:15} {}\n'.format('Game:', self.game.game)
+            _str += '{:15} {}\n'.format('Stakes:', blinds.get_stakes(self.game.level))
+            _str += '{:15} {}\n'.format('Seats:', self.game.seats)
+        else:
+            _str += '{:15} {}\n'.format('Game:', 'n/a (use the "games" command to set the game.')
+
+        return _str
 
     def do_quit(self, args):
         """
@@ -45,6 +88,8 @@ class Game(cmd.Cmd):
         hero = player_db.load_player(args)
         if hero:
             self.hero = hero
+            self.settings['hero'] = self.hero.name
+            self.save_settings()
 
     def do_del(self, args):
         """
@@ -56,21 +101,14 @@ class Game(cmd.Cmd):
                 if args == self.hero.name:
                     # Reset current player
                     self.hero = None
+                    self.settings['hero'] = 'None'
+                    self.save_settings()
 
     def do_info(self, args):
         """
         View current game info and settings.
         """
-        print('-=- Game info -=-'.center(DISPLAYWIDTH))
-        playertxt = ''
-        if self.hero:
-            playertxt = '{}(${})'.format(self.hero, self.hero.bank)
-
-        print('{:15} {}'.format('Player:', playertxt))
-        print('{:15} {}'.format('Table Name:', self.game.tablename))
-        print('{:15} {}'.format('Game:', self.game.game))
-        print('{:15} {}'.format('Stakes:', blinds.get_stakes(self.game.level)))
-        print('{:15} {}'.format('Seats:', self.game.seats))
+        print(self.get_info())
 
     def do_games(self, args):
         """
@@ -80,6 +118,8 @@ class Game(cmd.Cmd):
         sub_cmd.cmdloop()
         if sub_cmd.game:
             self.game = sub_cmd.game
+            self.settings['game'] = self.game.tablename
+            self.save_settings()
 
     def do_names(self, args):
         """
@@ -104,6 +144,16 @@ class Game(cmd.Cmd):
         Go to game options
         """
 
+    def logo(self):
+        txt = ''
+        with open(LOGO) as f:
+            for l in f.readlines():
+                txt += l
+        txt += '\n' + '~'*70 + '\n'
+
+        txt += self.get_info()
+        return txt
+
 
 class GameSelection(cmd.Cmd):
     def __init__(self):
@@ -125,15 +175,6 @@ class GameSelection(cmd.Cmd):
     def onecmd(self, args):
         if self.game or args.lower().startswith('q'):
             return True
-
-
-def logo():
-    txt = ''
-    with open(LOGO) as f:
-        for l in f.readlines():
-            txt += l
-    txt += '\n' + '~'*70 + '\n'
-    return txt
 
 
 def is_integer(num):
