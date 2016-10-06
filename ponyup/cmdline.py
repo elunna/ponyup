@@ -4,6 +4,7 @@ import json
 import os
 import textwrap
 from ponyup import blinds
+from ponyup import factory
 from ponyup import lobby
 from ponyup import logger
 from ponyup import names
@@ -11,6 +12,8 @@ from ponyup import player_db
 
 DISPLAYWIDTH = 70
 DEFAULT_PLAYER = 'luna'
+DEFAULT_STACK = 25  # Big blinds
+MINIMUM_STACK = 10  # Big blinds
 LOGO = 'data/logo2.txt'
 SETTINGS = 'data/settings.json'
 _logger = logger.get_logger(__name__)
@@ -21,7 +24,7 @@ class Game(cmd.Cmd):
         cmd.Cmd.__init__(self)
         self.prompt = "/): "
         self.lobby = lobby.Lobby()
-
+        self.hero, self.game = None, None
         self.load_settings()
 
         os.system('clear')
@@ -158,6 +161,76 @@ class Game(cmd.Cmd):
         """
         Go to game options
         """
+
+    def valid_buyin(self, amt):
+        minbuyin = blinds.stakes[self.game.level] * MINIMUM_STACK
+
+        # Check hero bank
+        if self.hero.bank < minbuyin:
+            print('You don\'t have enough chips to buyin to this game!')
+            return False
+
+        # Check the buyin
+        if not is_integer(amt):
+            print('Invalid buyin!')
+            return False
+        elif int(amt) < minbuyin:
+            print('The minimum buy-in is ${} bits.'.format(minbuyin))
+            return False
+        else:
+            return True
+
+    def valid_settings(self):
+        if self.hero is None or self.game is None:
+            print('Game or player has not been set!')
+            return False
+        else:
+            return True
+
+    def do_play(self, args):
+        """
+        Play the selected game. Supply a buyin amount or use the default buyin.
+        """
+        if not self.valid_settings():
+            return False
+
+        if args:
+            if self.valid_buyin(args):
+                buyin = int(args)
+            else:
+                return False
+        else:
+            buyin = blinds.stakes[self.game.level] * DEFAULT_STACK
+
+        sesh = factory.session_factory(
+            seats=self.game.seats,
+            game=self.game.game,
+            tablename=self.game.tablename,
+            level=self.game.level,
+            hero=self.hero,
+            names='random',
+            herobuyin=buyin,
+            varystacks=True,
+        )
+
+        playing = True
+        while playing:
+            sesh.play()
+            # Check if hero went broke
+            if sesh.find_hero().stack == 0:
+                rebuy = input('Rebuy?')
+                if not self.valid_buyin(rebuy):
+                    playing = False
+                else:
+                    sesh.find_hero().buy_chips(rebuy)
+
+            sesh.table_maintainance()
+
+            choice = input('keep playing? > ')
+            if choice.lower() == 'n':
+                playing = False
+                sesh.find_hero().standup()
+                self.do_save(None)
 
     def logo(self):
         txt = ''
