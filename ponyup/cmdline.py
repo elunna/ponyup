@@ -216,6 +216,7 @@ class Game(cmd.Cmd):
         # Launch a new shell for playing the Session and Rounds
         sub_cmd = SessionInterpreter(sesh)
         sub_cmd.cmdloop()
+        self.do_save(None)
 
     def logo(self):
         txt = ''
@@ -255,12 +256,17 @@ class SessionInterpreter(cmd.Cmd):
         cmd.Cmd.__init__(self)
         self.session = session
         self.playing = True
+        self.play_round(None)
 
     def emptyline(self):
+        self.play_round(self)
+
+    def play_round(self, args):
         os.system('clear')
         self.session.play()
+        self.post_round()
 
-    def postcmd(self, emptyline, stop=False):
+    def post_round(self):
         # Check if hero went broke
         if self.session.find_hero().stack == 0:
             rebuy = input('Rebuy?')
@@ -273,7 +279,6 @@ class SessionInterpreter(cmd.Cmd):
 
     def do_quit(self, args):
         self.session.find_hero().standup()
-        self.do_save(None)
         return True
 
 
