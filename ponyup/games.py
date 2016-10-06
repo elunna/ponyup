@@ -3,6 +3,11 @@ from collections import namedtuple
 Street = namedtuple('Street', ['name', 'betsize'])
 
 GAMES = {
+    # Just deals 5 cards
+    'POKER': [
+        Street(name="Deal", betsize=1),
+    ],
+
     'FIVE CARD DRAW': [
         Street(name="Predraw", betsize=1),
         Street(name="Postdraw", betsize=2),
