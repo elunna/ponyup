@@ -14,7 +14,7 @@ def load_player(name):
     _logger.debug('Attempting to load player from sqlite3 database.')
     p = player_exists(name)
     if p:
-        p = player.Player(*p)
+        p = player.Player(name=p[0], bank=p[1], playertype="HUMAN")
         _logger.debug('Loaded player {}'.format(p))
         _logger.debug('Bank: {}'.format(p.bank))
     else:
