@@ -41,17 +41,23 @@ def new_player(name):
     return result
 
 
-def save_player(plyr):
+def update_player(plyr):
     """
     Saves the Player current stats to the database.
     """
     _logger.debug('Attempting to update player info in sqlite3 database.')
-    conn = sqlite3.connect(DB)
-    c = conn.cursor()
+    if plyr:
+        conn = sqlite3.connect(DB)
+        c = conn.cursor()
 
-    conn.commit()
-    c.close()
-    conn.close()
+        c.execute('UPDATE players SET bank = {} WHERE name = "{}"'.format(plyr.bank, plyr.name))
+        _logger.debug('Set {}\'s bank amount to {}.'.format(plyr, plyr.bank))
+        conn.commit()
+        c.close()
+        conn.close()
+        return True
+    else:
+        return False
 
 
 def player_exists(name):

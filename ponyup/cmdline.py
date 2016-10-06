@@ -65,6 +65,12 @@ class Game(cmd.Cmd):
 
         return _str
 
+    ###################
+    # THROWAWAY TEST FUNC
+    def do_win(self, args):
+        print('Hero won $100!!!!!')
+        self.hero.bank += 100
+
     def do_quit(self, args):
         """
         Leaves the game.
@@ -90,6 +96,15 @@ class Game(cmd.Cmd):
             self.hero = hero
             self.settings['hero'] = self.hero.name
             self.save_settings()
+
+    def do_save(self, args):
+        """
+        Save the current player's info.
+        """
+        if player_db.update_player(self.hero):
+            print('Saved {} successfully!'.format(self.hero))
+        else:
+            print('Save failed!')
 
     def do_del(self, args):
         """
