@@ -332,7 +332,7 @@ class Round():
         sd_text += title
 
         revealed = self.show_cards()
-        sd_text += revealed
+        sd_text += '\n' + revealed
 
         _logger.debug('Calculating pots and sidepots.')
         award_txt = self.pot.allocate_money_to_winners()
