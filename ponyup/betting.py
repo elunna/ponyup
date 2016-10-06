@@ -1,4 +1,3 @@
-from __future__ import print_function
 from collections import namedtuple
 from ponyup import strategy
 
@@ -16,11 +15,7 @@ class BettingRound():
         self.pot = r.pot
         self.r = r
         self.BETCAP = 4
-        if r.gametype == "FIVE CARD DRAW":
-            self.set_bettors_w_blinds()
-        elif r.gametype in ["FIVE CARD STUD", "SEVEN CARD STUD"]:
-            self.set_bettors_w_antes()
-
+        self.bettor = self.get_utg()
         self.set_closer()
         self.set_betsize()
         self.set_stacks()
@@ -201,21 +196,6 @@ class BettingRound():
 
     def set_closer(self):
         self.closer = self.table.next_player(self.bettor, -1, hascards=True)
-
-    def set_bettors_w_blinds(self):
-        if self.table.TOKENS['D'] == -1:
-            raise Exception('Cannot set bettor or closer in the if button isn\'t set!')
-
-        if self.street == 0:
-            self.bettor = self.table.next_player(self.table.TOKENS['BB'])
-        else:
-            self.bettor = self.table.next_player(self.table.TOKENS['D'], hascards=True)
-
-    def set_bettors_w_antes(self):
-        if self.street == 0:
-            self.bettor = self.table.TOKENS['BI']
-        else:
-            self.bettor = self.highhand()
 
     def set_betsize(self):
         if self.street > len(self.streets):

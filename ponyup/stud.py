@@ -1,19 +1,24 @@
 from ponyup import blinds
+from ponyup import poker
 from ponyup import sessions
 
 
 class Stud5Session(sessions.Session):
     def __init__(self):
         super().__init__(gametype="FIVE CARD STUD")
-        self.blinds = blinds.Blinds(bringin=True)
+        self.blinds = blinds.Blinds(blinds=False, antes=True, bringin=True)
+
+    def new_round(self):
+        r = poker.StudRound(self)
+        r.log_hh()
+        return r
 
     def play(self):
         """
         Play a round of Five Card Draw.
         """
         r = self.new_round()
-        print(self)
-        print(r.post_antes())
+        r.setup()
 
         for s in self.streets:
             if r.street == 0:

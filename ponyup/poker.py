@@ -31,6 +31,8 @@ class Round():
         self.DECKSIZE = len(self.d)
         self.exposed = []
 
+        self.get_utg = self.position_by_button
+
         self.check_integrity_pre()
 
     def __str__(self):
@@ -48,6 +50,18 @@ class Round():
         except AttributeError:
             _logger.error('Error - {} attribute not in self.session'.format(name))
             raise AttributeError("Child' object has no attribute {}".format(name))
+
+    def setup(self):
+        # Perform the pre-round payment actions, check the blinds object for what is turned on.
+        if self.blinds.antes:
+            self.post_antes()
+
+        if self.blinds.blinds:
+            self.post_blinds()
+
+        # ! We can't set bringin until cards are dealt
+        #  if self.blinds.bringin:
+            #  self.post_bringin()
 
     @classmethod
     def decorate(self, text):
@@ -465,3 +479,51 @@ class Round():
         else:
             _logger.debug('Seat {} has high hand, returning its index.'.format(s.NUM))
             return seat.NUM
+
+    """
+    Get position based on button.
+    """
+    def position_by_button(self):
+        if self.table.TOKENS['D'] == -1:
+            raise Exception('Cannot set bettor or closer in the if button isn\'t set!')
+
+        if self.street == 0:
+            return self.table.next_player(self.table.TOKENS['BB'])
+        else:
+            return self.table.next_player(self.table.TOKENS['D'], hascards=True)
+
+    """
+    Override the base Round get_utg, and get position based on upcards.
+    """
+    def position_by_upcards(self):
+        if self.street == 0:
+            return self.table.TOKENS['BI']
+        else:
+            return self.highhand()
+
+
+class StudRound(Round):
+    """
+    A poker Round customized for playing Stud games.
+    Notable differences in Stud games:
+        * Uses Antes
+        * Uses a Bringin 'blind' to determine the first player to act.
+        * Uses the highhand on board to determine position
+    """
+    def __init__(self, session):
+        super().__init__(session)
+        self.get_utg = self.position_by_upcards
+
+
+class ButtonRound(Round):
+    """
+    A poker Round customized for playing poker games with a dealer button(holdem, omaha, draw5)
+    Notable differences in Button games:
+        * Uses a small blind and big blind.
+        * Uses the the dealer button to determine position
+        * The button is moved 1 seat clockwise at the beginning of every round.
+    """
+
+    def __init__(self, session):
+        super().__init__(session)
+        self.get_utg = self.position_by_button
