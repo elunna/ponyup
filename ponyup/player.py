@@ -14,7 +14,6 @@ class Player():
         self.bank = bank
 
         if playertype is None:
-            # Choose random player type
             rnd_type = random_type()
             self.playertype = rnd_type
         else:
@@ -82,7 +81,7 @@ def factory(name, game, playertype='random'):
     """
     Create a new Player, using the game strategy from the game specified.
     """
-    p = Player(name, playertype)
+    p = Player(name, playertype=playertype)
 
     if playertype == 'random':
         playertype = random_type()

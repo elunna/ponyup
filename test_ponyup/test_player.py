@@ -121,7 +121,7 @@ class TestPlayer(unittest.TestCase):
 
     # Human player
     def test_ishuman_HUMAN_returnsTrue(self):
-        p = player.Player('Erik', 'HUMAN')
+        p = player.Player('Erik', playertype='HUMAN')
         expected = True
         result = p.is_human()
         self.assertEqual(expected, result)
