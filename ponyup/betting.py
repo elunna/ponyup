@@ -16,9 +16,9 @@ class BettingRound():
         self.pot = r.pot
         self.r = r
         self.BETCAP = 4
-        if self.r.gametype == "FIVE CARD DRAW":
+        if r.gametype == "FIVE CARD DRAW":
             self.set_bettors_w_blinds()
-        elif self.r.gametype in ["FIVE CARD STUD", "SEVEN CARD STUD"]:
+        elif r.gametype in ["FIVE CARD STUD", "SEVEN CARD STUD"]:
             self.set_bettors_w_antes()
 
         self.set_closer()
@@ -31,6 +31,12 @@ class BettingRound():
         # Create the generator
         self.play_generator = self.__iter__()
 
+    def __getattr__(self, name):
+        try:
+            return getattr(self.r, name)
+        except AttributeError:
+            raise AttributeError("Child' object has no attribute {}".format(name))
+
     def __iter__(self):
         """
         This is a generator which yields the next betting player on a betting round. When all
@@ -40,7 +46,7 @@ class BettingRound():
         while True:
             yield self.get_bettor()
 
-            if self.r.one_left() or self.done():
+            if self.one_left() or self.done():
                 raise StopIteration()
             else:
                 self.next_bettor()
@@ -60,7 +66,7 @@ class BettingRound():
             return Action('ALLIN', 0)
         else:
             facing = self.cost(s) / self.betsize
-            return strategy.makeplay(s, options, self.r.street, self.level(), facing)
+            return strategy.makeplay(s, options, self.street, self.level(), facing)
 
     def betmenu(self, actions):
         """
@@ -77,7 +83,7 @@ class BettingRound():
         s = self.get_bettor()
 
         if action.name == 'FOLD':
-            self.r.muck.extend(s.fold())
+            self.muck.extend(s.fold())
             return
         elif action.name in ['CHECK', 'ALLIN']:
             return
@@ -111,7 +117,7 @@ class BettingRound():
         cost = self.cost(s)
         stack = s.stack
         option_dict = {}
-        #  completing = (self.betsize - cost) == self.r.blinds.SB
+        #  completing = (self.betsize - cost) == self.blinds.SB
 
         if stack == 0:
             option_dict['a'] = ALLIN
@@ -180,8 +186,8 @@ class BettingRound():
     def invested(self, seat):
         # Adjust for antes posted. Antes should NOT be counted in the bet amounts.
         # This only counts for the 1st street, when antes are posted.
-        if self.r.street == 0:
-            return (self.stacks[seat.NUM] - seat.stack) - self.r.blinds.ANTE
+        if self.street == 0:
+            return (self.stacks[seat.NUM] - seat.stack) - self.blinds.ANTE
         else:
             return self.stacks[seat.NUM] - seat.stack
 
@@ -194,38 +200,38 @@ class BettingRound():
         return self.bettor == self.closer
 
     def set_closer(self):
-        self.closer = self.r.table.next_player(self.bettor, -1, hascards=True)
+        self.closer = self.table.next_player(self.bettor, -1, hascards=True)
 
     def set_bettors_w_blinds(self):
-        if self.r.table.TOKENS['D'] == -1:
+        if self.table.TOKENS['D'] == -1:
             raise Exception('Cannot set bettor or closer in the if button isn\'t set!')
 
-        if self.r.street == 0:
-            self.bettor = self.r.table.next_player(self.r.table.TOKENS['BB'])
+        if self.street == 0:
+            self.bettor = self.table.next_player(self.table.TOKENS['BB'])
         else:
-            self.bettor = self.r.table.next_player(self.r.table.TOKENS['D'], hascards=True)
+            self.bettor = self.table.next_player(self.table.TOKENS['D'], hascards=True)
 
     def set_bettors_w_antes(self):
-        if self.r.street == 0:
-            self.bettor = self.r.table.TOKENS['BI']
+        if self.street == 0:
+            self.bettor = self.table.TOKENS['BI']
         else:
-            self.bettor = self.r.highhand()
+            self.bettor = self.highhand()
 
     def set_betsize(self):
-        if self.r.street > len(self.r.streets):
+        if self.street > len(self.streets):
             raise Exception('The street is larger than the number of streets in the game!')
         else:
-            self.betsize = self.r.get_street().betsize * self.r.blinds.SMBET
+            self.betsize = self.get_street().betsize * self.blinds.SMBET
 
     def get_bet(self):
         bet = 0
-        for s in self.r.table:
+        for s in self.table:
             i = self.invested(s)
             if i > bet:
                 bet = i
         # Adjust for ante.
-        #  if self.r.street == 0:
-            #  bet - self.r.blinds.ANTE
+        #  if self.street == 0:
+            #  bet - self.blinds.ANTE
         return bet
 
     def level(self):
@@ -235,26 +241,26 @@ class BettingRound():
         """
         Returns the current active bettor.
         """
-        return self.r.table.seats[self.bettor]
+        return self.table.seats[self.bettor]
 
     def next_bettor(self):
-        self.bettor = self.r.table.next_player(self.bettor, hascards=True)
+        self.bettor = self.table.next_player(self.bettor, hascards=True)
 
     def get_closer(self):
         """
         Returns the player who will close the betting.
         """
-        return self.r.table.seats[self.closer]
+        return self.table.seats[self.closer]
 
     def reopened_closer(self, bettor):
         # It's a bet or raise, so we'll need to reset last better.
-        return self.r.table.next_player(bettor, -1, hascards=True)
+        return self.table.next_player(bettor, -1, hascards=True)
 
     def set_stacks(self):
-        if self.r.street == 0:
+        if self.street == 0:
             self.stacks = self.pot.stacks
-        elif self.r.street > 0:
-            self.stacks = self.r.table.stackdict()
+        elif self.street > 0:
+            self.stacks = self.table.stackdict()
 
 
 def spacing(level):
