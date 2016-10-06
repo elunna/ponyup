@@ -1,7 +1,7 @@
 import unittest
 
 import logging
-logging.disable(logging.DEBUG)  # Disable logging
+logging.disable(logging.ERROR)  # Disable logging
 
 
 if __name__ == "__main__":
