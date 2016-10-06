@@ -23,7 +23,8 @@ def get_logger(name):
     ch.setLevel(logging.INFO)
 
     # Setup formatting
-    debug_fmt = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    debug_fmt = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                                  "%d-%m-%y %H:%M:%S")
     info_fmt = logging.Formatter('%(message)s')
 
     debug_fh.setFormatter(debug_fmt)
