@@ -129,6 +129,7 @@ class Round():
         for s in self.table.get_players(hascards=True):
             _str += '{:20} shows {}\n'.format(str(s), str(s.hand))
         _logger.info(_str)
+        _str += '\n'
         return _str
 
     def sortcards(self):
@@ -173,6 +174,7 @@ class Round():
             actions += '{} posts ${} ante.\n'.format(s, self.blinds.ANTE)
             self.pot += s.bet(self.blinds.ANTE)
 
+        _logger.info(actions)
         return actions
 
     def post_blinds(self):
@@ -200,6 +202,7 @@ class Round():
         actions += '{} posts ${}\n'.format(sb, self.blinds.SB)
         actions += '{} posts ${}'.format(bb, self.blinds.BB)
 
+        _logger.info(actions)
         return actions
 
     def post_bringin(self):
@@ -222,6 +225,7 @@ class Round():
         action = ''
         action += '{} brings it in for ${}'.format(seat.player, self.blinds.BRINGIN)
 
+        _logger.info(action)
         return action
 
     def next_street(self):
