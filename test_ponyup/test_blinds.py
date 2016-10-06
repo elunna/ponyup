@@ -61,13 +61,13 @@ class TestBlinds(unittest.TestCase):
     """
     def test_str_level1_returns2_4_stakes(self):
         self.b = blinds.Blinds()
-        expected = '$2/$4'
+        expected = '$2-$4'
         result = self.b.stakes()
         self.assertEqual(expected, result)
 
     def test_str_level5_returns30_60_stakes(self):
         self.b = blinds.Blinds(5)
-        expected = '$30/$60'
+        expected = '$30-$60'
         result = self.b.stakes()
         self.assertEqual(expected, result)
 
