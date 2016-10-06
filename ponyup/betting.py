@@ -48,7 +48,7 @@ class BettingRound():
     def __next__(self):
         return next(self.play_generator)
 
-    def player_decision(self, s):
+    def cpu_decision(self, s):
         """
         Presents the current bettor with their options and lets them pick one. Returns the
         Action object they picked.
@@ -58,27 +58,17 @@ class BettingRound():
         if 'a' in options:
             # Player is allin
             return Action('ALLIN', 0)
-        elif s.player.is_human():
-            return self.betmenu(options)
         else:
             facing = self.cost(s) / self.betsize
             return strategy.makeplay(s, options, self.r.street, self.level(), facing)
 
     def betmenu(self, actions):
         """
-        Display a list of betting options, and get input from the player to pick a valid option.
+        Return a string showing the betting options.
         """
         nice_opts = ['[' + v.name[0] + ']' + v.name[1:].lower() for k, v in sorted(actions.items())]
         choices = '/'.join(nice_opts)
-
-        while True:
-            choice = input('{}?'.format(choices))
-            if choice is None:
-                pass  # They chose a main menu option
-            elif choice.lower() in actions:
-                return actions[choice]
-            else:
-                print('Invalid choice, try again.')
+        return choices
 
     def process_option(self, action):
         """

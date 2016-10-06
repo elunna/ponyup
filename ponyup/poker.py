@@ -257,29 +257,30 @@ class Round():
         """
         Run through a round of betting. Returns a victor if it exists.
         """
-        _logger.debug('Displaying  table.')
         print(self.table)
-
-        _logger.debug('Creating Betting object.')
         br = betting.BettingRound(self)
 
-        _logger.debug('Starting iteration through Betting object.')
-        for p in br:
-            _logger.debug('Getting player decision.')
-
-            action = br.player_decision(p)
-            _logger.debug('Player chose {}.'.format(action))
+        _logger.debug('Starting iteration new Betting object.')
+        for seat in br:
+            if seat == self.find_hero():
+                # Get player action
+                while True:
+                    actions = br.get_options(seat)
+                    choice = input('{}?'.format(br.betmenu(actions)))
+                    if choice.lower() in actions:
+                        action = actions[choice]
+                        break
+                    else:
+                        print('Invalid choice, try again.')
+            else:
+                # Get cpu decision
+                action = br.cpu_decision(seat)
 
             br.process_option(action)
-            _logger.debug('Processed player option.')
-
             act_str = br.action_string(action)
-            _logger.debug('Created action string for player action.')
-
             space = betting.spacing(br.level())
 
             print(space, act_str)
-
             _logger.info(act_str)
 
         print('Pot: ${}'.format(self.pot))

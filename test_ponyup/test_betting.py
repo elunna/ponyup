@@ -81,48 +81,48 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for player_decision(p)
+    Tests for cpu_decision(p)
     """
     # This module kind of depends on the strategy, but we can probably rely on the fact that
     # they will fold/check absolute trash and raise incredibly strong hands(ie: royal flush).
     # We'll assume that the street is 1 and the betlevel is 1.
 
     # If a player is allin, return the Allin option
-    def test_playerdecision_allin_returnsAllinOption(self):
+    def test_cpudecision_allin_returnsAllinOption(self):
         self.setUp(players=2)
         bettor = self.br.get_bettor()
         bettor.bet(bettor.stack)
         expected = "ALLIN"
-        result = self.br.player_decision(bettor).name
+        result = self.br.cpu_decision(bettor).name
         self.assertEqual(expected, result)
 
     # Holds a royal flush, raises.
-    def test_playerdecision_royalflush_returnsRaise(self):
+    def test_cpudecision_royalflush_returnsRaise(self):
         self.setUp(players=2)
         bettor = self.br.get_bettor()
         bettor.hand.cards = tools.make('royalflush')
         expected = "RAISE"
-        result = self.br.player_decision(bettor).name
+        result = self.br.cpu_decision(bettor).name
         self.assertEqual(expected, result)
 
     # Holds junk hand, checks the BB.
-    def test_playerdecision_junk_returnsCheck(self):
+    def test_cpudecision_junk_returnsCheck(self):
         self.setUp(players=2)
         next(self.br)  # SB
         next(self.br)  # BB
         bettor = self.br.get_bettor()
         bettor.hand.cards = tools.make('junk')
         expected = "CHECK"
-        result = self.br.player_decision(bettor).name
+        result = self.br.cpu_decision(bettor).name
         self.assertEqual(expected, result)
 
     # If they don't have cards - raise an Exception!
-    def test_playerdecision_nocards_raiseException(self):
+    def test_cpudecision_nocards_raiseException(self):
         self.setUp(players=2)
         bettor = self.br.get_bettor()
         bettor.hand.cards = None
 
-        self.assertRaises(Exception, self.br.player_decision, bettor)
+        self.assertRaises(Exception, self.br.cpu_decision, bettor)
 
     """
     Tests for process_option(option)
