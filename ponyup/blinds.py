@@ -10,10 +10,9 @@ class Blinds():
         self.bringin = bringin
         self.antes = antes
 
-        if bringin:
+        if bringin and blinds:
             # We won't allow setting both blinds and bringin.
-            # Bringin will take priority and trigger antes.
-            self.antes = True
+            raise ValueError('Cannot set bringin and blinds at the same time!')
 
         self.SMBET, self.BB, self.SB, self.BRINGIN, self.ANTE = 0, 0, 0, 0, 0
         self.set_level(level)
