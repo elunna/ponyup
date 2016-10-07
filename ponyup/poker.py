@@ -57,6 +57,7 @@ class Round():
             self.post_antes()
 
         if self.blinds.blinds:
+            self.table.set_blinds()
             self.post_blinds()
 
         # ! We can't set bringin until cards are dealt

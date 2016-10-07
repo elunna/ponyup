@@ -6,6 +6,105 @@ from ponyup import logger
 _logger = logger.get_logger(__name__)
 
 
+class Discard():
+    """
+    Goes through a table and offers all players with cards the option to discard.
+    Returns a list of all the discards (ie:"muck" cards)
+    """
+    def __init__(self, _round):
+        self.round = _round
+        self.players = _round.table.get_players(hascards=True)
+        self.handsize = 5
+        self.done = False
+
+        if len(self.players) == 0:
+            raise Exception('No players available to discard!')
+
+        _logger.debug('New Discard object created.')
+
+    def __getattr__(self, name):
+        try:
+            return getattr(self.round, name)
+        except AttributeError:
+            raise AttributeError("Child' object has no attribute {}".format(name))
+
+    def genny(self):
+        # Generator
+        if self.done:
+            raise Exception('Already executed discard for this round!')
+        for p in self.players:
+            yield p
+        else:
+            self.done = True
+            raise StopIteration()
+
+    def max_discards(self):
+        maxd = (self.handsize if len(self.d) >= self.handsize else len(self.d))
+        _logger.debug('Maximum number of discards: {}'.format(maxd))
+        return maxd
+
+    def cpu_discard(self, seat):
+        _logger.debug('CPU discard for: {} '.format(seat))
+        if seat.player.is_human():
+            raise Exception('Human player is trying to access cpu_discard.')
+
+        cpu_hand = seat.hand
+        return auto_discard(cpu_hand, self.max_discards())
+
+    def discard(self, seat, discards):
+        _logger.debug('Discarding {} for {} '.format(discards, seat))
+
+        for c in discards:
+            # Muck the discard
+            self.muck.append(seat.hand.discard(c))
+
+    def discard_text(self, seat, discards):
+        if discards:
+            d_txt = '{} discards {} cards'.format(seat.player, len(discards))
+        else:
+            d_txt = '{} stands pat.'.format(seat.player)
+
+        _logger.info(d_txt)
+        return d_txt
+
+    def redraw(self, s):
+        """
+        Player draws cards back up to the normal handsize.
+        """
+        drawpile = []
+        while len(s.hand) < self.handsize:
+            draw = self.d.deal()
+            s.hand.add(draw)
+            drawpile.append(draw)
+        return drawpile
+
+
+def discard_phase(_round):
+    """
+    Goes through a table and offers all players with cards the option to discard.
+    Returns a list of all the discards (ie:"muck" cards)
+    """
+    title = 'Discard Phase:'
+    _logger.info(_round.decorate(title))
+    dis = Discard(_round)
+
+    for s in dis.genny():
+        # Check if cards are left in deck
+        if dis.max_discards == 0:
+            _logger.info('Deck has been depleted!')
+            break
+
+        if s.player.is_human():
+            discards = human_discard(s, dis.max_discards())
+        else:
+            discards = dis.cpu_discard(s)
+
+        dis.discard(s, discards)
+        d_txt = dis.discard_text(s, discards)
+        dis.redraw(s)
+        print(d_txt)
+
+
 def auto_discard(hand, max_discards=5):
     """
     Calculates the best discard in a 5 card hand. Takes a maximum number of allowed discards. If
@@ -110,44 +209,6 @@ def draw_discards(cards, ranklist):
     return ev.strip_ranks(cards, highcards)
 
 
-def discard_phase(_round):
-    """
-    Goes through a table and offers all players with cards the option to discard.
-    Returns a list of all the discards (ie:"muck" cards)
-    """
-    title = 'Discard Phase:'
-    _logger.info(_round.decorate(title))
-
-    cardholders = _round.table.get_players(hascards=True)
-
-    for s in cardholders:
-        max_discards = (5 if len(_round.d) >= 5 else len(_round.d))
-        if max_discards == 0:
-            _logger.info('Deck has been depleted!')
-            break
-
-        if s.player.is_human():
-            discards = human_discard(s.hand, max_discards)
-        else:
-            discards = auto_discard(s.hand, max_discards)
-
-        if discards:
-            d_txt = '{} discards {} cards'.format(str(s), len(discards))
-            _logger.info('{} discards {} cards'.format(str(s), len(discards)))
-        else:
-            d_txt = '{} stands pat.'.format(str(s))
-            _logger.info('{} stands pat.'.format(str(s)))
-
-        print(d_txt)
-
-        # Discard
-        for c in discards:
-            _round.discard(s, c)
-
-        # Redraw
-        redraw(s, _round.d)
-
-
 def discard_menu(hand):
     indices = ''.join(['{:<3}'.format(n) for n in valid_picks(hand)])
     txt = indices + '\n'
@@ -172,22 +233,11 @@ def get_discards(hand, picks):
     return [hand.cards[n - 1] for n in picks]
 
 
-def redraw(seat, deck, handsize=5):
-    """
-    Player draws cards back up to the normal handsize.
-    """
-    drawpile = []
-    while len(seat.hand) < handsize:
-        draw = deck.deal()
-        seat.hand.add(draw)
-        drawpile.append(draw)
-    return drawpile
-
-
-def human_discard(hand, max_discards=5):
+def human_discard(seat, max_discards=5):
     """
     Offers the human player a menu of discard options and returns the list of chosen discards.
     """
+    hand = seat.hand
     print(discard_menu(hand))
     while True:
         helpme = ['?', 'h', 'help']
