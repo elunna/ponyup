@@ -154,14 +154,6 @@ class Round():
         for s in self.table:
             s.hand.sort()
 
-    def discard(self, seat, c):
-        """
-        Takes the card from the seat's hand and transfers it to the muck. Returns True if the
-        operation was successful, False if it didn't.
-        """
-        _logger.debug('Seat {} is discarding {}.'.format(seat.NUM, c))
-        self.muck.append(seat.hand.discard(c))
-
     def burn(self):
         _logger.debug('Burning a card to the muck.')
         self.muck.append(self.d.deal())
