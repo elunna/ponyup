@@ -14,7 +14,7 @@ DISPLAYWIDTH = 70
 DEFAULT_PLAYER = 'luna'
 DEFAULT_STACK = 25  # Big blinds
 MINIMUM_STACK = 10  # Big blinds
-LOGO = 'data/logo2.txt'
+LOGO = 'data/logo.txt'
 SETTINGS = 'data/settings.json'
 _logger = logger.get_logger(__name__)
 

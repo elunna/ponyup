@@ -15,7 +15,7 @@ DISPLAYWIDTH = 70
 HERO = player.load_player(DEFAULT_PLAYER)
 LOBBY = lobby.Lobby()
 GAME = LOBBY.default()
-LOGO = 'data/logo2.txt'
+LOGO = 'data/logo.txt'
 _logger = logger.get_logger(__name__)
 
 menu = {}
