@@ -1,31 +1,18 @@
-PonyUp Poker Framework
+PyCardsPoker Framework
 ===============
 
-$$$$$$$\                                $$\   $$\           $$\ 
-$$  __$$\                               $$ |  $$ |          $$ |
-$$ |  $$ | $$$$$$\  $$$$$$$\  $$\   $$\ $$ |  $$ | $$$$$$\  $$ |
-$$$$$$$  |$$  __$$\ $$  __$$\ $$ |  $$ |$$ |  $$ |$$  __$$\ $$ |
-$$  ____/ $$ /  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ /  $$ |\__|
-$$ |      $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |    
-$$ |      \$$$$$$  |$$ |  $$ |\$$$$$$$ |\$$$$$$  |$$$$$$$  |$$\ 
-\__|       \______/ \__|  \__| \____$$ | \______/ $$  ____/ \__|
-                              $$\   $$ |          $$ |          
-                              \$$$$$$  |          $$ |          
-                               \______/           \__|    (2016)
-
-# PyCards
 This is my poker project for Python that has grown over time from a simple deck
 and cards to a full blown framework for running poker games. 
 
-Author: Erik Lunna
-Date Started: 01-01-2016
+* Author: Erik Lunna
+* Date Started: 01-01-2016
 
 ## Getting Started
 All you need is Python 3
 
 ## Running the console interface:
 ```
-python3 casino.py
+python3 run.py
 ```
 
 ## Running the War simulation
