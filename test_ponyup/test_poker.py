@@ -96,31 +96,6 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(expected, result)
 
     """
-    Tests for discard_to_muck(self, seat, c):
-    """
-    # Discard As in seats hand. Seat doesn't have the card after.
-    def test_discard_As_notinhand(self):
-        self.setUp(players=2)
-        c = card.Card('A', 's')
-        s = self.r.table.seats[0]
-        s.hand.add(c)
-        self.r.discard(s, c)
-        expected = False
-        result = c in s.hand
-        self.assertEqual(expected, result)
-
-    # Discard As in seats hand. Card is in the muck
-    def test_discard_As_inmuck(self):
-        self.setUp(players=2)
-        c = card.Card('A', 's')
-        s = self.r.table.seats[0]
-        s.hand.add(c)
-        self.r.discard(s, c)
-        expected = True
-        result = c in self.r.muck
-        self.assertEqual(expected, result)
-
-    """
     Tests for burn()
     """
     # Burn 1 card, deck is 1 less
