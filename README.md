@@ -116,7 +116,7 @@ a passive action instead of the typical aggressive one.
 
 ## Running the tests
 ```
-python3 -m unittest discover
+python3 -m runtests.py
 ```
 
 ## Testing tools - the tools module
