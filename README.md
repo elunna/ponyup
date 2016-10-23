@@ -1,31 +1,18 @@
-PonyUp Poker Framework
+PyCardsPoker Framework
 ===============
 
-$$$$$$$\                                $$\   $$\           $$\ 
-$$  __$$\                               $$ |  $$ |          $$ |
-$$ |  $$ | $$$$$$\  $$$$$$$\  $$\   $$\ $$ |  $$ | $$$$$$\  $$ |
-$$$$$$$  |$$  __$$\ $$  __$$\ $$ |  $$ |$$ |  $$ |$$  __$$\ $$ |
-$$  ____/ $$ /  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ /  $$ |\__|
-$$ |      $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |    
-$$ |      \$$$$$$  |$$ |  $$ |\$$$$$$$ |\$$$$$$  |$$$$$$$  |$$\ 
-\__|       \______/ \__|  \__| \____$$ | \______/ $$  ____/ \__|
-                              $$\   $$ |          $$ |          
-                              \$$$$$$  |          $$ |          
-                               \______/           \__|    (2016)
-
-# PyCards
 This is my poker project for Python that has grown over time from a simple deck
 and cards to a full blown framework for running poker games. 
 
-Author: Erik Lunna
-Date Started: 01-01-2016
+* Author: Erik Lunna
+* Date Started: 01-01-2016
 
 ## Getting Started
 All you need is Python 3
 
 ## Running the console interface:
 ```
-python3 casino.py
+python3 run.py
 ```
 
 ## Running the War simulation
@@ -45,13 +32,12 @@ python3 war.py
 Features
 ----------------
 ## Cards and Decks
-The Deck class constructs a standard 52 card deck.
-    Subclasses available to extend the regular Deck include:
-        * Blackjack Deck
-        * Standard Deck with one joker
-        * Standard Deck with two jokers
-        * Pinochle Deck
-        * Piquet Deck
+The Deck class constructs a standard 52 card deck. Subclasses available to extend the regular Deck include:
+* Blackjack Deck
+* Standard Deck with one joker
+* Standard Deck with two jokers
+* Pinochle Deck
+* Piquet Deck
 
 ## Poker 
 The rules of poker hands are enforced by the evaluator module, which has the
@@ -59,27 +45,26 @@ facilities to evaluate poker hands, values, and ranks. I am currently using a
 scoring system to compare different hands. 
 
 The structure of different poker variations are managed on a high level by the
-sessions module.
-Currently these subclasses of Session offer these types of poker:
-    * Five card stud
-    * Five card draw
+sessions module. Currently these subclasses of Session offer these types of poker:
+* Five card stud
+* Five card draw
 
 The structure of a single hand of poker is managed by the poker module. Since
 most poker varients share the same pattern of setting up, cards, and betting,
 this module serves as the main resource for creating different Sessions.
 
 Other important modules:
-    * Betting module: Manages the structure of a single betting round. There are
-      usually 2-5 rounds of betting in any hand of poker, depending on the
-      variant.
-    * Pots module: This manages the size of the pot, and divides the pot in case
-      of ties or all-in situations.
-    * Hand module: Manages the Cards in a poker hand.
-    * Handhistory module: Keeps a log of each hand in a poker session and writes
-      it to an external file with a unique session name and timestamp.
-    * Lobby module: The list of tables is kept in a separate sqlite database,
-      and this accesses that database to show which tables are available in
-      different table sizes, stakes, and game variants.
+* Betting module: Manages the structure of a single betting round. There are
+    usually 2-5 rounds of betting in any hand of poker, depending on the
+    variant.
+* Pots module: This manages the size of the pot, and divides the pot in case
+    of ties or all-in situations.
+* Hand module: Manages the Cards in a poker hand.
+* Handhistory module: Keeps a log of each hand in a poker session and writes
+    it to an external file with a unique session name and timestamp.
+* Lobby module: The list of tables is kept in a separate sqlite database,
+    and this accesses that database to show which tables are available in
+    different table sizes, stakes, and game variants.
 
 ## Poker Table
 In the table module we have the Table class, which governs Seats. Since in the
@@ -104,10 +89,10 @@ that let's us see our cards without turning them faceup to the table.
 To make the computer interesting to play against, I implemented a Strategy class
 which simply has the computer make different decisions based on few game
 variables:
-    * The current betlevel
-    * How much of a bet they are facing
-    * Their handvalue
-    * Their player type
+* The current betlevel
+* How much of a bet they are facing
+* Their handvalue
+* Their player type
 
 There are 4 player types: FISH, LION, JACKAL, and MOUSE - based on Phil
 Hellmuth's classic generalized types in his book Play Poker Like the Pros.
