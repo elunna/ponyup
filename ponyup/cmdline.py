@@ -257,6 +257,7 @@ class SessionInterpreter(cmd.Cmd):
         self.session = session
         self.playing = True
         self.play_round(None)
+        self.prompt = 'Press enter to play again, or "quit" to go back to the lobby.'
 
     def emptyline(self):
         self.play_round(self)
