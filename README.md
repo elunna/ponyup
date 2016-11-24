@@ -15,14 +15,6 @@ All you need is Python 3
 python3 run.py
 ```
 
-## Running the War simulation
-* To see an auto playthrough of the simple cardgame War, run the below. This
-  starts two players equal halves of a 54 card deck with 2 jokers. To avoid
-  infinite loops I shuffle the decks between every round.
-```
-python3 war.py
-```
-
 ## Authors
 * **Erik Lunna** 
 
