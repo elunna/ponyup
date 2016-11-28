@@ -8,23 +8,23 @@ PonyUp Poker
 * Author: Erik Lunna
 * Date Started: 01-01-2016
 
-## Getting Started
-All you need is Python 3
+## Requirements
 
-## Running the console interface:
+Python 3
+
+## Running 
 ```
 python3 run.py
 ```
 
-## Authors
-* **Erik Lunna** 
+## Running tests
+```
+python3 -m runtests.py
+```
 
-  ## License
-  This project is licensed under the MIT License.
+# Features
 
-Features
-----------------
-## Cards and Decks
+### Cards and Decks
 The Deck class constructs a standard 52 card deck. Subclasses available to extend the regular Deck include:
 * Blackjack Deck
 * Standard Deck with one joker
@@ -32,7 +32,7 @@ The Deck class constructs a standard 52 card deck. Subclasses available to exten
 * Pinochle Deck
 * Piquet Deck
 
-## Poker 
+### Poker 
 The rules of poker hands are enforced by the evaluator module, which has the
 facilities to evaluate poker hands, values, and ranks. I am currently using a
 scoring system to compare different hands. 
@@ -59,7 +59,7 @@ Other important modules:
     and this accesses that database to show which tables are available in
     different table sizes, stakes, and game variants.
 
-## Poker Table
+### Poker Table
 In the table module we have the Table class, which governs Seats. Since in the
 long term this could be an online site - I wanted to have flexibility with
 players possibly multitabling. 
@@ -70,7 +70,8 @@ doesn't allow for player to be at multiple tables. The Seat object lets them
 have multiple stacks at multiple tables, while the Player manages their money in
 their own "bank" account.
 
-** Keeping cards hidden
+#### Keeping cards hidden
+
 To keep cards from being exposed to the computer players (or other human
 players), Cards are automatically created and dealt face-down. The Card object
 has a 'hidden' boolean variable that tracks if it is facedown or faceup. For your player
@@ -78,7 +79,7 @@ to "see" their cards I implemented a peek method to the Card and Hand classes
 that let's us see our cards without turning them faceup to the table.
 
 
-## Computer AI and strategies
+### Computer AI and strategies
 To make the computer interesting to play against, I implemented a Strategy class
 which simply has the computer make different decisions based on few game
 variables:
@@ -107,12 +108,7 @@ aggressive action instead of a passive one. We could also incorporate a
 a passive action instead of the typical aggressive one.
 
 
-## Running the tests
-```
-python3 -m runtests.py
-```
-
-## Testing tools - the tools module
+### Testing tools - the tools module
 Since there are many things to test, there is a plethora of premade poker hands
 in the tools module so we can create any of the regular poker hand ranks, or
 other combos of cards for easy testing.
@@ -133,3 +129,6 @@ other combos of cards for easy testing.
 [As, Kc]
 ```
 
+### License
+
+This project is licensed under the MIT License.
