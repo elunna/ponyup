@@ -1,8 +1,19 @@
-PyCardsPoker Framework
+$$$$$$$\                                $$\   $$\           $$\ 
+$$  __$$\                               $$ |  $$ |          $$ |
+$$ |  $$ | $$$$$$\  $$$$$$$\  $$\   $$\ $$ |  $$ | $$$$$$\  $$ |
+$$$$$$$  |$$  __$$\ $$  __$$\ $$ |  $$ |$$ |  $$ |$$  __$$\ $$ |
+$$  ____/ $$ /  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ /  $$ |\__|
+$$ |      $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |    
+$$ |      \$$$$$$  |$$ |  $$ |\$$$$$$$ |\$$$$$$  |$$$$$$$  |$$\ 
+\__|       \______/ \__|  \__| \____$$ | \______/ $$  ____/ \__|
+                              $$\   $$ |          $$ |          
+							  Card Room                     \$$$$$$  |          $$ |          
+							                                 \______/           \__|
+															 (2016)
 ===============
+> Poker framework: Tools for creating custom card games and poker variations.
 
-This is my poker project for Python that has grown over time from a simple deck
-and cards to a full blown framework for running poker games. 
+![](ponyup.png)
 
 * Author: Erik Lunna
 * Date Started: 01-01-2016
