@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+  " The command line interface for playing the ponyup game.
+  """
 import cmd
 import json
 import os
@@ -20,6 +23,7 @@ _logger = logger.get_logger(__name__)
 
 
 class Game(cmd.Cmd):
+    """ Manages the lobby and game environment for the player. """
     def __init__(self):
         cmd.Cmd.__init__(self)
         self.prompt = "/): "
@@ -68,32 +72,22 @@ class Game(cmd.Cmd):
 
         return _str
 
-    ###################
-    # THROWAWAY TEST FUNC
-    def do_win(self, args):
-        print('Hero won $100!!!!!')
-        self.hero.bank += 100
-
     def do_quit(self, args):
-        """
-        Leaves the game.
-        """
+        # pylint: disable=unused-argument, no-self-use
+        """ Leaves the game . """
         return True
 
     def do_new(self, args):
-        """
-        Create a new player.
-        """
+        """ Create a new player.  """
         if player_db.new_player(args):
             self.hero = player_db.load_player(args)
 
     def do_players(self, args):
+        # pylint: disable=unused-argument, no-self-use
         print(player_db.get_players())
 
     def do_load(self, args):
-        """
-        Load a player.
-        """
+        """ Load a player.  """
         hero = player_db.load_player(args)
         if hero:
             self.hero = hero
@@ -101,18 +95,15 @@ class Game(cmd.Cmd):
             self.save_settings()
 
     def do_save(self, args):
-        """
-        Save the current player's info.
-        """
+        """ Save the current player's info.  """
+        # pylint: disable=unused-argument
         if player_db.update_player(self.hero):
             print('Saved {} successfully!'.format(self.hero))
         else:
             print('Save failed!')
 
     def do_del(self, args):
-        """
-        Delete a player.
-        """
+        """ Delete a player.  """
         if player_db.del_player(args):
             # Check if we deleted the current player
             if self.hero is not None:
@@ -123,15 +114,13 @@ class Game(cmd.Cmd):
                     self.save_settings()
 
     def do_info(self, args):
-        """
-        View current game info and settings.
-        """
+        """ View current game info and settings.  """
+        # pylint: disable=unused-argument
         print(self.get_info())
 
     def do_games(self, args):
-        """
-        View the available games.
-        """
+        """ View the available games.  """
+        # pylint: disable=unused-argument
         sub_cmd = GameSelection()
         sub_cmd.cmdloop()
         if sub_cmd.game:
@@ -140,29 +129,24 @@ class Game(cmd.Cmd):
             self.save_settings()
 
     def do_names(self, args):
-        """
-        View the stored CPU names.
-        """
+        """ View the stored CPU names.  """
+        # pylint: disable=unused-argument, no-self-use
         namelist = ', '.join(names.get_names_from_db())
         for line in textwrap.wrap(namelist, 80):
             print(line)
 
     def do_combos(self, args):
-        """
-        View all combinations in a deck of cards.
-        """
+        """ View all combinations in a deck of cards.  """
 
     def do_credits(self, args):
-        """
-        View game producer credits.
-        """
+        """ View game producer credits.  """
 
     def do_options(self, args):
-        """
-        Go to game options
-        """
+        """ Go to game options """
+        pass
 
     def valid_buyin(self, amt):
+        """ Prompt the player for how much they want to buyin for. """
         minbuyin = blinds.stakes[self.game.level] * MINIMUM_STACK
 
         # Check hero bank
@@ -181,6 +165,7 @@ class Game(cmd.Cmd):
             return True
 
     def valid_settings(self):
+        """ Check if the player is set up to play a game. """
         if self.hero is None or self.game is None:
             print('Game or player has not been set!')
             return False
@@ -188,9 +173,7 @@ class Game(cmd.Cmd):
             return True
 
     def do_play(self, args):
-        """
-        Play the selected game. Supply a buyin amount or use the default buyin.
-        """
+        """ Play the selected game. Supply a buyin amount or use the default buyin. """
         if not self.valid_settings():
             return False
 
@@ -219,6 +202,7 @@ class Game(cmd.Cmd):
         self.do_save(None)
 
     def logo(self):
+        """ Display the logo """
         txt = ''
         with open(LOGO) as f:
             for l in f.readlines():
@@ -230,6 +214,7 @@ class Game(cmd.Cmd):
 
 
 class GameSelection(cmd.Cmd):
+    """ Offer the player a list of poker games to choose from  """
     def __init__(self):
         cmd.Cmd.__init__(self)
         self.prompt = "games:> "
@@ -252,44 +237,37 @@ class GameSelection(cmd.Cmd):
 
 
 class SessionInterpreter(cmd.Cmd):
+    """ Runs through an ongoing session of poker. """
     def __init__(self, session):
         cmd.Cmd.__init__(self)
         self.session = session
         self.playing = True
-        self.play_round(None)
+        self.play_round()
         self.prompt = 'Press enter to play again, or "quit" to go back to the lobby.'
 
     def emptyline(self):
-        self.play_round(self)
+        self.play_round()
 
-    def play_round(self, args):
+    def play_round(self):
         os.system('clear')
         self.session.play()
         self.post_round()
 
     def post_round(self):
+        """ Perform post round checks """
+        # pylint: disable=bad-builtin
         # Check if hero went broke
         if self.session.find_hero().stack == 0:
             rebuy = input('Rebuy?')
             if not self.valid_buyin(rebuy):
-                self.do_quit()
+                self.do_quit(None)
             else:
                 self.session.find_hero().buy_chips(rebuy)
 
         self.session.table_maintainance()
 
     def do_quit(self, args):
+        """ Quits the poker session. """
+        # pylint: disable=unused-argument
         self.session.find_hero().standup()
         return True
-
-
-def is_integer(num):
-    """
-    Returns True if the num argument is an integer, and False if it is not.
-    """
-    try:
-        num = float(num)
-    except:
-        return False
-
-    return num.is_integer()

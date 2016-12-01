@@ -1,3 +1,6 @@
+"""
+  " Tools for managing a betting round - the betsize, the max raise, order of betting, etc.
+  """
 from collections import namedtuple
 from ponyup import strategy
 
@@ -7,11 +10,13 @@ CHECK = Action('CHECK', 0)
 FOLD = Action('FOLD', 0)
 
 
-class BettingRound():
+class BettingRound(object):
+    """ Manages the betting info and activities."""
     def __init__(self, r):
-        """
-        Manages the betting info and activities. Takes in a Round object as r.
-        """
+        self.stacks = None
+        self.closer = None
+        self.betsize = None
+
         self.pot = r.pot
         self.r = r
         self.BETCAP = 4
@@ -33,10 +38,9 @@ class BettingRound():
             raise AttributeError("Child' object has no attribute {}".format(name))
 
     def __iter__(self):
-        """
-        This is a generator which yields the next betting player on a betting round. When all
-        the bettors have been exhausted or everybody has folded except for one player, then
-        the generator stops.
+        """ This is a generator which yields the next betting player on a betting
+            round. When all the bettors have been exhausted or everybody has
+            folded except for one player, then the generator stops.
         """
         while True:
             yield self.get_bettor()
@@ -50,9 +54,8 @@ class BettingRound():
         return next(self.play_generator)
 
     def cpu_decision(self, s):
-        """
-        Presents the current bettor with their options and lets them pick one. Returns the
-        Action object they picked.
+        """ Presents the current bettor with their options and lets them pick one.
+            Returns the Action object they picked.
         """
         options = self.get_options(s)
 
@@ -63,18 +66,8 @@ class BettingRound():
             facing = self.cost(s) / self.betsize
             return strategy.makeplay(s, options, self.street, self.level(), facing)
 
-    def betmenu(self, actions):
-        """
-        Return a string showing the betting options.
-        """
-        nice_opts = ['[' + v.name[0] + ']' + v.name[1:].lower() for k, v in sorted(actions.items())]
-        choices = '/'.join(nice_opts)
-        return choices
-
     def process_option(self, action):
-        """
-        Performs the option picked by a player.
-        """
+        """ Performs the option picked by a player.  """
         s = self.get_bettor()
 
         if action.name == 'FOLD':
@@ -106,9 +99,7 @@ class BettingRound():
         self.pot += s.bet(action.cost)
 
     def get_options(self, s):
-        """
-        Shows the options available to the current bettor.
-        """
+        """ Shows the options available to the current bettor.  """
         cost = self.cost(s)
         stack = s.stack
         option_dict = {}
@@ -204,6 +195,7 @@ class BettingRound():
             self.betsize = self.get_street().betsize * self.blinds.SMBET
 
     def get_bet(self):
+        """ Returns how much the current player has to pay  """
         bet = 0
         for s in self.table:
             i = self.invested(s)
@@ -244,7 +236,12 @@ class BettingRound():
 
 
 def spacing(level):
-    """
-    Spaces the player actions by the current bet level.
-    """
+    """ Spaces the player actions by the current bet level.  """
     return '  ' * level
+
+
+def betmenu(actions):
+    """ Return a string showing the betting options.  """
+    nice_opts = ['[' + v.name[0] + ']' + v.name[1:].lower() for v in sorted(actions.values())]
+    choices = '/'.join(nice_opts)
+    return choices

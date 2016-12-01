@@ -1,4 +1,7 @@
-# Use tuples instead of lists
+"""
+  " Manages the suit, rank, comparison, and display of playing cards.
+  """
+
 SUITS = ('c', 'd', 'h', 's')
 SUITVALUES = {'c': 1, 'd': 2, 'h': 3, 's': 4}
 COLORS = {'c': 'green', 'd': 'blue', 'h': 'red', 's': 'white'}
@@ -10,7 +13,8 @@ RANKS = dict({str(x): x for x in range(2, 10)}, **FACECARDS)
 HIDDEN = 'Xx'
 
 
-class Card:
+class Card(object):
+    """ Manages a single instance of a Card """
     def __init__(self, rank, suit):
         if rank not in RANKS:
             raise ValueError('Corrupt card construction - {} is not a valid rank!'.format(rank))
@@ -22,51 +26,37 @@ class Card:
         self.hidden = True  # Hide cards by default
 
     def __str__(self):
-        """
-        Returns the colored string representation
-        """
+        """ Returns the colored string representation. """
         if self.hidden:
             return HIDDEN
         else:
             return self.rank + self.suit
 
     def __repr__(self):
-        """
-        Returns the string representation as Rank/Suit.
-        """
+        """ Returns the string representation as Rank/Suit. """
         return str(self)
 
     def __eq__(self, other):
-        """
-        Returns True if this card is equal to the other card, False otherwise.
-        """
+        """ Returns True if this card is equal to the other card, False otherwise. """
         return self.rank == other.rank and self.suit == other.suit
 
     def __gt__(self, other):
-        """
-        Returns True if this card's rank is greater than the other card, False otherwise.
-        """
+        """ Returns True if this card's rank is greater than the other card, False otherwise. """
         return RANKS[self.rank] > RANKS[other.rank]
 
     def __lt__(self, other):
-        """
-        Returns True if this card's rank is lesser than the other card, False otherwise.
-        """
+        """ Returns True if this card's rank is lesser than the other card, False otherwise. """
         return RANKS[self.rank] < RANKS[other.rank]
 
     def __hash__(self):
         return hash(str(self))
 
     def val(self):
-        """
-        Returns the value of the Cards rank.
-        """
+        """ Returns the value of the Cards rank. """
         return RANKS[self.rank]
 
     def peek(self):
-        """
-        This is how human/hero's are able to view hidden cards.
-        """
+        """ This is how human/hero's are able to view hidden cards. """
         return self.rank + self.suit
 
 

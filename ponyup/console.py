@@ -1,3 +1,7 @@
+"""
+  " Original console interface for the poker game.
+  " Deprecated: I'm Using the cmd module now, see cmdline.py.
+  """
 #!/usr/bin/env python3
 
 from __future__ import print_function
@@ -6,6 +10,7 @@ from ponyup import blinds
 from ponyup import combos
 from ponyup import lobby
 from ponyup import names
+from ponyup import numtools
 from ponyup import player
 from ponyup import factory
 from ponyup import logger
@@ -43,18 +48,6 @@ def prompt(p=''):
         return None
     else:  # We got something else...
         return i
-
-
-def is_integer(num):
-    """
-    Returns True if the num argument is an integer, and False if it is not.
-    """
-    try:
-        num = float(num)
-    except:
-        return False
-
-    return num.is_integer()
 
 
 def pick_name():
@@ -133,7 +126,7 @@ def get_menu_number(validchoices):
         choice = prompt()
         if choice is None:
             pass
-        elif is_integer(choice) is False:
+        elif numtools.is_integer(choice) is False:
             print('Please enter a number for your selection!')
         elif int(choice) in validchoices:
             return int(choice)
@@ -280,7 +273,7 @@ def get_buyin(game, hero):
         print('How much do you want to buyin for? (Minimum={})'.format(minbuyin))
 
         choice = prompt()
-        if is_integer(choice):
+        if numtools.is_integer(choice):
             if int(choice) < minbuyin:
                 print('Not enough!\n')
             elif int(choice) > hero.bank:

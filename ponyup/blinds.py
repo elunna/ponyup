@@ -1,14 +1,18 @@
-import math
+"""
+  " Tools for managing poker blind structures.
+  """
+from ponyup import numtools
 
 
-class Blinds():
+class Blinds(object):
+    """ Manages a blind structure """
+    # pylint: disable=too-many-instance-attributes
     def __init__(self, level=1, blinds=True, bringin=False, antes=False):
-        """
-        Initialize the Blinds object with a given blind structure.
-        """
+        """ Initialize the Blinds object with a given blind structure.  """
         self.blinds = blinds
         self.bringin = bringin
         self.antes = antes
+        self.level = level
 
         if bringin and blinds:
             # We won't allow setting both blinds and bringin.
@@ -17,12 +21,6 @@ class Blinds():
         self.SMBET, self.BB, self.SB, self.BRINGIN, self.ANTE = 0, 0, 0, 0, 0
         self.set_level(level)
 
-    def fmtnum(self, num):
-        if num % 1 > 0:
-            return '{:.2f}'.format(num)
-        else:
-            return '{}'.format(int(num))
-
     def __str__(self):
         """
         Returns the stakes, as in the small bet/big bet amounts.
@@ -30,15 +28,15 @@ class Blinds():
         """
         _str = ''
         if self.ANTE:
-            _str += 'Ante: ${}, '.format(self.fmtnum(self.ANTE))
+            _str += 'Ante: ${}, '.format(numtools.fmtnum(self.ANTE))
 
         if self.BRINGIN:
-            _str += 'Bringin: ${}\n'.format(self.fmtnum(self.BRINGIN))
+            _str += 'Bringin: ${}\n'.format(numtools.fmtnum(self.BRINGIN))
         if self.SB != self.BB:
-            _str += 'SB: ${}, BB: ${}\n'.format(self.fmtnum(self.SB), self.fmtnum(self.BB))
+            _str += 'SB: ${}, BB: ${}\n'.format(numtools.fmtnum(self.SB), numtools.fmtnum(self.BB))
         return _str
 
-    def stakes(self, lvl=None):
+    def stakes(self):
         """
         Returns the stakes, as in the small bet/big bet amounts. For games that only use blinds
         (without antes), we calculate the amounts by using the Big Blind as the small bet, and
@@ -46,17 +44,8 @@ class Blinds():
         """
         return '${}-${}'.format(self.BB, self.BB * 2)
 
-    def cleannum(self, num):
-        if num % 1 > 0:
-            return num
-        else:
-            return int(num)
-
     def set_level(self, level):
-        """
-        Set the blind level, if valid.
-        Default to regular blinds only.
-        """
+        """ Set the blind level, if valid.  Default to regular blinds only. """
         if level not in stakes.keys():
             raise ValueError('level is out of bounds!')
 
@@ -64,25 +53,23 @@ class Blinds():
         self.SMBET = stakes[level]
 
         if self.blinds:
-            self.SB, self.BB = self.cleannum(stakes[level] / 2), stakes[level]
+            self.SB, self.BB = numtools.cleannum(stakes[level] / 2), stakes[level]
 
         if self.bringin:
-            self.BRINGIN = self.cleannum(stakes[level] / 2)
+            self.BRINGIN = numtools.cleannum(stakes[level] / 2)
 
         if self.antes:
-            self.ANTE = self.cleannum(stakes[level] / 4)
+            self.ANTE = numtools.cleannum(stakes[level] / 4)
 
     def big_blinds(self, stack):
+        """ Returns how many big blinds are in the stack. Uses the Big Blind from
+            the current level and rounds down.
         """
-        Returns how many big blinds are in the stack. Uses the Big Blind from the current level
-        and rounds down.
-        """
-        return round_number(stack / self.BB)
+        return numtools.round_number(stack / self.BB)
 
     def trueBB(self, players):
-        """
-        Calculates the effective BB given how many players are at the table. When antes come
-        into play it changes how much each hand costs.
+        """ Calculates the effective BB given how many players are at the table.
+            When antes come into play it changes how much each hand costs.
         """
         if self.ANTE == 0:
             return self.BB
@@ -90,18 +77,15 @@ class Blinds():
         return round(pot * .66)
 
     def effectiveBB(self, stack, players):
+        """ Returns how many big blinds are effectively in the stack. First adds
+            up the current pot which is (SB + BB + Antes). The players variable
+            is an integer which specified how many antes to add. Then the
+            effective big blind is 2/3rds of the pot. Returns a rounded integer.
         """
-        Returns how many big blinds are effectively in the stack. First adds up the current pot
-        which is (SB + BB + Antes). The players variable is an integer which specified how many
-        antes to add. Then the effective big blind is 2/3rds of the pot. Returns a rounded
-        integer.
-        """
-        return round_number(stack / self.trueBB(players))
+        return numtools.round_number(stack / self.trueBB(players))
 
     def sb_to_ante_ratio(self):
-        """
-        Returns the SB-to-Ante ratio of the current small blind and ante.
-        """
+        """ Returns the SB-to-Ante ratio of the current small blind and ante. """
         # Use only one decimal place.
         if self.ANTE > 0:
             return round(self.SB / self.ANTE, 1)
@@ -109,15 +93,7 @@ class Blinds():
             return 0
 
 
-def round_number(num):
-    if num % 1 >= 0.5:
-        return math.ceil(num)
-    else:
-        return math.floor(num)
-
-"""
-Stakes as listed out by big blind(or small bet)
-"""
+# Stakes as listed out by big blind(or small bet)
 stakes = {
     1: 2,
     2: 4,
@@ -136,9 +112,7 @@ def get_stakes(lev):
     return '${}/${}'.format(stakes[lev], stakes[lev]*2)
 
 
-def levels(bet_dict=stakes):
-    """
-    Returns a listing of all the available blind levels in the structure.
-    """
+def levels(bet_dict):
+    """ Returns a listing of all the available blind levels in the structure.  """
     for k, v in sorted(bet_dict):
         print('\tLevel {:3}: ${}-${}'.format(k, v, v * 2))

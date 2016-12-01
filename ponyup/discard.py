@@ -1,3 +1,7 @@
+"""
+  " Manages the discarding of cards in a poker hand. This module specifically
+  " addresses the optimal discarding strategy for computer opponents.
+  """
 from __future__ import print_function
 from ponyup import card
 from ponyup import evaluator as ev
@@ -6,10 +10,9 @@ from ponyup import logger
 _logger = logger.get_logger(__name__)
 
 
-class Discard():
-    """
-    Goes through a table and offers all players with cards the option to discard.
-    Returns a list of all the discards (ie:"muck" cards)
+class Discard(object):
+    """ Goes through a table and offers all players with cards the option to
+        discard.  Returns a list of all the discards (ie:"muck" cards)
     """
     def __init__(self, _round):
         self.round = _round
@@ -34,9 +37,9 @@ class Discard():
             raise Exception('Already executed discard for this round!')
         for p in self.players:
             yield p
-        else:
-            self.done = True
-            raise StopIteration()
+
+        self.done = True
+        raise StopIteration()
 
     def max_discards(self):
         maxd = (self.handsize if len(self.d) >= self.handsize else len(self.d))
@@ -58,19 +61,8 @@ class Discard():
             # Muck the discard
             self.muck.append(seat.hand.discard(c))
 
-    def discard_text(self, seat, discards):
-        if discards:
-            d_txt = '{} discards {} cards'.format(seat.player, len(discards))
-        else:
-            d_txt = '{} stands pat.'.format(seat.player)
-
-        _logger.info(d_txt)
-        return d_txt
-
     def redraw(self, s):
-        """
-        Player draws cards back up to the normal handsize.
-        """
+        """ Player draws cards back up to the normal handsize. """
         drawpile = []
         while len(s.hand) < self.handsize:
             draw = self.d.deal()
@@ -80,9 +72,8 @@ class Discard():
 
 
 def discard_phase(_round):
-    """
-    Goes through a table and offers all players with cards the option to discard.
-    Returns a list of all the discards (ie:"muck" cards)
+    """ Goes through a table and offers all players with cards the option to
+        discard. Returns a list of all the discards (ie:"muck" cards)
     """
     title = 'Discard Phase:'
     _logger.info(_round.decorate(title))
@@ -106,11 +97,11 @@ def discard_phase(_round):
 
 
 def auto_discard(hand, max_discards=5):
-    """
-    Calculates the best discard in a 5 card hand. Takes a maximum number of allowed discards. If
-    the auto-pick for discards is larger than the max, we will pop out the lowest cards(thereby
-    keeping the higher and more valuable cards) until we reach the allowable number.
-    # hand is a Hand object
+    """ Calculates the best discard in a 5 card hand. Takes a maximum number of
+        allowed discards. If the auto-pick for discards is larger than the max,
+        we will pop out the lowest cards(thereby keeping the higher and more
+        valuable cards) until we reach the allowable number.
+        hand is a Hand object
     """
     _logger.debug('auto_discard for {}.'.format(hand))
 
@@ -134,9 +125,8 @@ def auto_discard(hand, max_discards=5):
 
 
 def made_hand_discards(hand, ranklist):
-    """
-    Determine the best cards to discard for a given made hand.
-    hand is a Hand object.
+    """ Determine the best cards to discard for a given made hand.
+        hand is a Hand object.
     """
     PAT_HANDS = ['STRAIGHT', 'FLUSH', 'FULL HOUSE', 'STRAIGHT FLUSH', 'ROYAL FLUSH']
     DIS_RANKS = ['PAIR', 'TRIPS', 'QUADS']
@@ -155,9 +145,8 @@ def made_hand_discards(hand, ranklist):
 
 
 def draw_discards(cards, ranklist):
-    """
-    Calculates the approprate card to discard for any draw-type hands.
-    """
+    """ Calculates the approprate card to discard for any draw-type hands. """
+
     if len(cards) != 5:
         raise ValueError('Card list needs to be 5 cards for a valid discard.')
     suit = ev.dominant_suit(cards)
@@ -217,9 +206,8 @@ def discard_menu(hand):
 
 
 def valid_picks(hand):
-    """
-    Create a list of all the indexes(in string format) of cards in the given hand.
-    List starts from 0.
+    """ Create a list of all the indexes(in string format) of cards in the given
+        hand. List starts from 0.
     """
     return list(map(str, range(1, len(hand) + 1)))
 
@@ -234,8 +222,8 @@ def get_discards(hand, picks):
 
 
 def human_discard(seat, max_discards=5):
-    """
-    Offers the human player a menu of discard options and returns the list of chosen discards.
+    """ Offers the human player a menu of discard options and returns the list
+        of chosen discards.
     """
     hand = seat.hand
     print(discard_menu(hand))
@@ -260,9 +248,7 @@ def human_discard(seat, max_discards=5):
 
 
 def extract_discards(cards, keep):
-    """
-    Returns the cards we should discard from a group of cards.
-    """
+    """ Returns the cards we should discard from a group of cards.  """
     if len(cards) == 0 or cards is None:
         raise ValueError('Card list needs to contain some cards!')
     for c in keep:
@@ -270,3 +256,13 @@ def extract_discards(cards, keep):
             raise ValueError('The keep list has a card not in the original card list!')
 
     return [c for c in cards if c not in keep]
+
+
+def discard_text(seat, discards):
+    if discards:
+        d_txt = '{} discards {} cards'.format(seat.player, len(discards))
+    else:
+        d_txt = '{} stands pat.'.format(seat.player)
+
+    _logger.info(d_txt)
+    return d_txt

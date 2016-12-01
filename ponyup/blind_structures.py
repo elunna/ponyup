@@ -1,3 +1,6 @@
+"""
+  " This module contains blind structures for different types of tournaments.
+  """
 WSOP = {
     1:    (100, 50, 0),
     2:    (200, 100, 0),

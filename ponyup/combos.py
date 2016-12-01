@@ -1,10 +1,11 @@
+"""
+  " Tools for getting combinations and permutations of poker cards
+  """
 import itertools
 
 
 def n_choose_k(n, k):
-    """
-    Returns how many combos of k are in a group of n.
-    """
+    """ Returns how many combos of k are in a group of n.  """
     if n <= 0 or k <= 0:
         raise ValueError('N or K passed is less than or equal to 0!')
     elif k > n:
@@ -32,16 +33,12 @@ def n_choose_k(n, k):
 
 
 def get_combolist(cards, n):
-    """
-    Takes a list and returns a list of all the combinations of size n
-    """
+    """ Takes a list and returns a list of all the combinations of size n """
     return list(itertools.combinations(cards, n))
 
 
 def get_allcombos(items):
-    """
-    Returns all combos of all possible sizes in the given list.
-    """
+    """ Returns all combos of all possible sizes in the given list.  """
     combos = []
     maxsize = len(items) + 1
     for i in range(1, maxsize):

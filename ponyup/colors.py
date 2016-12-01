@@ -1,3 +1,6 @@
+"""
+  " Tools for adding color to ASCII text.
+  """
 from functools import wraps
 from ponyup import card
 
@@ -44,7 +47,9 @@ def color(string, fg, bg='GRAY', STYLE='NORMAL'):
 
 
 def colorit(c):
+    """ Coloring decorator. """
     def decorate(func):
+        """ A decorator that when attached to a function, lets you provide a color. """
         @wraps(func)
         def wrapper(*args, **kwargs):
             result = func(*args, **kwargs)
@@ -52,7 +57,7 @@ def colorit(c):
             return '{}{};{};{}m{}{}'.format(
                 CSI, STYLES['NORMAL'], COLORS[c.upper()], 40, result, CSI_end)
 
-            return func(*args, **kwargs)
+            # return func(*args, **kwargs)
         return wrapper
     return decorate
 
@@ -64,7 +69,7 @@ def pot(p):
 
 def color_options(actions):
     colored_options = ['[' + color(v.name[0], 'white', STYLE='BOLD') + ']' + v.name[1:].lower()
-                       for k, v in sorted(actions.items())]
+                       for v in sorted(actions.values())]
 
     return '/'.join(colored_options)
 
@@ -90,6 +95,7 @@ def color_chips(amt):
 
 
 def color_action(space, act_str):
+    """ Colors a player's action in a poker game based on the actions meaning. """
     mstart = act_str.find('$')
     chips = color_chips(act_str[mstart+1:])
 
@@ -108,9 +114,7 @@ def color_action(space, act_str):
 
 
 def color_cards(cards):
-    """
-    Process card text to color representation
-    """
+    """ Process card text to color representation """
     _str = ''
     for c in cards.split():
         if c == 'Xx':
@@ -121,9 +125,7 @@ def color_cards(cards):
 
 
 def display_table(table, hero=None):
-    """
-    Return the string representation of the table, with colors.
-    """
+    """ Return the string representation of the table, with colors. """
     _str = '\n'
     _str = color('{:5}{:7}{:7}{:20}{:<17}{:16}\n'.format(
         'Seat', 'Blinds', 'Dealer', 'Player', 'Chips', 'Hand'), 'gray', STYLE='BOLD')
@@ -168,6 +170,7 @@ def display_table(table, hero=None):
 
 
 def color_logo(LOGO):
+    """ Adds color to the game logo. """
     txt = ''
     with open(LOGO) as f:
         for c in f.read():
@@ -179,7 +182,3 @@ def color_logo(LOGO):
     txt += ('~'*70)
     txt += '\n'
     return txt
-
-
-if __name__ == "__main__":
-    print(pot(10))
