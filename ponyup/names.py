@@ -58,7 +58,13 @@ def is_validname(name):
     """ Returns True if the given name is between MIN_LEN and MAX_LENcharacters
         long, False otherwise.
     """
-    if len(name) < MIN_LEN or len(name) > MAX_LEN:
+    if len(name) < MIN_LEN:
+        print('Name is too short!')
+    elif len(name) > MAX_LEN:
+        print('Name is too long!')
+        return False
+    elif has_surr_char(name):
+        print('Name has illegal characters!')
         return False
     else:
         return True

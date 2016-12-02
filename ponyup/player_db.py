@@ -2,26 +2,21 @@
   " Manages the player database so we can save and load human players.
   """
 import sqlite3
+from ponyup import names
 from ponyup import player
 
 DB = 'data/game.db'
 
 
-def load_player(name):
-    """ Gets the username, checks for any previous player info and loads the
-        player. Returns a Player object.
-    """
-    p = player_exists(name)
-    if p:
-        p = player.Player(name=p[0], bank=p[1], playertype="HUMAN")
-    return p
-
-
 def new_player(name):
     """ Create new player in sqlite3 database """
+    if not names.is_validname(name):
+        return False
+
     conn = sqlite3.connect(DB)
     c = conn.cursor()
-    p = player_exists(name)
+
+    p = load_player(name)
     result = False
     if not p:
         c.execute('INSERT INTO players VALUES("{}",{})'.format(name, player.HUMAN_BANK_BITS))
@@ -48,19 +43,27 @@ def update_player(plyr):
         return False
 
 
-def player_exists(name):
-    """ Checks if a player exists in the sqlite3 database. """
+def load_player(name):
+    """ Gets the username, checks for any previous player info and loads the
+        player. Returns a Player object.
+    """
     conn = sqlite3.connect(DB)
     c = conn.cursor()
 
     rows = c.execute('SELECT * FROM players WHERE name=("{}")'.format(name))
-    names = [(r[0], r[1]) for r in rows]
-    result = False
+    players = [(r[0], r[1]) for r in rows]
 
-    if len(names) > 1:
+    if len(players) == 0:
+        result = False
+    elif len(players) > 1:
         raise Exception('Player has more than one entry in the database!')
     else:
-        result = names[0]
+        p = players[0]
+        result = player.Player(
+            name=p[0],
+            bank=p[1],
+            playertype="HUMAN"
+        )
 
     c.close()
     conn.close()
@@ -72,11 +75,11 @@ def get_players():
     conn = sqlite3.connect(DB)
     c = conn.cursor()
 
-    names = [n for n in c.execute('SELECT * FROM players')]
+    players = [n for n in c.execute('SELECT * FROM players')]
 
     c.close()
     conn.close()
-    return names
+    return players
 
 
 def del_player(name):
@@ -84,7 +87,7 @@ def del_player(name):
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     result = False
-    if player_exists(name):
+    if load_player(name):
         c.execute('DELETE FROM players WHERE name = "{}"'.format(name))
         result = True
 
