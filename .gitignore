@@ -5,6 +5,7 @@ todo_list.txt
 globalnames
 
 old/*
+arc
 logs/*
 data/*
 .ropeproject/*
