@@ -272,14 +272,15 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_processoption_RAISE_partial(self):
-        """ Seat 3 bets, seat 4 raises. Closer is 3. """
+        """ Seat 1 bets, seat 2 raises. Closer is 1. """
         self.setUp(players=6, street=2)
+        self.assertEqual(self.br.closer, 0)
         bet = 4
-        next(self.br)  # Seat 3
+        next(self.br)  # Seat 1
         self.br.process_option(betting.Action('BET', bet))
-        next(self.br)  # Seat 4
+        next(self.br)  # Seat 2
         self.br.process_option(betting.Action('RAISE', bet * 2))
-        expected = 3
+        expected = 1
         result = self.br.closer
         self.assertEqual(expected, result)
 
