@@ -6,6 +6,7 @@ from ponyup import blinds
 
 
 class TestBlinds(unittest.TestCase):
+    """ Tests for blinds.py """
     def test_init_shouldbelevel1(self):
         self.b = blinds.Blinds()
         expected = 1

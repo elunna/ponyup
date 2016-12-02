@@ -1,3 +1,6 @@
+"""
+  " Tests for tools.py
+  """
 import unittest
 from ponyup import card
 from ponyup import evaluator as ev
@@ -5,14 +8,7 @@ from ponyup import tools
 
 
 class TestTools(unittest.TestCase):
-
-    """
-    Tests for deal_ranked_hands(table, reversed=False):
-    """
-
-    """
-    Tests for to_card(string)
-    """
+    """ Functions tests for tools.py """
     def test_tocard_As_returnsAs(self):
         string = 'As'
         rank = 'A'
@@ -25,9 +21,6 @@ class TestTools(unittest.TestCase):
         string = 'AA'
         self.assertRaises(Exception, tools.to_card, string)
 
-    """
-    Tests for convert_to_cards(cardlist):
-    """
     def test_converttocards_AsKs_returnsCardAsKs(self):
         As, Ks = card.Card('A', 's'), card.Card('K', 's')
         cardstr = ['As', 'Ks']
@@ -35,18 +28,12 @@ class TestTools(unittest.TestCase):
         result = tools.convert_to_cards(cardstr)
         self.assertEqual(expected, result)
 
-    """
-    Tests for make(hand_name):
-    """
     def test_make_royalflush_returnsRoyalFlush(self):
         h = tools.make('royalflush')
         expected = 'ROYAL FLUSH'
         result = ev.get_type(ev.get_value(h))
         self.assertEqual(expected, result)
 
-    """
-    Tests for get_cards(qty)
-    """
     # Ask for 0 cards, returns 0 cards
     def test_getcards_0_returns0cards(self):
         h = tools.get_cards(0)
@@ -70,9 +57,10 @@ class TestTools(unittest.TestCase):
 
 
 class TestPokerhands(unittest.TestCase):
-    ##################################################
+    """ Tests for all the poker hands to make sure get_value, get_type, and
+        get_description work.
+    """
     # ROYAL FLUSHES
-    ##################################################
     def test_getvalue_royalflush_returns100000000000(self):
         #  h = royalflush()
         h = tools.make('royalflush')
@@ -95,9 +83,7 @@ class TestPokerhands(unittest.TestCase):
         result = ev.get_description(val, h)
         self.assertEqual(expected, result)
 
-    ##################################################
     # STRAIGHT FLUSHES
-    ##################################################
     def test_getvalue_straightflushhigh_returns90900000000(self):
         h = tools.make('straightflush_high')
         expected = 91300000000
@@ -138,9 +124,7 @@ class TestPokerhands(unittest.TestCase):
         result = ev.get_description(val, h)
         self.assertEqual(expected, result)
 
-    ##################################################
     # FOUR OF A KINDS, ('QUADS')
-    ##################################################
     def test_getvalue_quadshigh_returns81413000000(self):
         h = tools.make('quads_high')
         expected = 81413000000
@@ -181,9 +165,7 @@ class TestPokerhands(unittest.TestCase):
         result = ev.get_description(val, h)
         self.assertEqual(expected, result)
 
-    ##################################################
     # FULL HOUSES ('BOATS')
-    ##################################################
     def test_getvalue_fullhousehigh_returns71413000000(self):
         h = tools.make('fullhouse_high')
         expected = 71413000000
@@ -224,9 +206,7 @@ class TestPokerhands(unittest.TestCase):
         result = ev.get_description(val, h)
         self.assertEqual(expected, result)
 
-    ##################################################
     # FLUSHES
-    ##################################################
     def test_getvalue_flushhigh_returns61413121109(self):
         h = tools.make('flush_high')
         expected = 61413121109
@@ -267,9 +247,7 @@ class TestPokerhands(unittest.TestCase):
         result = ev.get_description(val, h)
         self.assertEqual(expected, result)
 
-    ##################################################
     # STRAIGHTS
-    ##################################################
     def test_getvalue_straighthigh_returns51413121110(self):
         h = tools.make('straight_high')
         expected = 51413121110
@@ -330,9 +308,7 @@ class TestPokerhands(unittest.TestCase):
         result = ev.get_description(val, h)
         self.assertEqual(expected, result)
 
-    ##################################################
     # THREE OF A KIND ('SET', 'TRIPS'
-    ##################################################
     def test_getvalue_tripshigh_returns41413120000(self):
         h = tools.make('trips_high')
         expected = 41413120000
@@ -373,9 +349,7 @@ class TestPokerhands(unittest.TestCase):
         result = ev.get_description(val, h)
         self.assertEqual(expected, result)
 
-    ##################################################
     # TWO PAIRS
-    ##################################################
     def test_getvalue_twopairhigh_returns31413120000(self):
         h = tools.make('twopair_high')
         expected = 31413120000
@@ -416,9 +390,7 @@ class TestPokerhands(unittest.TestCase):
         result = ev.get_description(val, h)
         self.assertEqual(expected, result)
 
-    ##################################################
     # PAIRS
-    ##################################################
     def test_getvalue_pairhigh_returns21413121100(self):
         h = tools.make('pair_high')
         expected = 21413121100

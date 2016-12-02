@@ -1,13 +1,15 @@
+"""
+  " Tests for colors.py
+  """
+
 import unittest
 from ponyup import card
 from ponyup import colors
 
 
 class TestColors(unittest.TestCase):
+    """ Function tests for colors.py """
 
-    """
-    Tests for
-    """
     # Pass an integer 10. Returns True.
     def test_color_redforeground(self):
         txt = 'test'
@@ -27,9 +29,6 @@ class TestColors(unittest.TestCase):
         result = colors.color(txt, 'YELLOW')
         self.assertEqual(expected, result)
 
-    """
-    Tests for color_cards(self):
-    """
     def test_color_hiddenCard_returnsPurpleXx(self):
         c = card.Card('A', 's')
         expected = '\x1b[0;35;40mXx\x1b[0m'

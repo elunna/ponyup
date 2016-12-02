@@ -1,3 +1,6 @@
+"""
+  " Tests for poker.py
+  """
 import unittest
 from ponyup import blinds
 from ponyup import card
@@ -7,9 +10,7 @@ from ponyup import tools
 
 
 class TestPoker(unittest.TestCase):
-    """
-    Setup a session and round, with a table filled with 6 players.
-    """
+    """ Function tests for poker.py """
     def setUp(self, lvl=1, players=6):
         # Make a 6 player table
         self.g = factory.session_factory(seats=players, game="FIVE CARD DRAW", level=lvl)
@@ -22,24 +23,6 @@ class TestPoker(unittest.TestCase):
     def givehand(self, seat, hand):
         self.r.table.seats[seat].hand.cards = tools.make(hand)
 
-    """
-    Tests for __init__()
-    """
-    # Round __init__(): Pot = 0
-
-    """
-    Tests for __str__()
-    """
-    # None yet.
-
-    """
-    Tests for log
-    """
-    # Make into a decorator?
-
-    """
-    Tests for deal_cards(qty, faceup=False)
-    """
     # 6 players, deal 1 - should be 6 cardholders
     def test_dealcards_deal1_6cardholders(self):
         self.r.table.move_button()
@@ -77,14 +60,8 @@ class TestPoker(unittest.TestCase):
         self.r.deal_cards(1, handreq=True)  # Deal 5 cards
         self.assertEqual(len(self.r.d), 41)
 
-    """
-    Tests show_cards()
-    """
     # Deal facedown cards to 2 players, should be able to see CPU cards
 
-    """
-    Tests for sortcards()
-    """
     # deal highcards1():
     #  h = [('A', 'd'), ('4', 's'), ('Q', 's'), ('7', 's'), ('K', 'h')]
     def test_sortcards_humandealt_sorted(self):
@@ -95,9 +72,6 @@ class TestPoker(unittest.TestCase):
         result = self.r.table.seats[0].hand.cards
         self.assertEqual(expected, result)
 
-    """
-    Tests for burn()
-    """
     # Burn 1 card, deck is 1 less
     def test_burn_decksize_decreased1(self):
         decksize = len(self.r.d)
@@ -116,9 +90,6 @@ class TestPoker(unittest.TestCase):
 
     # Burn, empty deck, nothing happens
 
-    """
-    Tests for muck_all_cards()
-    """
     # 6 players, deal 1 - no cardholders after running
     def test_muckallcards_cardsmucked_nocardholders(self):
         self.r.table.move_button()
@@ -155,9 +126,6 @@ class TestPoker(unittest.TestCase):
         result = len(self.r.muck)
         self.assertEqual(expected, result)
 
-    """
-    Tests for post_antes()
-    """
     # 6 players ante 1. Pot == 6.
     def test_postantes_6players_potequals60(self):
         self.r.blinds = blinds.Blinds(level=2, antes=True)
@@ -175,17 +143,14 @@ class TestPoker(unittest.TestCase):
             result = s.stack
             self.assertEqual(expected, result)
 
-    """
-    Tests for post_blinds()
-    """
     # If the button(and blinds haven't been set, raise an exception.)
     def test_postblinds_btnnotset_raiseException(self):
         self.r.table.TOKENS['D'] = -1
         self.assertEqual(self.r.table.TOKENS['D'], -1, 'Button should be -1!')
         self.assertRaises(Exception, self.r.post_blinds)
 
-    # 2 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_2players_pot3(self):
+        """ 2 players(spaced out). SB=1, BB=2, startingstacks=1000 """
         for i in [1, 2, 4, 5]:
             self.r.table.pop(i)
         self.r.table.TOKENS['D'] = -1
@@ -197,8 +162,8 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(self.r.table.seats[3].stack, 998)
         self.assertEqual(self.r.pot, 3)
 
-    # 3 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_3players_pot3(self):
+        """ 3 players(spaced out). SB=1, BB=2, startingstacks=1000 """
         for i in [1, 3, 5]:
             self.r.table.pop(i)
 
@@ -211,8 +176,8 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(self.r.table.seats[4].stack, 998)
         self.assertEqual(self.r.pot, 3)
 
-    # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_6players_pot3(self):
+        """ 6 players(spaced out). SB=1, BB=2, startingstacks=1000 """
         self.r.table.TOKENS['D'] = -1
         self.r.table.move_button()
         self.r.table.set_blinds()
@@ -222,8 +187,8 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(self.r.table.seats[2].stack, 998)
         self.assertEqual(self.r.pot, 3)
 
-    # 6 players(spaced out). SB=1, BB=2, startingstacks=1000
     def test_postblinds_6players_returnsString(self):
+        """ 6 players(spaced out). SB=1, BB=2, startingstacks=1000 """
         self.setUp(lvl=1)
         self.r.table.TOKENS['D'] = -1
         self.r.table.move_button()
@@ -233,12 +198,8 @@ class TestPoker(unittest.TestCase):
         result = self.r.post_blinds()
         self.assertEqual(expected, result)
 
-    """
-    Tests for post_bringin():
-    """
-    # Initial stacks=1000.
-    # Seat 0
     def test_postbringin_seat5_has2chipsless(self):
+        """ XXX """
         self.setUp_stud()
         tools.deal_stud5(self.r.table, matchingranks=0)
         self.r.table.set_bringin()
@@ -258,9 +219,6 @@ class TestPoker(unittest.TestCase):
         result = self.r.post_bringin()
         self.assertEqual(expected, result)
 
-    """
-    Tests for next_street()
-    """
     def test_nextstreet_street0_streetIs1(self):
         self.r.next_street()
         expected = 1
@@ -272,13 +230,6 @@ class TestPoker(unittest.TestCase):
         self.r.next_street()
         self.assertRaises(Exception, self.r.next_street)
 
-    """
-    Tests for get_street()
-    """
-
-    """
-    Tests for one_left()
-    """
     def test_oneleft_allhavecards_returnsNone(self):
         self.setUp(players=2)
         self.r.deal_cards(1)
@@ -295,13 +246,6 @@ class TestPoker(unittest.TestCase):
         result = self.r.one_left()
         self.assertEqual(expected, result)
 
-    """
-    Tests for betting_round()
-    """
-
-    """
-    Tests for betting_over()
-    """
     def test_bettingover_2hands1broke_returnsTrue(self):
         self.setUp(players=2)
         self.r.deal_cards(1)
@@ -318,17 +262,6 @@ class TestPoker(unittest.TestCase):
         result = self.r.betting_over()
         self.assertEqual(expected, result)
 
-    """
-    Tests for found_winner()
-    """
-
-    """
-    Tests for showdown()
-    """
-
-    """
-    Tests for cleanup()
-    """
     # After cleanup, there should be no broke players.
     """
     def test_cleanup(self):
@@ -359,13 +292,6 @@ class TestPoker(unittest.TestCase):
         result = len(self.r.muck)
         self.assertEqual(expected, result)
 
-    """
-    Tests for check_integrity_pre(self):
-    """
-
-    """
-    Tests for check_integrity_post(self):
-    """
     # All cards mucked, but 1 card in deck, returns False
     def test_checkintegritypost_1cardindeck_returnsFalse(self):
         self.r.muck_all_cards()
@@ -375,8 +301,8 @@ class TestPoker(unittest.TestCase):
         result = self.r.check_integrity_post()
         self.assertEqual(expected, result)
 
-    # All cards mucked, but 1 player w cards, returns False
     def test_checkintegritypost_1playerwithcards_returnsFalse(self):
+        """ All cards mucked, but 1 player w cards, returns False """
         self.r.table.move_button()
         self.r.table.set_blinds()
         self.r.muck_all_cards()
@@ -394,14 +320,11 @@ class TestPoker(unittest.TestCase):
         result = self.r.check_integrity_post()
         self.assertEqual(expected, result)
 
-    """
-    Tests for highhand(table)
-    """
     # Throw in an empty seat for testing.
     # Throw in a player without cards for testing.
 
-    # Stud5:
     def test_highhand_3cards_pairAces_return0(self):
+        """ Stud5: 1 high hand"""
         self.setUp(players=3)
         self.givehand(0, '2AA_v1')
         self.givehand(1, '2KK')
@@ -411,8 +334,8 @@ class TestPoker(unittest.TestCase):
         result = self.r.highhand()
         self.assertEqual(expected, result)
 
-    # Stud5:
     def test_highhand_4cards_AceHigh_return0(self):
+        """ Stud5: 1 high hand"""
         self.setUp(players=4)
         self.givehand(0, 'QKA_v1')
         self.givehand(1, 'JTQ')
@@ -423,8 +346,8 @@ class TestPoker(unittest.TestCase):
         result = self.r.highhand()
         self.assertEqual(expected, result)
 
-    # Stud5:
     def test_highhand_3cards_2tied_return02(self):
+        """ Stud5: 2 tied """
         self.setUp(players=3)
         self.givehand(0, '2AA_v1')
         self.givehand(1, '2KK')
@@ -434,8 +357,8 @@ class TestPoker(unittest.TestCase):
         result = self.r.highhand()
         self.assertEqual(expected, result)
 
-    # Stud5:
     def test_highhand_4cards_2tied_return02(self):
+        """ Stud5: 2 tied """
         self.setUp(players=4)
         self.givehand(0, 'QKA_v1')  # Dealt first on 4th street
         self.givehand(1, 'JTQ')
@@ -446,8 +369,8 @@ class TestPoker(unittest.TestCase):
         result = self.r.highhand()
         self.assertEqual(expected, result)
 
-    # Stud5:
     def test_highhand_3cards_3tied_return023(self):
+        """ Stud5: 3 tied """
         self.setUp(players=6)
         self.givehand(0, '3AK_v1')  # Dealt first on 4th street
         self.givehand(1, '3AK_v2')

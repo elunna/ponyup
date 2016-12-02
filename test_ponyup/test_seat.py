@@ -1,3 +1,6 @@
+"""
+  " Tests for seat.py
+  """
 import unittest
 from ponyup import card
 from ponyup import player
@@ -5,23 +8,18 @@ from ponyup import seat
 
 
 class TestSeat(unittest.TestCase):
+    """ Function tests for seat.py """
 
     def setUp(self):
         self.s = seat.Seat(1)
         self.p = player.Player("Erik")
         self.p.bank = 1000
 
-    """
-    Tests for __init__()
-    """
     def test_init_newseat_playerNone(self):
         expected = None
         result = self.s.player
         self.assertEqual(expected, result)
 
-    """
-    Tests for __str__()
-    """
     # Test that the players name shows up
     def test_str_playersitting_returnsName(self):
         self.s.sitdown(self.p)
@@ -35,9 +33,6 @@ class TestSeat(unittest.TestCase):
         result = str(self.s)
         self.assertEqual(expected, result)
 
-    """
-    Tests for _-eq__(self, other)
-    """
     # Same seat, no player, are equal
     def test_eq_sameseat_noplayer_returnsTrue(self):
         seatcopy = self.s
@@ -70,8 +65,8 @@ class TestSeat(unittest.TestCase):
         result = self.s == s2
         self.assertEqual(expected, result)
 
-    # Same seats, same players, diff stacks, not equal
     def test_eq_sameplayers_diffstacks_returnsFalse(self):
+        """ Same seats, same players, diff stacks, not equal """
         s2 = seat.Seat(1)
         self.s.sitdown(self.p)
         s2.sitdown(self.p)
@@ -82,9 +77,6 @@ class TestSeat(unittest.TestCase):
         result = self.s == s2
         self.assertEqual(expected, result)
 
-    """
-    Tests for sitdown(self, player):
-    """
     def test_sitdown_player_isnotEmpty(self):
         self.s.sitdown(self.p)
         expected = False
@@ -100,9 +92,6 @@ class TestSeat(unittest.TestCase):
     def test_sitdown_dupeplayer_attable_raiseException(self):
         pass
 
-    """
-    Tests for standup(self, player):
-    """
     def test_standup_existingplayer_isempty(self):
         self.s.sitdown(self.p)
         self.s.standup()
@@ -125,15 +114,9 @@ class TestSeat(unittest.TestCase):
         result = self.s.standup()
         self.assertEqual(expected, result)
 
-    """
-    Tests for vacant(self):
-    """
     def test_vacant_emptyseat_returnsTrue(self):
         self.assertTrue(self.s.vacant())
 
-    """
-    Tests for occupied(self):
-    """
     def test_occupied_emptyseat_returnsFalse(self):
         expected = False
         result = self.s.occupied()
@@ -145,9 +128,6 @@ class TestSeat(unittest.TestCase):
         result = self.s.occupied()
         self.assertEqual(expected, result)
 
-    """
-    Tests for has_hand(self):
-    """
     def test_hashand_emptyseat_returnsFalse(self):
         self.assertFalse(self.s.has_hand())
 
@@ -163,9 +143,6 @@ class TestSeat(unittest.TestCase):
         result = self.s.has_hand()
         self.assertEqual(expected, result)
 
-    """
-    Tests for has_chips(self):
-    """
     def test_haschips_playerboughtchips_returnsTrue(self):
         self.s.sitdown(self.p)
         self.s.buy_chips(100)
@@ -179,9 +156,6 @@ class TestSeat(unittest.TestCase):
         result = self.s.has_chips()
         self.assertEqual(expected, result)
 
-    """
-    Tests for buy_chips(self, amount):
-    """
     def test_buychips_emptyseat_raiseException(self):
         self.assertRaises(Exception, self.s.buy_chips)
 
@@ -208,9 +182,6 @@ class TestSeat(unittest.TestCase):
         result = self.s.stack
         self.assertEqual(expected, result)
 
-    """
-    Tests for win(amount):
-    """
     def test_win_negamount_raiseException(self):
         self.s.sitdown(self.p)
         self.assertRaises(ValueError, self.s.win, -1)
@@ -222,9 +193,6 @@ class TestSeat(unittest.TestCase):
         result = self.s.stack
         self.assertEqual(expected, result)
 
-    """
-    Tests for bet(self, amount):
-    """
     def test_bet_stack100_bets10_returns10(self):
         self.s.sitdown(self.p)
         self.s.buy_chips(100)
@@ -268,9 +236,6 @@ class TestSeat(unittest.TestCase):
         self.s.buy_chips(100)
         self.assertRaises(ValueError, self.s.bet, -1)
 
-    """
-    Tests for fold(self, c):
-    """
     # Folding 1 card. Player has no cards
     def test_fold_1card_handisempty(self):
         c = card.Card('A', 's')

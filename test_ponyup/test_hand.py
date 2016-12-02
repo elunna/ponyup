@@ -1,3 +1,6 @@
+"""
+  " Tests for hand.py
+  """
 import unittest
 from ponyup import card
 from ponyup import hand
@@ -5,12 +8,11 @@ from ponyup import tools
 
 
 class TestHand(unittest.TestCase):
+    """ Function tests for hand.py """
+
     def test_init_invalidboth_raiseEx(self):
         self.assertRaises(ValueError, card.Card, 's', 'A')
 
-    """
-    Tests for __init__, and __len__
-    """
     # No cards pass, length = 0
     def test_init_0cardspassed_length0(self):
         h = hand.Hand()
@@ -34,14 +36,6 @@ class TestHand(unittest.TestCase):
         result = c in h.cards
         self.assertEqual(expected, result)
 
-    """
-    Tests for __len__(), __contains__()
-    """
-    # See add and discard tests
-
-    """
-    Tests for __str__
-    """
     # No cards pass, displays nothing
     def test_str_0cardspassed_returnsNothing(self):
         h = hand.Hand()
@@ -75,9 +69,6 @@ class TestHand(unittest.TestCase):
         result = str(h)
         self.assertEqual(expected, result)
 
-    """
-    Tests for add(card)
-    """
     # Empty hand, adding 1 card, size = 1
     def test_add_1card_length1(self):
         c = card.Card('A', 's')
@@ -96,9 +87,6 @@ class TestHand(unittest.TestCase):
         result = c in h.cards
         self.assertEqual(expected, result)
 
-    """
-    Tests for discard(card)
-    """
     # Discarding the only card in the hand, size = 0
     def test_discard_1card_length0(self):
         c = card.Card('A', 's')
@@ -122,9 +110,6 @@ class TestHand(unittest.TestCase):
         h = hand.Hand()
         self.assertRaises(ValueError, h.discard, c)
 
-    """
-    Tests for unhide()
-    """
     # Unhide a 1 card hand, the card is up
     def test_unhide_1card_cardIsUp(self):
         c = card.Card('A', 's')
@@ -135,8 +120,8 @@ class TestHand(unittest.TestCase):
         result = h.cards[0].hidden
         self.assertEqual(expected, result)
 
-    # Unhide a 2 card hand, both cards are up
     def test_unhide_2cards_bothcardsUp(self):
+        """ Unhide a 2 card hand, both cards are up """
         c1 = card.Card('A', 's')
         c2 = card.Card('K', 's')
         h = hand.Hand()
@@ -147,9 +132,6 @@ class TestHand(unittest.TestCase):
         result = h.cards[0].hidden is False and h.cards[1].hidden is False
         self.assertTrue(result)
 
-    """
-    Tests for sort()
-    """
     # Takes in a 564 hand and after it is 456
     def test_sort_unsortedhand_sortedafter(self):
         cards = tools.convert_to_cards(['5s', '6s', '4s'])
@@ -159,36 +141,24 @@ class TestHand(unittest.TestCase):
         result = h.cards
         self.assertTrue(expected, result)
 
-    """
-    Tests for value()
-    """
     def test_value_royalflush_returns100000000000(self):
         h = hand.Hand(tools.make('royalflush'))
         expected = 100000000000
         result = h.value()
         self.assertTrue(expected, result)
 
-    """
-    Tests for rank()
-    """
     def test_rank_royalflush_returnsROYALFLUSH(self):
         h = hand.Hand(tools.make('royalflush'))
         expected = 'ROYAL FLUSH'
         result = h.rank()
         self.assertTrue(expected, result)
 
-    """
-    Tests for desc()
-    """
     def test_desc_royalflush_AceHigh(self):
         h = hand.Hand(tools.make('royalflush'))
         expected = 'A high'
         result = h.rank()
         self.assertTrue(expected, result)
 
-    """
-    Tests for get_upcards()
-    """
     # 1 card hand that is hidden - return empty list
     def test_getupcards_1downcard_returnsEmptyList(self):
         c = card.Card('A', 's')
@@ -216,9 +186,6 @@ class TestHand(unittest.TestCase):
         result = len(h.get_upcards())
         self.assertEqual(expected, result)
 
-    """
-    Tests for peek()
-    """
     # Ex: As Ks. Returns string.
 
     def test_peek_AsKs_returnsString(self):

@@ -1,3 +1,6 @@
+"""
+  " Tests for deck.py
+  """
 import unittest
 from ponyup import deck
 from ponyup import card
@@ -5,9 +8,8 @@ from ponyup import tools
 
 
 class TestDeck(unittest.TestCase):
-    """
-    Tests for __str__()
-    """
+    """ Tests for the Deck class."""
+
     def test_str_2cards_returnsAsKsinParentheses(self):
         cards = tools.convert_to_cards(['As', 'Ks'])
         d = deck.Deck(cards)
@@ -16,9 +18,6 @@ class TestDeck(unittest.TestCase):
         result = str(d)
         self.assertEqual(expected, result)
 
-    """
-    Tests for __len__()
-    """
     def test_len_size52(self):
         d = deck.Deck()
         expected = 52
@@ -32,9 +31,6 @@ class TestDeck(unittest.TestCase):
         result = len(d)
         self.assertEqual(expected, result)
 
-    """
-    Tests for contains(card)
-    """
     def test_contains_AceSpadesinStandardDeck_returnsTrue(self):
         d = deck.Deck()
         c = card.Card('A', 's')
@@ -49,13 +45,6 @@ class TestDeck(unittest.TestCase):
         result = c in d
         self.assertEqual(expected, result)
 
-    """
-    Tests for shuffle()
-    """
-
-    """
-    Tests for sort()
-    """
     def test_sort_2cards_deuceisfirst(self):
         cards = tools.convert_to_cards(['As', '2s'])
         d = deck.Deck(cards)
@@ -72,9 +61,6 @@ class TestDeck(unittest.TestCase):
         result = d.cards[0].rank
         self.assertEqual(expected, result)
 
-    """
-    Tests for deal()
-    """
     def test_deal_stddeck_sizeIs51(self):
         d = deck.Deck()
         d.deal()
@@ -94,9 +80,6 @@ class TestDeck(unittest.TestCase):
         self.assertEqual(len(d), 0)
         self.assertRaises(Exception, d.deal)
 
-    """
-    Tests for is_empty()
-    """
     def test_isempty_fulldeck_returnFalse(self):
         d = deck.Deck()
         expected = False
@@ -109,9 +92,6 @@ class TestDeck(unittest.TestCase):
         result = d.is_empty()
         self.assertEqual(expected, result)
 
-    """
-    Tests for remove(card)
-    """
     def test_remove_removeAs_sizeIs51(self):
         d = deck.Deck()
         c = card.Card('A', 's')
@@ -127,9 +107,6 @@ class TestDeck(unittest.TestCase):
         result = d.remove(c)
         self.assertEqual(expected, result)
 
-    """
-    Tests for remove_cards(cards)
-    """
     def test_removecards_removeAs_sizeIs51(self):
         d = deck.Deck()
         c = card.Card('A', 's')
@@ -153,9 +130,6 @@ class TestDeck(unittest.TestCase):
         self.assertFalse(cards[0] in d)
         self.assertFalse(cards[1] in d)
 
-    """
-    Tests for unhide()
-    """
     # All cards in deck are faceup
     def test_unhide_2cards_bothfaceup(self):
         cards = tools.convert_to_cards(['As', 'Ks'])
@@ -166,9 +140,7 @@ class TestDeck(unittest.TestCase):
 
 
 class TestDeck1Joker(unittest.TestCase):
-    """
-    Tests for subclasses
-    """
+    """ Tests for Deck1Joker """
     def test_init_Deck1Joker_size53(self):
         d = deck.Deck1Joker()
         expected = 53
@@ -185,9 +157,7 @@ class TestDeck1Joker(unittest.TestCase):
 
 
 class TestDeck2Joker(unittest.TestCase):
-    """
-    Tests for __init__()
-    """
+    """ Tests for Deck2Joker """
     def test_init_Deck2Joker_size54(self):
         d = deck.Deck2Joker()
         expected = 54
@@ -205,9 +175,8 @@ class TestDeck2Joker(unittest.TestCase):
 
 
 class TestPiquetDeck(unittest.TestCase):
-    """
-    Tests for __init__()
-    """
+    """ Tests for PiquetDeck"""
+
     def test_init_PiquetDeck_size32(self):
         d = deck.PiquetDeck()
         expected = 32
@@ -232,9 +201,8 @@ class TestPiquetDeck(unittest.TestCase):
 
 
 class TestPinochleDeck(unittest.TestCase):
-    """
-    Tests for __init__()
-    """
+    """ Tests for PinochleDeck """
+
     def test_init_PinochleDeck_size48(self):
         d = deck.PinochleDeck()
         expected = 48
@@ -259,9 +227,8 @@ class TestPinochleDeck(unittest.TestCase):
 
 
 class TestBlackjackDeck(unittest.TestCase):
-    """
-    Tests for __init__
-    """
+    """ Tests for BlackjackDeck """
+
     def test_init_0shoes_raiseException(self):
         self.assertRaises(ValueError, deck.BlackjackDeck, 0)
 

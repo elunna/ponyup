@@ -1,12 +1,13 @@
+"""
+  " Tests for player.py
+  """
 import unittest
 from ponyup import player
 
 
 class TestPlayer(unittest.TestCase):
+    """ Function tests for player.py """
 
-    """
-    Tests for __init__
-    """
     # valid name, player name is ok
     def test_init_validname_namematches(self):
         p = player.Player('Erik')
@@ -24,9 +25,6 @@ class TestPlayer(unittest.TestCase):
     def test_init__(self):
         self.assertRaises(ValueError, player.Player, 'ab')
 
-    """
-    Tests for __str__
-    """
     # Return players name
     def test_str_validname_returnsName(self):
         p = player.Player('Erik')
@@ -34,9 +32,6 @@ class TestPlayer(unittest.TestCase):
         result = str(p)
         self.assertEqual(expected, result)
 
-    """
-    Tests for __repr__
-    """
     # Return players name
     def test_repr_validname_returnsName(self):
         p = player.Player('Erik')
@@ -44,9 +39,6 @@ class TestPlayer(unittest.TestCase):
         result = p.__repr__()
         self.assertEqual(expected, result)
 
-    """
-    Tests for withdraw(amt)
-    """
     # If a player has 0 and bets 0, it returns 0
     def test_withdraw_has0chipsbets0_returns0(self):
         p = player.Player('Erik')
@@ -84,9 +76,6 @@ class TestPlayer(unittest.TestCase):
         p.deposit(1)
         self.assertRaises(ValueError, p.withdraw, -1)
 
-    """
-    Tests for deposit(amt)
-    """
     # Adding 1 chip results in their stack being 1. Starting with 1.
     def test_deposit_newplayer_add1chip_has1chip(self):
         p = player.Player('Erik')
@@ -108,9 +97,6 @@ class TestPlayer(unittest.TestCase):
         p = player.Player('Erik')
         self.assertRaises(Exception, p.deposit, -100)
 
-    """
-    Tests for is_human()
-    """
     # CPU player
 
     def test_ishuman_CPU_returnsFalse(self):
@@ -126,16 +112,9 @@ class TestPlayer(unittest.TestCase):
         result = p.is_human()
         self.assertEqual(expected, result)
 
-    """
-    Tests for random_type()
-    """
     # Type is within the TYPES list.
     def test_randomtype_returnsTypeinTYPES(self):
         p = player.Player('Erik')
         expected = True
         result = p.playertype in player.TYPES
         self.assertEqual(expected, result)
-
-    """
-    Tests for factory(name, game, playertype='random')
-    """

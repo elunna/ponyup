@@ -1,12 +1,12 @@
+"""
+  " Tests for sessions.py
+  """
 import unittest
 from ponyup import factory
 
 
 class TestSessions(unittest.TestCase):
-
-    """
-    Tests for clear_broke_players()
-    """
+    """ Function tests for sessions.py """
     def test_clearbrokeplayers(self):
         s = factory.session_factory(seats=6, game='FIVE CARD DRAW', level=1)
         p = s.table.seats[0]

@@ -1,3 +1,6 @@
+"""
+  " Tests for joker.py
+  """
 import unittest
 from ponyup import card
 from ponyup import joker
@@ -5,9 +8,8 @@ from ponyup import tools
 
 
 class TestJoker(unittest.TestCase):
-    """
-    Tests for __str__()
-    """
+    """ Function tests for joker.py """
+
     def test_pickjoker_89TJrainbow_returnsQ(self):
         h = tools.make('OESD 4card')
         j = joker.pick_joker(h)

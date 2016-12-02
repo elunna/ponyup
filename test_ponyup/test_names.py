@@ -1,12 +1,13 @@
+"""
+  " Tests for names.py
+  """
 import unittest
 from ponyup import names
 
 
 class TestNames(unittest.TestCase):
+    """ Function Tests for names.py """
 
-    """
-    Tests for random_names(num)
-    """
     def test_randomnames_10_returns10names(self):
         namelist = names.random_names(10, names.pokerplayers)
         expected = 10
@@ -20,9 +21,6 @@ class TestNames(unittest.TestCase):
         result = len(set(namelist))
         self.assertEqual(expected, result)
 
-    """
-    Tests for is_validname(name)
-    """
     def test_isvalidname_2char_returnsFalse(self):
         name = 'qz'
         expected = False
@@ -48,9 +46,6 @@ class TestNames(unittest.TestCase):
         result = names.is_validname(name)
         self.assertEqual(expected, result)
 
-    """
-    Tests for has_surr_char(string):
-    """
     def test_hassurrchar_angle_returnsTrue(self):
         name = 'eriktheguy>'
         expected = True

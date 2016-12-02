@@ -1,3 +1,6 @@
+"""
+  " Tests for evaluator.py
+  """
 import unittest
 from ponyup import card
 from ponyup import evaluator
@@ -5,9 +8,7 @@ from ponyup import tools
 
 
 class TestEvaluator(unittest.TestCase):
-    """
-    Tests for is_valid_hand(cards)
-    """
+    """ Tests for evaluator.py """
     def test_is_validhand_4cards_returnsFalse(self):
         h = tools.get_cards(4)
         expected = False
@@ -38,9 +39,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.is_validhand(h)
         self.assertEqual(expected, result)
 
-    """
-    Tests for dominant_suit(cards)
-    """
     def test_dominantsuit_1card_returnssuit(self):
         cards = [card.Card('A', 's')]
         expected = 's'
@@ -77,9 +75,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.dominant_suit(cards)
         self.assertEqual(expected, result)
 
-    """
-    Tests for is_suited(cards)
-    """
     def test_issuited_1card_returnsTrue(self):
         cards = [card.Card('A', 's')]
         expected = True
@@ -98,9 +93,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.is_suited(cards)
         self.assertEqual(expected, result)
 
-    """
-    Tests for is_straight(cards)
-    """
     # Test a low straight hand
     def test_isstraight_lowstraight_returns5(self):
         hand = tools.make('straight_low')
@@ -129,9 +121,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.is_straight(hand)
         self.assertEqual(expected, result)
 
-    """
-    Tests for score_ranklist(ranklist)
-    """
     def test_scoreranklist_A_return14(self):
         cards = [card.Card('A', 's')]
         expected = 14 * evaluator.MULTIPLIERS[0]
@@ -139,9 +128,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.score_ranklist(rd)
         self.assertEqual(expected, result)
 
-    """
-    Tests for score_cardlist(cards)
-    """
     def test_scorecardlist_A_returns14(self):
         cards = [card.Card('A', 's')]
         expected = 14
@@ -160,10 +146,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.score_cardlist(cards)
         self.assertEqual(expected, result)
 
-    """
-    Tests for get_type(cards)
-    """
-
     def test_gettype_negativevalue_returnsINVALID(self):
         expected = 'INVALID'
         result = evaluator.get_type(-1)
@@ -171,10 +153,6 @@ class TestEvaluator(unittest.TestCase):
 
     def test_gettype_1000000000000_raiseEx(self):
         self.assertRaises(ValueError, evaluator.get_type, 1000000000000)
-
-    """
-    Tests for score_pair_hands(ranklist)
-    """
 
     # Test the value of 1 Ace
     def test_scorepairhands_A_returns1400000000(self):
@@ -211,14 +189,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.score_pair_hands(cards)
         self.assertEqual(expected, result)
 
-    """
-    Tests for get_description(value, cards)
-    """
-    # See test_tools.py for extensive tests of get_description.
-
-    """
-    Tests for find_best_hand(cards)
-    """
     def test_findbesthand_pair_returnsPAIR(self):
         cards = tools.convert_to_cards(['2c', '3c', '5s', '7s', 'Kc', 'Ac', 'As'])
         besthand = evaluator.find_best_hand(cards)
@@ -267,9 +237,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.get_type(val)
         self.assertEqual(expected, result)
 
-    """
-    Tests for is_set(cards)
-    """
     def test_is_set_royalflush_returnsTrue(self):
         h = tools.make('royalflush')
         expected = True
@@ -295,9 +262,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.is_set(h)
         self.assertEqual(expected, result)
 
-    """
-    Tests for rank_dict(cards)
-    """
     def test_rankdict_0Ace_counts0(self):
         cards = tools.convert_to_cards(['Kc', '2s'])
         expected = 0
@@ -320,9 +284,6 @@ class TestEvaluator(unittest.TestCase):
         result = rankdict.get('A')
         self.assertEqual(expected, result)
 
-    """
-    Tests for rank_list(cards)
-    """
     def test_ranklist_1Ace_lenEquals1(self):
         cards = [card.Card('A', 's')]
         expected = 1
@@ -360,9 +321,6 @@ class TestEvaluator(unittest.TestCase):
         result = len(ranklist)
         self.assertEqual(expected, result)
 
-    """
-    Tests for suit_dict(cards)
-    """
     def test_suitdict_0Spades_counts0(self):
         cards = tools.convert_to_cards(['Kc', '2h'])
         expected = 0
@@ -392,9 +350,6 @@ class TestEvaluator(unittest.TestCase):
         result = suitdict.get('s')
         self.assertEqual(expected, result)
 
-    """
-    Tests for suitedcard_dict(cards)
-    """
     def test_suitedcarddict_0Spades_listlenEquals0(self):
         cards = tools.convert_to_cards(['Kc', '2h'])
         expected = 0
@@ -411,9 +366,6 @@ class TestEvaluator(unittest.TestCase):
         result = len(suitdict.get('s', []))
         self.assertEqual(expected, result)
 
-    """
-    Tests for count_suit(cards, suit)
-    """
     def test_countsuit_nospade_returns0(self):
         cards = [card.Card('K', 'c')]
         expected = 0
@@ -426,9 +378,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.count_suit(cards, 's')
         self.assertEqual(expected, result)
 
-    """
-    Tests for get_gap(card1, card2)
-    """
     def test_getgap_23_returns0(self):
         c1 = card.Card('2', 's')
         c2 = card.Card('3', 's')
@@ -464,9 +413,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.get_gap(c1, c2)
         self.assertEqual(expected, result)
 
-    """
-    Tests for get_allgaps(cards)
-    """
     def test_getallgaps_1card_returns0(self):
         cards = tools.convert_to_cards(['Kc', 'As'])
         expected = 0
@@ -491,9 +437,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.get_allgaps(cards)
         self.assertEqual(expected, result)
 
-    """
-    Tests for strip_ranks(cards, ranks)
-    """
     def test_stripranks_stripAces_containsNoAces(self):
         ace = card.Card('A', 's')
         king = card.Card('K', 'c')
@@ -508,9 +451,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.strip_ranks(cards, ['A', 'K'])
         self.assertEqual(expected, result)
 
-    """
-    Tests for strip_suits(cards, suit)
-    """
     def test_stripsuits_stripSpades_containsNoSpades(self):
         cards = tools.convert_to_cards(['As', 'Kc'])
         cards = evaluator.strip_suits(cards, 's')
@@ -525,9 +465,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.count_suit(cards, 's') + evaluator.count_suit(cards, 'c')
         self.assertEqual(expected, result)
 
-    """
-    Tests for chk_wheel(cards):
-    """
     def test_chkwheel_A_returnsTrue(self):
         cards = tools.convert_to_cards(['As'])
         expected = True
@@ -582,9 +519,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.chk_wheel(cards)
         self.assertEqual(expected, result)
 
-    """
-    Tests for chk_straight_draw(cards, qty, gap):
-    """
     def test_chkstraightdraw_2card_0gap_275Q6K_returnsQK(self):
         qty, gap = 2, 0
         cards = tools.convert_to_cards(['2c', '7s', '5h', 'Qd', '6s', 'Kh'])
@@ -682,9 +616,6 @@ class TestEvaluator(unittest.TestCase):
         result = evaluator.chk_straight_draw(cards, qty, gap)
         self.assertEqual(expected, result)
 
-    """
-    Tests for remove_pairs(cards)
-    """
     def test_removepairs_22_returns2(self):
         cards = tools.convert_to_cards(['2c', '2d'])
         expected = [card.Card('2', 'c')]
@@ -702,7 +633,3 @@ class TestEvaluator(unittest.TestCase):
         expected = tools.convert_to_cards(['2h', '3d', 'As'])
         result = evaluator.remove_pairs(cards)
         self.assertEqual(expected, result)
-
-    """
-    Tests for evaluate_draws(cards)
-    """

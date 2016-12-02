@@ -1,3 +1,6 @@
+"""
+  " Tests for test_betting.py
+  """
 import unittest
 from ponyup import betting
 from ponyup import factory
@@ -5,11 +8,12 @@ from ponyup import tools
 
 
 class TestBetting(unittest.TestCase):
-    """
-    Setup a session and round, with a table filled with 6 players.
-    Default level is $2/$4.
-    """
+    """ Tests for test_betting.py """
+
     def setUp(self, lvl=1, players=6, street=1):
+        """ Setup a session and round, with a table filled with 6 players.
+            Default level is $2/$4.
+        """
         g = factory.session_factory(seats=players, game="FIVE CARD DRAW", level=lvl)
 
         g.table.move_button()
@@ -17,7 +21,7 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(g.table.TOKENS['D'], 0)  # verify the button is 0
         self.r = g.new_round()
 
-        for i in range(street - 1):  # Adjust which street to test.
+        for _ in range(street - 1):  # Adjust which street to test.
             self.r.next_street()
 
         self.r.post_blinds()
@@ -25,6 +29,7 @@ class TestBetting(unittest.TestCase):
         self.br = betting.BettingRound(self.r)
 
     def setUp_shorty(self, shortstack, lvl=1, players=6, street=1):
+        """ Sets up a table of short stack players """
         g = factory.session_factory(seats=players, game="FIVE CARD DRAW", level=lvl)
         # Sets seat 1(we'll use as the SB) as the short stack amount for easy testing.
         g.table.seats[1].stack = shortstack
@@ -33,20 +38,18 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(g.table.TOKENS['D'], 0)  # verify the button is 0
         self.r = g.new_round()
 
-        for i in range(street - 1):  # Adjust which street to test.
+        for _ in range(street - 1):  # Adjust which street to test.
             self.r.next_street()
         self.r.post_blinds()
         self.r.deal_cards(2)
         self.br = betting.BettingRound(self.r)
 
     def setUp_studGame(self, lvl=1, players=6, street=1):
-        """
-        Setup a 5 card stud game for testing.
-        """
+        """ Setup a 5 card stud game for testing. """
         g = factory.session_factory(seats=players, game="FIVE CARD STUD", level=lvl)
         self.r = g.new_round()
 
-        for i in range(street - 1):  # Adjust which street to test.
+        for _ in range(street - 1):  # Adjust which street to test.
             self.r.next_street()
 
         tools.deal_5stud_test_hands(self.r.table)
@@ -54,9 +57,6 @@ class TestBetting(unittest.TestCase):
         self.r.table.set_bringin()
         self.br = betting.BettingRound(self.r)
 
-    """
-    Tests for __iter__()
-    """
     # 6 player table: BTN=0, SB=1, BB=2
     def test_iter_1stplayer_returnsSeat3(self):
         seat = next(self.br)
@@ -80,9 +80,6 @@ class TestBetting(unittest.TestCase):
         result = seat.NUM
         self.assertEqual(expected, result)
 
-    """
-    Tests for cpu_decision(p)
-    """
     # This module kind of depends on the strategy, but we can probably rely on the fact that
     # they will fold/check absolute trash and raise incredibly strong hands(ie: royal flush).
     # We'll assume that the street is 1 and the betlevel is 1.
@@ -105,8 +102,8 @@ class TestBetting(unittest.TestCase):
         result = self.br.cpu_decision(bettor).name
         self.assertEqual(expected, result)
 
-    # Holds junk hand, checks the BB.
     def test_cpudecision_junk_returnsCheck(self):
+        """ Holds junk hand, checks the BB. """
         self.setUp(players=2)
         next(self.br)  # SB
         next(self.br)  # BB
@@ -124,9 +121,6 @@ class TestBetting(unittest.TestCase):
 
         self.assertRaises(Exception, self.br.cpu_decision, bettor)
 
-    """
-    Tests for process_option(option)
-    """
     # CHECK - Players chips stay the same
     def test_processoption_CHECK_playerchips_staysame(self):
         self.setUp(players=2, street=2)
@@ -237,9 +231,10 @@ class TestBetting(unittest.TestCase):
         result = self.br.closer
         self.assertEqual(expected, result)
 
-    # RAISE - Full raise: bet amount raised by one betsize
-    # Seat 3 bets, seat 4 raises.
     def test_processoption_RAISE_full_equals2betsize(self):
+        """ RAISE - Full raise: bet amount raised by one betsize
+            Seat 3 bets, seat 4 raises.
+        """
         self.setUp(players=6, street=2)
         bet = 4
         next(self.br)  # Seat 3
@@ -251,6 +246,7 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_processoption_RAISE_3bet_equals3betsize(self):
+        """ RAISE - Seat 3 bets, seat 4 raises, seat 5 reraises. """
         self.setUp(players=6, street=2)
         bet = 4
         next(self.br)  # Seat 3
@@ -263,8 +259,8 @@ class TestBetting(unittest.TestCase):
         result = self.br.bet
         self.assertEqual(expected, result)
 
-    # Seat 3 bets, seat 4 raises. Closer is 3.
     def test_processoption_RAISE_resetsCloser(self):
+        """ Seat 3 bets, seat 4 raises. Closer is 3. """
         self.setUp(players=6, street=2)
         bet = 4
         next(self.br)  # Seat 3
@@ -276,13 +272,14 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_processoption_RAISE_partial(self):
+        """ Seat 3 bets, seat 4 raises. Closer is 3. """
         self.setUp(players=6, street=2)
         bet = 4
         next(self.br)  # Seat 3
         self.br.process_option(betting.Action('BET', bet))
         next(self.br)  # Seat 4
         self.br.process_option(betting.Action('RAISE', bet * 2))
-        expected = self.br.closer
+        expected = 3
         result = self.br.closer
         self.assertEqual(expected, result)
 
@@ -300,12 +297,10 @@ class TestBetting(unittest.TestCase):
         self.br.process_option(betting.Action('RAISE', 3))
         next(self.br)  # Seat 1
 
-    """
-    Tests for get_options(cost)
-    """
-    # These tests are all $2/$4(blinds $1/$2). Assume full stacks for both players.
-    # HU Preflop: SB can FOLD, CALL $1, RAISE $3
     def test_getoptions_HU_preflop_SB_FOLDCALLRAISE(self):
+        """ These tests are all $2/$4(blinds $1/$2). Assume full stacks for both players.
+            HU Preflop: SB can FOLD, CALL $1, RAISE $3.
+        """
         self.setUp(players=2, street=1)
         p = next(self.br)  # Seat 0
         expected = ['c', 'f', 'r']
@@ -315,8 +310,8 @@ class TestBetting(unittest.TestCase):
         # Verify that the SB's cost to raise reflects the blind posted
         self.assertEqual(options['r'].cost, 3)
 
-    # HU Preflop: BB can CHECK, RAISE $2 (when SB completes)
     def test_getoptions_HU_BBpreflop_SBcompletes_CHECKRAISE(self):
+        """ HU Preflop: BB can CHECK, RAISE $2 (when SB completes) """
         self.sb_completes()
         p = self.br.get_bettor()
         expected = ['c', 'r']
@@ -326,8 +321,8 @@ class TestBetting(unittest.TestCase):
         # Verify that the SB's cost to raise reflects the blind posted
         self.assertEqual(options['r'].cost, 2)
 
-    # HU Preflop: BB can FOLD, CALL $2, RAISE $4 (when SB raises)
     def test_getoptions_HU_BBpreflop_SBraises_CALLFOLDRAISE(self):
+        """ HU Preflop: BB can FOLD, CALL $2, RAISE $4 (when SB raises) """
         self.sb_raises()
         p = self.br.get_bettor()
         expected = ['c', 'f', 'r']
@@ -337,8 +332,8 @@ class TestBetting(unittest.TestCase):
         # Verify that the SB's cost to raise reflects the blind posted
         self.assertEqual(options['r'].cost, 4)
 
-    # HU Preflop: SB can FOLD, CALL $2, RAISE $4 (when BB 3-bets)
     def test_getoptions_HU_SBpreflop_BB3bets_CALLFOLDRAISE(self):
+        """ HU Preflop: SB can FOLD, CALL $2, RAISE $4 (when BB 3-bets) """
         self.sb_raises()
         self.br.process_option(betting.Action('RAISE', 4))  # BB reraises
         next(self.br)  # Seat 0
@@ -348,8 +343,8 @@ class TestBetting(unittest.TestCase):
         result = sorted(list(options.keys()))
         self.assertEqual(expected, result)
 
-    # HU Preflop: BB can FOLD, CALL $2 (when SB 4-bets - and caps)
     def test_getoptions_HU_BBpreflop_SB4bets_CALLFOLD(self):
+        """ HU Preflop: BB can FOLD, CALL $2 (when SB 4-bets - and caps) """
         self.sb_raises()
         self.br.process_option(betting.Action('RAISE', 4))  # BB reraises
         next(self.br)  # Seat 0
@@ -370,8 +365,8 @@ class TestBetting(unittest.TestCase):
         result = sorted(list(options.keys()))
         self.assertEqual(expected, result)
 
-    # HU Postflop: BB can FOLD, CALL $2, RAISE $4 (when SB bets)
     def test_getoptions_HU_BBpost_SBbets_CALLFOLDRAISE(self):
+        """ HU Postflop: BB can FOLD, CALL $2, RAISE $4 (when SB bets) """
         self.setUp(players=2, street=2)
         next(self.br)  # Seat 1
         self.br.process_option(betting.Action('BET', 4))  # SB 4-bet caps
@@ -382,9 +377,10 @@ class TestBetting(unittest.TestCase):
         result = sorted(list(options.keys()))
         self.assertEqual(expected, result)
 
-    # Tests for allins and partial bets and raises.
-    # HU Preflop: SB can FOLD, CALL $1, RAISE $3
     def test_getoptions_allinBB_ALLIN(self):
+        """ Tests for allins and partial bets and raises.
+            HU Preflop: SB can FOLD, CALL $1, RAISE $3
+        """
         self.setUp_shorty(players=2, shortstack=1, street=1)
         next(self.br)
         self.br.process_option(betting.Action('CALL', 1))
@@ -395,9 +391,10 @@ class TestBetting(unittest.TestCase):
         result = sorted(list(options.keys()))
         self.assertEqual(expected, result)
 
-    # SB is shorty, but only has $2.50, not enough for a real raise.
-    # SB can only BET, not RAISE
     def test_getoptions_3max_shortSB_cannotRaise(self):
+        """ SB is shorty, but only has $2.50, not enough for a real raise.
+            SB can only BET, not RAISE
+        """
         self.setUp_shorty(players=3, shortstack=2.50, street=1)
         next(self.br)  # Button seat 0
         self.br.process_option(betting.Action('CALL', 2))
@@ -410,8 +407,8 @@ class TestBetting(unittest.TestCase):
         # Should cost the SB exactly 1.50.
         self.assertEqual(options['b'].cost, 1.50)
 
-    # SB is shorty, but only has $3.50, just enough for a real raise.
     def test_getoptions_3max_shortSB_CALLFOLDRAISE(self):
+        """ SB is shorty, but only has $3.50, just enough for a real raise. """
         self.setUp_shorty(players=3, shortstack=3.50, street=1)
         next(self.br)  # Button seat 0
         self.br.process_option(betting.Action('CALL', 2))
@@ -424,9 +421,10 @@ class TestBetting(unittest.TestCase):
         # Should cost the SB exactly 2.50.
         self.assertEqual(options['r'].cost, 2.50)
 
-    # SB is shorty, doesn't have enough for a real raise.
-    # Players behind cannot reraise.
     def test_getoptions_3max_shortSB_BBcannotRaise(self):
+        """ SB is shorty, doesn't have enough for a real raise.
+            Players behind cannot reraise.
+        """
         self.setUp_shorty(players=3, shortstack=2.50, street=1)
         next(self.br)  # Button seat 0
         self.br.process_option(betting.Action('CALL', 2))
@@ -443,9 +441,6 @@ class TestBetting(unittest.TestCase):
         # Should cost the BB $2 to raise
         self.assertEqual(options['r'].cost, 2)
 
-    """
-    Tests for action_string(action)
-    """
     # BET
     def test_actionstring_BET(self):
         self.setUp(players=2, street=2)
@@ -494,9 +489,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.action_string(betting.CHECK)
         self.assertEqual(expected, result)
 
-    """
-    Tests for invested(player)
-    """
     # Player bet 100 during the round.
     def test_invested_playerbet100_returns100(self):
         self.setUp(players=2)
@@ -506,9 +498,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.invested(bettor)
         self.assertEqual(expected, result)
 
-    """
-    Tests for cost(self, amt_invested)
-    """
     # Street 1: Bet = 2. Player hasn't put any money in. Cost = 2.
     def test_cost_UTG_predraw_callfor2_costs2(self):
         expected = 2
@@ -529,9 +518,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.cost(self.br.get_bettor())
         self.assertEqual(expected, result)
 
-    """
-    Tests for done()
-    """
     def test_done_2playersacted_returnsTrue(self):
         self.setUp(players=2)
         expected = True
@@ -545,9 +531,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.done()
         self.assertEqual(expected, result)
 
-    """
-    Tests for set_bettor_and_closer()
-    """
     # 6 players. Predraw. BTN=0, SB=1, BB=2. closer=2, bettor=3
     def test_setbettors_w_blinds_6plyr_predraw(self):
         closer, bettor = 2, 3
@@ -575,18 +558,12 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(closer, self.br.closer)
         self.assertEqual(bettor, self.br.bettor)
 
-    """
-    Tests for set_bettors_w_antes()
-    """
     def test_setbettorswantes_seat5islow_bettor5_closer4(self):
         self.setUp_studGame()
         bettor, closer, = 5, 4
         self.assertEqual(closer, self.br.closer)
         self.assertEqual(bettor, self.br.bettor)
 
-    """
-    Tests for set_betsize(self):
-    """
     # FiveCardDraw: street 1, BB=2, betsize = 2
     def test_setbetsize_street1_betsize2(self):
         expected = 2
@@ -614,9 +591,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.betsize
         self.assertEqual(expected, result)
 
-    """
-    Tests for current_bet()
-    """
     def test_getbet_HU_street1_returns2(self):
         self.setUp(players=2, street=1)
         expected = 2
@@ -648,9 +622,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.get_bet()
         self.assertEqual(expected, result)
 
-    """
-    Tests for level()
-    """
     def test_level_0bet_returns0(self):
         self.setUp(players=2, street=2)
         expected = 0
@@ -663,8 +634,8 @@ class TestBetting(unittest.TestCase):
         result = self.br.level()
         self.assertEqual(expected, result)
 
-    # If bet=10 and betsize=4, betlevel should be 5.
     def test_level_bet12_betsize4_returns3(self):
+        """ If bet=12 and betsize=4, betlevel should be 3. """
         self.setUp(street=2)
         # 2/4, betsize = 4
         # Current bet should be 0 before this.
@@ -675,6 +646,7 @@ class TestBetting(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_level_bet10_betsize4_returns2(self):
+        """ If bet=10 and betsize=4, betlevel should be 2. """
         self.setUp(street=2)
         # 2/4, betsize = 4
         # Current bet should be 0 before this.
@@ -684,9 +656,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.level()
         self.assertEqual(expected, result)
 
-    """
-    Tests for get_bettor()
-    """
     # 6 players, new table. Preflop. BTN=0, SB=1, BB=2. bettor should be 3.
     def test_getbettor_6plyr_predraw_returnsseat3(self):
         bettor = 3
@@ -718,9 +687,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.get_bettor()
         self.assertEqual(expected, result)
 
-    """
-    # Tests for next_bettor()
-    """
     # 6 players, street 1: Current bettor=3, next should be 4
     def test_nextbettor_6players_street1_returnsPlayer4(self):
         self.br.next_bettor()
@@ -752,9 +718,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.bettor
         self.assertEqual(expected, result)
 
-    """
-    Tests for get_closer()
-    """
     # 6 players, new table. Predraw. BTN=0, SB=1, BB=2. closer should be 2.
     def test_getcloser_6plyr_predraw_returnsseat2(self):
         closer = 2
@@ -786,9 +749,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.get_closer()
         self.assertEqual(expected, result)
 
-    """
-    Tests for reopened_closer(self, bettor):
-    """
     # Ex: Heads up, seat 0 is bettor, closer = seat 1
     def test_reopenedcloser_HU_seat0reopens_returns1(self):
         self.setUp(players=2, street=1)
@@ -813,9 +773,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.reopened_closer(bettor)
         self.assertEqual(expected, result)
 
-    """
-    Tests for set_stacks(self):
-    """
     # Draw5: Blind posting
     def test_setstacks_predraw_fullstacks(self):
         self.setUp(players=2)
@@ -836,10 +793,6 @@ class TestBetting(unittest.TestCase):
         result = self.br.stacks
         self.assertEqual(expected, result)
 
-    ################################################################################
-    """
-    Tests for spacing()
-    """
     # Level 0: 0 spaces
     def test_spacing_level0_returns0spaces(self):
         expected = ''

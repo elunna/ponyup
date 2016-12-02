@@ -1,12 +1,12 @@
+"""
+  " Tests for card.py
+  """
 import unittest
 from ponyup import card
 
 
 class TestCard(unittest.TestCase):
-
-    """
-    Tests for __init__ and card construction
-    """
+    """ Tests for card.py """
     def test_init_invalidsuit_raiseEx(self):
         self.assertRaises(ValueError, card.Card, 'A', 'a')
 
@@ -28,9 +28,6 @@ class TestCard(unittest.TestCase):
         result = c.hidden
         self.assertEqual(expected, result)
 
-    """
-    Tests for str()
-    """
     def test_str_hiddenCard_returnsXx(self):
         c = card.Card('A', 's')
         expected = 'Xx'
@@ -44,10 +41,6 @@ class TestCard(unittest.TestCase):
         result = str(c)
         self.assertEqual(expected, result)
 
-    """
-    Tests for __repr__()
-    * Currently this just calls str so no tests are required.
-    """
     def test_repr_hiddenCard_returnsXx(self):
         c = card.Card('A', 's')
         expected = 'Xx'
@@ -61,9 +54,6 @@ class TestCard(unittest.TestCase):
         result = repr(c)
         self.assertEqual(expected, result)
 
-    """
-    Tests for __eq__()
-    """
     def test_eq_SameCard_returnsTrue(self):
         """ __equals__ tests that the two cards have exactly the same suit and rank."""
         c1 = card.Card('A', 's')
@@ -79,9 +69,6 @@ class TestCard(unittest.TestCase):
         result = c1 == c2
         self.assertEqual(expected, result)
 
-    """
-    Tests for __gt__
-    """
     def test_gt_HighToLow_returnsFalse(self):
         high = card.Card('A', 's')
         low = card.Card('K', 's')
@@ -103,9 +90,6 @@ class TestCard(unittest.TestCase):
         result = c2 > c1
         self.assertEqual(expected, result)
 
-    """
-    Tests for __lt__
-    """
     def test_lt_HighToLow_returnsFalse(self):
         high = card.Card('A', 's')
         low = card.Card('K', 's')
@@ -127,9 +111,6 @@ class TestCard(unittest.TestCase):
         result = c2 < c1
         self.assertEqual(expected, result)
 
-    """
-    Tests for val()
-    """
     def test_val_JOKER_Z_returns15(self):
         c = card.Card('Z', 's')
         expected = 15

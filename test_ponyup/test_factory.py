@@ -1,15 +1,16 @@
+"""
+  " Tests for factory.py
+  """
 import unittest
 from ponyup import factory
 from ponyup import player
 
 
 class TestTableFactory(unittest.TestCase):
+    """ Tests for table_factory(**new_config) """
     def setUp(self):
         self.pool = factory.make_playerpool(quantity=10)
 
-    """
-    Tests for table_factory(**new_config)
-    """
     def test_tablefactory_noseatspassed_raisesException(self):
         self.assertRaises(ValueError, factory.table_factory)
 
@@ -51,7 +52,6 @@ class TestTableFactory(unittest.TestCase):
         result = len(t)
         self.assertEqual(expected, result)
 
-    # #########################################################
     def test_tablefactory_2seat_seat0bankminusStack(self):
         t = factory.table_factory(seats=2, playerpool=self.pool)
         expected = factory.CPU_BANK_BITS - factory.DEF_STACK
@@ -132,14 +132,12 @@ class TestTableFactory(unittest.TestCase):
 
 
 class TestSessionFactory(unittest.TestCase):
+    """ Tests for session_factory(**new_config) """
     def setUp(self):
         # Make a default hero
         self.h = player.Player('Octavia', playertype="HUMAN")
         self.h.deposit(factory.CPU_BANK_BITS)
 
-    """
-    Tests for session_factory(**new_config)
-    """
     def test_sessionfactory_noseatspassed_raisesException(self):
         self.assertRaises(ValueError, factory.session_factory)
 
@@ -172,9 +170,7 @@ class TestSessionFactory(unittest.TestCase):
 
 
 class TestMakePlayerpool(unittest.TestCase):
-    """
-    Tests for make_playerpool(**new_config)
-    """
+    """ Tests for make_playerpool(**new_config) """
     # No quantity pass
     def test_makeplayerpool_noquantity_raisesException(self):
         self.assertRaises(ValueError, factory.make_playerpool)

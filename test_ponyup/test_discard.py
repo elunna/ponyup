@@ -1,3 +1,6 @@
+"""
+  " Tests for discard.py
+  """
 import unittest
 from ponyup import deck
 from ponyup import discard
@@ -8,6 +11,7 @@ from ponyup import tools
 
 
 class TestDiscard(unittest.TestCase):
+    """ Tests for discard.py """
     def setUp(self, handsize=1, human=False):
         self.d = deck.Deck()
         self.s = seat.Seat(0)
@@ -16,12 +20,9 @@ class TestDiscard(unittest.TestCase):
         else:
             self.s.player = player.Player('CPU')
 
-        for i in range(handsize):
+        for _ in range(handsize):
             self.s.hand.add(self.d.deal())
 
-    """
-    Tests for auto_discard(hand):
-    """
     # Royal flush - no discards
     def test_autodiscard_royalflush_returnsEmptyList(self):
         h = hand.Hand(tools.make('royalflush'))
@@ -216,21 +217,6 @@ class TestDiscard(unittest.TestCase):
         result = [repr(c) for c in sorted(discard.auto_discard(h))]
         self.assertEqual(expected, result)
 
-    """
-    Tests for made_hand_discards(hand, ranklist):
-    """
-
-    """
-    Tests for draw_discards(cards, ranklist):
-    """
-
-    """
-    Tests for discard_phase(_round):
-    """
-
-    """
-    Tests for discard_menu(hand):
-    """
     # Commented out because the card coloring disrupts this test.
     # 1 card in hand, shows index and card
     """
@@ -250,9 +236,7 @@ class TestDiscard(unittest.TestCase):
         result = discard.discard_menu(h)
         self.assertEqual(expected, result)
     """
-    """
-    Tests for valid_picks(hand)
-    """
+
     # Empty hand, returns empty list
     def test_validpicks_handsize0_returnEmptylist(self):
         h = hand.Hand()
@@ -276,9 +260,6 @@ class TestDiscard(unittest.TestCase):
         result = discard.valid_picks(h)
         self.assertEqual(expected, result)
 
-    """
-    Tests for get_discards(hand, picks):
-    """
     # Empty hand, raise exception
     def test_getdiscards_emptyhand_raisesException(self):
         h = hand.Hand()
@@ -317,13 +298,6 @@ class TestDiscard(unittest.TestCase):
         result = discard.get_discards(h, picks)
         self.assertEqual(expected, result)
 
-    """
-    Tests for human_discard(hand, max_discards=5):
-    """
-
-    """
-    Tests for def extract_discards(cards, keep):
-    """
     # Empty list, raise exception
     def test_extractdiscards_emptylist_raiseException(self):
         cards = []

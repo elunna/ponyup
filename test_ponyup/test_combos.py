@@ -1,3 +1,6 @@
+"""
+  " Tests for combos.py
+  """
 import unittest
 from ponyup import combos
 from ponyup import deck
@@ -5,9 +8,7 @@ from ponyup import tools
 
 
 class TestCombos(unittest.TestCase):
-    """
-    Tests for n_choose_k(n, k)
-    """
+    """ Function tests for combos.py """
     def test_nchoosek_0pick1_raiseException(self):
         self.assertRaises(ValueError, combos.n_choose_k, 0, 1)
 
@@ -39,9 +40,6 @@ class TestCombos(unittest.TestCase):
         result = combos.n_choose_k(3, 2)
         self.assertEqual(expected, result)
 
-    """
-    Tests for get_combolist(source, n)
-    """
     def test_getcombos_of1withfullDeck_52combos(self):
         d = deck.Deck()
         combosof1 = combos.get_combolist(d.cards, 1)
@@ -62,6 +60,7 @@ class TestCombos(unittest.TestCase):
         expected = 22100
         result = len(combosof3)
         self.assertEqual(expected, result)
+
     """
     def test_getcombos_of4withfullDeck_combos270725(self):
         d = deck.Deck()
@@ -78,9 +77,6 @@ class TestCombos(unittest.TestCase):
         self.assertEqual(expected, result)
     """
 
-    """
-    Tests for get_allcombos(cards)
-    """
     def test_getallcombos_emptylist_returns0(self):
         allcombos = combos.get_allcombos([])
         expected = 0
