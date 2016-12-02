@@ -1,3 +1,6 @@
+"""
+  " Factory methods for creating tables, player pools, and sessions.
+  """
 import random
 from ponyup import draw5
 from ponyup import names
@@ -14,6 +17,7 @@ STEP = 100
 
 
 def table_factory(**new_config):
+    """ Takes a config dictionary and creates a new custom Table """
     config = {
         'seats': None,
         'tablename': 'default',
@@ -87,6 +91,7 @@ def table_factory(**new_config):
 
 
 def session_factory(**new_config):
+    """ Takes a config dictionary and creates a new custom Session. """
     config = {
         'seats': None,
         'poolsize': DEFAULT_POOL,
@@ -147,6 +152,8 @@ def session_factory(**new_config):
 
 
 def make_playerpool(**new_config):
+    """ Takes a config dictionary and creates list of Player objects. """
+
     config = {
         'quantity': None,
         'game': None,

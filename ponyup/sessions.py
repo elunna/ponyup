@@ -1,3 +1,17 @@
+"""
+  " The Session object manages the general structure of a poker cash game session.
+  "
+  " It is responsible for:
+  "     * knowing the game type,
+  "     * the table,
+  "     * the stakes,
+  "     * keeping track of how many rounds have been played.
+  "     * keeping track of how long the session has lasted.
+  "     * keeping a handhistory log of all rounds played
+  "     * Keeping track of when and what players get knocked out, for purposes of altering the
+  "     blind tokens if necessary.
+  """
+
 import random
 from ponyup import games
 from ponyup import stacks
@@ -5,32 +19,16 @@ from ponyup import logger
 from ponyup import options
 from ponyup import poker
 
-"""
-The Session object manages the general structure of a poker cash game session.
-
-It is responsible for:
-    * knowing the game type,
-    * the table,
-    * the stakes,
-    * keeping track of how many rounds have been played.
-    * keeping track of how long the session has lasted.
-    * keeping a handhistory log of all rounds played
-    * Keeping track of when and what players get knocked out, for purposes of altering the
-    blind tokens if necessary.
-
-"""
-
 ENTER_CHANCE = 10.0     # as a percent
 LEAVE_CHANCE = 2.0      # as a percent
 REBUY_CHANCE = 50.0     # as a percent
 _logger = logger.get_logger(__name__)
 
 
-class Session():
+class Session(object):
+    """ Manages a series of poker Rounds. """
     def __init__(self, gametype):
-        """
-        Initialize the poker Session settings.
-        """
+        """ Initialize the poker Session settings. """
         self.gametype = gametype
         self.streets = games.GAMES[gametype]
         self.blinds = None
@@ -41,9 +39,7 @@ class Session():
         self.playerpool = None
 
     def __str__(self):
-        """
-        Return info about the current Session.
-        """
+        """ Return info about the current Session. """
         _str = '{} -- {} {}\n'.format(self.table.name, self.blinds.stakes(), self.gametype)
         _str += 'Round: {}\n'.format(self.rounds)
         return _str
@@ -54,9 +50,7 @@ class Session():
         return r
 
     def play(self):
-        """
-        Defines the structure of how a single hand in the poker game is played.
-        """
+        """ Defines the structure of how a single hand in the poker game is played. """
         print('Stub play function')
 
     def find_hero(self):
@@ -67,9 +61,10 @@ class Session():
                 return s
 
     def clear_broke_players(self):
+        """ Remove all the seats that have 0 chips.
+            Returns a string showing what happened.
         """
-        Remove all the seats that have 0 chips. Return a string showing what happened.
-        """
+
         _logger.debug('Finding all broke players.')
         broke_players = self.table.get_broke_players()
         _str = ''
@@ -82,6 +77,7 @@ class Session():
         return _str
 
     def table_maintainance(self):
+        """ Performs player maintenance between rounds. """
         _logger.debug('Performing table maintenance.')
         _logger.debug('Removing broke players.')
         print(self.clear_broke_players())
@@ -94,11 +90,11 @@ class Session():
             self.yank_from_table()
 
     def repopulate(self):
-        """
-        If there are free seats, we'll take a random chance that a new player will occupy a
-        seat. If there is only one player at the table (ie: probably the human), then we MUST
-        add a new player to play. Otherwise, the chance a new player will arrive will be rather
-        low, ~5-10%, to give some variety in the game play.
+        """ If there are free seats, we'll take a random chance that a new player
+            will occupy a seat. If there is only one player at the table
+            (ie: probably the human), then we MUST add a new player to play.
+            Otherwise, the chance a new player will arrive will be rather low,
+            ~5-10%, to give some variety in the game play.
         """
         _logger.debug('Checking how many free seats there are.')
         freeseats = self.table.get_free_seats()
@@ -129,9 +125,7 @@ class Session():
         return True
 
     def yank_from_table(self):
-        """
-        Makes a random player (not including the hero) standup and leave the table.
-        """
+        """ Makes a random player (not including the hero) standup and leave.  """
         # If there are only 2 players, ignore this.
         if len(self.table.get_players()) == 2:
             _logger.debug('There are only 2 players at the table, cannot make any randomly leave.')
@@ -159,10 +153,12 @@ class Session():
                     return True
 
     def return_to_pool(self, player):
+        """ Removes a player from the Session and returns them to the player pool. """
         _logger.debug('Returning player {} to the player pool'.format(player))
         self.playerpool.append(player)
 
     def yank_from_pool(self):
+        """ Removes a player from the player pool to add to the Session's table. """
         _logger.debug('Finding a player to yank from the player pool.')
         if len(self.playerpool) == 0:
             _logger.debug('The player pool is empty.')

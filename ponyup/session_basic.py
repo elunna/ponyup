@@ -8,9 +8,7 @@ class PokerSession(sessions.Session):
         self.blinds = blinds.Blinds(bringin=True)
 
     def play(self):
-        """
-        Deals out 5 card poker.
-        """
+        """ Deals out 5 card poker. """
         r = self.new_round()
         DEALT = 5
         r.deal_cards(DEALT)

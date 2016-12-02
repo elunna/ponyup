@@ -1,38 +1,30 @@
+"""
+  " Manages the player database so we can save and load human players.
+  """
 import sqlite3
-from ponyup import logger
 from ponyup import player
 
-_logger = logger.get_logger(__name__)
 DB = 'data/game.db'
 
 
 def load_player(name):
+    """ Gets the username, checks for any previous player info and loads the
+        player. Returns a Player object.
     """
-    Gets the username, checks for any previous player info and loads the player. Returns a
-    Player object.
-    """
-    _logger.debug('Attempting to load player from sqlite3 database.')
     p = player_exists(name)
     if p:
         p = player.Player(name=p[0], bank=p[1], playertype="HUMAN")
-        _logger.debug('Loaded player {}'.format(p))
-        _logger.debug('Bank: {}'.format(p.bank))
-    else:
-        _logger.info('Player {} not found'.format(name))
     return p
 
 
 def new_player(name):
-    _logger.debug('Attempting to create new player in sqlite3 database.')
+    """ Create new player in sqlite3 database """
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     p = player_exists(name)
     result = False
-    if p:
-        _logger.info('Player already exists in database!')
-    else:
+    if not p:
         c.execute('INSERT INTO players VALUES("{}",{})'.format(name, player.HUMAN_BANK_BITS))
-        _logger.info('Created new player {}'.format(name))
         result = True
 
     conn.commit()
@@ -42,16 +34,12 @@ def new_player(name):
 
 
 def update_player(plyr):
-    """
-    Saves the Player current stats to the database.
-    """
-    _logger.debug('Attempting to update player info in sqlite3 database.')
+    """ Saves the Player current stats to the database. """
     if plyr:
         conn = sqlite3.connect(DB)
         c = conn.cursor()
 
         c.execute('UPDATE players SET bank = {} WHERE name = "{}"'.format(plyr.bank, plyr.name))
-        _logger.debug('Set {}\'s bank amount to {}.'.format(plyr, plyr.bank))
         conn.commit()
         c.close()
         conn.close()
@@ -61,7 +49,7 @@ def update_player(plyr):
 
 
 def player_exists(name):
-    _logger.debug('Checking if a player exists in the sqlite3 database.')
+    """ Checks if a player exists in the sqlite3 database. """
     conn = sqlite3.connect(DB)
     c = conn.cursor()
 
@@ -69,10 +57,7 @@ def player_exists(name):
     names = [(r[0], r[1]) for r in rows]
     result = False
 
-    if len(names) == 0:
-        _logger.debug('Player {} not in database.'.format(name))
-    elif len(names) > 1:
-        _logger.error('Player has more than one entry in the database!')
+    if len(names) > 1:
         raise Exception('Player has more than one entry in the database!')
     else:
         result = names[0]
@@ -83,10 +68,7 @@ def player_exists(name):
 
 
 def get_players():
-    """
-    Get a list of all players from the database.
-    """
-    _logger.debug('Querying sqlite3 database for all players.')
+    """ Get a list of all players from the database. """
     conn = sqlite3.connect(DB)
     c = conn.cursor()
 
@@ -98,16 +80,13 @@ def get_players():
 
 
 def del_player(name):
-    _logger.debug('Attempting to delete a player from the sqlite3 database.')
+    """ Removes a player from the database. """
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     result = False
     if player_exists(name):
         c.execute('DELETE FROM players WHERE name = "{}"'.format(name))
-        _logger.info('Player {} deleted.'.format(name))
         result = True
-    else:
-        _logger.debug('Player {} not found in database.'.format(name))
 
     conn.commit()
     c.close()

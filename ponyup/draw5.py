@@ -1,17 +1,19 @@
+"""
+  " Manages a Draw Five Poker session.
+  """
 from ponyup import blinds
 from ponyup import sessions
 from ponyup import discard
 
 
 class Draw5Session(sessions.Session):
+    """ Five Card Draw poker session """
     def __init__(self):
         super().__init__(gametype="FIVE CARD DRAW")
         self.blinds = blinds.Blinds()
 
     def play(self):
-        """
-        Play a round of Five Card Draw.
-        """
+        """ Play a round of Five Card Draw. """
         DEALT = 5
         self.table.move_button()
         r = self.new_round()
@@ -21,7 +23,7 @@ class Draw5Session(sessions.Session):
         r.sortcards()
         r.log_holecards()
 
-        for s in self.streets:
+        for _ in self.streets:
             if r.street == 1:
                 discard.discard_phase(r)
                 r.sortcards()

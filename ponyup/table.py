@@ -1,3 +1,8 @@
+"""
+  " The table manages Seats and is a source of different kinds of info useful to
+  " conducting a poker game.
+  """
+
 from __future__ import print_function
 import random
 from ponyup import card
@@ -6,7 +11,8 @@ from ponyup import seat
 VALID_SIZES = list(range(2, 10))
 
 
-class Table():
+class Table(object):
+    """ Manages a table of seats """
     def __init__(self, size):
         if size not in VALID_SIZES:
             raise ValueError('Not a valid table size!')
@@ -15,9 +21,7 @@ class Table():
         self.seats = [seat.Seat(i) for i in range(size)]
 
     def __str__(self):
-        """
-        Return the string representation of the table, with colors.
-        """
+        """ Return the string representation of the table, with colors. """
         _str = '\n'
         _str = '{:5}{:7}{:7}{:20}{:<17}{:16}\n'.format(
             'Seat', 'Blinds', 'Dealer', 'Player', 'Chips', 'Hand')
@@ -61,23 +65,17 @@ class Table():
         return _str
 
     def __len__(self):
-        """
-        Return the total # of seats.
-        """
+        """ Return the total # of seats. """
         return len(self.seats)
 
     def __iter__(self):
-        """
-        Creates an iterator for the table seats. Iterates over all seats, empty or not.
-        """
+        """ Creates an iterator for the table seats. Iterates over all seats, empty or not. """
         self.counter = 0
         self.seat_tup = tuple(s for s in self.seats)
         return self
 
     def __next__(self):
-        """
-        Move to the next seat in the iterator.
-        """
+        """ Move to the next seat in the iterator. """
         if self.counter > len(self.seat_tup) - 1:
             raise StopIteration
         p = self.seat_tup[self.counter]
@@ -85,19 +83,17 @@ class Table():
         return p
 
     def __contains__(self, player):
-        """
-        Returns True if the player is occupying a seat at the table, False otherwise.
+        """ Returns True if the player is occupying a seat at the table,
+            False otherwise.
         """
         for s in self:
             if s.player == player:
                 return True
-        else:
-            return False
+        return False
 
     def add_player(self, index, player):
-        """
-        Adds the player to the seat at the index.
-        Returns True if successful, False otherwise.
+        """ Adds the player to the seat at the index.
+            Returns True if successful, False otherwise.
         """
         # Check if the player is already sitting.
         if player.name in [s.player.name for s in self if s.occupied()]:
@@ -110,9 +106,8 @@ class Table():
             return False
 
     def pop(self, index):
-        """
-        Removes and returns a player from a given seat index. If the seat is empty, raises a
-        ValueError exception.
+        """ Removes and returns a player from a given seat index. If the seat is
+            empty, raises a ValueError exception.
         """
         s = self.seats[index]
         if s.vacant():
@@ -122,20 +117,18 @@ class Table():
             return p
 
     def get_index(self, player):
-        """
-        Tries to find the player in the table and returns it's index. Returns -1 if it can't
-        find the player.
+        """ Tries to find the player in the table and returns it's index.
+            Returns -1 if it can't find the player.
         """
         for i, s in enumerate(self.seats):
             if s.player == player:
                 return i
-        else:
-            return -1
+        return -1
 
     def get_players(self, hascards=False, haschips=False):
-        """
-        Returns a list of seats at the table. If the button is set, it is ordered from first
-        after button, to Button Last. Can specify if seats have cards and/or chips.
+        """ Returns a list of seats at the table. If the button is set, it is
+            ordered from first after button, to Button Last. Can specify if seats
+            have cards and/or chips.
         """
         if self.TOKENS['D'] == -1:
             btn = 0
@@ -157,11 +150,11 @@ class Table():
         return seatlist
 
     def next_player(self, from_seat, step=1, hascards=False):
-        """
-        Attempts to find the index of the next valid player from the from_seat. If step is -1
-        it will search backwards on the table. Step can only be 1 or -1. We can also specify to
-        search for the next player with cards by setting hascards to True. If no player is found
-        after searching the length of the table, an exception is raised.
+        """ Attempts to find the index of the next valid player from the from_seat.
+            If step is -1 it will search backwards on the table. Step can only be
+            1 or -1. We can also specify to search for the next player with cards
+            by setting hascards to True. If no player is found after searching
+            the length of the table, an exception is raised.
         """
         if from_seat < -1 or from_seat >= len(self):
             raise ValueError('from_seat is out of bounds!')
@@ -170,31 +163,27 @@ class Table():
 
         length = len(self)
         for i in range(1, length + 1):
-            seat = (from_seat + (i * step)) % length
-            s = self.seats[seat]
+            _seat = (from_seat + (i * step)) % length
+            s = self.seats[_seat]
 
             if s.vacant():
                 continue
             elif hascards and not s.has_hand():
                 continue
-            return seat
+            return _seat
 
-        else:
-            raise Exception('Error finding player!')
+        raise Exception('Error finding player!')
 
     def get_broke_players(self):
-        """
-        Returns a list of all the seats that have no chips in front of them.
-        """
+        """ Returns a list of all the seats that have no chips in front of them. """
         return [s for s in self if s.occupied() and s.has_chips() is False]
 
     def get_free_seats(self):
+        """ Returns a list of all seats that are vacant. """
         return [s for s in self if s.vacant()]
 
     def get_playerdict(self):
-        """
-        Returns a dictionary of seat indexes and players.
-        """
+        """ Returns a dictionary of seat indexes and players. """
         players = {}
         for i, s in enumerate(self.seats):
             if s.occupied():
@@ -202,24 +191,18 @@ class Table():
         return players
 
     def stackdict(self):
-        """
-        Returns a seat number/stacksize dictionary for each player at the table.
-        """
+        """ Returns a seat number/stacksize dictionary for each player at the table. """
         stacks = {}
         for s in self:
             stacks[s.NUM] = s.stack
         return stacks
 
     def stacklist(self):
-        """
-        Returns a list of all the stack sizes.
-        """
+        """ Returns a list of all the stack sizes. """
         return [s.stack for s in self]
 
     def player_listing(self):
-        """
-        Returns the list of seats with players and stacks, for the hand history.
-        """
+        """ Returns the list of seats with players and stacks, for the hand history. """
         _str = ''
         for i, s in enumerate(self.seats):
             if s.player is None:
@@ -229,9 +212,7 @@ class Table():
         return _str
 
     def move_button(self):
-        """
-        Moves the button to the next valid player/seat and sets the blinds.
-        """
+        """ Moves the button to the next valid player/seat and sets the blinds. """
         self.TOKENS['D'] = self.next_player(self.TOKENS['D'])
 
     def set_blinds(self):
@@ -245,31 +226,29 @@ class Table():
             raise ValueError('Not enough players at the table!')
 
     def set_bringin(self):
+        """ Finds which player has the lowest showing card and sets that player
+            to the bringin. Also sets the button the player to the right. If
+            reverse is true, we find the highest card instead.
         """
-        Finds which player has the lowest showing card and sets that player to the bringin.
-        Also sets the button the player to the right. If reverse is true, we find the highest
-        card instead.
-        """
-        seat = None
+        _seat = None
         lowcard = card.Card('Z', 's')  # Start high
 
         for s in self:
             c = s.hand.get_upcards()[0]
             if c.rank < lowcard.rank:
-                lowcard, seat = c, s
+                lowcard, _seat = c, s
             elif c.rank == lowcard.rank:
                 if card.SUITVALUES[c.suit] < card.SUITVALUES[lowcard.suit]:
-                    lowcard, seat = c, s
+                    lowcard, _seat = c, s
 
-        self.TOKENS['BI'] = seat.NUM
+        self.TOKENS['BI'] = _seat.NUM
         self.TOKENS['D'] = self.next_player(self.TOKENS['BI'], -1)
 
-        return '{} has the lowest showing card.'.format(seat.player)
+        return '{} has the lowest showing card.'.format(_seat.player)
 
     def randomize_button(self):
-        """
-        Places the button at a random player's seat. If there is no players at the table, it
-        raises an Exception."
+        """ Places the button at a random player's seat. If there is no players
+            at the table, it raises an Exception.
         """
         seats = list(self.get_playerdict().keys())
         if len(seats) == 0:
@@ -277,10 +256,8 @@ class Table():
         choice = random.choice(seats)
         self.TOKENS['D'] = choice
 
-    def position(self, seat, postflop=False):
-        """
-        Returns how many seats from the button the seat is.
-        """
+    def position(self, _seat, postflop=False):
+        """ Returns how many seats from the button the seat is. """
         # Raise an exception if the button is not set
 
         if postflop:
@@ -288,4 +265,4 @@ class Table():
         else:
             seats = self.get_players()
 
-        return len(seats) - seats.index(seat) - 1
+        return len(seats) - seats.index(_seat) - 1

@@ -1,12 +1,13 @@
+"""
+  " Tools for using the Joker in a playing card games.
+  """
 from ponyup import card
 from ponyup import deck
 from ponyup import evaluator
 
 
 def pick_joker(cards):
-    """
-    Picks the best card for the joker to represent for a group of cards.
-    """
+    """ Picks the best card for the joker to represent for a group of cards.  """
     # If the Joker is in the pile of cards, remove it for analysis.
     if card.JOKER1 in cards:
         cards.remove(card.JOKER1)

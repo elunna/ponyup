@@ -1,3 +1,7 @@
+"""
+  " Strategies for Draw 5 computer players
+  """
+
 from ponyup import ranges
 from ponyup import tools
 

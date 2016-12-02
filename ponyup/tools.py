@@ -1,5 +1,7 @@
-from ponyup import card
-from ponyup import deck
+"""
+  " Tools for testing and manipulation of cards and poker hands.
+  """
+from ponyup import card, deck
 
 # These are constants to help with computer AI
 HI_9x = 900
@@ -114,6 +116,7 @@ def make(hand_name, hidden=False):
 
 
 def deal_5stud_test_hands(table):
+    """ Deals out some preset 5 card stud starting hands for testing. """
     hands = []
     hands.append(convert_to_cards(['As', 'Ah']))
     hands.append(convert_to_cards(['Ks', 'Kh']))
@@ -139,6 +142,8 @@ def deal_list_to_table(table, cards, faceup=False):
 
 
 def deal_stud5(table, matchingranks=0):
+    """ Deals out some preset 5 card stud starting hands for testing. """
+
     # These cards are meant to be dealt face-down
     downcards = convert_to_cards(['As', 'Ks', 'Qs', 'Js', 'Ts', '9s', '2d', '3d', '4d',
                                   '2s', '3s', '4s'])
@@ -177,13 +182,13 @@ def deal_random_cards(table, qty=5):
     d = deck.Deck()
 
     for s in table:
-        for i in range(qty):
+        for _ in range(qty):
             s.hand.add(d.deal())
 
 
 def get_cards(qty):
     d, cards = deck.Deck(), []
-    for i in range(qty):
+    for _ in range(qty):
         c = d.deal()
         c.hidden = False
         cards.append(c)

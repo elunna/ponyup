@@ -1,15 +1,17 @@
-from collections import namedtuple
-import sqlite3
-
 """
 This lobby listing is a list of all the available cash tables a pony can play
 at. Each has: Table name, seats, stakes level, game type.
 """
-Game = namedtuple('Game', ['tablename', 'game', 'seats', 'level', 'stakes',  'format'])
+
+from collections import namedtuple
+import sqlite3
+
+Game = namedtuple('Game', ['tablename', 'game', 'seats', 'level', 'stakes', 'format'])
 DB = 'data/game.db'
 
 
-class Lobby():
+class Lobby(object):
+    """ Collection of available games the user can play in """
     def __init__(self):
         # Import the database to Game namedtuples
         self.conn = sqlite3.connect(DB)
@@ -23,8 +25,7 @@ class Lobby():
         for t in self.all_tables():
             if t.tablename == name:
                 return t
-        else:
-            return None
+        return None
 
     def all_tables(self):
         return [Game(*g) for g in self.c.execute('SELECT * FROM games')]
@@ -48,8 +49,8 @@ class Lobby():
         games = self.c.execute('SELECT * FROM games WHERE stakes="{}"'.format(stakes))
         return [Game(*g) for g in games]
 
-    def filter_by_format(self, format):
-        games = self.c.execute('SELECT * FROM games WHERE format="{}"'.format(format))
+    def filter_by_format(self, fmt):
+        games = self.c.execute('SELECT * FROM games WHERE format="{}"'.format(fmt))
         return [Game(*g) for g in games]
 
 

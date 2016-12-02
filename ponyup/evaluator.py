@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """ Evaluates poker hands """
 
 from __future__ import print_function
@@ -38,9 +37,7 @@ DRAWTYPES = {
 
 
 def is_validhand(cards):
-    """
-    Returns True if the cardlist is 5 unique cards."
-    """
+    """ Returns True if the cardlist is 5 unique cards. """
     if len(cards) > 5:
         return False
     elif len(cards) < 5:
@@ -51,11 +48,10 @@ def is_validhand(cards):
 
 
 def dominant_suit(cards):
-    """
-    Finds which suit occurs with the greatest frequency in a list of Cards. If there are an
-    equal # of suits between cards, count the higher ranked cards.  If a tie is further needed
-    to be broken because the suited cards are the same rank, break the tie by using the
-    traditional ranking of suits.
+    """ Finds which suit occurs with the greatest frequency in a list of Cards.
+        If there are an equal # of suits between cards, count the higher ranked
+        cards.  If a tie is further needed to be broken because the suited cards
+        are the same rank, break the tie by using the traditional ranking of suits.
     """
     # First create a dictionary to count the suits
     suitdict = suitedcard_dict(cards)
@@ -87,9 +83,7 @@ def dominant_suit(cards):
 
 
 def is_suited(cards):
-    """
-    Returns True if all the cards in the list match the same suit.
-    """
+    """ Returns True if all the cards in the list match the same suit. """
     suit = cards[0].suit
     for c in cards:
         if c.suit != suit:
@@ -98,9 +92,8 @@ def is_suited(cards):
 
 
 def is_straight(cards):
-    """
-    Check the list of cards to see if it is a valid straight. If it is, returns the highest rank
-    in straight, otherwise returns -1.
+    """ Check the list of cards to see if it is a valid straight. If it is,
+        returns the highest rank in straight, otherwise returns -1.
     """
     if not is_validhand(cards):
         return 0
@@ -110,14 +103,12 @@ def is_straight(cards):
     for c, r in zip(sorted(cards), [2, 3, 4, 5, 14]):
         if c.val() != r:
             return 0
-    else:
-        return 5
+    return 5
 
 
 def score_ranklist(ranklist):
-    """
-    Calculates and returns the score of a sorted list of 5 cards.
-    Precondition:  Hand should be ordered by highest value first, lowest last
+    """ Calculates and returns the score of a sorted list of 5 cards.
+        Precondition: Hand should be ordered by highest value first, lowest last
     """
     score = 0
     for i, c in enumerate(ranklist):
@@ -126,9 +117,8 @@ def score_ranklist(ranklist):
 
 
 def score_cardlist(cards):
-    """
-    Calculates and returns the score of a sorted list of 5 cards.
-    Precondition:  Hand should be ordered by highest value first, lowest last
+    """ Calculates and returns the score of a sorted list of 5 cards.
+        Precondition:  Hand should be ordered by highest value first, lowest last
     """
     score = 0
     for i, c in enumerate(sorted(cards)):
@@ -141,9 +131,7 @@ def score_cardlist(cards):
 
 
 def get_type(value):
-    """
-    # Determine the type of hand given the numerical value
-    """
+    """ Determine the type of hand given the numerical value. """
     if value < 0:
         return 'INVALID'
     else:
@@ -152,16 +140,15 @@ def get_type(value):
     for v in HANDTYPES:
         if HANDTYPES[v] == roundedval:
             return v
-    else:
-        raise ValueError('Type error: Cannot find type!')
+    raise ValueError('Type error: Cannot find type!')
 
 
 def get_value(cards):
-    """
-    Takes a list of cards, calculates the highest hand rank it qualifies for and returns its
-    integer value. If a hand is less than 5 cards, we can still calculate what type of hand
-    it is("pair", "two pair", etc), but having less than 5 cards automatically filters out the
-    hands that require 5: straights, flushes, full house, etc.
+    """ Takes a list of cards, calculates the highest hand rank it qualifies for
+        and returns its integer value. If a hand is less than 5 cards, we can
+        still calculate what type of hand it is("pair", "two pair", etc), but
+        having less than 5 cards automatically filters out the hands that require
+        5: straights, flushes, full house, etc.
     """
     #  cards = sorted(cards, key=lambda x: card.RANKS[x.rank])
     #  ranklist = rank_list(cards)
@@ -195,6 +182,9 @@ def get_value(cards):
 
 
 def score_pair_hands(cards):
+    """ Calculates the value of a hand that fits into the 'pair type' category:
+        pairs, two-pairs, sets, full-houses, and quads.
+    """
     ranklist = rank_list(sorted(cards))
 
     # Returns the value of a pair-type hand.
@@ -215,9 +205,7 @@ def score_pair_hands(cards):
 
 
 def get_description(value, cards):
-    """
-    Returns a fitting text description of the passed pokerhand.
-    """
+    """ Returns a text description of the passed pokerhand. """
     ranks = rank_list(cards)
     RANK = get_type(value)
     BASEVALUE = 10000000000
@@ -242,9 +230,8 @@ def get_description(value, cards):
 
 
 def find_best_hand(cards):
-    """
-    Takes a list of cards and determines the best available 5 card hand and returns that
-    hand as a Hand.
+    """ Takes a list of cards and determines the best available 5 card hand and
+        returns that hand as a Hand.
     """
     if len(cards) < HANDSIZE:
         return None
@@ -260,16 +247,14 @@ def find_best_hand(cards):
 
 
 def is_set(items):
-    """
-    Return False if items contains any duplicate entries and True if they are all unique.
+    """ Return False if items contains any duplicate entries and True if they
+        are all unique.
     """
     return len(set(items)) == len(items)
 
 
 def rank_dict(cards):
-    """
-    Returns a dictionary of rank/counts for the list of cards.
-    """
+    """ Returns a dictionary of rank/counts for the list of cards. """
     ranks = {}
     for c in cards:
         ranks[c.rank] = ranks.get(c.rank, 0) + 1
@@ -277,9 +262,8 @@ def rank_dict(cards):
 
 
 def rank_list(cards):
-    """
-    Returns a list of quantity/rank pairs by making a rank dictionary, converting it to a list
-    and sorting it by rank.
+    """ Returns a list of quantity/rank pairs by making a rank dictionary,
+        converting it to a list and sorting it by rank.
     """
     ranks = rank_dict(cards)
     L = [Ranklist(quantity=ranks[r], rank=r) for r in ranks]
@@ -288,9 +272,7 @@ def rank_list(cards):
 
 
 def suit_dict(cards):
-    """
-    Returns a dictionary of quantity/suit pair counts.
-    """
+    """ Returns a dictionary of quantity/suit pair counts. """
     suits = {}
     for c in cards:
         suits[c.suit] = suits.get(c.suit, 0) + 1
@@ -298,9 +280,8 @@ def suit_dict(cards):
 
 
 def suitedcard_dict(cards):
-    """
-    Returns a dictionary of suits and card lists. Useful for dividing a list of cards
-    into all the separate suits.
+    """ Returns a dictionary of suits and card lists. Useful for dividing a list
+        of cards into all the separate suits.
     """
     suits = {}
     for c in cards:
@@ -310,16 +291,13 @@ def suitedcard_dict(cards):
 
 
 def count_suit(cards, suit):
-    """
-    Counts how many cards of the given suit occur in the card list.
-    """
+    """ Counts how many cards of the given suit occur in the card list. """
     return sum(1 for c in cards if c.suit == suit)
 
 
 def get_gap(card1, card2):
-    """
-    Return how many spaces are between the ranks of 2 cards.
-    Example: For 87, 8 - 7 = 1, but the gap is actually 0. Paired cards have no gap.
+    """ Return how many spaces are between the ranks of 2 cards.
+        Example: For 87, 8 - 7 = 1, but the gap is actually 0. Paired cards have no gap.
     """
     if card1.rank == card2.rank:
         return -1
@@ -328,9 +306,8 @@ def get_gap(card1, card2):
 
 
 def get_allgaps(cards):
-    """
-    Takes a list of cards and determines how many gaps are between all the ranks (when
-    they occur in sorted order. Should work regardless of order
+    """ Takes a list of cards and determines how many gaps are between all the
+        ranks (when they occur in sorted order. Should work regardless of order.)
     """
     ordered = sorted(cards)
     gaps = 0
@@ -338,7 +315,7 @@ def get_allgaps(cards):
     for i, c in enumerate(ordered):
         if i == len(cards) - 1:
             break
-        g = get_gap(ordered[i], ordered[i + 1])
+        g = get_gap(c, ordered[i + 1])
         if g == -1:
             raise ValueError('Pair detected while attempting to parse connected cards!')
         gaps += g
@@ -346,27 +323,24 @@ def get_allgaps(cards):
 
 
 def strip_ranks(cards, ranks):
-    """
-    Takes a list of cards, removes the rank(s) given, and returns a list of the leftovers.
-    There can be more than one rank passed.
+    """ Takes a list of cards, removes the rank(s) given, and returns a list of
+        the leftovers.  There can be more than one rank passed.
     """
     return [c for c in cards if c.rank not in ranks]
 
 
 def strip_suits(cards, suits):
-    """
-    Takes a list of cards, removes the suit given, and returns a list of the leftovers.
-    There can only be one suit passed.
+    """ Takes a list of cards, removes the suit given, and returns a list of the
+        leftovers. There can only be one suit passed.
     """
     return [c for c in cards if c.suit not in suits]
 
 
 def chk_wheel(cards):
-    """
-    Check if the group of cards(passed as a rank dictionary) counts as a wheel draw. The
-    requirements are that an Ace must be present in the group of cards and that all other cards
-    must be no higher than a 5.  There must also be no pairs present, otherwise the order of the
-    draw will be disrupted.
+    """ Check if the group of cards(passed as a rank dictionary) counts as a wheel
+        draw. The requirements are that an Ace must be present in the group of
+        cards and that all other cards must be no higher than a 5.  There must
+        also be no pairs present, otherwise the order of the draw will be disrupted.
     """
     rankdict = rank_dict(cards)
     wheelcards = ['A', '2', '3', '4', '5']
@@ -377,11 +351,16 @@ def chk_wheel(cards):
             return False
         elif v > 1:
             return False
-    else:
-        return True
+    return True
 
 
 def chk_straight_draw(cards, qty, gap):
+    """ Check for wheel draws, we should only have to check the first x cards,
+        where x is qty-1, because the Ace takes out one card. For this exceptional
+        case, we will ignore the gap because wheel draws are inherently gapped
+        anyway. We also add this to the draws list first so that if a better draw
+        comes up later it will be used instead.
+    """
     # Remove any extra pairs first - they interfere with checking straight draws.
     pared = remove_pairs(cards)
 
@@ -390,10 +369,6 @@ def chk_straight_draw(cards, qty, gap):
 
     draws = []
 
-    # Check for wheel draws, we should only have to check the first x cards, where x is qty-1,
-    # because the Ace takes out one card. For this exceptional case, we will ignore the gap
-    # because wheel draws are inherently gapped anyway. We also add this to the draws list first
-    # so that if a better draw comes up later it will be used instead.
     if max(pared).rank == 'A':
         # Take the low cards and add the Ace (which should be at the end of the sorted list.
         aceslice = pared[0: qty - 1]
@@ -414,9 +389,7 @@ def chk_straight_draw(cards, qty, gap):
 
 
 def remove_pairs(cards):
-    """
-    Goes through a list of cards and removes any extra pairs.
-    """
+    """ Goes through a list of cards and removes any extra pairs. """
     cards = sorted(cards)
     newlist = []
     for i, c in enumerate(sorted(cards)):

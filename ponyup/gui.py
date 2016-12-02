@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+  " Module for running the poker game in a tkinter GUI
+  """
 
 #  from tkinter import *
 import tkinter as tk
@@ -44,9 +47,9 @@ class SplashScreen(tk.Frame):
         title2.config(smconf)
         title2.pack(side=tk.TOP)
 
-        credits = tk.Label(self, text='AoristTwilist Productions(2016)')
-        credits.config(smconf)
-        credits.pack(side=tk.TOP)
+        company = tk.Label(self, text='AoristTwilist Productions(2016)')
+        company.config(smconf)
+        company.pack(side=tk.TOP)
 
         author = tk.Label(self, text='Author: Erik Lunna')
         author.config(smconf)
@@ -54,6 +57,7 @@ class SplashScreen(tk.Frame):
 
 
 class MainMenu(tk.Frame):
+    """ Main menu screen and lobby """
     def __init__(self, parent=None):
         tk.Frame.__init__(self, parent)
         self.pack()
@@ -79,16 +83,16 @@ class MainMenu(tk.Frame):
 
     def dont(self):
         print('Octavia cellos')
-        pass
 
 
 class Lobby(tk.Frame):
     def __init__(self, parent=None):
         tk.Frame.__init__(self, parent)
         self.pack()
-        pass
 
-if __name__ == "__main__":
+
+def main():
+    """ Main entry point """
     root = tk.Tk()
     SplashScreen(root).pack()
     QuitButton(root).pack()
@@ -97,3 +101,7 @@ if __name__ == "__main__":
     tk.Button(text='Poker', command=(lambda: mb.showerror('Pokerz', errmsg))).pack(fill=tk.X)
 
     root.mainloop()
+
+
+if __name__ == "__main__":
+    main()

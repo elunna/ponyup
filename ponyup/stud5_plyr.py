@@ -1,3 +1,6 @@
+"""
+  " Strategies for Five Stud computer players
+  """
 from ponyup import ranges
 from ponyup import tools
 

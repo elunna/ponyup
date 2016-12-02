@@ -1,21 +1,20 @@
 """
-Considerations when planning a play:
-    * Cards
-    * Position
-    * Stacksizes
-    * Size of pot, Pot odds, and Implied odds. Also negative implied odds.
-    * Number and type of opponents
-    * Action beforehand and potential action ahead
-    * Game/street situation
-    * Meta-game reasons - influence image, bluffing, etc.
-To greatly simplify, we'll just start with cards and handvalue.
-"""
+  " Artificial intelligence for generating poker plays.
+  " Considerations when planning a play:
+  "     * Cards
+  "     * Position
+  "     * Stacksizes
+  "     * Size of pot, Pot odds, and Implied odds. Also negative implied odds.
+  "     * Number and type of opponents
+  "     * Action beforehand and potential action ahead
+  "     * Game/street situation
+  "     * Meta-game reasons - influence image, bluffing, etc.
+  " To greatly simplify, we'll just start with cards and handvalue.
+  """
 
 
 def makeplay(seat, options, street, betlevel, facing):
-    """
-    Determines the appropriate play based on the street and handstrength.
-    """
+    """ Determines the appropriate play based on the street and handstrength. """
     handval = seat.hand.value()
     strat = seat.player.strategies[street + 1]
 
@@ -47,9 +46,8 @@ def makeplay(seat, options, street, betlevel, facing):
 
 
 def pick_raise(options):
-    """
-    Pick the most aggressive action available
-    RAISE > BET > CALL
+    """ Pick the most aggressive action available.
+        RAISE > BET > CALL
     """
     if 'r' in options:
         return options['r']
@@ -60,9 +58,8 @@ def pick_raise(options):
 
 
 def pick_call(options):
-    """
-    Pick the 1-bet option
-    BET > CALL
+    """ Pick the 1-bet option
+        BET > CALL
     """
     if 'b' in options:
         return options['b']
@@ -71,9 +68,8 @@ def pick_call(options):
 
 
 def pick_fold_or_check(options):
-    """
-    Pick the passive option
-    FOLD or check/call
+    """ Pick the passive option
+        FOLD or check/call
     """
     if 'f' in options:
         return options['f']

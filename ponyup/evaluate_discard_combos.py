@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+  " Runs a brute force simulation to see what the best discard option is to
+  " improve to a high hand.
+  """
 from ponyup import combos
 from ponyup import deck
 from ponyup import evaluator
@@ -12,7 +16,7 @@ RANK = tools.TRIPS
 
 
 def find_best_discard(cards):
-    # Create a new deck
+    """ Finds the best discard in the poker hand. """
     d = deck.Deck()
 
     # Remove the cards in the card list from the deck
@@ -74,7 +78,8 @@ def rm_discards(cards, discards):
         cards.remove(x)
     return cards
 
-if __name__ == "__main__":
+
+def main():
     h = tools.make('OESD', hidden=False)
     print(h)
     d, c = find_best_discard(h)
@@ -82,3 +87,6 @@ if __name__ == "__main__":
     print('The best discard for {} is {}.'.format(h, d))
     print('There is a {}% chance of improving to {} or better'.format(
         c, evaluator.get_type(RANK)))
+
+if __name__ == "__main__":
+    main()

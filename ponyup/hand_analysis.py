@@ -1,3 +1,6 @@
+"""
+  " Analysis of all possible hands in a regular card deck.
+  """
 import pickle
 from ponyup import combos
 from ponyup import deck
@@ -61,7 +64,7 @@ def print_unique_5cardhands(handlist):
 def count_all_handtypes(combolist):
     print('')
     print('Counting all the hand types in the list of {} hands.'.format(len(combosof5)))
-    type_count = typecount_dict(combosof5)
+    type_count = typecount_dict(combolist)
 
     print('Results:')
     for t in type_count:
@@ -75,9 +78,9 @@ def enumerate_unique_5cardhands(combolist):
     print_unique_5cardhands(sortedhands)
 
 
-def write_handcombos():
+def write_handcombos(combolist):
     print('Enumerating unique 5-card hands by value')
-    unique_hands = get_unique_5cardhands()
+    unique_hands = get_unique_5cardhands(combolist)
 
     with open('handcombos.dat', 'wb') as db:
         pickle.dump(unique_hands, db)

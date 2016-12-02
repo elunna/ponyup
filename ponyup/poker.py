@@ -1,3 +1,6 @@
+"""
+  " Manages all the aspects of a round of poker
+  """
 from __future__ import print_function
 import datetime
 import logging
@@ -13,11 +16,11 @@ LOGDIR = 'logs/'
 MAX_HANDLERS = 3
 
 
-class Round():
+class Round(object):
+    """ A single round of poker in a longer running Session """
+
     def __init__(self, session):
-        """
-        Initialize the next round of Poker.
-        """
+        """ Initialize the next round of Poker.  """
         _logger.debug('Initialized a new Round.')
 
         self.sesh = session
@@ -36,9 +39,7 @@ class Round():
         self.check_integrity_pre()
 
     def __str__(self):
-        """
-        Return info about the current round.
-        """
+        """ Return info about the current round.  """
         _str = '{} -- {}, {} '.format(self.label, self.gametype, self.blinds)
         _str += 'Potsize: {}'.format(self.pot)
         _str += 'Street: {}'.format(self.street)
@@ -52,7 +53,9 @@ class Round():
             raise AttributeError("Child' object has no attribute {}".format(name))
 
     def setup(self):
-        # Perform the pre-round payment actions, check the blinds object for what is turned on.
+        """ Perform the pre-round payment actions, check the blinds object for
+            what is turned on.
+        """
         if self.blinds.antes:
             self.post_antes()
 
@@ -65,11 +68,8 @@ class Round():
             #  self.post_bringin()
 
     @classmethod
-    def decorate(self, text):
-        #  L, R = '/)(\ ', ' /)(\'
-        #  L, R = '(\/) ', ' (\/)'
-        #  L, R = '~~(\ ', ' /)~~'
-        L, R = '~~/) ', ' (\~~'
+    def decorate(cls, text):
+        L, R = '~~/) ', ' (\\~~'
         return '\n' + L + text + R
 
     def log_holecards(self):
@@ -82,6 +82,7 @@ class Round():
         _logger.info('{}: [{}]'.format(hero, cards.strip()))
 
     def log_hh(self):
+        """ Creates a new handhistory entry in the handhistory file. """
         dt = datetime.datetime
         filename = 'HH_{}_-_{}_{}_{}(Pony Bits).log'.format(
             dt.now().strftime('%Y%m%d'),
@@ -111,14 +112,13 @@ class Round():
         _logger.info('Seat {} has the button.'.format(self.table.TOKENS['D']))
 
     def deal_cards(self, qty, faceup=False, handreq=False):
-        """
-        Deal the specified quantity of cards to each player. If faceup is True, the cards are
-        dealt face-up, otherwise they are face-down.
+        """ Deal the specified quantity of cards to each player. If faceup is
+            True, the cards are dealt face-up, otherwise they are face-down.
         """
         _logger.debug('Dealing cards out to table.')
         _logger.debug('qtt={}, faceup={}, handreq={}'.format(qty, faceup, handreq))
 
-        for i in range(qty):
+        for _ in range(qty):
             for s in self.table.get_players():
                 if handreq and not s.has_hand():
                     continue
@@ -132,9 +132,7 @@ class Round():
                     self.exposed.append(c)
 
     def show_cards(self):
-        """
-        Unhides all player hands.
-        """
+        """ Unhides all player hands. """
         _logger.debug('All player hands are being revealed.')
         for s in self.table.get_players(hascards=True):
             _logger.debug('Unhiding {}\'s hand.'.format(s.player))
@@ -148,9 +146,7 @@ class Round():
         return _str
 
     def sortcards(self):
-        """
-        Sort all cards in all players hands.
-        """
+        """ Sort all cards in all players hands. """
         _logger.debug('Sorting all player hands.')
         for s in self.table:
             s.hand.sort()
@@ -160,9 +156,7 @@ class Round():
         self.muck.append(self.d.deal())
 
     def muck_all_cards(self):
-        """
-        Muck all player hands, and muck the contents of the deck.
-        """
+        """ Muck all player hands, and muck the contents of the deck. """
         _logger.debug('Mucking all player hands.')
         for s in self.table:
             self.muck.extend(s.fold())
@@ -172,9 +166,7 @@ class Round():
             self.muck.append(self.d.deal())
 
     def post_antes(self):
-        """
-        All players bet the ante amount and it's added to the pot.
-        """
+        """ All players bet the ante amount and it's added to the pot. """
         _logger.debug('Making players post antes.')
         actions = ''
         for s in self.table:
@@ -185,9 +177,9 @@ class Round():
         return actions
 
     def post_blinds(self):
-        """
-        Gets the small and big blind positions from the table and makes each player bet the
-        appropriate mount to the pot. Returns a string describing what the blinds posted.
+        """ Gets the small and big blind positions from the table and makes each
+            player bet the appropriate mount to the pot. Returns a string
+            describing what the blinds posted.
         """
         _logger.debug('Making players post blinds.')
 
@@ -198,7 +190,6 @@ class Round():
         if len(self.table.get_players()) < 2:
             _logger.error('Not enough players to play!')
             raise ValueError('Not enough players to play!')
-            exit()
         sb = self.table.seats[self.table.TOKENS['SB']]
         bb = self.table.seats[self.table.TOKENS['BB']]
 
@@ -213,9 +204,8 @@ class Round():
         return actions
 
     def post_bringin(self):
-        """
-        Gets the player who must post the bringin amount, adds their bet to the pot, and
-        returns a string describing what the blinds posted.
+        """ Gets the player who must post the bringin amount, adds their bet to
+            the pot, and returns a string describing what the blinds posted.
         """
         _logger.debug('Finding the player who is the bringin.')
         table = self.table
@@ -236,9 +226,7 @@ class Round():
         return action
 
     def next_street(self):
-        """
-        Advanced the street counter by one.
-        """
+        """ Advanced the street counter by one. """
         if self.street >= len(self.streets):
             _logger.error('The last street has been reached on this game!')
             raise Exception('The last street has been reached on this game!')
@@ -251,6 +239,7 @@ class Round():
         return self.streets[self.street]
 
     def one_left(self):
+        """ Determines if only one valid bettor with cards is left. """
         cardholders = self.table.get_players(hascards=True)
         if len(cardholders) == 1:
             _logger.debug('There is only one seat left with cards.')
@@ -261,9 +250,8 @@ class Round():
             return None
 
     def betting_round(self):
-        """
-        Run through a round of betting. Returns a victor if it exists.
-        """
+        """ Run through a round of betting. Returns a victor if it exists.  """
+        # pylint: disable=bad-builtin
         print(self.table)
         br = betting.BettingRound(self)
 
@@ -293,10 +281,9 @@ class Round():
         print('Pot: ${}'.format(self.pot))
 
     def betting_over(self):
-        """
-        Checks the players and sees if any valid bettors are left to duke it out. If no more
-        than 1 is left, the betting is over. Returns True if there is no more betting, False
-        otherwise.
+        """ Checks the players and sees if any valid bettors are left to duke it
+            out. If no more than 1 is left, the betting is over. Returns True if
+            there is no more betting, False otherwise.
         """
         hands = len(self.table.get_players(hascards=True))
         _logger.debug('There are {} seats with hands left.'.format(hands))
@@ -312,7 +299,7 @@ class Round():
             return False
 
     def found_winner(self):
-        _logger.debug('Checking if a one player is left to claim the pot.')
+        """ Check if one player is remaining to claim the pot. """
         victor = self.one_left()
 
         if victor is None:
@@ -328,9 +315,8 @@ class Round():
             return True
 
     def showdown(self):
-        """
-        Compare all the hands of players holding cards and determine the winner(s). Awards each
-        winner the appropriate amount.
+        """ Compare all the hands of players holding cards and determine the
+            winner(s). Awards each winner the appropriate amount.
         """
         sd_text = ''
 
@@ -358,9 +344,7 @@ class Round():
             raise Exception('Integrity of game could not be verified after round was complete!')
 
     def check_integrity_pre(self):
-        """
-        Verify that the game elements are set up correctly.
-        """
+        """ Verify that the game elements are set up correctly. """
         _logger.debug('Checking the integrity of the game, pre-deal.')
 
         # Check that the deck is full.
@@ -395,9 +379,8 @@ class Round():
         return True
 
     def check_integrity_post(self):
-        """
-        Verify that the game elements have been cleaned up correctly and that all cards are
-        accounted for.
+        """ Verify that the game elements have been cleaned up correctly and that
+            all cards are accounted for.
         """
         _logger.debug('Checking the integrity of the game, post-showdown.')
 
@@ -428,17 +411,19 @@ class Round():
         return True
 
     def exposed_cards(self):
-        _logger.debug('Finding new exposed cards to add to the Rounds list.')
+        """ Looks at all cards that are faceup in the game environment and adds
+            them to the list of exposed cards.
+        """
         exposed = []
         for s in self.table:
             exposed.extend(s.hand.get_upcards())
         return exposed
 
     def highhand(self):
-        """
-        Finds which player has the highest showing hand and return their seat index.  For stud
-        games, after the first street, the high hand on board initiates the action (a tie is
-        broken by position, with the player who received cards first acting first).
+        """ Finds which player has the highest showing hand and return their seat
+            index.  For stud games, after the first street, the high hand on
+            board initiates the action (a tie is broken by position, with the
+            player who received cards first acting first).
         """
         _logger.debug('Determining which player has the highest exposed hand.')
         seat, highvalue = None, 0
@@ -464,6 +449,7 @@ class Round():
         # Return the seat index of the first-to-act.
         if len(ties) > 1:
             _logger.debug('There was a tie for high hand, breaking tie with seat position')
+            s = None
             # Process ties, get the player who was dealt first.
             for s in self.table.get_players(hascards=True):
                 if s in ties:
@@ -473,10 +459,8 @@ class Round():
             _logger.debug('Seat {} has high hand, returning its index.'.format(s.NUM))
             return seat.NUM
 
-    """
-    Get position based on button.
-    """
     def position_by_button(self):
+        """ Get position based on button. """
         if self.table.TOKENS['D'] == -1:
             raise Exception('Cannot set bettor or closer in the if button isn\'t set!')
 
@@ -485,10 +469,8 @@ class Round():
         else:
             return self.table.next_player(self.table.TOKENS['D'], hascards=True)
 
-    """
-    Override the base Round get_utg, and get position based on upcards.
-    """
     def position_by_upcards(self):
+        """ Override the base Round get_utg, and get position based on upcards. """
         if self.street == 0:
             return self.table.TOKENS['BI']
         else:
@@ -496,27 +478,28 @@ class Round():
 
 
 class StudRound(Round):
-    """
-    A poker Round customized for playing Stud games.
-    Notable differences in Stud games:
+    """A poker Round customized for playing Stud games.
+        Notable differences in Stud games:
         * Uses Antes
         * Uses a Bringin 'blind' to determine the first player to act.
         * Uses the highhand on board to determine position
     """
     def __init__(self, session):
-        super().__init__(session)
+        # super().__init__(session)
+        super(StudRound, self).__init__(self)
         self.get_utg = self.position_by_upcards
 
 
 class ButtonRound(Round):
-    """
-    A poker Round customized for playing poker games with a dealer button(holdem, omaha, draw5)
-    Notable differences in Button games:
+    """ A poker Round customized for playing poker games with a dealer button
+        (holdem, omaha, draw5)
+        Notable differences in Button games:
         * Uses a small blind and big blind.
         * Uses the the dealer button to determine position
         * The button is moved 1 seat clockwise at the beginning of every round.
     """
 
     def __init__(self, session):
-        super().__init__(session)
+        # super().__init__(session)
+        super(ButtonRound, self).__init__(self)
         self.get_utg = self.position_by_button

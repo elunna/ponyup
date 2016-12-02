@@ -1,16 +1,15 @@
+"""
+  " Module for producing new names for computer players.
+  " Rules for player names:
+  "     Must be 3 to 20 characters long.
+  "     Can contain special characters.
+  "     Cannot contain any non-ASCII characters or characters that do unusual things.
+  """
 import random
 import re
 import sqlite3
-"""
-Rules for player names:
-    Must be 3 to 20 characters long.
-    Can contain special characters.
-    Cannot contain any non-ASCII characters or characters that do unusual things.
-"""
 
-# Maximum name length
-MAX_LEN = 20
-MIN_LEN = 3
+MIN_LEN, MAX_LEN = 3, 20
 INVALID_CHARACTERS = r"[<>()/{}[\]`'\\]"
 DB = 'data/game.db'
 
@@ -25,6 +24,7 @@ pokerplayers = [
 
 
 def get_names_from_db():
+    """ Retrieve the names from the SQL database """
     conn = sqlite3.connect(DB)
     c = conn.cursor()
 
@@ -36,13 +36,13 @@ def get_names_from_db():
 
 
 def random_names(num, namelist=get_names_from_db()):
-    """
-    Generate a unique list of names from the names module. num specifies how many names.
+    """ Generate a unique list of names from the names module.
+        num specifies how many names
     """
     nameset = []
 
     # Make sure all the names are unique
-    for i in range(num):
+    for _ in range(num):
         nameset.append(new_name(nameset, namelist))
     return nameset
 
@@ -55,9 +55,8 @@ def new_name(taken, namelist):
 
 
 def is_validname(name):
-    """
-    Returns True if the given name is between MIN_LEN and MAX_LENcharacters long, False
-    otherwise.
+    """ Returns True if the given name is between MIN_LEN and MAX_LENcharacters
+        long, False otherwise.
     """
     if len(name) < MIN_LEN or len(name) > MAX_LEN:
         return False
@@ -66,14 +65,12 @@ def is_validname(name):
 
 
 def has_surr_char(string):
-    """
-    Returns True if the given string contains any 'surround' characters, False otherwise.
-    These characters many cause bugs in programs if used.
+    """ Returns True if the given string contains any 'surround' characters,
+        False otherwise.
+        These characters many cause bugs in programs if used.
     """
     re1 = re.compile(INVALID_CHARACTERS)
     if re1.search(string):
-        #  print ("RE1: Invalid char detected.")
         return True
     else:
-        #  print ("RE1: No invalid char detected.")
         return False
