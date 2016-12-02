@@ -68,7 +68,7 @@ class Round(object):
             #  self.post_bringin()
 
     @classmethod
-    def decorate(cls, text):
+    def decorate(self, text):
         L, R = '~~/) ', ' (\\~~'
         return '\n' + L + text + R
 
@@ -485,8 +485,8 @@ class StudRound(Round):
         * Uses the highhand on board to determine position
     """
     def __init__(self, session):
-        # super().__init__(session)
-        super(StudRound, self).__init__(self)
+        super().__init__(session)
+        # super(StudRound, self).__init__(self)
         self.get_utg = self.position_by_upcards
 
 
@@ -500,6 +500,6 @@ class ButtonRound(Round):
     """
 
     def __init__(self, session):
-        # super().__init__(session)
-        super(ButtonRound, self).__init__(self)
+        super().__init__(session)
+        # super(ButtonRound, self).__init__(self)
         self.get_utg = self.position_by_button

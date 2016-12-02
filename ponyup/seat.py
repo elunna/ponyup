@@ -89,7 +89,6 @@ class Seat(object):
         self.hand.cards = []
         return copy
 
-
-def check_amount(amt):
-    if amt <= 0:
-        raise ValueError('Bet amount must be a positive number!')
+    def check_amount(self, amt):
+        if amt <= 0:
+            raise ValueError('Bet amount must be a positive number!')
