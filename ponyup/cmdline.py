@@ -9,17 +9,16 @@ import textwrap
 from ponyup import blinds
 from ponyup import factory
 from ponyup import lobby
-from ponyup import logger
 from ponyup import names
+from ponyup import numtools
 from ponyup import player_db
 
-DISPLAYWIDTH = 70
+DISPLAYWIDTH = 80
 DEFAULT_PLAYER = 'luna'
 DEFAULT_STACK = 25  # Big blinds
 MINIMUM_STACK = 10  # Big blinds
 LOGO = 'data/logo.txt'
 SETTINGS = 'data/settings.json'
-_logger = logger.get_logger(__name__)
 
 
 class Game(cmd.Cmd):
@@ -48,9 +47,7 @@ class Game(cmd.Cmd):
             json.dump(self.settings, f)
 
     def get_info(self):
-        """
-        Return a string containing the game info.
-        """
+        """ Return a string containing the game info. """
         _str = ''
         title = '-=- Game info -=-'.center(DISPLAYWIDTH)
         _str += title + '\n'
@@ -155,7 +152,7 @@ class Game(cmd.Cmd):
             return False
 
         # Check the buyin
-        if not is_integer(amt):
+        if not numtools.is_integer(amt):
             print('Invalid buyin!')
             return False
         elif int(amt) < minbuyin:
@@ -225,7 +222,7 @@ class GameSelection(cmd.Cmd):
         print(lobby.numbered_list(self.tables))
 
     def precmd(self, args):
-        if is_integer(args):
+        if numtools.is_integer(args):
             i = int(args)
             if i in self.valid_choices:
                 self.game = self.tables[i]

@@ -70,6 +70,15 @@ class Discard(object):
             drawpile.append(draw)
         return drawpile
 
+    def discard_text(self, seat, discards):
+        if discards:
+            d_txt = '{} discards {} cards'.format(seat.player, len(discards))
+        else:
+            d_txt = '{} stands pat.'.format(seat.player)
+
+        _logger.info(d_txt)
+        return d_txt
+
 
 def discard_phase(_round):
     """ Goes through a table and offers all players with cards the option to
@@ -257,12 +266,3 @@ def extract_discards(cards, keep):
 
     return [c for c in cards if c not in keep]
 
-
-def discard_text(seat, discards):
-    if discards:
-        d_txt = '{} discards {} cards'.format(seat.player, len(discards))
-    else:
-        d_txt = '{} stands pat.'.format(seat.player)
-
-    _logger.info(d_txt)
-    return d_txt

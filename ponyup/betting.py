@@ -235,13 +235,13 @@ class BettingRound(object):
             self.stacks = self.table.stackdict()
 
 
+    def betmenu(self, actions):
+        """ Return a string showing the betting options.  """
+        nice_opts = ['[' + v.name[0] + ']' + v.name[1:].lower() for v in sorted(actions.values())]
+        choices = '/'.join(nice_opts)
+        return choices
+
 def spacing(level):
     """ Spaces the player actions by the current bet level.  """
     return '  ' * level
 
-
-def betmenu(actions):
-    """ Return a string showing the betting options.  """
-    nice_opts = ['[' + v.name[0] + ']' + v.name[1:].lower() for v in sorted(actions.values())]
-    choices = '/'.join(nice_opts)
-    return choices

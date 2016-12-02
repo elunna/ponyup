@@ -1,7 +1,7 @@
 """
-This lobby listing is a list of all the available cash tables a pony can play
-at. Each has: Table name, seats, stakes level, game type.
-"""
+  " This lobby listing is a list of all the available cash tables a pony can play
+  " at. Each has: Table name, seats, stakes level, game type.
+  """
 
 from collections import namedtuple
 import sqlite3

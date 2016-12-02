@@ -27,6 +27,7 @@ _logger = logger.get_logger(__name__)
 
 class Session(object):
     """ Manages a series of poker Rounds. """
+
     def __init__(self, gametype):
         """ Initialize the poker Session settings. """
         self.gametype = gametype
