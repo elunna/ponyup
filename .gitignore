@@ -14,3 +14,4 @@ ponyup/.ropeproject/*
 ponyup/.ropeproject/globalnames
 /test_ponyup/.ropeproject/*
 /test_ponyup/.ropeproject/globalnames
+.cache

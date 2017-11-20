@@ -90,7 +90,7 @@ class Casino(object):
         """ View the available games.  """
         self.game = game
 
-    def valid_buyin(self, amt):
+    def valid_buyin(self, buyin):
         """ Returns True if the player has a valid buyin amount, False otherwise. """
         minbuyin = blinds.stakes[self.game.level] * MINIMUM_STACK
 
@@ -100,14 +100,10 @@ class Casino(object):
             return False
 
         # Check the buyin
-        try:
-            if int(amt) >= minbuyin:
-                return True
-            else:
-                print('The minimum buy-in is ${} bits.'.format(minbuyin))
-                return False
-        except ValueError:
-            print('You need to enter a number for the buyin!')
+        if buyin >= minbuyin:
+            return True
+        else:
+            print('The minimum buy-in is ${} bits.'.format(minbuyin))
             return False
 
     def default_buyin(self):

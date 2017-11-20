@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-Runs the console version.
-"""
-#  from ponyup import console
+""" Runs the console version. """
 from ponyup import cmdline
 
 

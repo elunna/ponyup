@@ -83,9 +83,20 @@ class Game(cmd.Cmd):
 
     def do_play(self, args):
         """ Play the selected game. Supply a buyin amount or use the default buyin. """
-        buyin = int(args)
+        if not args:
+            print('Getting default buyin')
+            buyin = self.casino.default_buyin()
+        else:
+            try:
+                buyin = int(buyin)
+            except:
+                print('Amount needs to be an integer!')
+                print('You need to enter a number for the buyin!')
+                return False
+
         if not self.casino.valid_buyin(buyin):
             return False
+
         sesh = self.casino.make_session(buyin)
 
         # Launch a new shell for playing the Session and Rounds
