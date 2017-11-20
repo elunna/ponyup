@@ -11,6 +11,34 @@ from ponyup import lobby
 DISPLAYWIDTH = 80
 LOGO = 'data/logo.txt'
 
+credits = """
+Author: Erik Lunna
+Web Portfolio: http://eslunna.byethost24.com
+Location: Minnesota
+
+Erik is a passionate Python developer originally from Vermont but now settled in
+Minnesota. He loves music, drumming, poker, beer, and solving puzzles.
+
+This project started as an exploration of what Java could do - I wanted to see
+if I could make a typical 5-card draw program in Java. I eventually was able to
+get it into a simple format where you play a Video Poker machine and I created a
+GUI for that in Netbeans. I also made a small multiplayer CPU capability, you
+could play 6 players at 5 card draw, but my limited design skills made the code
+quickly grow out of control and I let it rest for a while.  Then a couple of
+years later I discovered Python and how friendly it was, and I figured a good
+way to learn Python would be to remake my poker program with it.  This time I
+separated out things a lot better (although I still need lots of discipline with
+that!) and incorporated MUCH MORE testing.  So far it can do a lot but I know
+I'm just scratching the surface and want to take this as far as I can and
+incorporated MUCH MORE testing.
+
+I would like to thank:
+    My family, my mom for being so creative and helping me be an out of the box
+    thinker and my dad for infusing me with an iron-clad work ethic. And my
+    sister for always pushing me to reach further.
+    And of course, Anna! :)
+"""
+
 
 class Game(cmd.Cmd):
     """ Command-line console interface for the PonyUp card casino. """
@@ -22,8 +50,7 @@ class Game(cmd.Cmd):
         os.system('clear')
         self.intro = self.logo()
 
-    def do_quit(self):
-        # pylint: disable=unused-argument, no-self-use
+    def do_quit(self, args):
         """ Leaves the game . """
         return True
 
@@ -31,15 +58,14 @@ class Game(cmd.Cmd):
         """ Create a new player.  """
         self.casino.new_player(args)
 
-    def do_players(self):
-        # pylint: disable=unused-argument, no-self-use
+    def do_players(self, args):
         print(self.casino.list_players())
 
     def do_load(self, args):
         """ Load a player.  """
         self.casino.load_player(args)
 
-    def do_save(self):
+    def do_save(self, args):
         """ Save the current player's info.  """
         self.casino.save_player()
 
@@ -47,11 +73,11 @@ class Game(cmd.Cmd):
         """ Delete a player.  """
         self.casino.delete_player(args)
 
-    def do_info(self):
+    def do_info(self, args):
         """ View current game info and settings.  """
         print(self.casino.get_info())
 
-    def do_games(self):
+    def do_games(self, args):
         """ View the available games.  """
         games = lobby.sort_by_stakes(self.lobby.all_tables())
         print(lobby.numbered_list(games))
@@ -71,10 +97,11 @@ class Game(cmd.Cmd):
         else:
             print('Not a valid game...')
 
-    def do_credits(self):
+    def do_credits(self, args):
         """ View game producer credits.  """
+        print(credits)
 
-    def do_options(self):
+    def do_options(self, args):
         """ Go to game options """
         pass
 
