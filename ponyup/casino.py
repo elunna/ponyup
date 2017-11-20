@@ -52,12 +52,19 @@ class Casino(object):
         return _str
 
     def list_players(self):
-        return player_db.get_players()
+        _str = '{:20} {:10}\n'.format('Name', 'Chips')
+        for entry in player_db.get_players():
+            _str += '{:20} ${:<10}\n'.format(*entry)
+
+        return _str
 
     def new_player(self, args):
         """ Create a new player. """
         if player_db.new_player(args):
             self.hero = player_db.load_player(args)
+            return True
+        else:
+            return False
 
     def load_player(self, name):
         """ Load a player. """
@@ -66,13 +73,16 @@ class Casino(object):
             self.hero = hero
             self.settings['hero'] = self.hero.name
             self.save_settings()
+            return True
+        else:
+            return False
 
     def save_player(self):
         """ Save the current player's info to the database. """
         if player_db.update_player(self.hero):
-            print('Saved {} successfully!'.format(self.hero))
+            return True
         else:
-            print('Save failed!')
+            return False
 
     def delete_player(self, name):
         """ Delete a player from the database. """
@@ -84,6 +94,9 @@ class Casino(object):
                     self.hero = None
                     self.settings['hero'] = 'None'
                     self.save_settings()
+            return True
+        else:
+            return False
 
     def valid_buyin(self, buyin):
         """ Returns True if the player has a valid buyin amount, False otherwise. """

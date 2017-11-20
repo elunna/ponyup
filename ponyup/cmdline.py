@@ -56,7 +56,12 @@ class Game(cmd.Cmd):
         ex: To create a new player "erik"
         :> new erik
         """
-        self.casino.new_player(args)
+        if not args.strip():
+            print('No name specified for the new player!')
+        elif self.casino.new_player(args):
+            print("Successfully created new player '{}'".format(args))
+        else:
+            print("Failed to create new player '{}'".format(args))
 
     def do_load(self, args):
         """ Load a player.
@@ -64,16 +69,24 @@ class Game(cmd.Cmd):
         ex: To load player "erik"
         :> load erik
         """
-        self.casino.load_player(args)
-        self.casino.list_players()
+        if not args.strip():
+            print('No name specified!')
+        elif self.casino.load_player(args):
+            print('Loaded {} successfully!'.format(self.casino.hero))
+        else:
+            print("Load failed for '{}'!".format(self.casino.hero))
+            print('Here are all the available players:')
+            print(self.casino.list_players())
 
     def do_save(self, args):
         """ Save the current player's info.
-        Usage: save <player>
-        ex: To save player "erik"
-        :> save erik
+        Usage: save
+        :> save
         """
-        self.casino.save_player()
+        if self.casino.save_player():
+            print("Saved '{}' successfully!".format(self.casino.hero))
+        else:
+            print("Save failed for '{}'!".format(self.casino.hero))
 
     def do_del(self, args):
         """ Delete a player.
@@ -81,11 +94,14 @@ class Game(cmd.Cmd):
         ex: To delete player "erik"
         :> del erik
         """
-        self.casino.delete_player(args)
-
-    def do_info(self, args):
-        """ View current game info and settings. """
-        print(self.casino.get_info())
+        if not args.strip():
+            print('No name specified!')
+        elif self.casino.delete_player(args):
+            print("Successfully deleted '{}'!".format(args))
+        else:
+            print("Delete failed for '{}'!".format(args))
+            print('Here are all the available players:')
+            print(self.casino.list_players())
 
     def do_table(self, args):
         """ Select a table to play at.
@@ -100,7 +116,7 @@ class Game(cmd.Cmd):
         try:
             choice = int(input('Pick a game to play :> '))
         except ValueError:
-            print('Not a valid number...')
+            print('Not a valid table... staying with default')
             return
 
         if choice in valid_choices:
