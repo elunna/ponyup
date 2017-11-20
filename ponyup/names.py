@@ -5,53 +5,71 @@
   "     Can contain special characters.
   "     Cannot contain any non-ASCII characters or characters that do unusual things.
   """
-import random
+from random import shuffle
 import re
-import sqlite3
+
 
 MIN_LEN, MAX_LEN = 3, 20
 INVALID_CHARACTERS = r"[<>()/{}[\]`'\\]"
-DB = 'data/game.db'
 
 pokerplayers = [
-    'Seidel', 'Doyle', 'Mercier', 'Negreanu', 'Grospellier', 'Hellmuth', 'Mortensen',
-    'Antonius', 'Harman', 'Ungar', 'Dwan', 'Greenstein', 'Chan', 'Moss', 'Ivey', 'Brunson',
-    'Reese', 'Esfandiari', 'Juanda', 'Duhamel', 'Gold', 'Cada', 'Mizrachi', 'Schulman',
-    'Selbst', 'Duke', 'Rousso', 'Liebert', 'Galfond', 'Elezra', 'Benyamine', 'Booth',
-    'DAgostino', 'Eastgate', 'Farha', 'Ferguson', 'Forrest', 'Hansen', 'Hachem', 'Kaplan',
-    'Laak', 'Lederer', 'Lindren', 'Matusow', 'Minieri'
+    'Seidel',
+    'Doyle',
+    'Mercier',
+    'Negreanu',
+    'Grospellier',
+    'Hellmuth',
+    'Mortensen',
+    'Antonius',
+    'Harman',
+    'Ungar',
+    'Dwan',
+    'Greenstein',
+    'Chan',
+    'Moss',
+    'Ivey',
+    'Brunson',
+    'Reese',
+    'Esfandiari',
+    'Juanda',
+    'Duhamel',
+    'Gold',
+    'Cada',
+    'Mizrachi',
+    'Schulman',
+    'Selbst',
+    'Duke',
+    'Rousso',
+    'Liebert',
+    'Galfond',
+    'Elezra',
+    'Benyamine',
+    'Booth',
+    'DAgostino',
+    'Eastgate',
+    'Farha',
+    'Ferguson',
+    'Forrest',
+    'Hansen',
+    'Hachem',
+    'Kaplan',
+    'Laak',
+    'Lederer',
+    'Lindren',
+    'Matusow',
+    'Minieri'
 ]
 
 
-def get_names_from_db():
-    """ Retrieve the names from the SQL database """
-    conn = sqlite3.connect(DB)
-    c = conn.cursor()
-
-    names = [n[0] for n in c.execute('SELECT * FROM ponies')]
-
-    c.close()
-    conn.close()
-    return names
-
-
-def random_names(num, namelist=get_names_from_db()):
-    """ Generate a unique list of names from the names module.
+def random_names(num, namelist=pokerplayers):
+    """ Generate a unique list of names from the namelist.
         num specifies how many names
     """
-    nameset = []
-
-    # Make sure all the names are unique
-    for _ in range(num):
-        nameset.append(new_name(nameset, namelist))
-    return nameset
-
-
-def new_name(taken, namelist):
-    while True:
-        nextname = random.choice(namelist)
-        if nextname not in taken and is_validname(nextname):
-            return nextname
+    shuffle(namelist)
+    try:
+        return namelist[:num]
+    except:
+        return namelist
 
 
 def is_validname(name):
