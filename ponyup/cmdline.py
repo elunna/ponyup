@@ -22,7 +22,7 @@ class Game(cmd.Cmd):
         os.system('clear')
         self.intro = self.logo()
 
-    def do_quit(self, args):
+    def do_quit(self):
         # pylint: disable=unused-argument, no-self-use
         """ Leaves the game . """
         return True
@@ -31,7 +31,7 @@ class Game(cmd.Cmd):
         """ Create a new player.  """
         self.casino.new_player(args)
 
-    def do_players(self, args):
+    def do_players(self):
         # pylint: disable=unused-argument, no-self-use
         print(self.casino.list_players())
 
@@ -39,23 +39,20 @@ class Game(cmd.Cmd):
         """ Load a player.  """
         self.casino.load_player(args)
 
-    def do_save(self, args):
+    def do_save(self):
         """ Save the current player's info.  """
-        # pylint: disable=unused-argument
         self.casino.save_player()
 
     def do_del(self, args):
         """ Delete a player.  """
         self.casino.delete_player(args)
 
-    def do_info(self, args):
+    def do_info(self):
         """ View current game info and settings.  """
-        # pylint: disable=unused-argument
         print(self.casino.get_info())
 
-    def do_games(self, args):
+    def do_games(self):
         """ View the available games.  """
-        # pylint: disable=unused-argument, bad-builtin
         games = lobby.sort_by_stakes(self.lobby.all_tables())
         print(lobby.numbered_list(games))
 
@@ -74,15 +71,15 @@ class Game(cmd.Cmd):
         else:
             print('Not a valid game...')
 
-    def do_credits(self, args):
+    def do_credits(self):
         """ View game producer credits.  """
 
-    def do_options(self, args):
+    def do_options(self):
         """ Go to game options """
         pass
 
     def do_play(self, args):
-        """ Play the selected game. Supply a buyin amount or use the default buyin. """
+        """ Play the selected game. Supply a buyin amount or use the default buyin. ex: 'play 100' to play for 100 chips, or just 'play' to buyin for the default. """
         if not args:
             print('Getting default buyin')
             buyin = self.casino.default_buyin()
@@ -123,7 +120,7 @@ class SessionInterpreter(cmd.Cmd):
         self.session = session
         self.playing = True
         self.play_round()
-        self.prompt = 'Press enter to play again, or "quit" to go back to the lobby.'
+        self.prompt = 'Press enter to play again, or "[q]uit" to go back to the lobby.'
 
     def emptyline(self):
         self.play_round()
@@ -135,7 +132,6 @@ class SessionInterpreter(cmd.Cmd):
 
     def post_round(self):
         """ Perform post round checks """
-        # pylint: disable=bad-builtin
         # Check if hero went broke
         if self.session.find_hero().stack == 0:
             rebuy = input('Rebuy?')
@@ -148,6 +144,5 @@ class SessionInterpreter(cmd.Cmd):
 
     def do_quit(self, args):
         """ Quits the poker session. """
-        # pylint: disable=unused-argument
         self.session.find_hero().standup()
         return True

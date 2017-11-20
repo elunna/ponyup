@@ -69,14 +69,14 @@ class Casino(object):
             self.save_settings()
 
     def save_player(self):
-        """ Save the current player's info.  """
+        """ Save the current player's info to the database. """
         if player_db.update_player(self.hero):
             print('Saved {} successfully!'.format(self.hero))
         else:
             print('Save failed!')
 
     def delete_player(self, name):
-        """ Delete a player. """
+        """ Delete a player from the database. """
         if player_db.del_player(name):
             # Check if we deleted the current player
             if self.hero is not None:
@@ -85,10 +85,6 @@ class Casino(object):
                     self.hero = None
                     self.settings['hero'] = 'None'
                     self.save_settings()
-
-    def set_game(self, game):
-        """ View the available games.  """
-        self.game = game
 
     def valid_buyin(self, buyin):
         """ Returns True if the player has a valid buyin amount, False otherwise. """
