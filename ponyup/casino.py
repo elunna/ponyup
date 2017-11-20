@@ -52,7 +52,6 @@ class Casino(object):
         return _str
 
     def list_players(self):
-        # pylint: disable=no-self-use
         return player_db.get_players()
 
     def new_player(self, args):
@@ -119,6 +118,10 @@ class Casino(object):
             varystacks=True,
         )
         return sesh
+
+    def set_game(self, game):
+        """ View the available games."""
+        self.game = game
 
 
 def load_settings():

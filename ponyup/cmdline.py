@@ -9,7 +9,7 @@ from ponyup import lobby
 
 
 DISPLAYWIDTH = 80
-LOGO = 'data/logo.txt'
+LOGO = 'data/logo2.txt'
 
 credits = """
 Author: Erik Lunna
@@ -44,41 +44,54 @@ class Game(cmd.Cmd):
     """ Command-line console interface for the PonyUp card casino. """
     def __init__(self):
         cmd.Cmd.__init__(self)
-        self.prompt = "/): "
+        self.prompt = "(ponyup) :> "
         self.casino = casino.Casino()
         self.lobby = lobby.Lobby()
         os.system('clear')
-        self.intro = self.logo()
-
-    def do_quit(self, args):
-        """ Leaves the game . """
-        return True
+        self.intro = self.menu()
 
     def do_new(self, args):
-        """ Create a new player.  """
+        """ Create a new player.
+        Usage: new <player>
+        ex: To create a new player "erik"
+        :> new erik
+        """
         self.casino.new_player(args)
 
-    def do_players(self, args):
-        print(self.casino.list_players())
-
     def do_load(self, args):
-        """ Load a player.  """
+        """ Load a player.
+        Usage: load <player>
+        ex: To load player "erik"
+        :> load erik
+        """
         self.casino.load_player(args)
+        self.casino.list_players()
 
     def do_save(self, args):
-        """ Save the current player's info.  """
+        """ Save the current player's info.
+        Usage: save <player>
+        ex: To save player "erik"
+        :> save erik
+        """
         self.casino.save_player()
 
     def do_del(self, args):
-        """ Delete a player.  """
+        """ Delete a player.
+        Usage: del <player>
+        ex: To delete player "erik"
+        :> del erik
+        """
         self.casino.delete_player(args)
 
     def do_info(self, args):
-        """ View current game info and settings.  """
+        """ View current game info and settings. """
         print(self.casino.get_info())
 
-    def do_games(self, args):
-        """ View the available games.  """
+    def do_table(self, args):
+        """ Select a table to play at.
+        Usage: table
+        You will be presented with a list of all the tables, then just select one.
+        """
         games = lobby.sort_by_stakes(self.lobby.all_tables())
         print(lobby.numbered_list(games))
 
@@ -98,15 +111,25 @@ class Game(cmd.Cmd):
             print('Not a valid game...')
 
     def do_credits(self, args):
-        """ View game producer credits.  """
+        """ View game producer credits. """
         print(credits)
 
     def do_options(self, args):
-        """ Go to game options """
+        """ View and edit game options. """
         pass
 
     def do_play(self, args):
-        """ Play the selected game. Supply a buyin amount or use the default buyin. ex: 'play 100' to play for 100 chips, or just 'play' to buyin for the default. """
+        """ Play the selected game.
+        Supply a buyin amount or use the default buyin.
+
+        Usage: play or play <buyin amount>
+        ex: To play for the default
+        :> play
+
+        ex: To play for 100 chips
+        :> play 100
+
+        """
         if not args:
             print('Getting default buyin')
             buyin = self.casino.default_buyin()
@@ -128,16 +151,29 @@ class Game(cmd.Cmd):
         sub_cmd.cmdloop()
         self.do_save(None)
 
-    def logo(self):
+    def do_quit(self, args):
+        """ Leaves the game . """
+        # self.postcmd(True, args)
+        print('Goodbye!')
+        exit()
+        # return True
+
+    def menu(self):
         """ Display the logo """
         txt = ''
         with open(LOGO) as f:
             for l in f.readlines():
                 txt += l
-        txt += '\n' + '~'*70 + '\n'
+        txt += '~'*70 + '\n'
 
         txt += self.casino.get_info()
         return txt
+
+    def postcmd(self, stop, args):
+        if args != 'help':
+            input('Press any key')
+            os.system('clear')
+            print(self.menu())
 
 
 class SessionInterpreter(cmd.Cmd):
