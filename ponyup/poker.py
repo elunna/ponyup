@@ -1,7 +1,6 @@
 """
   " Manages all the aspects of a round of poker
   """
-from __future__ import print_function
 import datetime
 import logging
 import random
@@ -252,7 +251,7 @@ class Round(object):
     def betting_round(self):
         """ Run through a round of betting. Returns a victor if it exists.  """
         # pylint: disable=bad-builtin
-        print(self.table)
+        _logger.info(self.table)
         br = betting.BettingRound(self)
 
         _logger.debug('Starting iteration new Betting object.')
@@ -266,7 +265,7 @@ class Round(object):
                         action = actions[choice]
                         break
                     else:
-                        print('Invalid choice, try again.')
+                        _logger.info('Invalid choice, try again.')
             else:
                 # Get cpu decision
                 action = br.cpu_decision(seat)
@@ -275,10 +274,10 @@ class Round(object):
             act_str = br.action_string(action)
             space = betting.spacing(br.level())
 
-            print(space, act_str)
-            _logger.info(act_str)
+            _logger.info('{}{}'.format(space, act_str))
+            # _logger.info(act_str)
 
-        print('Pot: ${}'.format(self.pot))
+        _logger.info('Pot: ${}'.format(self.pot))
 
     def betting_over(self):
         """ Checks the players and sees if any valid bettors are left to duke it
@@ -308,7 +307,7 @@ class Round(object):
             return False
         else:
             _logger.debug('One player left.')
-            print('Only one player left!'.rjust(70))
+            _logger.info('Only one player left!'.rjust(70))
 
             awardtext = pots.award_pot(victor, self.pot.pot)
             _logger.info(awardtext)

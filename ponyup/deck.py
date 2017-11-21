@@ -1,7 +1,6 @@
 """
   " Creation and management of a Deck of cards.
   """
-from __future__ import print_function
 import random
 from ponyup import card
 

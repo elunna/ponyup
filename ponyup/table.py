@@ -3,7 +3,6 @@
   " conducting a poker game.
   """
 
-from __future__ import print_function
 import random
 from ponyup import card
 from ponyup import seat

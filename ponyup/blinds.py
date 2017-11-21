@@ -114,5 +114,6 @@ def get_stakes(lev):
 
 def levels(bet_dict):
     """ Returns a listing of all the available blind levels in the structure.  """
+    _str = ''
     for k, v in sorted(bet_dict):
-        print('\tLevel {:3}: ${}-${}'.format(k, v, v * 2))
+        _str += '\tLevel {:3}: ${}-${}\n'.format(k, v, v * 2)

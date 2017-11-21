@@ -3,6 +3,8 @@
   """
 from functools import wraps
 from ponyup import card
+from ponyup import logger
+_logger = logger.get_logger(__name__)
 
 CSI = "\x1b["
 CSI_end = "\x1b[0m"
@@ -100,17 +102,17 @@ def color_action(space, act_str):
     chips = color_chips(act_str[mstart+1:])
 
     if 'fold' in act_str:
-        print('{}{}'.format(space, color(act_str, 'PURPLE')))
+        _logger.info('{}{}'.format(space, color(act_str, 'PURPLE')))
     elif 'check' in act_str:
-        print('{}{}'.format(space, color(act_str, 'WHITE')))
+        _logger.info('{}{}'.format(space, color(act_str, 'WHITE')))
     elif 'allin' in act_str:
-        print('{}{}'.format(space, color(act_str, 'WHITE')))
+        _logger.info('{}{}'.format(space, color(act_str, 'WHITE')))
     elif 'call' in act_str:
-        print('{}{}{}'.format(space, color(act_str[:mstart], 'WHITE'), chips))
+        _logger.info('{}{}{}'.format(space, color(act_str[:mstart], 'WHITE'), chips))
     elif 'bet' in act_str:
-        print('{}{}{}'.format(space, color(act_str[:mstart], 'RED'), chips))
+        _logger.info('{}{}{}'.format(space, color(act_str[:mstart], 'RED'), chips))
     elif 'raise' in act_str:
-        print('{}{}{}'.format(space, color(act_str[:mstart], 'RED'), chips))
+        _logger.info('{}{}{}'.format(space, color(act_str[:mstart], 'RED'), chips))
 
 
 def color_cards(cards):

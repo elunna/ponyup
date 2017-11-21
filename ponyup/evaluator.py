@@ -1,6 +1,5 @@
 """ Evaluates poker hands """
 
-from __future__ import print_function
 from collections import namedtuple
 import itertools
 from ponyup import card

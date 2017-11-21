@@ -4,6 +4,7 @@
 import json
 from ponyup import blinds
 from ponyup import factory
+from ponyup import logger
 from ponyup import lobby
 from ponyup import player_db
 
@@ -12,6 +13,7 @@ SETTINGS = 'data/settings.json'
 DEFAULT_PLAYER = 'luna'
 DEFAULT_STACK = 20  # Big blinds
 MINIMUM_STACK = 5  # Big blinds
+_logger = logger.get_logger(__name__)
 
 
 class Casino(object):
@@ -104,14 +106,14 @@ class Casino(object):
 
         # Check hero bank
         if self.hero.bank < minbuyin:
-            print('You don\'t have enough chips to buyin to this game!')
+            _logger.info('You don\'t have enough chips to buyin to this game!')
             return False
 
         # Check the buyin
         if buyin >= minbuyin:
             return True
         else:
-            print('The minimum buy-in is ${} bits.'.format(minbuyin))
+            _logger.info('The minimum buy-in is ${} bits.'.format(minbuyin))
             return False
 
     def default_buyin(self):

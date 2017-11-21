@@ -34,7 +34,7 @@ def get_logger(name):
     # Add handlers to logger
     logger.addHandler(debug_fh)
     logger.addHandler(info_fh)
-    #  logger.addHandler(ch)
+    logger.addHandler(ch)
     return logger
 
 

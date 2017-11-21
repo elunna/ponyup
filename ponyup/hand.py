@@ -1,5 +1,4 @@
 """ Manages a regular hand of cards. """
-from __future__ import print_function
 from ponyup import evaluator
 
 

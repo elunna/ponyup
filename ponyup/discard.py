@@ -2,7 +2,6 @@
   " Manages the discarding of cards in a poker hand. This module specifically
   " addresses the optimal discarding strategy for computer opponents.
   """
-from __future__ import print_function
 from ponyup import card
 from ponyup import evaluator as ev
 from ponyup import logger
@@ -76,7 +75,7 @@ class Discard(object):
         else:
             d_txt = '{} stands pat.'.format(seat.player)
 
-        _logger.info(d_txt)
+        # _logger.info(d_txt)
         return d_txt
 
 
@@ -102,7 +101,7 @@ def discard_phase(_round):
         dis.discard(s, discards)
         d_txt = dis.discard_text(s, discards)
         dis.redraw(s)
-        print(d_txt)
+        _logger.info(d_txt)
 
 
 def auto_discard(hand, max_discards=5):
@@ -235,21 +234,21 @@ def human_discard(seat, max_discards=5):
         of chosen discards.
     """
     hand = seat.hand
-    print(discard_menu(hand))
+    _logger.info(discard_menu(hand))
     while True:
         helpme = ['?', 'h', 'help']
         c = input(':> ')
         if c in helpme:
-            print('')
-            print('Enter the cards you want to discard:')
-            print('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
+            _logger.info('')
+            _logger.info('Enter the cards you want to discard:')
+            _logger.info('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
             continue
 
         # Note: x is checking if there is a str x in valid_picks.
         picks = [int(x) for x in set(c) if x in valid_picks(hand)]
 
         if len(picks) > max_discards:
-            print('Sorry, the deck is low -- you can only pick up to {} cards.'.format(
+            _logger.info('Sorry, the deck is low -- you can only pick up to {} cards.'.format(
                 max_discards))
             continue
 
@@ -265,4 +264,3 @@ def extract_discards(cards, keep):
             raise ValueError('The keep list has a card not in the original card list!')
 
     return [c for c in cards if c not in keep]
-

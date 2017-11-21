@@ -6,6 +6,9 @@ import cmd
 import os
 from ponyup import casino
 from ponyup import lobby
+from ponyup import logger
+
+_logger = logger.get_logger(__name__)
 
 
 DISPLAYWIDTH = 80
@@ -57,11 +60,11 @@ class Game(cmd.Cmd):
         :> new erik
         """
         if not args.strip():
-            print('No name specified for the new player!')
+            _logger.info('No name specified for the new player!')
         elif self.casino.new_player(args):
-            print("Successfully created new player '{}'".format(args))
+            _logger.info("Successfully created new player '{}'".format(args))
         else:
-            print("Failed to create new player '{}'".format(args))
+            _logger.info("Failed to create new player '{}'".format(args))
 
     def do_load(self, args):
         """ Load a player.
@@ -70,13 +73,13 @@ class Game(cmd.Cmd):
         :> load erik
         """
         if not args.strip():
-            print('No name specified!')
+            _logger.info('No name specified!')
         elif self.casino.load_player(args):
-            print('Loaded {} successfully!'.format(self.casino.hero))
+            _logger.info('Loaded {} successfully!'.format(self.casino.hero))
         else:
-            print("Load failed for '{}'!".format(self.casino.hero))
-            print('Here are all the available players:')
-            print(self.casino.list_players())
+            _logger.info("Load failed for '{}'!".format(self.casino.hero))
+            _logger.info('Here are all the available players:')
+            _logger.info(self.casino.list_players())
 
     def do_save(self, args):
         """ Save the current player's info.
@@ -84,9 +87,9 @@ class Game(cmd.Cmd):
         :> save
         """
         if self.casino.save_player():
-            print("Saved '{}' successfully!".format(self.casino.hero))
+            _logger.info("Saved '{}' successfully!".format(self.casino.hero))
         else:
-            print("Save failed for '{}'!".format(self.casino.hero))
+            _logger.info("Save failed for '{}'!".format(self.casino.hero))
 
     def do_del(self, args):
         """ Delete a player.
@@ -95,13 +98,13 @@ class Game(cmd.Cmd):
         :> del erik
         """
         if not args.strip():
-            print('No name specified!')
+            _logger.info('No name specified!')
         elif self.casino.delete_player(args):
-            print("Successfully deleted '{}'!".format(args))
+            _logger.info("Successfully deleted '{}'!".format(args))
         else:
-            print("Delete failed for '{}'!".format(args))
-            print('Here are all the available players:')
-            print(self.casino.list_players())
+            _logger.info("Delete failed for '{}'!".format(args))
+            _logger.info('Here are all the available players:')
+            _logger.info(self.casino.list_players())
 
     def do_table(self, args):
         """ Select a table to play at.
@@ -109,26 +112,26 @@ class Game(cmd.Cmd):
         You will be presented with a list of all the tables, then just select one.
         """
         games = lobby.sort_by_stakes(self.lobby.all_tables())
-        print(lobby.numbered_list(games))
+        _logger.info(lobby.numbered_list(games))
 
         valid_choices = list(range(len(games)))
 
         try:
             choice = int(input('Pick a game to play :> '))
         except ValueError:
-            print('Not a valid table... staying with default')
+            _logger.info('Not a valid table... staying with default')
             return
 
         if choice in valid_choices:
             g = games[choice]
             self.casino.set_game(g)
-            print('Game set to {}'.format(g.tablename))
+            _logger.info('Game set to {}'.format(g.tablename))
         else:
-            print('Not a valid game...')
+            _logger.info('Not a valid game...')
 
     def do_credits(self, args):
         """ View game producer credits. """
-        print(credits)
+        _logger.info(credits)
 
     def do_options(self, args):
         """ View and edit game options. """
@@ -147,14 +150,14 @@ class Game(cmd.Cmd):
 
         """
         if not args:
-            print('Getting default buyin')
+            _logger.info('Getting default buyin')
             buyin = self.casino.default_buyin()
         else:
             try:
                 buyin = int(buyin)
             except:
-                print('Amount needs to be an integer!')
-                print('You need to enter a number for the buyin!')
+                _logger.info('Amount needs to be an integer!')
+                _logger.info('You need to enter a number for the buyin!')
                 return False
 
         if not self.casino.valid_buyin(buyin):
@@ -170,7 +173,7 @@ class Game(cmd.Cmd):
     def do_quit(self, args):
         """ Leaves the game . """
         # self.postcmd(True, args)
-        print('Goodbye!')
+        _logger.info('Goodbye!')
         exit()
         # return True
 
@@ -189,7 +192,7 @@ class Game(cmd.Cmd):
         if args != 'help':
             input('Press any key')
             os.system('clear')
-            print(self.menu())
+            _logger.info(self.menu())
 
 
 class SessionInterpreter(cmd.Cmd):

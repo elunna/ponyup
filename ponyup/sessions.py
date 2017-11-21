@@ -52,7 +52,7 @@ class Session(object):
 
     def play(self):
         """ Defines the structure of how a single hand in the poker game is played. """
-        print('Stub play function')
+        _logger.info('Stub play function')
 
     def find_hero(self):
         _logger.debug('Attempting to find the hero player in the Session\'s table.')
@@ -81,7 +81,7 @@ class Session(object):
         """ Performs player maintenance between rounds. """
         _logger.debug('Performing table maintenance.')
         _logger.debug('Removing broke players.')
-        print(self.clear_broke_players())
+        _logger.info(self.clear_broke_players())
 
         _logger.debug('Checking if we need to repopulate players to the table..')
         if self.repopulate():
@@ -115,7 +115,7 @@ class Session(object):
             newplayer = self.yank_from_pool()
             _logger.debug('Randomizing which free seat the new player will occupy')
             newseat = random.choice(freeseats)
-            print('{} has entered the game and taken seat {}.'.format(newplayer.name, newseat.NUM))
+            _logger.info('{} has entered the game and taken seat {}.'.format(newplayer.name, newseat.NUM))
 
             _logger.debug('Seating the new player at seat {}'.format(newseat.NUM))
             newseat.sitdown(newplayer)
@@ -147,7 +147,7 @@ class Session(object):
                     continue
                 else:
                     _logger.debug('Found a CPU to make leave: seat {}'.format(s.NUM))
-                    print('{} has left the table..'.format(s.player))
+                    _logger.info('{} has left the table..'.format(s.player))
                     # Make the random player leave
                     _logger.debug('Making seat {} stand up from the table'.format(s.NUM))
                     s.standup()
