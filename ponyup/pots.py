@@ -154,12 +154,16 @@ class Pot():
         for sidepot, winners in award_dict.items():
             for i, amt in self.split_pot(winners, sidepot).items():
                 seat = self.table.seats[i]
-                _str += '{} wins with a {}: {}\n'.format(
-                    str(seat.player),
-                    str(seat.hand.rank()),
-                    str(seat.hand.desc())
-                )
-                _str += award_pot(seat, amt)
+                if award_pot(seat, amt):
+                    _str += '{} wins ${} with a {}: {}\n'.format(
+                        str(seat.player),
+                        amt,
+                        str(seat.hand.rank()),
+                        str(seat.hand.desc())
+                    )
+                else:
+                    _str += '{} has no hand! Not eligible to win any pot!'.format(seat.player)
+
         return _str
 
     def valid_sidepots(self, sidepots):
@@ -200,9 +204,9 @@ def award_pot(seat, amt):
     """
     if seat.has_hand():
         seat.win(amt)
-        return '{:} wins ${}\n'.format(str(seat.player), amt)
+        return True
     else:
-        raise ValueError('Player has no hand! Not eligible to win any pot!')
+        return False
 
 
 def best_hand_val(seats):

@@ -140,7 +140,6 @@ class Round(object):
         _str = ''
         for s in self.table.get_players(hascards=True):
             _str += '{:20} shows {}\n'.format(str(s), str(s.hand))
-        _logger.info(_str)
         _str += '\n'
         return _str
 
@@ -275,7 +274,6 @@ class Round(object):
             space = betting.spacing(br.level())
 
             _logger.info('{}{}'.format(space, act_str))
-            # _logger.info(act_str)
 
         _logger.info('Pot: ${}'.format(self.pot))
 
@@ -320,7 +318,6 @@ class Round(object):
         sd_text = ''
 
         title = self.decorate('Showdown!')
-        _logger.info(title)
         sd_text += title
 
         revealed = self.show_cards()
@@ -329,7 +326,6 @@ class Round(object):
         _logger.debug('Calculating pots and sidepots.')
         award_txt = self.pot.allocate_money_to_winners()
 
-        _logger.info(award_txt)
         sd_text += award_txt
 
         return sd_text
