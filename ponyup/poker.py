@@ -250,7 +250,7 @@ class Round(object):
     def betting_round(self):
         """ Run through a round of betting. Returns a victor if it exists.  """
         # pylint: disable=bad-builtin
-        _logger.info(self.table)
+        _logger.info(str(self.table))
         br = betting.BettingRound(self)
 
         _logger.debug('Starting iteration new Betting object.')
@@ -307,7 +307,8 @@ class Round(object):
             _logger.debug('One player left.')
             _logger.info('Only one player left!'.rjust(70))
 
-            awardtext = pots.award_pot(victor, self.pot.pot)
+            pots.award_pot(victor, self.pot.pot)
+            awardtext = '{} wins ${} without a showdown!\n'.format(victor, self.pot.pot)
             _logger.info(awardtext)
             return True
 

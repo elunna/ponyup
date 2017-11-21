@@ -1,15 +1,43 @@
+from ponyup import colors
 import datetime
 import logging
 
 DEBUG_FILE = 'logs/debug.log'
 INFO_FILE = 'logs/info.log'
 LOGDIR = 'logs/'
+old_factory = logging.getLogRecordFactory()
+
+
+class ContextFilter(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """
+    def filter(self, record):
+        record.begin, record.end = '', ''
+
+        act_str = record.getMessage()
+
+        if 'fold' in act_str:
+            record.begin, record.end = colors.color_tuple('PURPLE')
+        elif 'check' in act_str:
+            record.begin, record.end = colors.color_tuple('WHITE')
+        elif 'allin' in act_str:
+            record.begin, record.end = colors.color_tuple('WHITE')
+        elif 'call' in act_str:
+            record.begin, record.end = colors.color_tuple('WHITE')
+        elif 'bet' in act_str:
+            record.begin, record.end = colors.color_tuple('RED')
+        elif 'raise' in act_str:
+            record.begin, record.end = colors.color_tuple('RED')
+
+        return True
 
 
 def get_logger(name):
     # Logger setup
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
+    # logging.setLogRecordFactory(record_factory)
 
     # Setup file handlers
     debug_fh = logging.FileHandler(DEBUG_FILE)
@@ -27,9 +55,16 @@ def get_logger(name):
                                   "%d-%m-%y %H:%M:%S")
     info_fmt = logging.Formatter('%(message)s')
 
+    con_fmt = logging.Formatter('%(begin)s%(message)s%(end)s')
+    # con_fmt = logging.Formatter('%(message)s')
+
     debug_fh.setFormatter(debug_fmt)
     info_fh.setFormatter(info_fmt)
-    ch.setFormatter(info_fmt)
+    ch.setFormatter(con_fmt)
+
+    # Custom filter
+    cfilter = ContextFilter()
+    ch.addFilter(cfilter)
 
     # Add handlers to logger
     logger.addHandler(debug_fh)

@@ -3,8 +3,6 @@
   """
 from functools import wraps
 from ponyup import card
-from ponyup import logger
-_logger = logger.get_logger(__name__)
 
 CSI = "\x1b["
 CSI_end = "\x1b[0m"
@@ -38,12 +36,16 @@ def color(string, fg, bg='GRAY', STYLE='NORMAL'):
     """
     if fg.upper() in COLORS:
         return '{}{};{};{}m{}{}'.format(
-            CSI,
-            STYLES[STYLE],
-            COLORS[fg.upper()],
-            COLORS[bg.upper()],
+            CSI, STYLES[STYLE], COLORS[fg.upper()], COLORS[bg.upper()],
             string,
             CSI_end)
+    else:
+        raise ValueError('Passed arg color is not in the available colors!')
+
+
+def color_tuple(fg, bg='GRAY', STYLE='NORMAL'):
+    if fg.upper() in COLORS:
+        return ('{}{};{};{}m'.format(CSI, STYLES[STYLE], COLORS[fg.upper()], COLORS[bg.upper()]), CSI_end)
     else:
         raise ValueError('Passed arg color is not in the available colors!')
 
@@ -96,23 +98,23 @@ def color_chips(amt):
     return '$' + amt
 
 
-def color_action(space, act_str):
+def color_action(act_str):
     """ Colors a player's action in a poker game based on the actions meaning. """
     mstart = act_str.find('$')
-    chips = color_chips(act_str[mstart+1:])
+    chips = color_chips(act_str[mstart + 1:])
 
     if 'fold' in act_str:
-        _logger.info('{}{}'.format(space, color(act_str, 'PURPLE')))
+        return '{1}{0}{2}'.format(act_str, *color_tuple('PURPLE'))
     elif 'check' in act_str:
-        _logger.info('{}{}'.format(space, color(act_str, 'WHITE')))
+        return '{1}{0}{2}'.format(act_str, *color_tuple('WHITE'))
     elif 'allin' in act_str:
-        _logger.info('{}{}'.format(space, color(act_str, 'WHITE')))
+        return '{1}{0}{2}'.format(act_str, *color_tuple('WHITE'))
     elif 'call' in act_str:
-        _logger.info('{}{}{}'.format(space, color(act_str[:mstart], 'WHITE'), chips))
+        return '{1}{0}{2}{3}'.format(act_str, chips, act_str[:mstart], *color_tuple('WHITE'))
     elif 'bet' in act_str:
-        _logger.info('{}{}{}'.format(space, color(act_str[:mstart], 'RED'), chips))
+        return '{1}{0}{2}{3}'.format(act_str, chips, act_str[:mstart], *color_tuple('RED'))
     elif 'raise' in act_str:
-        _logger.info('{}{}{}'.format(space, color(act_str[:mstart], 'RED'), chips))
+        return '{1}{0}{2}{3}'.format(act_str, chips, act_str[:mstart], *color_tuple('RED'))
 
 
 def color_cards(cards):
