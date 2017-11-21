@@ -68,8 +68,7 @@ class Round(object):
 
     @classmethod
     def decorate(self, text):
-        L, R = '~~/) ', ' (\\~~'
-        return '\n' + L + text + R
+        return '\n~~~ {} ~~~\n'.format(text)
 
     def log_holecards(self):
         _logger.info(self.decorate('Hole Cards'))
@@ -78,7 +77,8 @@ class Round(object):
         _logger.debug('Hero is: {}'.format(hero.player))
 
         cards = hero.hand.peek()
-        _logger.info('{}: [{}]'.format(hero, cards.strip()))
+        _logger.info('{}: [{}]\n'.format(hero, cards.strip()))
+        _logger.info('\n')
 
     def log_hh(self):
         """ Creates a new handhistory entry in the handhistory file. """
@@ -108,7 +108,8 @@ class Round(object):
 
         _logger.info(logger.round_header(self))
         _logger.info(self.table.player_listing())
-        _logger.info('Seat {} has the button.'.format(self.table.TOKENS['D']))
+        _logger.info('\n')
+        _logger.info('Seat {} has the button.\n'.format(self.table.TOKENS['D']))
 
     def deal_cards(self, qty, faceup=False, handreq=False):
         """ Deal the specified quantity of cards to each player. If faceup is
@@ -127,7 +128,7 @@ class Round(object):
                     c.hidden = False
 
                     if s is not self.find_hero():
-                        _logger.info('{} was dealt [{}]'.format(s.player, c))
+                        _logger.info('{} was dealt [{}]\n'.format(s.player, c))
                     self.exposed.append(c)
 
     def show_cards(self):
@@ -166,13 +167,9 @@ class Round(object):
     def post_antes(self):
         """ All players bet the ante amount and it's added to the pot. """
         _logger.debug('Making players post antes.')
-        actions = ''
         for s in self.table:
-            actions += '{} posts ${} ante.\n'.format(s, self.blinds.ANTE)
+            _logger.info('{} posts ${} ante.\n'.format(s, self.blinds.ANTE))
             self.pot += s.bet(self.blinds.ANTE)
-
-        _logger.info(actions)
-        return actions
 
     def post_blinds(self):
         """ Gets the small and big blind positions from the table and makes each
@@ -194,12 +191,9 @@ class Round(object):
         # Bet the SB and BB amounts and add to the pot
         self.pot += sb.bet(self.blinds.SB)
         self.pot += bb.bet(self.blinds.BB)
-        actions = ''
-        actions += '{} posts ${}\n'.format(sb, self.blinds.SB)
-        actions += '{} posts ${}'.format(bb, self.blinds.BB)
 
-        _logger.info(actions)
-        return actions
+        _logger.info('{} posts ${}\n'.format(sb, self.blinds.SB))
+        _logger.info('{} posts ${}\n'.format(bb, self.blinds.BB))
 
     def post_bringin(self):
         """ Gets the player who must post the bringin amount, adds their bet to
@@ -217,11 +211,8 @@ class Round(object):
         _logger.debug('Making a player post the bringin.')
         # Bet the Bringin amount and add to the pot
         self.pot += seat.bet(self.blinds.BRINGIN)
-        action = ''
-        action += '{} brings it in for ${}'.format(seat.player, self.blinds.BRINGIN)
 
-        _logger.info(action)
-        return action
+        _logger.info('{} brings it in for ${}'.format(seat.player, self.blinds.BRINGIN))
 
     def next_street(self):
         """ Advanced the street counter by one. """
@@ -249,8 +240,8 @@ class Round(object):
 
     def betting_round(self):
         """ Run through a round of betting. Returns a victor if it exists.  """
-        # pylint: disable=bad-builtin
         _logger.info(str(self.table))
+
         br = betting.BettingRound(self)
 
         _logger.debug('Starting iteration new Betting object.')
@@ -264,7 +255,7 @@ class Round(object):
                         action = actions[choice]
                         break
                     else:
-                        _logger.info('Invalid choice, try again.')
+                        _logger.info('Invalid choice, try again.\n')
             else:
                 # Get cpu decision
                 action = br.cpu_decision(seat)
@@ -273,9 +264,9 @@ class Round(object):
             act_str = br.action_string(action)
             space = betting.spacing(br.level())
 
-            _logger.info('{}{}'.format(space, act_str))
+            _logger.info('{}{}\n'.format(space, act_str))
 
-        _logger.info('Pot: ${}'.format(self.pot))
+        _logger.info('Pot: ${}\n'.format(self.pot))
 
     def betting_over(self):
         """ Checks the players and sees if any valid bettors are left to duke it
@@ -304,8 +295,7 @@ class Round(object):
             self.next_street()
             return False
         else:
-            _logger.debug('One player left.')
-            _logger.info('Only one player left!'.rjust(70))
+            _logger.info('Only one player left!\n'.rjust(70))
 
             pots.award_pot(victor, self.pot.pot)
             awardtext = '{} wins ${} without a showdown!\n'.format(victor, self.pot.pot)

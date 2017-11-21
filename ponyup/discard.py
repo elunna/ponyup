@@ -71,11 +71,10 @@ class Discard(object):
 
     def discard_text(self, seat, discards):
         if discards:
-            d_txt = '{} discards {} cards'.format(seat.player, len(discards))
+            d_txt = '{} discards {} cards\n'.format(seat.player, len(discards))
         else:
-            d_txt = '{} stands pat.'.format(seat.player)
+            d_txt = '{} stands pat.\n'.format(seat.player)
 
-        # _logger.info(d_txt)
         return d_txt
 
 
@@ -83,14 +82,14 @@ def discard_phase(_round):
     """ Goes through a table and offers all players with cards the option to
         discard. Returns a list of all the discards (ie:"muck" cards)
     """
-    title = 'Discard Phase:'
+    title = 'Discard Phase'
     _logger.info(_round.decorate(title))
     dis = Discard(_round)
 
     for s in dis.genny():
         # Check if cards are left in deck
         if dis.max_discards == 0:
-            _logger.info('Deck has been depleted!')
+            _logger.warning('Deck has been depleted!\n')
             break
 
         if s.player.is_human():
@@ -239,16 +238,16 @@ def human_discard(seat, max_discards=5):
         helpme = ['?', 'h', 'help']
         c = input(':> ')
         if c in helpme:
-            _logger.info('')
-            _logger.info('Enter the cards you want to discard:')
-            _logger.info('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.')
+            _logger.info('\n')
+            _logger.info('Enter the cards you want to discard:\n')
+            _logger.info('Example: "1" discards card 1, "12" discards cards 1 and 2, etc.\n')
             continue
 
         # Note: x is checking if there is a str x in valid_picks.
         picks = [int(x) for x in set(c) if x in valid_picks(hand)]
 
         if len(picks) > max_discards:
-            _logger.info('Sorry, the deck is low -- you can only pick up to {} cards.'.format(
+            _logger.info('Sorry, the deck is low -- you can only pick up to {} cards.\n'.format(
                 max_discards))
             continue
 

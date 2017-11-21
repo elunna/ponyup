@@ -48,6 +48,7 @@ def get_logger(name):
 
     # Setup console stream handler
     ch = logging.StreamHandler()
+    ch.terminator = ''
     ch.setLevel(logging.INFO)
 
     # Setup formatting

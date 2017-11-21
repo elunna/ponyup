@@ -31,7 +31,7 @@ class Stud5Session(sessions.Session):
 
                 # The bringin determines the first bettor.
                 r.table.set_bringin()
-                print(r.post_bringin())
+                r.post_bringin()
             else:
                 r.deal_cards(1, faceup=True, handreq=True)
                 high = r.highhand()
