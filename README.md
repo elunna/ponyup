@@ -132,3 +132,24 @@ other combos of cards for easy testing.
 ### License
 
 This project is licensed under the MIT License.
+
+
+### Todo
+
+todo: deck.py -  Add faceup arg to deal
+todo: Main menu View Help
+todo: Option: Speed
+todo: Option: View Odds (TOGGLE)
+todo: Show BB, effBB, stacksize.(TOGGLE)
+todo: Hand strength display(TOGGLE)
+todo: Auto sort cards(TOGGLE)
+todo: Implement The Grind - and CPU basic strategies(4 types?)
+
+Chips need gold color
+Chips need correct decimals
+Add time delay and option to change
+Fix: Doesn't say when someone wins from folds
+Fix: Stud - Seat one has button?
+todo: Add q to quit while betting
+todo: Use proper ID instead of making a random number for sessions and gameids
+fix: Input space
