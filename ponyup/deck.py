@@ -31,7 +31,7 @@ class Deck(object):
         """ Returns True if the given Card is in the deck, False otherwise.  """
         return c in self.cards
 
-    def shuffle(self, x):
+    def shuffle(self, x=1):
         """ Shuffles the deck of cards once.  """
         for _ in range(x):
             random.shuffle(self.cards)
