@@ -206,7 +206,7 @@ def award_pot(seat, amt):
         seat.win(amt)
         return True
     else:
-        return False
+        raise ValueError('Player {} has no cards!'.format(seat.player))
 
 
 def best_hand_val(seats):

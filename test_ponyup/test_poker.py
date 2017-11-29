@@ -187,17 +187,6 @@ class TestPoker(unittest.TestCase):
         self.assertEqual(self.r.table.seats[2].stack, 998)
         self.assertEqual(self.r.pot, 3)
 
-    def test_postblinds_6players_returnsString(self):
-        """ 6 players(spaced out). SB=1, BB=2, startingstacks=1000 """
-        self.setUp(lvl=1)
-        self.r.table.TOKENS['D'] = -1
-        self.r.table.move_button()
-        self.r.table.set_blinds()
-        self.assertEqual(self.r.table.TOKENS['D'], 0)  # verify the button is 0
-        expected = 'bob1 posts $1\nbob2 posts $2'
-        result = self.r.post_blinds()
-        self.assertEqual(expected, result)
-
     def test_postbringin_seat5_has2chipsless(self):
         """ XXX """
         self.setUp_stud()
@@ -209,14 +198,6 @@ class TestPoker(unittest.TestCase):
         self.r.post_bringin()
         expected = 1
         result = stack - seat.stack
-        self.assertEqual(expected, result)
-
-    def test_postbringin_seat5_returnsString(self):
-        self.setUp_stud()
-        tools.deal_stud5(self.r.table, matchingranks=0)
-        expected = 'bob5 brings it in for $1'
-        self.r.table.set_bringin()
-        result = self.r.post_bringin()
         self.assertEqual(expected, result)
 
     def test_nextstreet_street0_streetIs1(self):
