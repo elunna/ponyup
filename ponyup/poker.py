@@ -170,7 +170,9 @@ class Round(object):
         """ All players bet the ante amount and it's added to the pot. """
         _logger.debug('Making players post antes.')
         for s in self.table:
-            _logger.info('{} posts ${} ante.\n'.format(s, self.blinds.ANTE))
+            _logger.info('{} posts '.format(s))
+            _logger.info('${} ante.\n'.format(self.blinds.ANTE))
+
             self.pot += s.bet(self.blinds.ANTE)
 
     def post_blinds(self):
@@ -194,8 +196,11 @@ class Round(object):
         self.pot += sb.bet(self.blinds.SB)
         self.pot += bb.bet(self.blinds.BB)
 
-        _logger.info('{} posts ${}\n'.format(sb, self.blinds.SB))
-        _logger.info('{} posts ${}\n'.format(bb, self.blinds.BB))
+        _logger.info('{} posts '.format(sb))
+        _logger.info('${}\n'.format(self.blinds.SB))
+
+        _logger.info('{} posts '.format(bb))
+        _logger.info('${}\n'.format(self.blinds.BB))
 
     def post_bringin(self):
         """ Gets the player who must post the bringin amount, adds their bet to
