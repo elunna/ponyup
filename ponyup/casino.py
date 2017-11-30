@@ -32,7 +32,7 @@ class Casino(object):
 
     def get_info(self):
         """ Return a string containing the game info. """
-        _logger.info('-=- Game info -=-'.center(DISPLAYWIDTH))
+        _logger.info('-=- Current Game info -=-'.center(DISPLAYWIDTH))
         _logger.info('\n')
 
         if self.hero:

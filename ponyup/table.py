@@ -58,7 +58,7 @@ class Table(object):
 
             if s.occupied():
                 _str.append('{:20}'.format(str(s.player)))
-                _str.append('{:<16}'.format(s.stack))
+                _str.append('${:<16}'.format(s.stack))
             else:
                 # Don't show anything for vacant seats.
                 _str.append('{:20}{:16}'.format('', ''))
