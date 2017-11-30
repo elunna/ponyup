@@ -3,6 +3,7 @@
   " addresses the optimal discarding strategy for computer opponents.
   """
 from ponyup import card
+from ponyup import cmdline
 from ponyup import evaluator as ev
 from ponyup import logger
 
@@ -89,7 +90,7 @@ def discard_phase(_round):
     for s in dis.genny():
         # Check if cards are left in deck
         if dis.max_discards == 0:
-            _logger.warning('Deck has been depleted!\n')
+            _logger.warning('Deck has been depleted!\n'.rjust(cmdline.DISPLAYWIDTH))
             break
 
         if s.player.is_human():
@@ -98,7 +99,7 @@ def discard_phase(_round):
             discards = dis.cpu_discard(s)
 
         dis.discard(s, discards)
-        d_txt = dis.discard_text(s, discards)
+        d_txt = dis.discard_text(s, discards).rjust(cmdline.DISPLAYWIDTH)
         dis.redraw(s)
         _logger.info(d_txt)
 
@@ -226,16 +227,19 @@ def human_discard(seat, max_discards=5):
         of chosen discards.
     """
     hand = seat.hand
-    _logger.info(''.join(['{:<3}'.format(n) for n in valid_picks(hand)]))
+    dis_menu = ''.join(['{:<3}'.format(n) for n in valid_picks(hand)])
+    _logger.info(dis_menu.rjust(cmdline.DISPLAYWIDTH))
     _logger.info('\n')
 
+    spacing = cmdline.DISPLAYWIDTH - 15
+    _logger.info(' '*spacing)
     for c in hand.peek():
         _logger.info('{}'.format(c))
     _logger.info('\n')
 
     while True:
         helpme = ['?', 'h', 'help']
-        c = input(':> ')
+        c = input(':> '.rjust(cmdline.DISPLAYWIDTH - 15))
         if c in helpme:
             _logger.info('\n')
             _logger.info('Enter the cards you want to discard:\n')
