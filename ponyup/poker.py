@@ -83,7 +83,7 @@ class Round(object):
     def log_hh(self):
         """ Creates a new handhistory entry in the handhistory file. """
         dt = datetime.datetime
-        filename = 'HH_{}_-_{}_{}_{}(Pony Bits).log'.format(
+        filename = 'HH_{}_-_{}_{}_{}.log'.format(
             dt.now().strftime('%Y%m%d'),
             self.table.name,
             self.gametype,
@@ -106,7 +106,8 @@ class Round(object):
         _logger.debug('Round - deck: {}'.format(self.d))
         _logger.debug('Round - exposed: {}'.format(self.exposed))
 
-        _logger.info(logger.round_header(self))
+        for txt in logger.round_header(self):
+            _logger.info(txt)
         # _logger.info(self.table.player_listing())  # Too much info?
         # _logger.info('\n')
         _logger.info('Seat {} has the button.\n'.format(self.table.TOKENS['D']))

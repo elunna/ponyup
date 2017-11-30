@@ -91,14 +91,12 @@ def hh_logname(session):
 
 
 def round_header(_round):
+    """ Returns a list of strings for the header"""
     dt = datetime.datetime
-    date = dt.today()
     time = dt.now().strftime('%Y-%m-%d %H:%M:%S')
-    header = 'PonyUp Poker Game ID# {}: Table {} - {} - {} - {}\n'.format(
-        _round.gameid,
-        _round.table.name,
-        _round.blinds.stakes(),
-        _round.gametype,
-        time,
-        date)
+    header = []
+    header.append('PonyUp Game ID {}: {} - '.format(_round.gameid, _round.gametype))
+    header.append('{}'.format(_round.blinds.stakes()))
+    header.append('\n')
+    header.append('{} - {}\n'.format(_round.table.name, time))
     return header

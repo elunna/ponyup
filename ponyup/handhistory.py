@@ -30,7 +30,7 @@ class HandHistory(object):
     def generate_filename(self):
         """ Creates a unique filename that describes the handhistory for the session, """
         stakes = '${}-${}'.format(self.r.blinds.SMBET, self.r.blinds.SMBET * 2)
-        filename = 'HH_{}_-_{}_{}_{}(Pony Bits)'.format(
+        filename = 'HH_{}_-_{}_{}_{}'.format(
             self.dt.now().strftime('%Y%m%d'),
             self.r.table.name,
             self.r.gametype,
@@ -42,7 +42,7 @@ class HandHistory(object):
         """ Creates a header for each new round of poker """
         date = self.dt.today()
         time = self.dt.now().strftime('%Y-%m-%d %H:%M:%S')
-        header = 'PonyUp Poker Game ID# {}: Table {} - {} - {} - {}\n'.format(
+        header = 'PonyUp Game ID# {}: {} - {} - {} - {}\n'.format(
             self.r.gameid,
             self.r.table.name,
             self.r.blinds.stakes(),
