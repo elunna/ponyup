@@ -299,7 +299,9 @@ class Round(object):
             act_str = br.action_string(action)
             space = betting.spacing(br.level())
 
-            _logger.info('{}{}\n'.format(space, act_str))
+            _logger.info('{}'.format(space))
+            _logger.display(act_str)
+            _logger.info('\n')
 
         _logger.info('Pot: ${}\n'.format(self.pot).rjust(cmdline.DISPLAYWIDTH))
 

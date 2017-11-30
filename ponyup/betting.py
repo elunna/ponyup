@@ -157,15 +157,16 @@ class BettingRound(object):
 
     def action_string(self, action):
         s = self.get_bettor()
-        act_str = ''
-        act_str += '{} {}s'.format(s.player, action.name.lower())
+        act_str = []
+        act_str.append('{} {}s '.format(s.player, action.name.lower()))
 
         if action.name in ['CALL', 'BET', 'RAISE']:
-            return '{} ${}'.format(act_str, str(action.cost))
+            act_str.append('${}'.format(str(action.cost)))
+            return act_str
         elif action.name in ['FOLD', 'CHECK']:
             return act_str
         elif action.name == 'ALLIN':
-            return '{} is all in.'.format(s.player)
+            return ['{} is all in.'.format(s.player)]
         else:
             raise Exception('Error processing the action!')
 
@@ -234,14 +235,13 @@ class BettingRound(object):
         elif self.street > 0:
             self.stacks = self.table.stackdict()
 
-
     def betmenu(self, actions):
         """ Return a string showing the betting options.  """
         nice_opts = ['[' + v.name[0] + ']' + v.name[1:].lower() for v in sorted(actions.values())]
         choices = '/'.join(nice_opts)
         return choices
 
+
 def spacing(level):
     """ Spaces the player actions by the current bet level.  """
-    return '  ' * level
-
+    return '   ' * level
