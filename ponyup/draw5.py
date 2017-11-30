@@ -36,7 +36,7 @@ class Draw5Session(sessions.Session):
                 break
 
         else:
-            print(r.showdown())
+            r.showdown()
 
         r.cleanup()
         self.rounds += 1

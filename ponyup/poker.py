@@ -136,15 +136,15 @@ class Round(object):
     def show_cards(self):
         """ Unhides all player hands. """
         _logger.debug('All player hands are being revealed.')
+
         for s in self.table.get_players(hascards=True):
             _logger.debug('Unhiding {}\'s hand.'.format(s.player))
             s.hand.unhide()
 
-        _str = ''
         for s in self.table.get_players(hascards=True):
-            _str += '{:20} shows {}\n'.format(str(s), str(s.hand))
-        _str += '\n'
-        return _str
+            _logger.info('{:20} shows '.format(str(s)))
+            _logger.display(s.hand.peek())
+            _logger.info('\n')
 
     def sortcards(self):
         """ Sort all cards in all players hands. """
@@ -337,20 +337,13 @@ class Round(object):
         """ Compare all the hands of players holding cards and determine the
             winner(s). Awards each winner the appropriate amount.
         """
-        sd_text = ''
-
-        title = self.decorate('Showdown!')
-        sd_text += title
-
-        revealed = self.show_cards()
-        sd_text += '\n' + revealed
+        _logger.info(self.decorate('Showdown!'))
+        _logger.info('\n')
+        self.show_cards()
 
         _logger.debug('Calculating pots and sidepots.')
-        award_txt = self.pot.allocate_money_to_winners()
 
-        sd_text += award_txt
-
-        return sd_text
+        _logger.display(self.pot.allocate_money_to_winners())
 
     def cleanup(self):
         _logger.debug('Cleanup phase.')

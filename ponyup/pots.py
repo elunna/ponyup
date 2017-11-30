@@ -150,19 +150,16 @@ class Pot():
         Takes in the dictionary of awards/seats and awards each player their share. Uses
         split pot to correctly split up ties.
         """
-        _str = ''
+        _str = []
         for sidepot, winners in award_dict.items():
             for i, amt in self.split_pot(winners, sidepot).items():
                 seat = self.table.seats[i]
                 if award_pot(seat, amt):
-                    _str += '{} wins ${} with a {}: {}\n'.format(
-                        str(seat.player),
-                        amt,
-                        str(seat.hand.rank()),
-                        str(seat.hand.desc())
-                    )
+                    _str.append('{} wins '.format(str(seat.player)))
+                    _str.append('${}'.format(amt))
+                    _str.append(' with a {}: {}\n'.format(str(seat.hand.rank()), str(seat.hand.desc())))
                 else:
-                    _str += '{} has no hand! Not eligible to win any pot!'.format(seat.player)
+                    _str.append('{} has no hand! Not eligible to win any pot!'.format(seat.player))
 
         return _str
 
@@ -186,13 +183,16 @@ class Pot():
         if not self.valid_sidepots(sidepots):
             raise Exception('Sidepots are not valid - they do not total the pot amount!')
 
-        award_txt = ''
+        award_txt = []
 
         if len(sidepots) > 1:
             for i, s in enumerate(sidepots):
-                award_txt += 'Sidepot #{}: ${}\n'.format(i+1, s)
+                award_txt.append('Sidepot #{}: '.format(i+1))
+                award_txt.append('${}'.format(s))
+                award_txt.append('\n')
 
-        award_txt += self.process_awards(sidepots)
+        award_txt.extend(self.process_awards(sidepots))
+
         return award_txt
 
 
