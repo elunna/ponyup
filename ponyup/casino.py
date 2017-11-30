@@ -32,26 +32,24 @@ class Casino(object):
 
     def get_info(self):
         """ Return a string containing the game info. """
-        _str = ''
-        title = '-=- Game info -=-'.center(DISPLAYWIDTH)
-        _str += title + '\n'
+        _logger.info('-=- Game info -=-'.center(DISPLAYWIDTH))
+        _logger.info('\n')
 
-        playertxt = ''
         if self.hero:
-            playertxt = '{}(${})'.format(self.hero, self.hero.bank)
-            _str += '{:15} {}\n'.format('Player:', playertxt)
+            _logger.info('{:15} {}('.format('Player:', self.hero))
+            _logger.info('${}'.format(self.hero.bank))
+            _logger.info(')\n')
         else:
-            _str += '{:15} {}\n'.format('Player:', 'n/a')
+            _logger.info('{:15} {}\n'.format('Player:', 'n/a'))
 
         if self.game:
-            _str += '{:15} {}\n'.format('Table Name:', self.game.tablename)
-            _str += '{:15} {}\n'.format('Game:', self.game.game)
-            _str += '{:15} {}\n'.format('Stakes:', blinds.get_stakes(self.game.level))
-            _str += '{:15} {}\n'.format('Seats:', self.game.seats)
+            _logger.info('{:15} {}\n'.format('Table Name:', self.game.tablename))
+            _logger.info('{:15} {}\n'.format('Game:', self.game.game))
+            _logger.info('{:15} '.format('Stakes:'))
+            _logger.info('{}\n'.format(blinds.get_stakes(self.game.level)))
+            _logger.info('{:15} {}\n'.format('Seats:', self.game.seats))
         else:
-            _str += '{:15} {}\n'.format('Game:', 'n/a (use the "games" command to set the game.')
-
-        return _str
+            _logger.info('{:15} {}\n'.format('Game:', 'n/a (use the "games" command to set the game.'))
 
     def list_players(self):
         _str = '{:20} {:10}\n'.format('Name', 'Chips')

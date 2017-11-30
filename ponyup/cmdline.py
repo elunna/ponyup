@@ -185,7 +185,7 @@ class Game(cmd.Cmd):
                 _logger.info(l)
         _logger.info('~'*70 + '\n')
 
-        _logger.info(self.casino.get_info())
+        self.casino.get_info()
 
     def postcmd(self, stop, args):
         if args != 'help':
