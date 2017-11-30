@@ -179,14 +179,13 @@ class Game(cmd.Cmd):
 
     def menu(self):
         """ Display the logo """
-        txt = ''
-        with open(LOGO) as f:
-            for l in f.readlines():
-                txt += l
-        txt += '~'*70 + '\n'
 
-        txt += self.casino.get_info()
-        return txt
+        with open(LOGO) as f:
+            for l in f.read():
+                _logger.info(l)
+        _logger.info('~'*70 + '\n')
+
+        _logger.info(self.casino.get_info())
 
     def postcmd(self, stop, args):
         if args != 'help':
