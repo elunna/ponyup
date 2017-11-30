@@ -8,27 +8,31 @@ LOGDIR = 'logs/'
 old_factory = logging.getLogRecordFactory()
 
 
-class ContextFilter(logging.Filter):
-    """
-    This is a filter which injects contextual information into the log.
-    """
-    def filter(self, record):
-        record.begin, record.end = '', ''
+def color_stuff(msg):
+    if 'fold' in msg:
+        return colors.color_tuple('PURPLE')
+    elif 'check' in msg:
+        return colors.color_tuple('WHITE')
+    elif 'allin' in msg:
+        return colors.color_tuple('WHITE')
+    elif 'call' in msg:
+        return colors.color_tuple('WHITE')
+    elif 'bet' in msg:
+        return colors.color_tuple('RED')
+    elif 'raise' in msg:
+        return colors.color_tuple('RED')
+    elif '$' in msg:
+        return colors.color_tuple('YELLOW')
+    else:
+        return '', ''
 
+
+class ContextFilter(logging.Filter):
+    """ This is a filter which injects contextual information into the log.  """
+    def filter(self, record):
         act_str = record.getMessage()
 
-        if 'fold' in act_str:
-            record.begin, record.end = colors.color_tuple('PURPLE')
-        elif 'check' in act_str:
-            record.begin, record.end = colors.color_tuple('WHITE')
-        elif 'allin' in act_str:
-            record.begin, record.end = colors.color_tuple('WHITE')
-        elif 'call' in act_str:
-            record.begin, record.end = colors.color_tuple('WHITE')
-        elif 'bet' in act_str:
-            record.begin, record.end = colors.color_tuple('RED')
-        elif 'raise' in act_str:
-            record.begin, record.end = colors.color_tuple('RED')
+        record.begin, record.end = color_stuff(act_str)
 
         return True
 
