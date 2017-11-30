@@ -112,7 +112,7 @@ class Game(cmd.Cmd):
         You will be presented with a list of all the games, then just select one.
         """
         games = lobby.sort_by_stakes(self.lobby.all_tables())
-        _logger.info(lobby.numbered_list(games))
+        _logger.display(lobby.numbered_list(games))
 
         valid_choices = list(range(len(games)))
 

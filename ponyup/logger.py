@@ -2,6 +2,7 @@ from ponyup import card
 from ponyup import colors
 import datetime
 import logging
+import types
 
 DEBUG_FILE = 'logs/debug.log'
 INFO_FILE = 'logs/info.log'
@@ -96,7 +97,18 @@ def get_logger(name):
     logger.addHandler(debug_fh)
     logger.addHandler(info_fh)
     logger.addHandler(ch)
+
+    # This allows us to attach the display method to the logger so we can print
+    # lists of strings. We have to use types.MethodType because just attaching
+    # it doesn't work
+    logger.display = types.MethodType(display, logger)
+
     return logger
+
+
+def display(self, list_o_strings):
+    for s in list_o_strings:
+        self.info(s)
 
 
 def hh_logname(session):

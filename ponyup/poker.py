@@ -77,9 +77,7 @@ class Round(object):
         _logger.debug('Hero is: {}'.format(hero.player))
 
         _logger.info('{}: [ '.format(hero))
-        for c in hero.hand.peek():
-            _logger.info('{}'.format(c))
-
+        _logger.display(hero.hand.peek())
         _logger.info(']\n')
 
     def log_hh(self):

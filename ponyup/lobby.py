@@ -68,9 +68,19 @@ def sort_by_seats(L):
 
 def numbered_list(L):
     _str = ''
-    fmt_str = '{:<8}{:20}{:<8}{:12}{:25}\n'
-    _str += fmt_str.format('Pick#', 'Game', 'Seats', 'Stakes', 'Table Name')
+    _str = []
+    _str.append('{:<8}'.format('Pick#'))
+    _str.append('{:20}'.format('Game'))
+    _str.append('{:<8}'.format('Seats'))
+    _str.append('{:12}'.format('Stakes'))
+    _str.append('{:25}'.format('Table Name'))
+    _str.append('\n')
 
     for i, gt in enumerate(L):
-        _str += (fmt_str.format(i, gt.game.title(), gt.seats, gt.stakes, gt.tablename))
+        _str.append('{:<8}'.format(i))
+        _str.append('{:20}'.format(gt.game.title()))
+        _str.append('{:<8}'.format(gt.seats))
+        _str.append('{:12}'.format(gt.stakes))
+        _str.append('{:25}'.format(gt.tablename))
+        _str.append('\n')
     return _str

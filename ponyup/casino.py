@@ -31,7 +31,7 @@ class Casino(object):
             json.dump(self.settings, f)
 
     def get_info(self):
-        """ Return a string containing the game info. """
+        """ Print the game info. """
         _logger.info('-=- Current Game info -=-'.center(DISPLAYWIDTH))
         _logger.info('\n')
 
