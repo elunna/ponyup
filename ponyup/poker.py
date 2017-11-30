@@ -5,6 +5,7 @@ import datetime
 import logging
 import random
 from ponyup import betting
+from ponyup import cmdline
 from ponyup import deck
 from ponyup import evaluator
 from ponyup import logger
@@ -142,7 +143,10 @@ class Round(object):
             s.hand.unhide()
 
         for s in self.table.get_players(hascards=True):
-            _logger.info('{:20} shows '.format(str(s)))
+            nameshow = '{} shows '.format(str(s))
+            spacelen = cmdline.DISPLAYWIDTH - (len(nameshow) + len(str(s.hand)))
+            _logger.info(' '*spacelen)
+            _logger.info(nameshow)
             _logger.display(s.hand.peek())
             _logger.info('\n')
 
@@ -297,7 +301,7 @@ class Round(object):
 
             _logger.info('{}{}\n'.format(space, act_str))
 
-        _logger.info('Pot: ${}\n'.format(self.pot))
+        _logger.info('Pot: ${}\n'.format(self.pot).rjust(cmdline.DISPLAYWIDTH))
 
     def betting_over(self):
         """ Checks the players and sees if any valid bettors are left to duke it
@@ -326,11 +330,17 @@ class Round(object):
             self.next_street()
             return False
         else:
-            _logger.info('Only one player left!\n'.rjust(70))
+            _logger.info('Only one player left!\n'.rjust(cmdline.DISPLAYWIDTH))
 
             pots.award_pot(victor, self.pot.pot)
-            awardtext = '{} wins ${} without a showdown!\n'.format(victor, self.pot.pot)
-            _logger.info(awardtext)
+            wintxt1 = '{} wins '.format(victor)
+            wintxt2 = '${}'.format(self.pot.pot)
+            wintxt3 = ' without a showdown!\n'
+            spacing = cmdline.DISPLAYWIDTH - (len(wintxt1) + len(wintxt2) + len(wintxt3))
+            _logger.info(' '*spacing)
+            _logger.info(wintxt1)
+            _logger.info(wintxt2)
+            _logger.info(wintxt3)
             return True
 
     def showdown(self):
@@ -340,10 +350,12 @@ class Round(object):
         _logger.info(self.decorate('Showdown!'))
         _logger.info('\n')
         self.show_cards()
+        _logger.info('\n')
 
         _logger.debug('Calculating pots and sidepots.')
 
         _logger.display(self.pot.allocate_money_to_winners())
+        _logger.info('\n')
 
     def cleanup(self):
         _logger.debug('Cleanup phase.')

@@ -26,12 +26,12 @@ class Table(object):
         """ Return the string representation of the table, with colors. """
         _str = []
         _str.append('\n')
-        _str.append('{:5}'.format('Seat'))
-        _str.append('{:7}'.format('Blinds'))
-        _str.append('{:7}'.format('Dealer'))
+        _str.append('{:10}'.format('Seat'))
+        _str.append('{:10}'.format('Blinds'))
+        _str.append('{:10}'.format('Dealer'))
         _str.append('{:20}'.format('Player'))
-        _str.append('{:<17}'.format('Chips'))
-        _str.append('{:16}'.format('Hand'))
+        _str.append('{:<16}'.format('Chips'))
+        _str.append('{:15}'.format('Hand'))
         _str.append('\n')
 
         for i, s in enumerate(self.seats):
@@ -40,28 +40,28 @@ class Table(object):
                 _str.append('{}\n'.format(i))
                 continue
             else:
-                _str.append('{:<5}'.format(i))
+                _str.append('{:<10}'.format(i))
 
             if self.TOKENS['SB'] == i:
-                _str.append('{:7}'.format('[SB]'))
+                _str.append('{:10}'.format('[SB]'))
             elif self.TOKENS['BB'] == i:
-                _str.append('{:7}'.format('[BB]'))
+                _str.append('{:10}'.format('[BB]'))
             elif self.TOKENS['BI'] == i:
-                _str.append('{:7}'.format('[BI]'))
+                _str.append('{:10}'.format('[BI]'))
             else:
-                _str.append(' '*7)
+                _str.append(' '*10)
 
             if self.TOKENS['D'] == i:
-                _str.append('{:7}'.format('[D]'))
+                _str.append('{:10}'.format('[D]'))
             else:
-                _str.append(' '*7)
+                _str.append(' '*10)
 
             if s.occupied():
                 _str.append('{:20}'.format(str(s.player)))
-                _str.append('${:<16}'.format(s.stack))
+                _str.append('${:<15}'.format(s.stack))
             else:
                 # Don't show anything for vacant seats.
-                _str.append('{:20}{:16}'.format('', ''))
+                _str.append('{:20}{:15}'.format('', ''))
 
             # Display hand if available
             if s.player.is_human():
@@ -70,7 +70,7 @@ class Table(object):
                 # _str.append('{:16}'.format(
 
             elif s.hand is not None:
-                _str.append('{:16}'.format(str(s.hand)))
+                _str.append('{:15}'.format(str(s.hand)))
             _str.append('\n')
 
         return _str

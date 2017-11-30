@@ -1,3 +1,6 @@
+from ponyup import cmdline
+
+
 class Pot():
     def __init__(self, table):
         self.pot = 0
@@ -155,9 +158,15 @@ class Pot():
             for i, amt in self.split_pot(winners, sidepot).items():
                 seat = self.table.seats[i]
                 if award_pot(seat, amt):
-                    _str.append('{} wins '.format(str(seat.player)))
-                    _str.append('${}'.format(amt))
-                    _str.append(' with a {}: {}\n'.format(str(seat.hand.rank()), str(seat.hand.desc())))
+                    wintxt1 = '{} wins '.format(str(seat.player))
+                    wintxt2 = '${}'.format(amt)
+                    wintxt3 = ' with a {}: {}\n'.format(str(seat.hand.rank()), str(seat.hand.desc()))
+
+                    spacelen = cmdline.DISPLAYWIDTH - (len(wintxt1) + len(wintxt2) + len(wintxt3))
+                    _str.append(' '*spacelen)
+                    _str.append(wintxt1)
+                    _str.append(wintxt2)
+                    _str.append(wintxt3)
                 else:
                     _str.append('{} has no hand! Not eligible to win any pot!'.format(seat.player))
 
