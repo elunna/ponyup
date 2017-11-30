@@ -17,35 +17,29 @@ cards = (
 )
 
 
-def color_card(text):
-    if text in cards:
-        return colors.color_tuple(card.COLORS[text[1]])
-    elif text == 'Xx':
-        return colors.color_tuple('PURPLE')
-    else:
-        return None
-
-
 def color_stuff(msg):
-    msg = msg.lower()
-    if 'fold' in msg:
+    msg_lower = msg.lower()
+
+    if 'fold' in msg_lower:
         return colors.color_tuple('PURPLE')
-    elif 'check' in msg:
+    elif 'check' in msg_lower:
         return colors.color_tuple('WHITE')
-    elif 'allin' in msg:
+    elif 'allin' in msg_lower:
         return colors.color_tuple('WHITE')
-    elif 'call' in msg:
+    elif 'call' in msg_lower:
         return colors.color_tuple('WHITE')
-    elif 'bet' in msg:
+    elif 'bet' in msg_lower:
         return colors.color_tuple('RED')
-    elif 'raise' in msg:
+    elif 'raise' in msg_lower:
         return colors.color_tuple('RED')
-    elif '$' in msg:
+    elif '$' in msg_lower:
         return colors.color_tuple('YELLOW')
 
-    card_tup = color_card(msg.strip())
-    if card_tup:
-        return card_tup
+    msg = msg.strip()
+    if msg in cards:
+        return colors.color_tuple(card.COLORS[msg[1]])
+    elif msg == 'Xx':
+        return colors.color_tuple('PURPLE')
     else:
         return '', ''
 
