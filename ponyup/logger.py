@@ -27,6 +27,7 @@ def color_card(text):
 
 
 def color_stuff(msg):
+    msg = msg.lower()
     if 'fold' in msg:
         return colors.color_tuple('PURPLE')
     elif 'check' in msg:

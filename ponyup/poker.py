@@ -258,12 +258,35 @@ class Round(object):
                 # Get player action
                 while True:
                     actions = br.get_options(seat)
-                    choice = input('{}?'.format(br.betmenu(actions)))
+                    choice = input('{} :> '.format(br.betmenu(actions)))
                     if choice.lower() in actions:
                         action = actions[choice]
                         break
+                    elif choice.lower().startswith('q'):
+                        # We'll make q just fold or check for now - eventually
+                        # it should quit to the main menu.
+                        if 'f' in actions:
+                            _logger.info("(quit) We'll just fold your hand...")
+                            action = actions['f']
+                        else:
+                            _logger.info("(quit) We'll just check your hand...")
+                            action = actions['c']
+                        break
+
+                    elif choice.lower().startswith(('h', '?')):
+                        _logger.info('\n')
+                        _logger.info('Action Menu Help:\n')
+                        _logger.info('These are all the options, not all will be available in each situation!\n')
+                        _logger.info("Call  (or 'c') -- Call the required amount.\n")
+                        _logger.info("Check (or 'c') -- Pass the action to the next player.\n")
+                        _logger.info("Bet   (or 'b') -- Bet the standard amount.\n")
+                        _logger.info("Raise (or 'r') -- Raise the current amount.\n")
+                        _logger.info("Fold  (or 'f') -- Give up the current hand.\n")
+                        _logger.info("Quit  (or 'q') -- Quit this session.\n")
+                        _logger.info('\n')
+
                     else:
-                        _logger.info('Invalid choice, try again.\n')
+                        _logger.info('Invalid choice, try again.\n\n')
             else:
                 # Get cpu decision
                 action = br.cpu_decision(seat)
