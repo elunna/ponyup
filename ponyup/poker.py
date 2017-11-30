@@ -78,7 +78,6 @@ class Round(object):
 
         cards = hero.hand.peek()
         _logger.info('{}: [{}]\n'.format(hero, cards.strip()))
-        _logger.info('\n')
 
     def log_hh(self):
         """ Creates a new handhistory entry in the handhistory file. """
@@ -110,6 +109,7 @@ class Round(object):
             _logger.info(txt)
         # _logger.info(self.table.player_listing())  # Too much info?
         # _logger.info('\n')
+        _logger.info('\n')
         _logger.info('Seat {} has the button.\n'.format(self.table.TOKENS['D']))
 
     def deal_cards(self, qty, faceup=False, handreq=False):
