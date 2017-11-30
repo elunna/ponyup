@@ -54,7 +54,7 @@ class Game(cmd.Cmd):
         self.intro = self.menu()
 
     def do_new(self, args):
-        """ Create a new player.
+        """Create a new player.
         Usage: new <player>
         ex: To create a new player "erik"
         :> new erik
@@ -67,7 +67,7 @@ class Game(cmd.Cmd):
             _logger.info("Failed to create new player '{}'\n".format(args))
 
     def do_load(self, args):
-        """ Load a player.
+        """Load a player.
         Usage: load <player>
         ex: To load player "erik"
         :> load erik
@@ -82,7 +82,7 @@ class Game(cmd.Cmd):
             _logger.info(self.casino.list_players())
 
     def do_save(self, args):
-        """ Save the current player's info.
+        """Save the current player's info.
         Usage: save
         :> save
         """
@@ -92,7 +92,7 @@ class Game(cmd.Cmd):
             _logger.info("Save failed for '{}'!\n".format(self.casino.hero))
 
     def do_del(self, args):
-        """ Delete a player.
+        """Delete a player.
         Usage: del <player>
         ex: To delete player "erik"
         :> del erik
@@ -106,10 +106,10 @@ class Game(cmd.Cmd):
             _logger.info('Here are all the available players:\n')
             _logger.info(self.casino.list_players())
 
-    def do_table(self, args):
-        """ Select a table to play at.
-        Usage: table
-        You will be presented with a list of all the tables, then just select one.
+    def do_game(self, args):
+        """Select a table game to play at.
+        Usage: game
+        You will be presented with a list of all the games, then just select one.
         """
         games = lobby.sort_by_stakes(self.lobby.all_tables())
         _logger.info(lobby.numbered_list(games))
@@ -119,7 +119,7 @@ class Game(cmd.Cmd):
         try:
             choice = int(input('Pick a game to play :> '))
         except ValueError:
-            _logger.info('Not a valid table... staying with default\n')
+            _logger.info('Not a valid game... staying with default\n')
             return
 
         if choice in valid_choices:
@@ -130,15 +130,15 @@ class Game(cmd.Cmd):
             _logger.info('Not a valid game...\n')
 
     def do_credits(self, args):
-        """ View game producer credits. """
+        """View game producer credits. """
         _logger.info(credits)
 
     def do_options(self, args):
-        """ View and edit game options. """
+        """View and edit game options. """
         pass
 
     def do_play(self, args):
-        """ Play the selected game.
+        """Play the selected game.
         Supply a buyin amount or use the default buyin.
 
         Usage: play or play <buyin amount>
@@ -171,14 +171,14 @@ class Game(cmd.Cmd):
         self.do_save(None)
 
     def do_quit(self, args):
-        """ Leaves the game . """
+        """Leaves the game . """
         # self.postcmd(True, args)
         _logger.info('Goodbye!\n')
         exit()
         # return True
 
     def menu(self):
-        """ Display the logo """
+        """Display the logo """
 
         with open(LOGO) as f:
             for l in f.read():
@@ -188,10 +188,50 @@ class Game(cmd.Cmd):
         self.casino.get_info()
 
     def postcmd(self, stop, args):
-        if args != 'help':
+        if args not in ['help', 'h', '?']:
             input('Press any key')
             os.system('clear')
-            _logger.info(self.menu())
+            self.menu()
+
+    def do_c(self, args):
+        """Alias for credits command"""
+        return self.do_credits(args)
+
+    def do_d(self, args):
+        """Alias for del command"""
+        return self.do_del(args)
+
+    def do_g(self, args):
+        """Alias for game command"""
+        return self.do_game(args)
+
+    def do_h(self, args):
+        """Alias for help command"""
+        return self.do_help(args)
+
+    def do_l(self, args):
+        """Alias for load command"""
+        return self.do_load(args)
+
+    def do_n(self, args):
+        """Alias for new command"""
+        return self.do_new(args)
+
+    def do_o(self, args):
+        """Alias for options command"""
+        return self.do_options(args)
+
+    def do_p(self, args):
+        """Alias for play command"""
+        return self.do_play(args)
+
+    def do_q(self, args):
+        """Alias for quit command"""
+        return self.do_quit(args)
+
+    def do_s(self, args):
+        """Alias for save command"""
+        return self.do_save(args)
 
 
 class SessionInterpreter(cmd.Cmd):
@@ -201,7 +241,7 @@ class SessionInterpreter(cmd.Cmd):
         self.session = session
         self.playing = True
         self.play_round()
-        self.prompt = 'Press enter to play again, or "[q]uit" to go back to the lobby.'
+        self.prompt = '[Enter], [q]uit, or [?] :> '
 
     def emptyline(self):
         self.play_round()
@@ -227,3 +267,7 @@ class SessionInterpreter(cmd.Cmd):
         """ Quits the poker session. """
         self.session.find_hero().standup()
         return True
+
+    def do_q(self, args):
+        """ Quits the poker session. """
+        return self.do_quit(args)
