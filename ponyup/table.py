@@ -20,46 +20,55 @@ class Table(object):
         self.seats = [seat.Seat(i) for i in range(size)]
 
     def __str__(self):
+        return 'Table: {} seats'.format(len(self.seats))
+
+    def display(self):
         """ Return the string representation of the table, with colors. """
-        _str = '\n'
-        _str = '{:5}{:7}{:7}{:20}{:<17}{:16}\n'.format(
-            'Seat', 'Blinds', 'Dealer', 'Player', 'Chips', 'Hand')
+        _str = []
+        _str.append('\n')
+        _str.append('{:5}'.format('Seat'))
+        _str.append('{:7}'.format('Blinds'))
+        _str.append('{:7}'.format('Dealer'))
+        _str.append('{:20}'.format('Player'))
+        _str.append('{:<17}'.format('Chips'))
+        _str.append('{:16}'.format('Hand'))
+        _str.append('\n')
 
         for i, s in enumerate(self.seats):
             if s is None:
                 # No player is occupying the seat
-                _str += '{}\n'.format(i)
+                _str.append('{}\n'.format(i))
                 continue
             else:
-                _str += '{:<5}'.format(i)
+                _str.append('{:<5}'.format(i))
 
             if self.TOKENS['SB'] == i:
-                _str += '{:7}'.format('[SB]')
+                _str.append('{:7}'.format('[SB]'))
             elif self.TOKENS['BB'] == i:
-                _str += '{:7}'.format('[BB]')
+                _str.append('{:7}'.format('[BB]'))
             elif self.TOKENS['BI'] == i:
-                _str += '{:7}'.format('[BI]')
+                _str.append('{:7}'.format('[BI]'))
             else:
-                _str += ' '*7
+                _str.append(' '*7)
 
             if self.TOKENS['D'] == i:
-                _str += '{:7}'.format('[D]')
+                _str.append('{:7}'.format('[D]'))
             else:
-                _str += ' '*7
+                _str.append(' '*7)
 
             if s.occupied():
-                _str += '{:20}'.format(str(s.player))
-                _str += '{:<16}'.format(s.stack)
+                _str.append('{:20}'.format(str(s.player)))
+                _str.append('{:<16}'.format(s.stack))
             else:
                 # Don't show anything for vacant seats.
-                _str += '{:20}{:16}'.format('', '')
+                _str.append('{:20}{:16}'.format('', ''))
 
             # Display hand if available
             if s.player.is_human():
-                _str += '{:16}'.format(s.hand.peek())
+                _str.append('{:16}'.format(s.hand.peek()))
             elif s.hand is not None:
-                _str += '{:16}'.format(str(s.hand))
-            _str += '\n'
+                _str.append('{:16}'.format(str(s.hand)))
+            _str.append('\n')
 
         return _str
 

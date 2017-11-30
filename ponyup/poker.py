@@ -107,8 +107,8 @@ class Round(object):
         _logger.debug('Round - exposed: {}'.format(self.exposed))
 
         _logger.info(logger.round_header(self))
-        _logger.info(self.table.player_listing())
-        _logger.info('\n')
+        # _logger.info(self.table.player_listing())  # Too much info?
+        # _logger.info('\n')
         _logger.info('Seat {} has the button.\n'.format(self.table.TOKENS['D']))
 
     def deal_cards(self, qty, faceup=False, handreq=False):
@@ -240,7 +240,8 @@ class Round(object):
 
     def betting_round(self):
         """ Run through a round of betting. Returns a victor if it exists.  """
-        _logger.info(str(self.table))
+        for txt in self.table.display():
+            _logger.info(txt)
 
         br = betting.BettingRound(self)
 
