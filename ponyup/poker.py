@@ -76,8 +76,11 @@ class Round(object):
         hero = self.find_hero()
         _logger.debug('Hero is: {}'.format(hero.player))
 
-        cards = hero.hand.peek()
-        _logger.info('{}: [{}]\n'.format(hero, cards.strip()))
+        _logger.info('{}: [ '.format(hero))
+        for c in hero.hand.peek():
+            _logger.info('{}'.format(c))
+
+        _logger.info(']\n')
 
     def log_hh(self):
         """ Creates a new handhistory entry in the handhistory file. """

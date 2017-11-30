@@ -65,7 +65,10 @@ class Table(object):
 
             # Display hand if available
             if s.player.is_human():
-                _str.append('{:16}'.format(s.hand.peek()))
+                _str.extend(c for c in s.hand.peek())
+
+                # _str.append('{:16}'.format(
+
             elif s.hand is not None:
                 _str.append('{:16}'.format(str(s.hand)))
             _str.append('\n')

@@ -58,7 +58,4 @@ class Hand(object):
         return [c for c in self.cards if c.hidden is False]
 
     def peek(self):
-        _str = ''
-        for c in self.cards:
-            _str += c.peek() + ' '
-        return _str.strip()
+        return [c.peek() + ' ' for c in self.cards]

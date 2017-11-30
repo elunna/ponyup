@@ -205,13 +205,6 @@ def draw_discards(cards, ranklist):
     return ev.strip_ranks(cards, highcards)
 
 
-def discard_menu(hand):
-    indices = ''.join(['{:<3}'.format(n) for n in valid_picks(hand)])
-    txt = indices + '\n'
-    txt += hand.peek() + '\n'
-    return txt
-
-
 def valid_picks(hand):
     """ Create a list of all the indexes(in string format) of cards in the given
         hand. List starts from 0.
@@ -233,7 +226,13 @@ def human_discard(seat, max_discards=5):
         of chosen discards.
     """
     hand = seat.hand
-    _logger.info(discard_menu(hand))
+    _logger.info(''.join(['{:<3}'.format(n) for n in valid_picks(hand)]))
+    _logger.info('\n')
+
+    for c in hand.peek():
+        _logger.info('{}'.format(c))
+    _logger.info('\n')
+
     while True:
         helpme = ['?', 'h', 'help']
         c = input(':> ')
