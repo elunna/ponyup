@@ -1,3 +1,4 @@
+from ponyup import card
 from ponyup import colors
 import datetime
 import logging
@@ -6,6 +7,22 @@ DEBUG_FILE = 'logs/debug.log'
 INFO_FILE = 'logs/info.log'
 LOGDIR = 'logs/'
 old_factory = logging.getLogRecordFactory()
+
+cards = (
+    '2c', '3c', '4c', '5c', '6c', '7c', '8c', '9c', 'Tc', 'Jc', 'Qc', 'Kc', 'Ac',
+    '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s', 'Ts', 'Js', 'Qs', 'Ks', 'As',
+    '2h', '3h', '4h', '5h', '6h', '7h', '8h', '9h', 'Th', 'Jh', 'Qh', 'Kh', 'Ah',
+    '2d', '3d', '4d', '5d', '6d', '7d', '8d', '9d', 'Td', 'Jd', 'Qd', 'Kd', 'Ad',
+)
+
+
+def color_card(text):
+    if text in cards:
+        return colors.color_tuple(card.COLORS[text[1]])
+    elif text == 'Xx':
+        return colors.color_tuple('PURPLE')
+    else:
+        return None
 
 
 def color_stuff(msg):
@@ -23,6 +40,10 @@ def color_stuff(msg):
         return colors.color_tuple('RED')
     elif '$' in msg:
         return colors.color_tuple('YELLOW')
+
+    card_tup = color_card(msg.strip())
+    if card_tup:
+        return card_tup
     else:
         return '', ''
 
