@@ -247,8 +247,8 @@ class Round(object):
 
     def betting_round(self):
         """ Run through a round of betting. Returns a victor if it exists.  """
-        for txt in self.table.display():
-            _logger.info(txt)
+
+        _logger.display(self.table.display())
 
         br = betting.BettingRound(self)
 
