@@ -241,7 +241,7 @@ class SessionInterpreter(cmd.Cmd):
         self.session = session
         self.playing = True
         self.play_round()
-        self.prompt = '[Enter], [q]uit, or [?] :> '
+        self.prompt = ':> '
 
     def emptyline(self):
         self.play_round()
@@ -254,12 +254,10 @@ class SessionInterpreter(cmd.Cmd):
     def post_round(self):
         """ Perform post round checks """
         # Check if hero went broke
-        if self.session.find_hero().stack == 0:
-            rebuy = input('Rebuy?')
-            if not self.valid_buyin(rebuy):
-                self.do_quit(None)
-            else:
-                self.session.find_hero().buy_chips(rebuy)
+        hero_seat = self.session.find_hero()
+        if hero_seat.stack == 0:
+            _logger.info('You busted!')
+            return self.do_quit(None)
 
         self.session.table_maintainance()
 

@@ -303,7 +303,10 @@ class Round(object):
             _logger.display(act_str)
             _logger.info('\n')
 
-        _logger.info('Pot: ${}\n'.format(self.pot).rjust(cmdline.DISPLAYWIDTH))
+        pottxt = 'Pot: ${}\n'.format(self.pot)
+
+        _logger.info(' ' * (cmdline.DISPLAYWIDTH - len(pottxt)))
+        _logger.info(pottxt)
 
     def betting_over(self):
         """ Checks the players and sees if any valid bettors are left to duke it
