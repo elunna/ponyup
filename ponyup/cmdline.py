@@ -163,11 +163,9 @@ class Game(cmd.Cmd):
         if not self.casino.valid_buyin(buyin):
             return False
 
-        sesh = self.casino.make_session(buyin)
-
         # Launch a new shell for playing the Session and Rounds
-        sub_cmd = SessionInterpreter(sesh)
-        sub_cmd.cmdloop()
+        play_session(self.casino.make_session(buyin))
+
         self.do_save(None)
 
     def do_quit(self, args):
@@ -234,38 +232,23 @@ class Game(cmd.Cmd):
         return self.do_save(args)
 
 
-class SessionInterpreter(cmd.Cmd):
-    """ Runs through an ongoing session of poker. """
-    def __init__(self, session):
-        cmd.Cmd.__init__(self)
-        self.session = session
-        self.playing = True
-        self.play_round()
-        self.prompt = ':> '
+def play_session(session):
+    # Play as long as the hero has money
 
-    def emptyline(self):
-        self.play_round()
-
-    def play_round(self):
+    hero_seat = session.find_hero()
+    while True:
         os.system('clear')
-        self.session.play()
-        self.post_round()
+        session.play()
 
-    def post_round(self):
-        """ Perform post round checks """
-        # Check if hero went broke
-        hero_seat = self.session.find_hero()
         if hero_seat.stack == 0:
-            _logger.info('You busted!')
-            return self.do_quit(None)
+            _logger.info('You busted!\n')
+            break
 
-        self.session.table_maintainance()
+        session.table_maintainance()
 
-    def do_quit(self, args):
-        """ Quits the poker session. """
-        self.session.find_hero().standup()
-        return True
+        _logger.info('Keep playing[enter], [q]uit.\n')
+        c = input(':> ')
+        if c.lower().startswith('q'):
+            break
 
-    def do_q(self, args):
-        """ Quits the poker session. """
-        return self.do_quit(args)
+    session.find_hero().standup()

@@ -174,10 +174,11 @@ class Round(object):
         """ All players bet the ante amount and it's added to the pot. """
         _logger.debug('Making players post antes.')
         for s in self.table:
-            _logger.info('{} posts '.format(s))
-            _logger.info('${} ante.\n'.format(self.blinds.ANTE))
+            if s.player:  # make sure there is a valid player!
+                _logger.info('{} posts '.format(s))
+                _logger.info('${} ante.\n'.format(self.blinds.ANTE))
 
-            self.pot += s.bet(self.blinds.ANTE)
+                self.pot += s.bet(self.blinds.ANTE)
 
     def post_blinds(self):
         """ Gets the small and big blind positions from the table and makes each

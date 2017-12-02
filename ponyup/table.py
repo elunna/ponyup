@@ -59,18 +59,17 @@ class Table(object):
             if s.occupied():
                 _str.append('{:20}'.format(str(s.player)))
                 _str.append('${:<15}'.format(s.stack))
+                # Display hand if available
+                if s.player.is_human():
+                    _str.extend(c for c in s.hand.peek())
+
+                elif s.hand is not None:
+                    _str.append('{:15}'.format(str(s.hand)))
+
             else:
                 # Don't show anything for vacant seats.
                 _str.append('{:20}{:15}'.format('', ''))
 
-            # Display hand if available
-            if s.player.is_human():
-                _str.extend(c for c in s.hand.peek())
-
-                # _str.append('{:16}'.format(
-
-            elif s.hand is not None:
-                _str.append('{:15}'.format(str(s.hand)))
             _str.append('\n')
 
         return _str
@@ -244,7 +243,7 @@ class Table(object):
         _seat = None
         lowcard = card.Card('Z', 's')  # Start high
 
-        for s in self:
+        for s in self.get_players(hascards=True):
             c = s.hand.get_upcards()[0]
             if c.rank < lowcard.rank:
                 lowcard, _seat = c, s
