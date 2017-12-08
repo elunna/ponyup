@@ -71,6 +71,15 @@ class Player(object):
         """ Returns True if the player is a HUMAN type, False otherwise. """
         return self.playertype == 'HUMAN'
 
+    @property
+    def bank(self):
+        # return '${:.2f}'.format(self.bank)
+        return round(self.__bank, 2)
+
+    @bank.setter
+    def bank(self, x):
+        self.__bank = x
+
 
 def random_type():
     return random.choice(TYPES)

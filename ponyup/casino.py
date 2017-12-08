@@ -37,7 +37,7 @@ class Casino(object):
 
         if self.hero:
             _logger.info('{:15} {}('.format('Player:', self.hero))
-            _logger.info('${}'.format(self.hero.bank))
+            _logger.info('${:.2f}'.format(self.hero.bank))
             _logger.info(')\n')
         else:
             _logger.info('{:15} {}\n'.format('Player:', 'n/a'))
