@@ -66,7 +66,9 @@ class Seat(object):
         return self.stack > 0
 
     def buy_chips(self, amount):
-        if amount > self.player.bank:
+        if self.player is None:
+            raise ValueError('No player is sitting to buy chips!')
+        elif amount > self.player.bank:
             raise ValueError('Player cannot buy more chips than they can afford!')
         self.stack += self.player.withdraw(amount)
 

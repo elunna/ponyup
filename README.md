@@ -166,10 +166,13 @@ todo: Rename card to cards module
 todo: Move Joker to card module... Maybe... it has it's own logic.
 todo: Take hand import out of Seat.
 todo: Move complex player management from Table to a Dealer module
-todo: Move blinds/bringin logic from table to blinds/stud.
 todo: Consolidate poker tools to a poker module.
 todo: Move testing hands to a test_hands module in the tests directory.
 todo: Use less modules... in general
+todo: Make a CardPile class that has a lot of logic from the evaluator??
+todo: Subclass player to Human, CPU, Dealer. Give CPU's strategies.
+
+DONE: Move blinds/bringin logic from table to blinds/stud.
 
 Start with simpler games... Start simple, yet solid
 todo: War

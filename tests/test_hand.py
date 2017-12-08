@@ -126,11 +126,10 @@ def test_unhide_2cards_bothcardsUp():
 
 # Takes in a 564 hand and after it is 456
 def test_sort_unsortedhand_sortedafter():
-    cards = tools.convert_to_cards(['5s', '6s', '4s'])
+    cards = tools.convert_to_cards(['5s', '6s', '4s'], hidden=False)
     h = hand.Hand(cards)
     h.sort()
-    expected = [cards[2], cards[1], cards[0]]
-    assert h.cards == expected
+    assert h.cards == [cards[2], cards[0], cards[1]]
 
 
 def test_value_royalflush_returns100000000000():
@@ -145,7 +144,7 @@ def test_rank_royalflush_returnsROYALFLUSH():
 
 def test_desc_royalflush_AceHigh():
     h = hand.Hand(tools.make('royalflush'))
-    assert h.rank() == 'A high'
+    assert h.desc() == 'A High'
 
 
 # 1 card hand that is hidden - return empty list

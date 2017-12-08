@@ -67,7 +67,7 @@ def test_deal_emptydeck_raiseException():
     d = deck.Deck([])
     assert len(d) == 0
     with pytest.raises(Exception):
-        d.deal
+        d.deal()
 
 
 def test_isempty_fulldeck_returnFalse():

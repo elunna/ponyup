@@ -462,7 +462,7 @@ def test_chkstraightdraw_2card_0gap_2A5Q6_returns56():
 def test_chkstraightdraw_3card_0gap_AK_raisesException():
     qty, gap = 3, 0
     cards = tools.convert_to_cards(['As', 'Kc'])
-    with pytest.reaises(ValueError):
+    with pytest.raises(ValueError):
         evaluator.chk_straight_draw(cards, qty, gap)
 
 

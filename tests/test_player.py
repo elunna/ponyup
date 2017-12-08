@@ -88,16 +88,3 @@ def test_deposit_negativechips_raisesException():
     p = player.Player('Erik')
     with pytest.raises(Exception):
         p.deposit(-100)
-
-# CPU player
-
-
-def test_ishuman_CPU_returnsFalse():
-    p = player.Player('Erik', 'CPU')
-    assert p.is_human() is False
-
-
-# Human player
-def test_ishuman_HUMAN_returnsTrue():
-    p = player.Player('Erik', playertype='HUMAN')
-    assert p.is_human()

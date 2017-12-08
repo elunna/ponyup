@@ -25,14 +25,14 @@ def test_init_newseat_playerNone(s):
 
 
 # Test that the players name shows up
-def test_str_playersitting_returnsName(s):
+def test_str_playersitting_returnsName(s, p):
     s.sitdown(p)
-    assert str(s) == 'Erik'
+    assert s.__str__() == 'Erik'
 
 
 # If no player is sitting, returns 'Open Seat'
 def test_str_empty_returnsOpenSeat(s):
-    assert str(s) == 'Open Seat'
+    assert s.__str__() == 'Open Seat'
 
 
 # Same seat, no player, are equal
@@ -120,13 +120,12 @@ def test_occupied_filledseat_returnsTrue(s, p):
 
 
 def test_hashand_emptyseat_returnsFalse(s):
-    assert s.has_hand()
+    assert s.has_hand() is False
 
 
-def test_hashand_filledseat_returnsFalse(s, p):
-    # Has a player, but still no hand
+def test_hashand_filledseat_nohand_returnsFalse(s, p):
     s.sitdown(p)
-    assert s.has_hand()
+    assert s.has_hand() is False
 
 
 def test_hashand_1card_returnsTrue(s, p):
@@ -146,12 +145,12 @@ def test_haschips_playerdidnotbuychips_returnsFalse(s, p):
     assert s.has_chips() is False
 
 
-def test_buychips_emptyseat_raiseException(s):
-    with pytest.raises(Exception):
-        s.buy_chips
+def test_buychips_emptyseat_raiseValueError(s):
+    with pytest.raises(ValueError):
+        s.buy_chips(100)
 
 
-def test_buychips_negamount_raiseException(s, p):
+def test_buychips_negamount_raiseValueError(s, p):
     s.sitdown(p)
     with pytest.raises(ValueError):
         s.buy_chips(-1)

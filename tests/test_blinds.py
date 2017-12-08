@@ -3,6 +3,7 @@
   """
 import pytest
 from ..src import blinds
+from . import test_table
 
 
 def test_init_shouldbelevel1():
@@ -143,3 +144,29 @@ def test_sbtoanteratio_lev1_returns2(self):
 def test_sbtoanteratio_lev5_returns2(self):
     b = blinds.Blinds(level=5, antes=True)
     assert b.sb_to_ante_ratio() == 2
+
+
+def test_setblinds_setUpTable_SBat1(self):
+    # New table: Button at 0, sb should be at 1
+    t = test_table.custom_tbl(btn_moved=1, setblinds=True)
+    assert t.TOKENS['SB'] == 1
+
+
+def test_setblinds_seat1removed_SBat2(self):
+    # New table(seat 1 removed): Button at 0, sb should be at 2
+    t = test_table.custom_tbl(rm=1, btn_moved=1, setblinds=True)
+    t.set_blinds()
+    assert t.TOKENS['SB'] == 2
+
+
+def test_setblinds_setUpTable_BBat2(self):
+    # New table: Button at 0, bb should be at 2
+    t = test_table.custom_tbl(setblinds=True)
+    assert t.TOKENS['BB'] == 2
+
+
+def test_setblinds_seat2removed_BBat3(self):
+    # New table(seat 2 removed): Button at 0, bb should be at 3
+    t = test_table.custom_tbl(rm=2, setblinds=True)
+    assert t.TOKENS['D'] == 0
+    assert t.TOKENS['BB'] == 3
