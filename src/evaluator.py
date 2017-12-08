@@ -294,6 +294,11 @@ def count_suit(cards, suit):
     return sum(1 for c in cards if c.suit == suit)
 
 
+def count_rank(cards, rank):
+    """ Counts how many cards of the given rank occur in the card list. """
+    return sum(1 for c in cards if c.rank == rank)
+
+
 def get_gap(card1, card2):
     """ Return how many spaces are between the ranks of 2 cards.
         Example: For 87, 8 - 7 = 1, but the gap is actually 0. Paired cards have no gap.

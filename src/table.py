@@ -1,6 +1,5 @@
 """
-  " The table manages Seats and is a source of different kinds of info useful to
-  " conducting a poker game.
+  " The table manages Seats and the table tokens.
   """
 
 import random

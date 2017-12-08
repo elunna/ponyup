@@ -13,8 +13,8 @@ backburner/*
 venv/*
 .ropeproject/*
 
-ponyup/.ropeproject/*
-ponyup/.ropeproject/globalnames
-/test_ponyup/.ropeproject/*
-/test_ponyup/.ropeproject/globalnames
+src/.ropeproject/*
+src/.ropeproject/globalnames
+/tests/.ropeproject/*
+/tests/.ropeproject/globalnames
 .cache
