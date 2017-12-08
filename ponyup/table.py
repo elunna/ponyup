@@ -58,7 +58,7 @@ class Table(object):
 
             if s.occupied():
                 _str.append('{:20}'.format(str(s.player)))
-                _str.append('${:<15}'.format(s.stack))
+                _str.append('${:<15.2f}'.format(s.stack))
                 # Display hand if available
                 if s.player.is_human():
                     _str.extend(s.hand.peek())
