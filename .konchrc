@@ -1,0 +1,28 @@
+# coding: utf-8
+# This file should be in your home dir to work.
+# These are the defaults for konch init files.
+import konch
+import os
+
+konch.config({
+    'context': {
+        'banner': "And that's how Equestria was made!",
+    }
+})
+
+konch.named_config('sysutil', {
+    'context': {
+        'os': os,
+        'path': os.path,
+    }
+})
+
+
+def setup():
+    print('setup()')
+    pass
+
+
+def teardown():
+    print('teardown()')
+    print('Oatmeal!? Are you crazy?!')
