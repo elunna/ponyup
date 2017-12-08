@@ -4,6 +4,7 @@ A Token is a button or other object on the table that represents a position, a g
 
 
 class Token(object):
-    def __init__(self):
-        self.name = None
-        self.seat
+    def __init__(self, name, table):
+        self.table = table
+        self.name = name
+        self.seat = None

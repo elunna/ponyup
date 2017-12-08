@@ -18,7 +18,7 @@ def custom_tbl(players=6):
     for i, seat in enumerate(t):
         name = 'bob{}'.format(i)
         p = player.Player(name)
-        t.add_player(index=i, player=p)
+        seat.sitdown(p)
 
     return t
 
