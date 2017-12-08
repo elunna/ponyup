@@ -64,7 +64,8 @@ class Table(object):
                     _str.extend(c for c in s.hand.peek())
 
                 elif s.hand is not None:
-                    _str.append('{:15}'.format(str(s.hand)))
+                    _str.extend(str(c) + ' ' for c in s.hand.cards)
+                    # _str.append('{:15}'.format(str(s.hand.cards)))
 
             else:
                 # Don't show anything for vacant seats.
