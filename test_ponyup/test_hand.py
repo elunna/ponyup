@@ -186,18 +186,13 @@ class TestHand(unittest.TestCase):
         result = len(h.get_upcards())
         self.assertEqual(expected, result)
 
-    # Ex: As Ks. Returns string.
-
-    def test_peek_AsKs_returnsString(self):
+    def test_peek_AsKs_returnslist(self):
         cards = tools.convert_to_cards(['As', 'Ks'])
-        #  c1 = card.color(cards[0].peek())
-        #  c2 = card.color(cards[1].peek())
         h = hand.Hand(cards)
-        expected = 'As Ks'
+        expected = ['As ', 'Ks ']
         result = h.peek()
         self.assertEqual(expected, result)
 
-    # Ex: As Ks. Cards are still hidden.
     def test_peek_AsKs_stillhidden(self):
         cards = tools.convert_to_cards(['As', 'Ks'])
         h = hand.Hand(cards)

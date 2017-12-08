@@ -131,7 +131,9 @@ class Round(object):
                     c.hidden = False
 
                     if s is not self.find_hero():
-                        _logger.info('{} was dealt [{}]\n'.format(s.player, c))
+                        _logger.info('{} was dealt '.format(s.player))
+                        _logger.info('{}'.format(c))
+                        _logger.info('\n')
                     self.exposed.append(c)
 
     def show_cards(self):

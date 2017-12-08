@@ -61,7 +61,7 @@ class Table(object):
                 _str.append('${:<15}'.format(s.stack))
                 # Display hand if available
                 if s.player.is_human():
-                    _str.extend(c for c in s.hand.peek())
+                    _str.extend(s.hand.peek())
 
                 elif s.hand is not None:
                     _str.extend(str(c) + ' ' for c in s.hand.cards)
