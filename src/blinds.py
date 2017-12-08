@@ -3,23 +3,23 @@
   """
 from . import numtools
 
+class ForcedBet(object):
+    """ Manages a forced bet structure on a table. """
+    def __init__(self, ante, bringin):
 
-class Blinds(object):
-    """ Manages a blind structure """
-    # pylint: disable=too-many-instance-attributes
-    def __init__(self, level=1, blinds=True, bringin=False, antes=False):
-        """ Initialize the Blinds object with a given blind structure.  """
-        self.blinds = blinds
+
+class Antes(ForcedBet):
+    def __init__(self, bringin, ante):
         self.bringin = bringin
-        self.antes = antes
-        self.level = level
+        self.antes = ante
 
-        if bringin and blinds:
-            # We won't allow setting both blinds and bringin.
-            raise ValueError('Cannot set bringin and blinds at the same time!')
 
-        self.SMBET, self.BB, self.SB, self.BRINGIN, self.ANTE = 0, 0, 0, 0, 0
-        self.set_level(level)
+class Blinds(ForcedBet):
+    def __init__(self, sb, bb, antes=0):
+        """ Initialize the Blinds object with a given blind structure.  """
+        self.sb = sb
+        self.bb = bb
+
 
     def __str__(self):
         """
@@ -93,21 +93,6 @@ class Blinds(object):
             return 0
 
 
-# Stakes as listed out by big blind(or small bet)
-stakes = {
-    1: 2,
-    2: 4,
-    3: 8,
-    4: 15,
-    5: 30,
-    6: 50,
-    7: 100,
-    8: 200,
-    9: 500,
-    10: 1000,
-}
-
-
 def get_stakes(lev):
     return '${}/${}'.format(stakes[lev], stakes[lev]*2)
 
@@ -117,3 +102,14 @@ def levels(bet_dict):
     _str = ''
     for k, v in sorted(bet_dict):
         _str += '\tLevel {:3}: ${}-${}\n'.format(k, v, v * 2)
+
+
+def set_blinds(table):
+    if len(table.get_players()) == 2:
+        table.TOKENS['SB'] = table.TOKENS['D']
+        table.TOKENS['BB'] = table.next_player(table.TOKENS['D'])
+    elif len(table.get_players()) > 2:
+        table.TOKENS['SB'] = table.next_player(table.TOKENS['D'])
+        table.TOKENS['BB'] = table.next_player(table.TOKENS['SB'])
+    else:
+        raise ValueError('Not enough players at the table!')
