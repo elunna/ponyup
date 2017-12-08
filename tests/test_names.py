@@ -1,7 +1,7 @@
 """
   " Tests for names.py
   """
-from ponyup import names
+from ..src import names
 
 
 def test_randomnames_10_returns10names():

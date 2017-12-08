@@ -14,7 +14,7 @@ Other clarification:
 
 
 from __future__ import print_function
-from ponyup import deck
+from . import deck
 import random
 import sys
 import time

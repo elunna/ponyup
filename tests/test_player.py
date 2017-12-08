@@ -2,7 +2,7 @@
   " Tests for player.py
   """
 import pytest
-from ponyup import player
+from ..src import player
 
 
 # valid name, player name is ok

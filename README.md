@@ -162,8 +162,13 @@ todo: Generic Card class
 todo: Object diagram for Card, Deck, 
 todo: Make python2 and 3 compatible
 todo: Make this framework super flexible: Should work with console, curses, tkinter, and django.
-todo: Consolidate cards to one module.
+todo: Rename card to cards module
+todo: Move Joker to card module... Maybe... it has it's own logic.
+todo: Take hand import out of Seat.
+todo: Move complex player management from Table to a Dealer module
+todo: Move blinds/bringin logic from table to blinds/stud.
 todo: Consolidate poker tools to a poker module.
+todo: Move testing hands to a test_hands module in the tests directory.
 todo: Use less modules... in general
 
 Start with simpler games... Start simple, yet solid

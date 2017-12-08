@@ -1,9 +1,9 @@
 """
   " Tools for using the Joker in a playing card games.
   """
-from ponyup import card
-from ponyup import deck
-from ponyup import evaluator
+from . import card
+from . import deck
+from . import evaluator
 
 
 def pick_joker(cards):

@@ -3,8 +3,8 @@
   """
 
 import random
-from ponyup import card
-from ponyup import seat
+from . import card
+from . import seat
 
 VALID_SIZES = list(range(2, 10))
 

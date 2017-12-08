@@ -1,5 +1,6 @@
 """ Manages a regular hand of cards. """
-from ponyup import evaluator
+
+from . import evaluator
 
 
 class Hand(object):

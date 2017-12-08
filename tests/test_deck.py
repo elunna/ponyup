@@ -2,9 +2,9 @@
   " Tests for deck.py
   """
 import pytest
-from ponyup import deck
-from ponyup import card
-from ponyup import tools
+from ..src import deck
+from ..src import card
+from ..src import tools
 
 
 def test_str_2cards_returnsAsKsinParentheses():

@@ -2,9 +2,9 @@
   " Tests for evaluator.py
   """
 import pytest
-from ponyup import card
-from ponyup import evaluator
-from ponyup import tools
+from ..src import card
+from ..src import evaluator
+from ..src import tools
 
 
 def test_is_validhand_4cards_returnsFalse():

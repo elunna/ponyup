@@ -1,7 +1,8 @@
 """
   " Tools for testing and manipulation of cards and poker hands.
   """
-from ponyup import card, deck
+from . import card
+from . import deck
 
 # These are constants to help with computer AI
 HI_9x = 900

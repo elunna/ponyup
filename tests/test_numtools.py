@@ -1,7 +1,7 @@
 """
   " Tests for numtools.py
   """
-from ponyup import numtools
+from ..src import numtools
 
 
 def test_isinteger_10_returnsTrue():

@@ -1,7 +1,7 @@
 """
   " Tools for managing poker blind structures.
   """
-from ponyup import numtools
+from . import numtools
 
 
 class Blinds(object):

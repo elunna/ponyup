@@ -1,9 +1,9 @@
 """
   " Tests for joker.py
   """
-from ponyup import card
-from ponyup import joker
-from ponyup import tools
+from ..src import card
+from ..src import joker
+from ..src import tools
 
 
 def test_pickjoker_89TJrainbow_returnsQ():

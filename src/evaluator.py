@@ -2,7 +2,7 @@
 
 from collections import namedtuple
 import itertools
-from ponyup import card
+from . import card
 
 Ranklist = namedtuple('Ranklist', ['quantity', 'rank'])
 HANDSIZE = 5

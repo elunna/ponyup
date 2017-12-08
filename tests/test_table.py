@@ -2,16 +2,16 @@
   " Tests for table.py
   """
 import pytest
-from ponyup import card
-from ponyup import factory
-from ponyup import player
-from ponyup import table
-from ponyup import tools
+from ..src import card
+from ..src import player
+from ..src import table
+from ..src import tools
 
 
 @pytest.fixture
 def tbl():
     return table.Table(size=6)
+
 
 def test_table(players=6, rm=None, btn_moved=1, setblinds=False):
     """ Setup a table filled with generic players for testing. """
@@ -91,10 +91,12 @@ def test_addplayer_EmptyTable_1player(tbl):
 def test_addplayer_EmptyTable_returnsTrue(tbl):
     assert tbl.add_player(0, player.Player('bob0', 'CPU'))
 
+
 def test_addplayer_EmptyTable_containsPlayer(tbl):
     p = player.Player('bob0', 'CPU')
     tbl.add_player(0, p)
     assert p in tbl
+
 
 def test_addplayer_occupied_returnsFalse(tbl):
     p1 = player.Player('bob0', 'CPU')
@@ -465,7 +467,7 @@ def test_setblinds_setUpTable_BBat2(self):
 def test_setblinds_seat2removed_BBat3(self):
     # New table(seat 2 removed): Button at 0, bb should be at 3
     self.setUp(rm=2, setblinds=True)
-    assert t.TOKENS['D'], == 0
+    assert t.TOKENS['D'] == 0
     assert t.TOKENS['BB'] == 3
 
 

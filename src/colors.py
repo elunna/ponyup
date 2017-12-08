@@ -2,7 +2,7 @@
   " Tools for adding color to ASCII text.
   """
 from functools import wraps
-from ponyup import card
+from . import card
 
 CSI = "\x1b["
 CSI_end = "\x1b[0m"

@@ -1,5 +1,5 @@
-from ponyup import card
-from ponyup import colors
+from . import card
+from . import colors
 import datetime
 import logging
 import types

@@ -2,8 +2,8 @@
   " Tests for colors.py
   """
 
-from ponyup import card
-from ponyup import colors
+from ..src import card
+from ..src import colors
 
 
 # Pass an integer 10. Returns True.

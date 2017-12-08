@@ -2,9 +2,9 @@
   " Tests for seat.py
   """
 import pytest
-from ponyup import card
-from ponyup import player
-from ponyup import seat
+from ..src import card
+from ..src import player
+from ..src import seat
 
 
 @pytest.fixture

@@ -3,7 +3,7 @@
   " password, money available, etc.
   """
 
-from ponyup import names
+from . import names
 
 TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
 DATADIR = 'data/'

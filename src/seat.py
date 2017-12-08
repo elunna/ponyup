@@ -1,7 +1,7 @@
 """
   " Seats manage Players, chip stack, and Hands.
   """
-from ponyup import hand
+from . import hand
 
 
 class Seat(object):

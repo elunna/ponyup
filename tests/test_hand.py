@@ -2,9 +2,9 @@
   " Tests for hand.py
   """
 import pytest
-from ponyup import card
-from ponyup import hand
-from ponyup import tools
+from ..src import card
+from ..src import hand
+from ..src import tools
 
 
 """ Function tests for hand.py """

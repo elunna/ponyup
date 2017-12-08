@@ -2,7 +2,7 @@
   " Creation and management of a Deck of cards.
   """
 import random
-from ponyup import card
+from . import card
 
 
 class Deck(object):

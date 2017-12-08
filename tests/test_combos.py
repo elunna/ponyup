@@ -2,9 +2,9 @@
   " Tests for combos.py
   """
 import pytest
-from ponyup import combos
-from ponyup import deck
-from ponyup import tools
+from ..src import combos
+from ..src import deck
+from ..src import tools
 
 
 def test_nchoosek_0pick1_raiseException():

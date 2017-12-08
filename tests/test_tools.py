@@ -2,9 +2,9 @@
   " Tests for tools.py
   """
 import pytest
-from ponyup import card
-from ponyup import evaluator as ev
-from ponyup import tools
+from ..src import card
+from ..src import evaluator as ev
+from ..src import tools
 
 
 def test_tocard_As_returnsAs():
