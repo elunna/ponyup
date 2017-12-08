@@ -3,10 +3,7 @@
   " password, money available, etc.
   """
 
-import random
-from ponyup import draw5_plyr
 from ponyup import names
-from ponyup import stud5_plyr
 
 TYPES = ['FISH', 'JACKAL', 'MOUSE', 'LION']
 DATADIR = 'data/'
@@ -22,12 +19,7 @@ class Player(object):
             raise ValueError('Invalid username "{}" for object!'.format(name))
 
         self.bank = bank
-
-        if playertype is None:
-            rnd_type = random_type()
-            self.playertype = rnd_type
-        else:
-            self.playertype = playertype
+        self.playertype = playertype
 
         self.strategies = None
 
@@ -79,24 +71,3 @@ class Player(object):
     @bank.setter
     def bank(self, x):
         self.__bank = x
-
-
-def random_type():
-    return random.choice(TYPES)
-
-
-def factory(name, game, playertype='random'):
-    """ Create a new Player, using the game strategy from the game specified.  """
-    p = Player(name, playertype=playertype)
-
-    if playertype == 'random':
-        playertype = random_type()
-
-    if game == "FIVE CARD DRAW":
-        p.strategies = draw5_plyr.strat[playertype]
-    elif game == "FIVE CARD STUD":
-        p.strategies = stud5_plyr.strat[playertype]
-    elif game is None:
-        p.strategies = None
-
-    return p

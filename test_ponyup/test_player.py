@@ -111,10 +111,3 @@ class TestPlayer(unittest.TestCase):
         expected = True
         result = p.is_human()
         self.assertEqual(expected, result)
-
-    # Type is within the TYPES list.
-    def test_randomtype_returnsTypeinTYPES(self):
-        p = player.Player('Erik')
-        expected = True
-        result = p.playertype in player.TYPES
-        self.assertEqual(expected, result)

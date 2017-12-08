@@ -147,25 +147,35 @@ other combos of cards for easy testing.
 python war.py
 ```
 
-## Potential updates
-Things I might do when I get the time.
-
-* Add support for different graphics(tkinter maybe) 
-* Track time
-* Take the simulation running to a higher level - be able to run thousands of games and
-  track statistics.
-* Add command line options for choosing 52/54 card card, and game delays.
-* When the shuffle-between-rounds option is not on, the game can sometimes fall into
-  infinite loops.  Is there a way to detect an infinite setup loop?
-
-
 ### License
 
 This project is licensed under the MIT License.
 
 
-### Todo
+### Todos and Potential updates
 
+*IMPORTANT*
+todo: Redo framework from the ground up - start over with Rounds/Sessions/Games
+todo: Implement pytest testing
+todo: Redesign all elements
+todo: Generic Card class
+todo: Object diagram for Card, Deck, 
+todo: Make python2 and 3 compatible
+todo: Make this framework super flexible: Should work with console, curses, tkinter, and django.
+todo: Consolidate cards to one module.
+todo: Consolidate poker tools to a poker module.
+todo: Use less modules... in general
+
+Start with simpler games... Start simple, yet solid
+todo: War
+todo: Blackjack
+todo: Go fish
+todo: The grind 
+todo: Basic 5 card poker
+
+
+
+* Later priorities
 todo: deck.py -  Add faceup arg to deal
 todo: Main menu View Help
 todo: Option: Speed
@@ -175,11 +185,17 @@ todo: Hand strength display(TOGGLE)
 todo: Auto sort cards(TOGGLE)
 todo: Implement The Grind - and CPU basic strategies(4 types?)
 
-Chips need gold color
-Chips need correct decimals
 Add time delay and option to change
-Fix: Doesn't say when someone wins from folds
 Fix: Stud - Seat one has button?
 todo: Add q to quit while betting
 todo: Use proper ID instead of making a random number for sessions and gameids
-fix: Input space
+
+
+* Track time
+* Take the simulation running to a higher level - be able to run thousands of games and
+  track statistics.
+* Add command line options for choosing 52/54 card card, and game delays.
+* When the shuffle-between-rounds option is not on, the game can sometimes fall into
+  infinite loops.  Is there a way to detect an infinite setup loop?
+
+

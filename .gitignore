@@ -9,6 +9,7 @@ arc
 logs/*
 data/*
 sounds/*
+backburner/*
 .ropeproject/*
 
 ponyup/.ropeproject/*
