@@ -2,7 +2,7 @@
   " Tests for evaluator.py
   """
 import pytest
-from ..src import card
+from ..src import playingcard as pc
 from ..src import evaluator
 from ..src import tools
 
@@ -33,7 +33,7 @@ def test_is_validhand_royalflush_returnsTrue():
 
 
 def test_dominantsuit_1card_returnssuit():
-    cards = [card.Card('A', 's')]
+    cards = [pc.PlayingCard('A', 's')]
     assert evaluator.dominant_suit(cards) == 's'
 
 
@@ -63,7 +63,7 @@ def test_dominantsuit_HigherSpades_returnsSpades():
 
 
 def test_issuited_1card_returnsTrue():
-    cards = [card.Card('A', 's')]
+    cards = [pc.PlayingCard('A', 's')]
     assert evaluator.is_suited(cards)
 
 
@@ -102,14 +102,14 @@ def test_isstraight_nonstraight_returns0():
 
 
 def test_scoreranklist_A_return14():
-    cards = [card.Card('A', 's')]
+    cards = [pc.PlayingCard('A', 's')]
     expected = 14 * evaluator.MULTIPLIERS[0]
     rd = evaluator.rank_list(cards)
     assert evaluator.score_ranklist(rd) == expected
 
 
 def test_scorecardlist_A_returns14():
-    cards = [card.Card('A', 's')]
+    cards = [pc.PlayingCard('A', 's')]
     assert evaluator.score_cardlist(cards) == 14
 
 
@@ -134,7 +134,7 @@ def test_gettype_1000000000000_raiseEx():
 
 # Test the value of 1 Ace
 def test_scorepairhands_A_returns1400000000():
-    cards = [card.Card('A', 's')]
+    cards = [pc.PlayingCard('A', 's')]
     assert evaluator.score_pair_hands(cards) == 1400000000
 
 
@@ -215,12 +215,12 @@ def test_is_set_handwithdupes_returnsFalse():
 
 
 def test_is_set_1card_returnsTrue():
-    h = [card.Card('A', 's')]
+    h = [pc.PlayingCard('A', 's')]
     assert evaluator.is_set(h)
 
 
 def test_is_set_2As_returnsFalse():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     h = [c, c]
     assert evaluator.is_set(h) is False
 
@@ -245,13 +245,13 @@ def test_rankdict_2Aces_counts2():
 
 
 def test_ranklist_1Ace_lenEquals1():
-    cards = [card.Card('A', 's')]
+    cards = [pc.PlayingCard('A', 's')]
     ranklist = evaluator.rank_list(cards)
     assert len(ranklist) == 1
 
 
 def test_ranklist_1Ace_1AceCounted():
-    cards = [card.Card('A', 's')]
+    cards = [pc.PlayingCard('A', 's')]
     ranklist = evaluator.rank_list(cards)
     assert ranklist[0][0] == 1
     assert ranklist[0][1] == 'A'
@@ -316,7 +316,7 @@ def test_suitedcarddict_1Spade_listlenEquals1():
 
 
 def test_countsuit_nospade_returns0():
-    cards = [card.Card('K', 'c')]
+    cards = [pc.PlayingCard('K', 'c')]
     assert evaluator.count_suit(cards, 's') == 0
 
 
@@ -326,32 +326,32 @@ def test_countsuit_1spade_returns1():
 
 
 def test_getgap_23_returns0():
-    c1 = card.Card('2', 's')
-    c2 = card.Card('3', 's')
+    c1 = pc.PlayingCard('2', 's')
+    c2 = pc.PlayingCard('3', 's')
     assert evaluator.get_gap(c1, c2) == 0
 
 
 def test_getgap_32_returns0():
-    c1 = card.Card('2', 's')
-    c2 = card.Card('3', 's')
+    c1 = pc.PlayingCard('2', 's')
+    c2 = pc.PlayingCard('3', 's')
     assert evaluator.get_gap(c2, c1) == 0
 
 
 def test_getgap_24_returns1():
-    c1 = card.Card('2', 's')
-    c2 = card.Card('4', 's')
+    c1 = pc.PlayingCard('2', 's')
+    c2 = pc.PlayingCard('4', 's')
     assert evaluator.get_gap(c2, c1) == 1
 
 
 def test_getgap_2A_returns11():
-    c1 = card.Card('2', 's')
-    c2 = card.Card('A', 's')
+    c1 = pc.PlayingCard('2', 's')
+    c2 = pc.PlayingCard('A', 's')
     assert evaluator.get_gap(c1, c2) == 11
 
 
 def test_getgap_22_returnsNeg1():
-    c1 = card.Card('2', 's')
-    c2 = card.Card('2', 'c')
+    c1 = pc.PlayingCard('2', 's')
+    c2 = pc.PlayingCard('2', 'c')
     assert evaluator.get_gap(c1, c2) == -1
 
 
@@ -376,8 +376,8 @@ def test_getallgaps_3cards1gap_returns1():
 
 
 def test_stripranks_stripAces_containsNoAces():
-    ace = card.Card('A', 's')
-    king = card.Card('K', 'c')
+    ace = pc.PlayingCard('A', 's')
+    king = pc.PlayingCard('K', 'c')
     cards = [ace, king]
     assert ace not in evaluator.strip_ranks(cards, ['A'])
 
@@ -543,7 +543,7 @@ def test_chkstraightdraw_4card_1gap_34589A_returnsA345():
 
 def test_removepairs_22_returns2():
     cards = tools.convert_to_cards(['2c', '2d'])
-    expected = [card.Card('2', 'c')]
+    expected = [pc.PlayingCard('2', 'c')]
     assert evaluator.remove_pairs(cards) == expected
 
 

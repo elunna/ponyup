@@ -2,7 +2,7 @@
 
 from collections import namedtuple
 import itertools
-from . import card
+from . import playingcard as pc
 
 Ranklist = namedtuple('Ranklist', ['quantity', 'rank'])
 HANDSIZE = 5
@@ -111,7 +111,7 @@ def score_ranklist(ranklist):
     """
     score = 0
     for i, c in enumerate(ranklist):
-        score += card.RANKS[c[1]] * MULTIPLIERS[i]
+        score += pc.RANKS[c[1]] * MULTIPLIERS[i]
     return score
 
 
@@ -125,7 +125,7 @@ def score_cardlist(cards):
             multiplier = 10 ** (i * 2)
         else:
             multiplier = 1
-        score += card.RANKS[c.rank] * multiplier
+        score += pc.RANKS[c.rank] * multiplier
     return score
 
 
@@ -267,7 +267,7 @@ def rank_list(cards):
     ranks = rank_dict(cards)
     L = [Ranklist(quantity=ranks[r], rank=r) for r in ranks]
 
-    return sorted(L, key=lambda x: (-x.quantity, -card.RANKS[x.rank]))
+    return sorted(L, key=lambda x: (-x.quantity, -pc.RANKS[x.rank]))
 
 
 def suit_dict(cards):

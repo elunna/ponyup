@@ -2,7 +2,7 @@
   " Tests for tools.py
   """
 import pytest
-from ..src import card
+from ..src import playingcard as pc
 from ..src import evaluator as ev
 from ..src import tools
 
@@ -20,7 +20,7 @@ def test_tocard_AA_returnsAs():
 
 
 def test_converttocards_AsKs_returnsCardAsKs():
-    As, Ks = card.Card('A', 's'), card.Card('K', 's')
+    As, Ks = pc.PlayingCard('A', 's'), pc.PlayingCard('K', 's')
     tools.convert_to_cards(['As', 'Ks']) == [As, Ks]
 
 

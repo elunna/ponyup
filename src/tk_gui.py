@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """
   " Module for running the poker game in a tkinter GUI
+  " Might have to do: sudo apt-get install tk-dev python-tk"
   """
 
-#  from tkinter import *
-import tkinter as tk
-import tkinter.messagebox as mb
+# import Tkinter
+# from Tkinter import *
+import Tkinter as tk
+import tk.messagebox as mb
 
 errmsg = 'POKER HAS NOT YET BEEN IMPLEMENTED!\nBILL GATES PWNS U!!!!!!'
 

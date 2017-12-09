@@ -2,15 +2,20 @@
   " Creation and management of a Deck of cards.
   """
 import random
-from . import card
+from . import playingcard as pc
+from . import joker
+
+
+def std_deck():
+    return [pc.PlayingCard(r, s) for s in pc.SUITS
+            for r in pc.RANKS if r != joker.joker_rank]
 
 
 class Deck(object):
-    """ Creates a standard 52 card deck, with no Jokers.  """
+    """ Creates a standard 52 card deck."""
     def __init__(self, cards=None):
         if cards is None:
-            self.cards = \
-                [card.Card(r, s[0]) for s in card.SUITS for r in card.RANKS if r != 'Z']
+            self.cards = std_deck()
         else:
             self.cards = cards
 
@@ -76,18 +81,16 @@ class Deck(object):
 class Deck1Joker(Deck):
     """ Creates a deck with one Joker. """
     def __init__(self):
-        # super().__init__()  # Python3
         super(Deck1Joker, self).__init__()
-        self.cards.append(card.JOKER1)
+        self.cards.append(joker.Joker())
 
 
 class Deck2Joker(Deck):
     """ Creates a deck with two Jokers. """
     def __init__(self):
-        # super().__init__()  # Python3
         super(Deck2Joker, self).__init__()
-        self.cards.append(card.JOKER1)
-        self.cards.append(card.JOKER2)
+        self.cards.append(joker.Joker())
+        self.cards.append(joker.Joker())
 
 
 class PiquetDeck(Deck):
@@ -95,8 +98,8 @@ class PiquetDeck(Deck):
     def __init__(self):
         super(PiquetDeck, self).__init__()
         pinochle_cards = ['7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
-        self.cards = [card.Card(r, s[0])
-                      for s in card.SUITS for r in card.RANKS if r in pinochle_cards]
+        self.cards = [pc.PlayingCard(r, s[0]) for s in pc.SUITS
+                      for r in pc.RANKS if r in pinochle_cards]
 
 
 class PinochleDeck(Deck):
@@ -104,7 +107,7 @@ class PinochleDeck(Deck):
     def __init__(self):
         super(PinochleDeck, self).__init__()
         pinochle_cards = ['9', 'T', 'J', 'Q', 'K', 'A']
-        c = [card.Card(r, s[0]) for s in card.SUITS for r in card.RANKS if r in pinochle_cards]
+        c = [pc.PlayingCard(r, s[0]) for s in pc.SUITS for r in pc.RANKS if r in pinochle_cards]
 
         self.cards = c + c
 
@@ -117,7 +120,6 @@ class BlackjackDeck(Deck):
         if shoes < 1:
             raise ValueError('BlackjackDeck must be passed a value of 1 or more for shoes!')
 
-        # super().__init__()  # Python3
         super(BlackjackDeck, self).__init__()
         cardset = self.cards[:]
         for _ in range(shoes - 1):

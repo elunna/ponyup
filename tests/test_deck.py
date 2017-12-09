@@ -3,7 +3,8 @@
   """
 import pytest
 from ..src import deck
-from ..src import card
+from ..src import playingcard as pc
+from ..src import joker
 from ..src import tools
 
 
@@ -27,13 +28,13 @@ def test_len_2cards_haslen2():
 
 def test_contains_AceSpadesinStandardDeck_returnsTrue():
     d = deck.Deck()
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     assert c in d
 
 
 def test_contains_JokerinStandardDeck_returnsFalse():
     d = deck.Deck()
-    c = card.JOKER1
+    c = joker.Joker()
     assert c not in d
 
 
@@ -58,7 +59,7 @@ def test_deal_stddeck_sizeIs51():
 
 
 def test_deal_As_returnsCard():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     d = deck.Deck([c])
     assert d.deal() == c
 
@@ -82,27 +83,27 @@ def test_isempty_emptydeck_returnTrue():
 
 def test_remove_removeAs_sizeIs51():
     d = deck.Deck()
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     d.remove(c)
     assert len(d) == 51
 
 
 def test_remove_cardnotindeck_returnsNone():
     d = deck.Deck()
-    c = card.Card('Z', 's')
+    c = pc.PlayingCard('Z', 's')
     assert d.remove(c) == None
 
 
 def test_removecards_removeAs_sizeIs51():
     d = deck.Deck()
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     d.remove_cards([c])
     assert len(d) == 51
 
 
 def test_removecards_removeAs_containsIsFalse():
     d = deck.Deck()
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     d.remove_cards([c])
     assert c not in d
 
@@ -134,7 +135,7 @@ def test_init_Deck1Joker_size53():
 
 def test_init_Deck1Joker_containsZs():
     d = deck.Deck1Joker()
-    joker = card.Card('Z', 's')
+    joker = pc.PlayingCard('Z', 's')
     assert joker in d
 
 
@@ -148,8 +149,8 @@ def test_init_Deck2Joker_size54():
 
 def test_init_Deck2Joker_containsZsZc():
     d = deck.Deck2Joker()
-    joker1 = card.Card('Z', 's')
-    joker2 = card.Card('Z', 'c')
+    joker1 = joker.Joker()
+    joker2 = joker.Joker()
     assert joker1 in d
     assert joker2 in d
 
@@ -170,7 +171,7 @@ def test_init_PiquetDeck_4Aces():
 
 def test_init_PiquetDeck_1AceSpades():
     d = deck.PiquetDeck()
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     assert d.cards.count(c) == 1
 
 
@@ -189,7 +190,7 @@ def test_init_PinochleDeck_8Aces():
 
 
 def test_init_PinochleDeck_2AceSpades():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     d = deck.PinochleDeck()
     assert d.cards.count(c) == 2
 
@@ -214,7 +215,7 @@ def test_init_4shoes_208cards():
 
 def test_init_4shoes_4AceSpaces():
     d = deck.BlackjackDeck(4)
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     assert d.cards.count(c) == 4
 
 

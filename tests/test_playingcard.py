@@ -22,9 +22,9 @@ def test_init_invalidboth_raiseEx():
         PlayingCard('s', 'A')
 
 
-def test_init_uppercaseSuit_suitIsLowercase():
-    c = PlayingCard('A', 'S')
-    assert c.suit == 's'
+def test_init_uppercaseSuit_raiseException():
+    with pytest.raises(ValueError):
+        PlayingCard('A', 'S')
 
 
 def test_init_default_hiddenIsTrue():

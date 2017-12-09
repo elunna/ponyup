@@ -2,7 +2,7 @@
   " Tests for hand.py
   """
 import pytest
-from ..src import card
+from ..src import playingcard as pc
 from ..src import hand
 from ..src import tools
 
@@ -12,7 +12,7 @@ from ..src import tools
 
 def test_init_invalidboth_raiseEx():
     with pytest.raises(ValueError):
-        card.Card('s', 'A')
+        pc.PlayingCard('s', 'A')
 
 
 # No cards pass, length = 0
@@ -23,14 +23,14 @@ def test_init_0cardspassed_length0():
 
 # 1 card passed, length = 1
 def test_init_1cardpassed_length1():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     h = hand.Hand([c])
     assert len(h) == 1
 
 
 # 1 card passed, contains the card
 def test_init_1cardpassed_containsCard():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     h = hand.Hand([c])
     assert c in h.cards
 
@@ -43,14 +43,14 @@ def test_str_0cardspassed_returnsNothing():
 
 # 1 card passed, displays the hidden card as "Xx"
 def test_str_1card_hidden_returnsAs():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     h = hand.Hand([c])
     assert str(h) == 'Xx'
 
 
 # 1 card passed, displays the hidden card as "Xx"
 def test_str_1card_unhidden_returnsAs():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     h = hand.Hand([c])
     h.unhide()
     assert str(h) == 'As'
@@ -66,7 +66,7 @@ def test_str_2cards_unhidden_returnsAs_Ks():
 
 # Empty hand, adding 1 card, size = 1
 def test_add_1card_length1():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     h = hand.Hand()
     h.add(c)
     assert len(h) == 1
@@ -74,7 +74,7 @@ def test_add_1card_length1():
 
 # Empty hand, adding 1 card, contains the card
 def test_add_1card_containsCard():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     h = hand.Hand()
     h.add(c)
     assert c in h.cards
@@ -82,7 +82,7 @@ def test_add_1card_containsCard():
 
 # Discarding the only card in the hand, size = 0
 def test_discard_1card_length0():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     h = hand.Hand([c])
     h.discard(c)
     assert len(h) == 0
@@ -90,14 +90,14 @@ def test_discard_1card_length0():
 
 # Discarding the only card in the hand, returns the card
 def test_discard_1card_returnsCard():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     h = hand.Hand([c])
     assert h.discard(c) == c
 
 
 # Discarding a card not in the hand, raise exception
 def test_discard_cardNotInHand_raiseException():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     h = hand.Hand()
     with pytest.raises(ValueError):
         h.discard(c)
@@ -105,7 +105,7 @@ def test_discard_cardNotInHand_raiseException():
 
 # Unhide a 1 card hand, the card is up
 def test_unhide_1card_cardIsUp():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     h = hand.Hand([c])
     h.unhide()
     assert h.cards[0].hidden is False
@@ -113,8 +113,8 @@ def test_unhide_1card_cardIsUp():
 
 def test_unhide_2cards_bothcardsUp():
     """ Unhide a 2 card hand, both cards are up """
-    c1 = card.Card('A', 's')
-    c2 = card.Card('K', 's')
+    c1 = pc.PlayingCard('A', 's')
+    c2 = pc.PlayingCard('K', 's')
     h = hand.Hand()
     h.add(c1)
     h.add(c2)
@@ -149,14 +149,14 @@ def test_desc_royalflush_AceHigh():
 
 # 1 card hand that is hidden - return empty list
 def test_getupcards_1downcard_returnsEmptyList():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     h = hand.Hand([c])
     assert h.get_upcards() == []
 
 
 # 1 card hand that is up - return card
 def test_getupcards_1upcard_returnsUpCard():
-    c = card.Card('A', 's')
+    c = pc.PlayingCard('A', 's')
     c.hidden = False
     h = hand.Hand([c])
     assert h.get_upcards() == [c]

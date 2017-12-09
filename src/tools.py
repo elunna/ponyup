@@ -1,7 +1,7 @@
 """
   " Tools for testing and manipulation of cards and poker hands.
   """
-from . import card
+from . import playingcard as pc
 from . import deck
 
 # These are constants to help with computer AI
@@ -94,7 +94,7 @@ HANDS = {
 
 
 def to_card(string, hidden=True):
-    c = card.Card(*string)
+    c = pc.PlayingCard(*string)
     if hidden:
         c.hidden = True
     else:
