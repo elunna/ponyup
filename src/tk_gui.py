@@ -1,25 +1,21 @@
 #!/usr/bin/env python3
 """
   " Module for running the poker game in a tkinter GUI
-  " Might have to do: sudo apt-get install tk-dev python-tk"
   """
 
-import Tkinter
-import tkMessageBox
-from Tkconstants import *
-from Tkinter import Frame, Button, Label, Menu
-
-mb = tkMessageBox
+#  from tkinter import *
+import tkinter as tk
+import tkinter.messagebox as mb
 
 errmsg = 'POKER HAS NOT YET BEEN IMPLEMENTED!\nBILL GATES PWNS U!!!!!!'
 
 
-class QuitButton(Frame):
+class QuitButton(tk.Frame):
     def __init__(self, parent=None):
-        Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent)
         self.pack()
-        widget = Button(self, text='Quit', command=self.quit)
-        widget.pack(side=LEFT, expand=YES, fill=BOTH)
+        widget = tk.Button(self, text='Quit', command=self.quit)
+        widget.pack(side=tk.LEFT, expand=tk.YES, fill=tk.BOTH)
 
     def quit(self):
         if mb.askyesno('verify', 'do you really want to quit?'):
@@ -28,16 +24,16 @@ class QuitButton(Frame):
             mb.showinfo('No', 'Quit has been cancelled')
 
 
-class SplashScreen(Frame):
+class SplashScreen(tk.Frame):
     def __init__(self, parent=None):
-        Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent)
         self.pack()
         labelfont = ('times', 20, 'bold')
-        title = Label(self, text='PonyUp Poker')
+        title = tk.Label(self, text='PonyUp Poker')
         title.config(bg='black', fg='yellow')
         title.config(font=labelfont)
         title.config(height=2, width=30)
-        title.pack(side=TOP)
+        title.pack(side=tk.TOP)
 
         # Settings for the smaller text
         smconf = {
@@ -47,28 +43,28 @@ class SplashScreen(Frame):
             'width': 30,
         }
 
-        title2 = Label(self, text='Card Room')
+        title2 = tk.Label(self, text='Card Room')
         title2.config(smconf)
-        title2.pack(side=TOP)
+        title2.pack(side=tk.TOP)
 
-        company = Label(self, text='AoristTwilist Productions(2016)')
+        company = tk.Label(self, text='AoristTwilist Productions(2016)')
         company.config(smconf)
-        company.pack(side=TOP)
+        company.pack(side=tk.TOP)
 
-        author = Label(self, text='Author: Erik Lunna')
+        author = tk.Label(self, text='Author: Erik Lunna')
         author.config(smconf)
-        author.pack(side=TOP)
+        author.pack(side=tk.TOP)
 
 
-class MainMenu(Frame):
+class MainMenu(tk.Frame):
     """ Main menu screen and lobby """
     def __init__(self, parent=None):
-        Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent)
         self.pack()
-        menu = Menu()
+        menu = tk.Menu()
         parent.config(menu=menu)
 
-        gameMenu = Menu(menu)
+        gameMenu = tk.Menu(menu)
         menu.add_cascade(label="File", menu=gameMenu)
         gameMenu.add_command(label="New Player", command=self.dont)
         gameMenu.add_command(label="Open Player", command=self.dont)
@@ -77,7 +73,7 @@ class MainMenu(Frame):
         gameMenu.add_separator()
         gameMenu.add_command(label="Exit", command=self.dont)
 
-        helpMenu = Menu(menu)
+        helpMenu = tk.Menu(menu)
 
         menu.add_cascade(label="Edit", menu=helpMenu)
         helpMenu.add_command(label="Help", command=self.dont)
@@ -89,21 +85,20 @@ class MainMenu(Frame):
         print('Octavia cellos')
 
 
-class Lobby(Frame):
+class Lobby(tk.Frame):
     def __init__(self, parent=None):
-        Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent)
         self.pack()
 
 
 def main():
     """ Main entry point """
-    # root = tk.Tk()
-    root = Tkinter.Tk()
+    root = tk.Tk()
     SplashScreen(root).pack()
     QuitButton(root).pack()
     MainMenu(root).pack()
 
-    Button(text='Poker', command=(lambda: mb.showerror('Pokerz', errmsg))).pack(fill=X)
+    tk.Button(text='Poker', command=(lambda: mb.showerror('Pokerz', errmsg))).pack(fill=tk.X)
 
     root.mainloop()
 
