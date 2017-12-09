@@ -3,16 +3,17 @@
   """
 import pytest
 from ..src import card
+Card = card.Card
 BACK_TEXT = card.BACK_TEXT
 
 
 @pytest.fixture
 def testcard():
-    return card.Card('As')
+    return Card('As')
 
 
 def test_init_cardtype(testcard):
-    assert isinstance(testcard, card.Card)
+    assert isinstance(testcard, Card)
 
 
 def test_init_str(testcard):
@@ -54,3 +55,28 @@ def test_peek_hidden(testcard):
 def test_peek_faceup(testcard):
     testcard.unhide()
     assert str(testcard) == 'As'
+
+
+def test_eq_SameCard_returnsTrue():
+    """ __equals__ tests that the two cards have exactly the same suit and rank."""
+    c1 = Card('As')
+    c2 = Card('As')
+    assert c1 == c2
+
+
+def test_eq_DiffSuits_returnsFalse():
+    c1 = Card('As')
+    c2 = Card('Ac')
+    assert c1 != c2
+
+
+def test_hash1():
+    c1 = Card('As')
+    # Not sure if this will work long term, but this is the hash for this card
+    assert hash(c1) == 8320049985075186
+
+
+def test_hash2():
+    c2 = Card('Ac')
+    # Not sure if this will work long term, but this is the hash for this card
+    assert hash(c2) == 8320049985075170

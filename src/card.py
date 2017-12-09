@@ -34,3 +34,10 @@ class Card(object):
     def peek(self):
         """ This is how human/hero's are able to view hidden cards. """
         return self.top_text
+
+    def __eq__(self, other):
+        """ Returns True if this card is equal to the other card, False otherwise. """
+        return self.top_text == other.top_text
+
+    def __hash__(self):
+        return hash(self.top_text)

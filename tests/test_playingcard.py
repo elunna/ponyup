@@ -54,19 +54,6 @@ def test_repr_FaceupAs_returnsAs():
     assert repr(c) == 'As'
 
 
-def test_eq_SameCard_returnsTrue():
-    """ __equals__ tests that the two cards have exactly the same suit and rank."""
-    c1 = PlayingCard('A', 's')
-    c2 = PlayingCard('A', 's')
-    assert c1 == c2
-
-
-def test_eq_DiffSuits_returnsFalse():
-    c1 = PlayingCard('A', 's')
-    c2 = PlayingCard('A', 'c')
-    assert c1 != c2
-
-
 def test_gt_HighToLow_returnsFalse():
     high = PlayingCard('A', 's')
     low = PlayingCard('K', 's')
@@ -101,11 +88,6 @@ def test_lt_SameRanks_returnsFalse():
     c1 = PlayingCard('K', 's')
     c2 = PlayingCard('K', 'c')
     assert not c2 < c1
-
-
-def test_val_JOKER_Z_returns15():
-    c = PlayingCard('Z', 's')
-    assert c.val() == 15
 
 
 def test_val_A_returns14():
@@ -171,3 +153,8 @@ def test_val_3_returns3():
 def test_val_2_returns2():
     instance = PlayingCard('2', 's')
     assert instance.val() == 2
+
+
+def test_val_JOKER_Z_returns15():
+    c = PlayingCard('Z', 's')
+    assert c.val() == 15
