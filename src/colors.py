@@ -4,6 +4,7 @@
 from functools import wraps
 from . import card
 
+COLORS = {'c': 'green', 'd': 'blue', 'h': 'red', 's': 'white'}
 CSI = "\x1b["
 CSI_end = "\x1b[0m"
 #  reset = CSI + "m"
