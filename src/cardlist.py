@@ -1,4 +1,6 @@
-""" A CardList is a structure for manipulating Cards """
+""" A CardList is a structure for manipulating PlayingCards.
+    PlayingCards have more complexities that this will be able to manage.
+"""
 import random
 
 
