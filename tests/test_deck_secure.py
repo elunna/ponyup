@@ -4,12 +4,12 @@
 
 import pytest
 from ..src import card
-from ..src import secure_deck
+from ..src import deck_secure
 
 
 @pytest.fixture
 def sc():
-    return secure_deck.SecureDeck()
+    return deck_secure.SecureDeck()
 
 
 def test_init_size52(sc):
