@@ -1,13 +1,11 @@
 import pytest
 from ..src import cardlist
-from ..src import deck
-from ..src import joker
 from ..src import playingcard as pc
 
 
 @pytest.fixture
 def full_deck():
-    d = deck.std_deck()
+    d = pc.std_deck()
     return cardlist.CardList(d)
 
 
@@ -46,7 +44,7 @@ def test_contains_AceSpadesinStandardDeck_returnsTrue(ace_spades):
 
 
 def test_contains_JokerinStandardDeck_returnsFalse(test_cl):
-    c = joker.Joker()
+    c = pc.Joker()
     assert c not in test_cl.cards
 
 

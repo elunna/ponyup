@@ -1,5 +1,5 @@
 from . import deck
-from . import joker
+from . import playingcard
 
 
 class DeckJoker(deck.Deck):
@@ -9,4 +9,4 @@ class DeckJoker(deck.Deck):
         deck.Deck.__init__(self)
 
         for _ in range(jokers):
-            self.cards.append(joker.Joker())
+            self.cards.append(playingcard.Joker())

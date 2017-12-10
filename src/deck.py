@@ -2,12 +2,6 @@
   " Creation and management of a Deck of cards.
   """
 from . import playingcard as pc
-from . import joker
-
-
-def std_deck():
-    return [pc.PlayingCard(r, s) for s in pc.SUITS
-            for r in pc.RANKS if r != joker.joker_rank]
 
 
 class Deck(object):
@@ -17,7 +11,7 @@ class Deck(object):
 
     def __init__(self, cards=None):
         if cards is None:
-            self.cards = std_deck()
+            self.cards = pc.std_deck()
         else:
             self.cards = cards
 

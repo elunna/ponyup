@@ -5,17 +5,6 @@ import pytest
 from ..src import deck
 from ..src import playingcard as pc
 
-
-def test_stddeck_size52():
-    d = deck.std_deck()
-    assert len(d) == 52
-
-
-def test_stddeck_allunique():
-    d = deck.std_deck()
-    assert len(set(d)) == 52
-
-
 def test_deal_stddeck_sizeIs51():
     d = deck.Deck()
     d.deal()

@@ -1,4 +1,4 @@
-from . import deck
+from . import playingcard
 
 
 class SecureDeck(object):
@@ -15,7 +15,7 @@ class SecureDeck(object):
 
     def __init__(self):
         """ Initializes a new standard 52 card deck. """
-        self._cards = deck.std_deck()
+        self._cards = playingcard.std_deck()
 
     def __len__(self):
         """ Returns how many cards are in the deck. """
