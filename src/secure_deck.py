@@ -32,8 +32,8 @@ class SecureDeck(object):
 
     @property
     def cards(self):
-        raise Exception
+        raise AttributeError('Outside access not allowed to cards in SecureDeck!')
 
     @cards.setter
     def cards(self, val):
-        raise Exception
+        raise AttributeError('Outside mutation no allowed to cards in SecureDeck!')

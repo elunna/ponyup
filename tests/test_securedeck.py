@@ -32,13 +32,37 @@ def test_deal_allcards_raiseException(sc):
             sc.deal()
 
 
-def test_copy_card_list_raiseException(sc):
+def test_cards_access_raiseError(sc):
     # We should not be able to get the list
-    with pytest.raises(Exception):
+    with pytest.raises(AttributeError):
+        sc.cards
+
+
+def test_cards_copy_raiseError(sc):
+    # We should not be able to get the list
+    with pytest.raises(AttributeError):
         sc.cards[:]
 
 
-def test_access_card_list_raiseException(sc):
+def test_cards_index_raiseError(sc):
     # We should not be able to get the list
-    with pytest.raises(Exception):
-        sc.cards
+    with pytest.raises(AttributeError):
+        sc.cards[0]
+
+
+def test_cards_pop_raiseError(sc):
+    # We should not be able to get the list
+    with pytest.raises(AttributeError):
+        sc.cards.pop()
+
+
+def test_cards_changeindex_raiseError(sc):
+    # We should not be able to get the list
+    with pytest.raises(AttributeError):
+        sc.cards[0] == 'Hehe'
+
+
+def test_cards_del_raiseError(sc):
+    # We should not be able to get the list
+    with pytest.raises(AttributeError):
+        del(sc.cards)
