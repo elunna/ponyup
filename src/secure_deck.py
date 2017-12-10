@@ -20,3 +20,12 @@ class SecureDeck(object):
     def __len__(self):
         """ Returns how many cards are in the deck. """
         return len(self.cards)
+
+    def deal(self):
+        """ Removes the top card off the deck and returns it. Raises an exception
+            if the deck is empty.
+        """
+        if len(self.cards) > 0:
+            return self.cards.pop()
+        else:
+            raise Exception('Deck is empty, cannot deal cards!')
