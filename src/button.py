@@ -11,6 +11,12 @@ class Button(tokens.Token):
         tokens.Token.__init__(self, name="Button", table=table)
         self.seat = -1  # Start at -1  or None?
 
+    def __repr__(self):
+        return str(self.seat)
+
+    def __int__(self):
+        return self.seat
+
     def move(self):
         """ Move the button clockwise to the next valid player/seat. """
         self.seat = dealer.next_player(self.table, from_seat=self.seat)

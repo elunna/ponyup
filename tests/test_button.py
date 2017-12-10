@@ -3,6 +3,24 @@ from ..src import table
 from ..src import button
 
 
+def test_init_seat_neg1():
+    t = test_table.custom_tbl(players=6)
+    btn = button.Button(t)
+    assert btn.seat == -1
+
+
+def test_init_repr_neg1_str():
+    t = test_table.custom_tbl(players=6)
+    btn = button.Button(t)
+    assert repr(btn) == '-1'
+
+
+def test_init_int_neg1():
+    t = test_table.custom_tbl(players=6)
+    btn = button.Button(t)
+    assert int(btn) == -1
+
+
 def test_movebutton_newTable_returns0():
     t = test_table.custom_tbl(players=6)
     btn = button.Button(t)
