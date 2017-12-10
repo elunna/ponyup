@@ -1,4 +1,4 @@
-from . import deck
+from . import deck_secure as ds
 from . import playingcard as pc
 
 
@@ -8,7 +8,7 @@ def mk_blackjack_deck(shoes):
     return pc.std_deck() * shoes
 
 
-class BlackjackDeck(deck.Deck):
+class BlackjackDeck(ds.SecureDeck):
     """ Creates a blackjack deck with the specified number of 'shoes' included.
         4 shoes is the most common size for a Las Vegas blackjack deck.
     """

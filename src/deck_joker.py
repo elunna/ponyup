@@ -1,4 +1,4 @@
-from . import deck
+from . import deck_secure as ds
 from . import playingcard
 
 
@@ -9,7 +9,7 @@ def mk_joker_deck(jokers):
     return cards
 
 
-class DeckJoker(deck.Deck):
+class DeckJoker(ds.SecureDeck):
     """ Creates a deck with one Joker. """
     def __init__(self, jokers):
-        deck.Deck.__init__(self)
+        ds.SecureDeck.__init__(self)

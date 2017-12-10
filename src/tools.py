@@ -2,7 +2,6 @@
   " Tools for testing and manipulation of cards and poker hands.
   """
 from . import playingcard as pc
-from . import deck
 
 # These are constants to help with computer AI
 HI_9x = 900
@@ -180,17 +179,19 @@ def deal_ranked_hands(table, _rev=False):
 
 
 def deal_random_cards(table, qty=5):
-    d = deck.Deck()
+    deck = pc.std_deck()
 
     for s in table:
         for _ in range(qty):
-            s.hand.add(d.deal())
+            s.hand.add(deck.pop())
 
 
 def get_cards(qty):
-    d, cards = deck.Deck(), []
+    cards = []
+    deck = pc.std_deck()
+
     for _ in range(qty):
-        c = d.deal()
+        c = deck.pop()
         c.hidden = False
         cards.append(c)
     return cards
