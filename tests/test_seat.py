@@ -83,10 +83,6 @@ def test_sitdown_player_matchesSeatPlayer(s, p):
     assert s.player == p
 
 
-def test_sitdown_dupeplayer_attable_raiseException():
-    pass
-
-
 def test_standup_existingplayer_isempty(s, p):
     s.sitdown(p)
     s.standup()

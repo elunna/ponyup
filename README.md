@@ -160,15 +160,10 @@ todo: Implement pytest testing
 todo: Redesign all elements
 todo: Generic Card class
 todo: Object diagram for Card, Deck, 
-todo: Make python2 and 3 compatible
 todo: Make this framework super flexible: Should work with console, curses, tkinter, and django.
-todo: Rename card to cards module
 todo: Move Joker to card module... Maybe... it has it's own logic.
-todo: Take hand import out of Seat.
-todo: Move complex player management from Table to a Dealer module
 todo: Consolidate poker tools to a poker module.
 todo: Move testing hands to a test_hands module in the tests directory.
-todo: Use less modules... in general
 todo: Make a CardPile class that has a lot of logic from the evaluator??
 todo: Subclass player to Human, CPU, Dealer. Give CPU's strategies.
 
@@ -205,5 +200,4 @@ todo: Use proper ID instead of making a random number for sessions and gameids
 * Add command line options for choosing 52/54 card card, and game delays.
 * When the shuffle-between-rounds option is not on, the game can sometimes fall into
   infinite loops.  Is there a way to detect an infinite setup loop?
-
 

@@ -1,6 +1,7 @@
 """
   " Seats manage Players, chip stack, and Hands.
   """
+
 from . import hand
 
 
@@ -9,7 +10,6 @@ class Seat(object):
     def __init__(self, num):
         self.NUM = num  # Need to set the seat number in the table.
         self.player = None
-        # Set the hand to a new empty Hand
         self.hand = hand.Hand()
         self.stack = 0
 
@@ -41,12 +41,12 @@ class Seat(object):
             self.hand = hand.Hand()
 
     def standup(self):
-        """ Remove the Player from this seat and refund their money. """
-        # Give their chips back
+        """ Removes the Player from this seat and refunds their money. """
         self.player.deposit(self.stack)
         self.stack = 0
         p = self.player
         self.player = None
+        self.hand = hand.Hand()
         return p
 
     def vacant(self):
@@ -57,10 +57,7 @@ class Seat(object):
 
     def has_hand(self):
         """ Returns True if the player at this seat currently has a Hand, False otherwise """
-        if self.hand is None:
-            return False
-        else:
-            return len(self.hand) > 0
+        return len(self.hand) > 0
 
     def has_chips(self):
         return self.stack > 0
@@ -70,6 +67,7 @@ class Seat(object):
             raise ValueError('No player is sitting to buy chips!')
         elif amount > self.player.bank:
             raise ValueError('Player cannot buy more chips than they can afford!')
+
         self.stack += self.player.withdraw(amount)
 
     def win(self, amount):
@@ -78,7 +76,7 @@ class Seat(object):
         self.stack += amount
 
     def bet(self, amt):
-        """ Removes the given amount from the players stack and returns it as an integer. """
+        """ Removes the given amount from the players stack and returns it. """
         self.check_amount(amt)
         if amt > self.stack:
             amt = self.stack
@@ -86,9 +84,10 @@ class Seat(object):
         return amt
 
     def fold(self):
-        """ Removes all the cards in the hand and returns them as a list. """
+        """ Removes all the cards in the hand and returns them as a list.
+        """
         copy = self.hand.cards[:]
-        self.hand.cards = []
+        self.hand.cards = hand.Hand()
         return copy
 
     def check_amount(self, amt):
