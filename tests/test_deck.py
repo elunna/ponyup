@@ -4,7 +4,6 @@
 import pytest
 from ..src import deck
 from ..src import playingcard as pc
-from ..src import tools
 
 
 def test_stddeck_size52():
@@ -15,19 +14,6 @@ def test_stddeck_size52():
 def test_stddeck_allunique():
     d = deck.std_deck()
     assert len(set(d)) == 52
-
-def test_sort_2cards_deuceisfirst():
-    cards = tools.convert_to_cards(['As', '2s'])
-    d = deck.Deck(cards)
-    d.sort()
-    assert d.cards[0].rank == '2'
-
-
-def test_sort_3cards_deuceisfirst():
-    cards = tools.convert_to_cards(['As', '7s', '2s'])
-    d = deck.Deck(cards)
-    d.sort()
-    assert d.cards[0].rank == '2'
 
 
 def test_deal_stddeck_sizeIs51():

@@ -80,3 +80,20 @@ def test_togglehidden_1card_nothidden(ace_spades):
     cl = cardlist.CardList([ace_spades])
     cl.toggle_hidden(True)
     assert cl.cards[0].hidden
+
+
+def test_sort_2cards_deuceisfirst(test_cl):
+    c1 = pc.PlayingCard('A', 's')
+    c2 = pc.PlayingCard('2', 's')
+    test_cl.cards = [c1, c2]
+    test_cl.sort()
+    assert test_cl.cards[0].rank == '2'
+
+
+def test_sort_3cards_deuceisfirst(test_cl):
+    c1 = pc.PlayingCard('A', 's')
+    c2 = pc.PlayingCard('2', 's')
+    c3 = pc.PlayingCard('7', 's')
+    test_cl.cards = [c1, c2, c3]
+    test_cl.sort()
+    assert test_cl.cards[0].rank == '2'

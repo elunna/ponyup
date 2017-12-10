@@ -36,6 +36,11 @@ class CardList(object):
         else:
             return None
 
+    def sort(self):
+        """ Sorts the deck by card rank.  """
+        # self.cards.sort(key=lambda x: x.val())
+        self.cards.sort()
+
     def toggle_hidden(self, hidden):
         """ Goes through all cards in the CardList and set them to the designated hidden status."""
         for c in self.cards:

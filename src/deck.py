@@ -33,7 +33,3 @@ class Deck(object):
             return self.cards.pop()
         else:
             raise Exception('Deck is empty, cannot deal cards!')
-
-    def sort(self):
-        """ Sorts the deck by card rank.  """
-        self.cards.sort(key=lambda x: x.val())
