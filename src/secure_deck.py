@@ -37,3 +37,7 @@ class SecureDeck(object):
     @cards.setter
     def cards(self, val):
         raise AttributeError('Outside mutation no allowed to cards in SecureDeck!')
+
+    @cards.deleter
+    def cards(self):
+        raise AttributeError('Outside deletion of cards not permitted in SecureDeck!')
