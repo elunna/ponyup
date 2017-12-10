@@ -72,14 +72,17 @@ class Seat(object):
 
     def win(self, amount):
         """ Award the given amount of chips to the current players stack. """
-        self.check_amount(amount)
+        if amount <= 0:
+            raise ValueError('Amount won needs to be greater than 0!')
         self.stack += amount
 
     def bet(self, amt):
         """ Removes the given amount from the players stack and returns it. """
-        self.check_amount(amt)
         if amt > self.stack:
             amt = self.stack
+        elif amt <= 0:
+            raise ValueError('Amount bet needs to be greater than 0!')
+
         self.stack -= amt
         return amt
 
@@ -89,7 +92,3 @@ class Seat(object):
         copy = self.hand.cards[:]
         self.hand.cards = hand.Hand()
         return copy
-
-    def check_amount(self, amt):
-        if amt <= 0:
-            raise ValueError('Bet amount must be a positive number!')
