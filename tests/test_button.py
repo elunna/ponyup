@@ -1,4 +1,3 @@
-import pytest
 from . import test_table
 from ..src import table
 from ..src import button
@@ -61,5 +60,4 @@ def test_randomize_noplayers_raisesException():
     seats = 9
     t = table.Table(seats)
     btn = button.Button(t)
-    with pytest.raises(Exception):
-        btn.randomize()
+    assert btn.seat == -1

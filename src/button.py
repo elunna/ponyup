@@ -8,19 +8,16 @@ from . import dealer
 
 class Button(tokens.Token):
     def __init__(self, table):
-        # super(tokens.Token, self).__init__()
         tokens.Token.__init__(self, name="Button", table=table)
         self.seat = -1  # Start at -1  or None?
-        # super().__init__()
-        # self.table = table
 
     def move(self):
         """ Move the button clockwise to the next valid player/seat. """
         self.seat = dealer.next_player(self.table, from_seat=self.seat)
 
     def randomize(self):
-        """ Places the button at a random player's seat. If there is no players
-            at the table, it raises an Exception.
+        """ Places the button at a random player's seat.
+            If there is no players at the table, sets seat to -1.
         """
         seats = list(dealer.get_playerdict(self.table).keys())
         if len(seats) == 0:

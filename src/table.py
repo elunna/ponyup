@@ -3,6 +3,7 @@
   """
 
 from . import seat
+from . import button
 
 VALID_SIZES = list(range(2, 10))
 
@@ -12,14 +13,8 @@ class Table(object):
     def __init__(self, size):
         if size not in VALID_SIZES:
             raise ValueError('Not a valid table size!')
-
-        self.TOKENS = {
-            'D': -1,
-            'SB': -1,
-            'BB': -1,
-            'BI': -1
-        }
         self.seats = [seat.Seat(self, i) for i in range(size)]
+        self.btn = button.Button(self)
 
     def __str__(self):
         """ Return the name of the table with some brief info."""
