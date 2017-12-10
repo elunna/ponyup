@@ -19,7 +19,7 @@ class Table(object):
             'BB': -1,
             'BI': -1
         }
-        self.seats = [seat.Seat(i) for i in range(size)]
+        self.seats = [seat.Seat(self, i) for i in range(size)]
 
     def __str__(self):
         """ Return the name of the table with some brief info."""

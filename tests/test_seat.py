@@ -9,7 +9,7 @@ from ..src import seat
 
 @pytest.fixture
 def s():
-    s = seat.Seat(1)
+    s = seat.Seat(position=1)
     return s
 
 
@@ -33,44 +33,6 @@ def test_str_playersitting_returnsName(s, p):
 # If no player is sitting, returns 'Open Seat'
 def test_str_empty_returnsOpenSeat(s):
     assert s.__str__() == 'Open Seat'
-
-
-# Same seat, no player, are equal
-def test_eq_sameseat_noplayer_returnsTrue(s):
-    seatcopy = s
-    assert s == seatcopy
-
-
-# Different seats, not equal
-def test_eq_different_returnsFalse(s):
-    s2 = seat.Seat(2)
-    assert s != s2
-
-
-# Different seats, same players, not equal
-def test_eq_diffseats_sameplayers_returnsFalse(s, p):
-    s2 = seat.Seat(2)
-    s.sitdown(p)
-    s2.sitdown(p)
-    assert s != s2
-
-
-# Same seats, same players, equal
-def test_eq_sameseats_sameplayers_returnsTrue(s, p):
-    s2 = seat.Seat(1)
-    s.sitdown(p)
-    s2.sitdown(p)
-    assert s == s2
-
-
-def test_eq_sameplayers_diffstacks_returnsFalse(s, p):
-    """ Same seats, same players, diff stacks, not equal """
-    s2 = seat.Seat(1)
-    s.sitdown(p)
-    s2.sitdown(p)
-    s.buy_chips(100)
-    s2.buy_chips(300)
-    assert s != s2
 
 
 def test_sitdown_player_isnotEmpty(s, p):

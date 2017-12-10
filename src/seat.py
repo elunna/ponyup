@@ -7,8 +7,9 @@ from . import hand
 
 class Seat(object):
     """ Defines a Seat object that occupies a Table.  """
-    def __init__(self, num):
-        self.NUM = num  # Need to set the seat number in the table.
+    def __init__(self, table=None, position=0):
+        self.table = table
+        self.NUM = position  # Seat number at the table, after the dealer.
         self.player = None
         self.hand = hand.Hand()
         self.stack = 0
@@ -18,19 +19,6 @@ class Seat(object):
             return 'Open Seat'
         else:
             return str(self.player)
-
-    def __eq__(self, other):
-        """ Compares this seat to another seat and returns True if all attributes
-            match.
-        """
-        if self.player != other.player:
-            return False
-        elif self.stack != other.stack:
-            return False
-        elif self.NUM != other.NUM:
-            return False
-        else:
-            return True
 
     def sitdown(self, player):
         """ Takes a Player and sets them in this seat if not occupied. """
