@@ -2,9 +2,14 @@
   " Tests for secure_deck.py
   """
 
-from ..src import secure_deck as sc
+import pytest
+from ..src import secure_deck
 
 
-def test_init_size52():
-    d = sc.SecureDeck()
-    assert len(d) == 52
+@pytest.fixture
+def sc():
+    return secure_deck.SecureDeck()
+
+
+def test_init_size52(sc):
+    assert len(sc) == 52

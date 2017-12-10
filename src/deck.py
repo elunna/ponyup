@@ -11,8 +11,7 @@ def std_deck():
 
 
 class Deck(object):
-    """ Manages a deck of Cards using a stack structure.
-        If cards is a list of Cards, the deck is created using that list,
+    """ Manages a deck of Cards. The deck is created using that list,
         Otherwise, we create the deck as a standard 52 card deck of PlayingCards.
     """
 
