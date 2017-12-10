@@ -97,3 +97,14 @@ def position(table, _seat, postflop=False):
         seats = table.get_players()
 
     return len(seats) - seats.index(_seat) - 1
+
+
+def set_blinds(self, table):
+    if len(table.get_players()) == 2:
+        table.TOKENS['SB'] = table.TOKENS['D']
+        table.TOKENS['BB'] = table.next_player(table.TOKENS['D'])
+    elif len(table.get_players()) > 2:
+        table.TOKENS['SB'] = table.next_player(table.TOKENS['D'])
+        table.TOKENS['BB'] = table.next_player(table.TOKENS['SB'])
+    else:
+        raise ValueError('Not enough players at the table!')

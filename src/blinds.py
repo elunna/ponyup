@@ -4,14 +4,11 @@ from . import numtools
 
 class Blinds(forcedbet.ForcedBet):
     def __init__(self, bb, sb, antes=0):
-        """ Initialize the Blinds object with a given blind structure.  """
+        """ Initialize the Blinds object with the small blind, big blind, and antes amounts.  """
         forcedbet.ForcedBet.__init__(self, bb, sb, antes)
 
     def __str__(self):
-        """
-        Returns the stakes, as in the small bet/big bet amounts.
-        Note: For ante/bringin games, the small-bet is SB and the big-bet is BB.
-        """
+        """Returns the blind and ante amounts. """
         _str = ''
         if self.antes > 0:
             _str += 'Ante: ${}, '.format(numtools.fmtnum(self.antes))
@@ -25,13 +22,3 @@ class Blinds(forcedbet.ForcedBet):
             return round(self.sb / self.antes, 1)
         else:
             return 0
-
-    def set_blinds(self, table):
-        if len(table.get_players()) == 2:
-            table.TOKENS['SB'] = table.TOKENS['D']
-            table.TOKENS['BB'] = table.next_player(table.TOKENS['D'])
-        elif len(table.get_players()) > 2:
-            table.TOKENS['SB'] = table.next_player(table.TOKENS['D'])
-            table.TOKENS['BB'] = table.next_player(table.TOKENS['SB'])
-        else:
-            raise ValueError('Not enough players at the table!')
