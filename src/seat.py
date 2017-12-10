@@ -1,5 +1,6 @@
 """
   " Seats manage Players, chip stack, and Hands.
+  " Note: Maybe repr should return the position of the seat?"
   """
 
 from . import hand
@@ -9,7 +10,7 @@ class Seat(object):
     """ Defines a Seat object that occupies a Table.  """
     def __init__(self, table=None, position=0):
         self.table = table
-        self.NUM = position  # Seat number at the table, after the dealer.
+        self.position = position  # Seat number at the table, after the dealer.
         self.player = None
         self.hand = hand.Hand()
         self.stack = 0

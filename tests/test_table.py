@@ -59,7 +59,7 @@ def test_iternext_removedseat0_getsseat0():
     t = custom_tbl()
     t.pop(0)
     iterator = t.__iter__()
-    assert next(iterator).NUM == 0
+    assert next(iterator).position == 0
 
 
 def test_addplayer_EmptyTable_1player(tbl):
