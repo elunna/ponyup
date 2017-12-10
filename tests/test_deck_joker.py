@@ -8,7 +8,7 @@ from ..src import joker
 def test_1Joker_containsJoker():
     d = dj.DeckJoker(jokers=1)
     joker1 = joker.Joker()
-    assert joker1 in d
+    assert joker1 in d.cards
 
 
 def test_1Joker_size53():
