@@ -15,17 +15,25 @@ class SecureDeck(object):
 
     def __init__(self):
         """ Initializes a new standard 52 card deck. """
-        self.cards = deck.std_deck()
+        self._cards = deck.std_deck()
 
     def __len__(self):
         """ Returns how many cards are in the deck. """
-        return len(self.cards)
+        return len(self._cards)
 
     def deal(self):
         """ Removes the top card off the deck and returns it. Raises an exception
             if the deck is empty.
         """
-        if len(self.cards) > 0:
-            return self.cards.pop()
+        if len(self._cards) > 0:
+            return self._cards.pop()
         else:
             raise Exception('Deck is empty, cannot deal cards!')
+
+    @property
+    def cards(self):
+        raise Exception
+
+    @cards.setter
+    def cards(self, val):
+        raise Exception

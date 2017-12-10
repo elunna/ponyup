@@ -30,3 +30,15 @@ def test_deal_allcards_raiseException(sc):
     with pytest.raises(Exception):
         while True:
             sc.deal()
+
+
+def test_copy_card_list_raiseException(sc):
+    # We should not be able to get the list
+    with pytest.raises(Exception):
+        sc.cards[:]
+
+
+def test_access_card_list_raiseException(sc):
+    # We should not be able to get the list
+    with pytest.raises(Exception):
+        sc.cards
