@@ -4,7 +4,7 @@
 import pytest
 from ..src import playingcard as pc
 from ..src import evaluator as ev
-from ..src import tools
+from . import tools
 
 
 def test_tocard_As_returnsAs():
@@ -21,7 +21,7 @@ def test_tocard_AA_returnsAs():
 
 def test_converttocards_AsKs_returnsCardAsKs():
     As, Ks = pc.PlayingCard('A', 's'), pc.PlayingCard('K', 's')
-    tools.convert_to_cards(['As', 'Ks']) == [As, Ks]
+    tools.to_cards(['As', 'Ks']) == [As, Ks]
 
 
 def test_make_royalflush_returnsRoyalFlush():

@@ -156,15 +156,10 @@ This project is licensed under the MIT License.
 
 *IMPORTANT*
 todo: Redo framework from the ground up - start over with Rounds/Sessions/Games
-todo: Implement pytest testing
-todo: Redesign all elements
-todo: Generic Card class
 todo: Object diagram for Card, Deck, 
 todo: Make this framework super flexible: Should work with console, curses, tkinter, and django.
-todo: Move Joker to card module... Maybe... it has it's own logic.
 todo: Consolidate poker tools to a poker module.
 todo: Move testing hands to a test_hands module in the tests directory.
-todo: Make a CardPile class that has a lot of logic from the evaluator??
 todo: Subclass player to Human, CPU, Dealer. Give CPU's strategies.
 
 DONE: Move blinds/bringin logic from table to blinds/stud.
@@ -176,10 +171,7 @@ todo: Go fish
 todo: The grind 
 todo: Basic 5 card poker
 
-
-
 * Later priorities
-todo: deck.py -  Add faceup arg to deal
 todo: Main menu View Help
 todo: Option: Speed
 todo: Option: View Odds (TOGGLE)
@@ -200,4 +192,3 @@ todo: Use proper ID instead of making a random number for sessions and gameids
 * Add command line options for choosing 52/54 card card, and game delays.
 * When the shuffle-between-rounds option is not on, the game can sometimes fall into
   infinite loops.  Is there a way to detect an infinite setup loop?
-

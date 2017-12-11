@@ -1,7 +1,7 @@
 """
   " Tools for testing and manipulation of cards and poker hands.
   """
-from . import playingcard as pc
+from ..src import playingcard as pc
 
 # These are constants to help with computer AI
 HI_9x = 900
@@ -101,14 +101,14 @@ def to_card(string, hidden=True):
     return c
 
 
-def convert_to_cards(strings, hidden=True):
+def to_cards(strings, hidden=True):
     # Unhide for testing purposes
     cards = [to_card(x, hidden) for x in strings]
     return cards
 
 
 def make(hand_name, hidden=False):
-    h = convert_to_cards(HANDS[hand_name])
+    h = to_cards(HANDS[hand_name])
     if not hidden:
         for c in h:
             c.hidden = False
@@ -118,12 +118,12 @@ def make(hand_name, hidden=False):
 def deal_5stud_test_hands(table):
     """ Deals out some preset 5 card stud starting hands for testing. """
     hands = []
-    hands.append(convert_to_cards(['As', 'Ah']))
-    hands.append(convert_to_cards(['Ks', 'Kh']))
-    hands.append(convert_to_cards(['Qs', 'Qh']))
-    hands.append(convert_to_cards(['Js', 'Jh']))
-    hands.append(convert_to_cards(['Ts', 'Th']))
-    hands.append(convert_to_cards(['9s', '9h']))
+    hands.append(to_cards(['As', 'Ah']))
+    hands.append(to_cards(['Ks', 'Kh']))
+    hands.append(to_cards(['Qs', 'Qh']))
+    hands.append(to_cards(['Js', 'Jh']))
+    hands.append(to_cards(['Ts', 'Th']))
+    hands.append(to_cards(['9s', '9h']))
     # This is 5 stud, so the cards after the first should be faceup.
     for h in hands:
         for c in h[1:]:
@@ -145,19 +145,19 @@ def deal_stud5(table, matchingranks=0):
     """ Deals out some preset 5 card stud starting hands for testing. """
 
     # These cards are meant to be dealt face-down
-    downcards = convert_to_cards(['As', 'Ks', 'Qs', 'Js', 'Ts', '9s', '2d', '3d', '4d',
-                                  '2s', '3s', '4s'])
+    downcards = to_cards(['As', 'Ks', 'Qs', 'Js', 'Ts', '9s', '2d', '3d', '4d',
+                          '2s', '3s', '4s'])
     deal_list_to_table(table, downcards)
 
     # These are the up-cards
     if matchingranks == 0:
-        upcards = convert_to_cards(['Ah', 'Kh', 'Qh', 'Jh', 'Th', '9h'])
+        upcards = to_cards(['Ah', 'Kh', 'Qh', 'Jh', 'Th', '9h'])
     elif matchingranks == 2:
-        upcards = convert_to_cards(['5h', '5c', 'Qh', 'Jh', 'Th', '9h'])
+        upcards = to_cards(['5h', '5c', 'Qh', 'Jh', 'Th', '9h'])
     elif matchingranks == 3:
-        upcards = convert_to_cards(['5s', '5c', 'Qh', 'Jh', '5d', '9h'])
+        upcards = to_cards(['5s', '5c', 'Qh', 'Jh', '5d', '9h'])
     elif matchingranks == 4:
-        upcards = convert_to_cards(['5s', '5c', 'Qh', 'Jh', '5d', '5h'])
+        upcards = to_cards(['5s', '5c', 'Qh', 'Jh', '5d', '5h'])
 
     deal_list_to_table(table, upcards, faceup=True)
 
