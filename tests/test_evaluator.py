@@ -62,21 +62,6 @@ def test_dominantsuit_HigherSpades_returnsSpades():
     assert evaluator.dominant_suit(cards) == 's'
 
 
-def test_issuited_1card_returnsTrue():
-    cards = [pc.PlayingCard('A', 's')]
-    assert evaluator.is_suited(cards)
-
-
-def test_issuited_2suitedcards_returnsTrue():
-    cards = tools.convert_to_cards(['As', '2s'])
-    assert evaluator.is_suited(cards)
-
-
-def test_issuited_2unsuitedcard_returnsFalse():
-    cards = tools.convert_to_cards(['As', 'Ad'])
-    assert evaluator.is_suited(cards) is False
-
-
 # Test a low straight hand
 def test_isstraight_lowstraight_returns5():
     hand = tools.make('straight_low')
@@ -204,127 +189,6 @@ def test_findbesthand_flush_returnsFLUSH():
     assert evaluator.get_type(val) == 'FLUSH'
 
 
-def test_is_set_royalflush_returnsTrue():
-    h = tools.make('royalflush')
-    assert evaluator.is_set(h)
-
-
-def test_is_set_handwithdupes_returnsFalse():
-    h = tools.make('dupes')
-    assert evaluator.is_set(h) is False
-
-
-def test_is_set_1card_returnsTrue():
-    h = [pc.PlayingCard('A', 's')]
-    assert evaluator.is_set(h)
-
-
-def test_is_set_2As_returnsFalse():
-    c = pc.PlayingCard('A', 's')
-    h = [c, c]
-    assert evaluator.is_set(h) is False
-
-
-def test_rankdict_0Ace_counts0():
-    cards = tools.convert_to_cards(['Kc', '2s'])
-    rankdict = evaluator.rank_dict(cards)
-    # 0 is the default in case there are no Aces
-    assert rankdict.get('A', 0) == 0
-
-
-def test_rankdict_1Ace_counts1():
-    cards = tools.convert_to_cards(['Kc', 'As'])
-    rankdict = evaluator.rank_dict(cards)
-    assert rankdict.get('A') == 1
-
-
-def test_rankdict_2Aces_counts2():
-    cards = tools.convert_to_cards(['Ah', 'Kc', 'As'])
-    rankdict = evaluator.rank_dict(cards)
-    assert rankdict.get('A') == 2
-
-
-def test_ranklist_1Ace_lenEquals1():
-    cards = [pc.PlayingCard('A', 's')]
-    ranklist = evaluator.rank_list(cards)
-    assert len(ranklist) == 1
-
-
-def test_ranklist_1Ace_1AceCounted():
-    cards = [pc.PlayingCard('A', 's')]
-    ranklist = evaluator.rank_list(cards)
-    assert ranklist[0][0] == 1
-    assert ranklist[0][1] == 'A'
-
-
-def test_ranklist_2Aces_lenEquals1():
-    cards = tools.convert_to_cards(['As', 'Ah'])
-    ranklist = evaluator.rank_list(cards)
-    assert len(ranklist) == 1
-
-
-def test_ranklist_2Aces_2AcesCounted():
-    cards = tools.convert_to_cards(['As', 'Ah'])
-    ranklist = evaluator.rank_list(cards)
-    assert ranklist[0][0] == 2
-    assert ranklist[0][1] == 'A'
-
-
-def test_ranklist_AK_lenEquals2():
-    cards = tools.convert_to_cards(['As', 'Kh'])
-    ranklist = evaluator.rank_list(cards)
-    assert len(ranklist) == 2
-
-
-def test_suitdict_0Spades_counts0():
-    cards = tools.convert_to_cards(['Kc', '2h'])
-    suitdict = evaluator.suit_dict(cards)
-    # 0 is the default in case there are no Aces
-    assert suitdict.get('s', 0) == 0
-
-
-def test_suitdict_0Spade_counts0():
-    cards = tools.convert_to_cards(['Kc', 'Ah'])
-    suitdict = evaluator.suit_dict(cards)
-    assert suitdict.get('s', 0) == 0
-
-
-def test_suitdict_1Spade_counts1():
-    cards = tools.convert_to_cards(['Kc', 'As'])
-    suitdict = evaluator.suit_dict(cards)
-    assert suitdict.get('s') == 1
-
-
-def test_suitdict_2Spade_counts2():
-    cards = tools.convert_to_cards(['Kc', '2s', 'As'])
-    suitdict = evaluator.suit_dict(cards)
-    assert suitdict.get('s') == 2
-
-
-def test_suitedcarddict_0Spades_listlenEquals0():
-    cards = tools.convert_to_cards(['Kc', '2h'])
-    suitdict = evaluator.suitedcard_dict(cards)
-    # Empty list is the default in case there are no Aces
-    assert len(suitdict.get('s', [])) == 0
-
-
-def test_suitedcarddict_1Spade_listlenEquals1():
-    cards = tools.convert_to_cards(['Kc', 'As'])
-    suitdict = evaluator.suitedcard_dict(cards)
-    # Empty list is the default in case there are no Aces
-    assert len(suitdict.get('s', [])) == 1
-
-
-def test_countsuit_nospade_returns0():
-    cards = [pc.PlayingCard('K', 'c')]
-    assert evaluator.count_suit(cards, 's') == 0
-
-
-def test_countsuit_1spade_returns1():
-    cards = tools.convert_to_cards(['Kc', 'As'])
-    assert evaluator.count_suit(cards, 's') == 1
-
-
 def test_getgap_23_returns0():
     c1 = pc.PlayingCard('2', 's')
     c2 = pc.PlayingCard('3', 's')
@@ -373,31 +237,6 @@ def test_getallgaps_2cards1gap_returns1():
 def test_getallgaps_3cards1gap_returns1():
     cards = tools.convert_to_cards(['Tc', 'Js', 'Ks'])
     assert evaluator.get_allgaps(cards) == 1
-
-
-def test_stripranks_stripAces_containsNoAces():
-    ace = pc.PlayingCard('A', 's')
-    king = pc.PlayingCard('K', 'c')
-    cards = [ace, king]
-    assert ace not in evaluator.strip_ranks(cards, ['A'])
-
-
-def test_stripranks_stripAcesAndKings_containsNothing():
-    cards = tools.convert_to_cards(['As', 'Kc'])
-    assert evaluator.strip_ranks(cards, ['A', 'K']) == []
-
-
-def test_stripsuits_stripSpades_containsNoSpades():
-    cards = tools.convert_to_cards(['As', 'Kc'])
-    cards = evaluator.strip_suits(cards, 's')
-    assert evaluator.count_suit(cards, 's') == 0
-
-
-def test_stripsuits_stripMultipleSuits_allSuitsWereStripped():
-    cards = tools.convert_to_cards(['As', 'Kc', 'Qd'])
-    cards = evaluator.strip_suits(cards, ['s', 'c'])
-    assert evaluator.count_suit(cards, 's') == 0
-    assert evaluator.count_suit(cards, 'c') == 0
 
 
 def test_chkwheel_A_returnsTrue():
@@ -539,21 +378,3 @@ def test_chkstraightdraw_4card_1gap_34589A_returnsA345():
     cards = tools.convert_to_cards(['3h', '4s', '5d', '8h', '9d', 'Ad'])
     expected = tools.convert_to_cards(['3h', '4s', '5d', 'Ad'])
     assert evaluator.chk_straight_draw(cards, qty, gap) == expected
-
-
-def test_removepairs_22_returns2():
-    cards = tools.convert_to_cards(['2c', '2d'])
-    expected = [pc.PlayingCard('2', 'c')]
-    assert evaluator.remove_pairs(cards) == expected
-
-
-def test_removepairs_2345_returns2345():
-    cards = tools.convert_to_cards(['2c', '3d', '4d', '5h'])
-    assert evaluator.remove_pairs(cards) == cards
-
-
-def test_removepairs_A223_returns23A():
-    # Keep the first 2
-    cards = tools.convert_to_cards(['As', '2h', '2c', '3d'])
-    expected = tools.convert_to_cards(['2h', '3d', 'As'])
-    assert evaluator.remove_pairs(cards) == expected

@@ -1,10 +1,8 @@
 """ Evaluates poker hands """
 
-from collections import namedtuple
 import itertools
 from . import playingcard as pc
 
-Ranklist = namedtuple('Ranklist', ['quantity', 'rank'])
 HANDSIZE = 5
 MULTIPLIERS = (100000000, 1000000, 10000, 100, 1)
 
@@ -79,15 +77,6 @@ def dominant_suit(cards):
                 highscore = score
                 highsuit = s
         return highsuit
-
-
-def is_suited(cards):
-    """ Returns True if all the cards in the list match the same suit. """
-    suit = cards[0].suit
-    for c in cards:
-        if c.suit != suit:
-            return False
-    return True
 
 
 def is_straight(cards):
@@ -245,60 +234,6 @@ def find_best_hand(cards):
     return bestcombo
 
 
-def is_set(items):
-    """ Return False if items contains any duplicate entries and True if they
-        are all unique.
-    """
-    return len(set(items)) == len(items)
-
-
-def rank_dict(cards):
-    """ Returns a dictionary of rank/counts for the list of cards. """
-    ranks = {}
-    for c in cards:
-        ranks[c.rank] = ranks.get(c.rank, 0) + 1
-    return ranks
-
-
-def rank_list(cards):
-    """ Returns a list of quantity/rank pairs by making a rank dictionary,
-        converting it to a list and sorting it by rank.
-    """
-    ranks = rank_dict(cards)
-    L = [Ranklist(quantity=ranks[r], rank=r) for r in ranks]
-
-    return sorted(L, key=lambda x: (-x.quantity, -pc.RANKS[x.rank]))
-
-
-def suit_dict(cards):
-    """ Returns a dictionary of quantity/suit pair counts. """
-    suits = {}
-    for c in cards:
-        suits[c.suit] = suits.get(c.suit, 0) + 1
-    return suits
-
-
-def suitedcard_dict(cards):
-    """ Returns a dictionary of suits and card lists. Useful for dividing a list
-        of cards into all the separate suits.
-    """
-    suits = {}
-    for c in cards:
-        key = c.suit
-        suits.setdefault(key, []).append(c)  # Dict grouping
-    return suits
-
-
-def count_suit(cards, suit):
-    """ Counts how many cards of the given suit occur in the card list. """
-    return sum(1 for c in cards if c.suit == suit)
-
-
-def count_rank(cards, rank):
-    """ Counts how many cards of the given rank occur in the card list. """
-    return sum(1 for c in cards if c.rank == rank)
-
-
 def get_gap(card1, card2):
     """ Return how many spaces are between the ranks of 2 cards.
         Example: For 87, 8 - 7 = 1, but the gap is actually 0. Paired cards have no gap.
@@ -324,20 +259,6 @@ def get_allgaps(cards):
             raise ValueError('Pair detected while attempting to parse connected cards!')
         gaps += g
     return gaps
-
-
-def strip_ranks(cards, ranks):
-    """ Takes a list of cards, removes the rank(s) given, and returns a list of
-        the leftovers.  There can be more than one rank passed.
-    """
-    return [c for c in cards if c.rank not in ranks]
-
-
-def strip_suits(cards, suits):
-    """ Takes a list of cards, removes the suit given, and returns a list of the
-        leftovers. There can only be one suit passed.
-    """
-    return [c for c in cards if c.suit not in suits]
 
 
 def chk_wheel(cards):
@@ -390,15 +311,3 @@ def chk_straight_draw(cards, qty, gap):
         return draws[-1]
     else:
         return None
-
-
-def remove_pairs(cards):
-    """ Goes through a list of cards and removes any extra pairs. """
-    cards = sorted(cards)
-    newlist = []
-    for i, c in enumerate(sorted(cards)):
-        if i == 0:
-            newlist.append(c)
-        elif c.rank != cards[i - 1].rank:
-            newlist.append(c)
-    return newlist
