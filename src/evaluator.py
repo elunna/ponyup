@@ -1,8 +1,11 @@
 """ Evaluates poker hands """
 
 import itertools
+from . import cardlist
 from . import playingcard as pc
+from collections import namedtuple
 
+Ranklist = namedtuple('Ranklist', ['quantity', 'rank'])
 HANDSIZE = 5
 MULTIPLIERS = (100000000, 1000000, 10000, 100, 1)
 
@@ -33,14 +36,69 @@ DRAWTYPES = {
 }
 
 
-def is_validhand(cards):
-    """ Returns True if the cardlist is 5 unique cards. """
-    if len(cards) > 5:
+class PokerHand(cardlist.CardList):
+    def __init__(self, cards):
+        self.cards = cards
+
+    def value(self):
+        return get_value(self.cards)
+
+    def rank(self):
+        return get_type(self.value())
+
+    def desc(self):
+        return get_description(self.value(), self.cards)
+
+
+def chk_straight_draw(cards, qty, gap):
+    """ Check for wheel draws, we should only have to check the first x cards,
+        where x is qty-1, because the Ace takes out one card. For this exceptional
+        case, we will ignore the gap because wheel draws are inherently gapped
+        anyway. We also add this to the draws list first so that if a better draw
+        comes up later it will be used instead.
+    """
+    # Remove any extra pairs first - they interfere with checking straight draws.
+    pared = remove_pairs(cards)
+
+    if qty > len(pared):
+        raise ValueError('qty cannot be larger than the length of the card list!')
+
+    draws = []
+
+    if max(pared).rank == 'A':
+        # Take the low cards and add the Ace (which should be at the end of the sorted list.
+        aceslice = pared[0: qty - 1]
+        aceslice.append(pared[-1])
+        if chk_wheel(aceslice):
+            draws.append(aceslice)
+
+    end_index = (len(pared) - qty) + 1
+    for i in range(end_index):
+        currentslice = pared[i: qty + i]
+        if get_allgaps(currentslice) <= gap:
+            draws.append(currentslice)
+    if draws:
+        # Return the highest draw found, which would be the last added.
+        return draws[-1]
+    else:
+        return None
+
+
+def chk_wheel(cards):
+    """ Check if the group of cards(passed as a rank dictionary) counts as a wheel
+        draw. The requirements are that an Ace must be present in the group of
+        cards and that all other cards must be no higher than a 5.  There must
+        also be no pairs present, otherwise the order of the draw will be disrupted.
+    """
+    rankdict = rank_dict(cards)
+    wheelcards = ['A', '2', '3', '4', '5']
+    if 'A' not in rankdict:
         return False
-    elif len(cards) < 5:
-        return False
-    elif not is_set(cards):
-        return False
+    for k, v in rankdict.items():
+        if k not in wheelcards:
+            return False
+        elif v > 1:
+            return False
     return True
 
 
@@ -79,6 +137,13 @@ def dominant_suit(cards):
         return highsuit
 
 
+def is_set(cards):
+    """ Return False if items contains any duplicate entries and True if they
+        are all unique.
+    """
+    return len(set(cards)) == len(cards)
+
+
 def is_straight(cards):
     """ Check the list of cards to see if it is a valid straight. If it is,
         returns the highest rank in straight, otherwise returns -1.
@@ -94,28 +159,93 @@ def is_straight(cards):
     return 5
 
 
-def score_ranklist(ranklist):
-    """ Calculates and returns the score of a sorted list of 5 cards.
-        Precondition: Hand should be ordered by highest value first, lowest last
-    """
-    score = 0
-    for i, c in enumerate(ranklist):
-        score += pc.RANKS[c[1]] * MULTIPLIERS[i]
-    return score
+def is_suited(cards):
+    """ Returns True if all the cards in the list match the same suit. """
+    suit = cards[0].suit
+    for c in cards:
+        if c.suit != suit:
+            return False
+    return True
 
 
-def score_cardlist(cards):
-    """ Calculates and returns the score of a sorted list of 5 cards.
-        Precondition:  Hand should be ordered by highest value first, lowest last
+def is_validhand(cards):
+    """ Returns True if the cardlist is 5 unique cards. """
+    if len(cards) > 5:
+        return False
+    elif len(cards) < 5:
+        return False
+    elif not is_set(cards):
+        return False
+    return True
+
+
+def find_best_hand(cards):
+    """ Takes a list of cards and determines the best available 5 card hand and
+        returns that hand as a Hand.
     """
-    score = 0
-    for i, c in enumerate(sorted(cards)):
-        if i > 0:
-            multiplier = 10 ** (i * 2)
+    if len(cards) < HANDSIZE:
+        return None
+    combos = [c for c in itertools.combinations(cards, HANDSIZE)]
+
+    bestcombo, bestvalue = None, 0
+
+    for c in combos:
+        val = get_value(c)
+        if val > bestvalue:
+            bestcombo, bestvalue = c, val
+    return bestcombo
+
+
+def get_allgaps(cards):
+    """ Takes a list of cards and determines how many gaps are between all the
+        ranks (when they occur in sorted order. Should work regardless of order.)
+    """
+    ordered = sorted(cards)
+    gaps = 0
+
+    for i, c in enumerate(ordered):
+        if i == len(cards) - 1:
+            break
+        g = get_gap(c, ordered[i + 1])
+        if g == -1:
+            raise ValueError('Pair detected while attempting to parse connected cards!')
+        gaps += g
+    return gaps
+
+
+def get_gap(card1, card2):
+    """ Return how many spaces are between the ranks of 2 cards.
+        Example: For 87, 8 - 7 = 1, but the gap is actually 0. Paired cards have no gap.
+    """
+    if card1.rank == card2.rank:
+        return -1
+
+    return abs(card1.val() - card2.val()) - 1
+
+
+def get_description(value, cards):
+    """ Returns a text description of the passed pokerhand. """
+    ranks = rank_list(cards)
+    RANK = get_type(value)
+    BASEVALUE = 10000000000
+
+    if len(cards) == 0:
+        return 'No cards!'
+    elif RANK in ['STRAIGHT', 'STRAIGHT FLUSH']:
+        if value % BASEVALUE == 0:
+            return '5 High'
         else:
-            multiplier = 1
-        score += pc.RANKS[c.rank] * multiplier
-    return score
+            return '{} High'.format(ranks[0].rank)
+    elif RANK in ['QUADS', 'TRIPS', 'PAIR']:
+        return '{}\'s'.format(ranks[0].rank)
+    elif RANK == 'FULL HOUSE':
+        return '{}\'s full of {}\'s'.format(
+            ranks[0].rank, ranks[1].rank)
+    elif RANK == 'TWO PAIR':
+        return '{}\'s and {}\'s'.format(
+            ranks[0].rank, ranks[1].rank)
+    else:
+        return '{} High'.format(ranks[0].rank)
 
 
 def get_type(value):
@@ -169,6 +299,68 @@ def get_value(cards):
         return HANDTYPES['INVALID']
 
 
+def rank_dict(cards):
+    """ Returns a dictionary of rank/counts for the list of cards. """
+    ranks = {}
+    for c in cards:
+        ranks[c.rank] = ranks.get(c.rank, 0) + 1
+    return ranks
+
+
+def rank_list(cards):
+    """ Returns a list of quantity/rank pairs by making a rank dictionary,
+        converting it to a list and sorting it by rank.
+    """
+    ranks = rank_dict(cards)
+    L = [Ranklist(quantity=ranks[r], rank=r) for r in ranks]
+    return sorted(L, key=lambda x: (-x.quantity, -pc.RANKS[x.rank]))
+
+
+def remove_pairs(cards):
+    """ Goes through a list of cards and removes any extra pairs. """
+    cards = sorted(cards)
+    newlist = []
+    for i, c in enumerate(sorted(cards)):
+        if i == 0:
+            newlist.append(c)
+        elif c.rank != cards[i - 1].rank:
+            newlist.append(c)
+    return newlist
+
+
+def suitedcard_dict(cards):
+    """ Returns a dictionary of suits and card lists. Useful for dividing a list
+        of cards into all the separate suits.
+    """
+    suits = {}
+    for c in cards:
+        key = c.suit
+        suits.setdefault(key, []).append(c)  # Dict grouping
+    return suits
+
+
+def suit_dict(cards):
+    """ Returns a dictionary of quantity/suit pair counts. """
+    suits = {}
+    for c in cards:
+        suits[c.suit] = suits.get(c.suit, 0) + 1
+    return suits
+
+
+def score_cardlist(cards):
+    """ Calculates and returns the score of a sorted list of 5 cards.
+        Precondition:  Hand should be ordered by highest value first, lowest last
+    """
+    score = 0
+    for i, c in enumerate(sorted(cards)):
+        if i > 0:
+            multiplier = 10 ** (i * 2)
+        else:
+            multiplier = 1
+        score += pc.RANKS[c.rank] * multiplier
+    return score
+
+
 def score_pair_hands(cards):
     """ Calculates the value of a hand that fits into the 'pair type' category:
         pairs, two-pairs, sets, full-houses, and quads.
@@ -192,122 +384,11 @@ def score_pair_hands(cards):
         return HANDTYPES['QUADS'] + score_ranklist(ranklist)
 
 
-def get_description(value, cards):
-    """ Returns a text description of the passed pokerhand. """
-    ranks = rank_list(cards)
-    RANK = get_type(value)
-    BASEVALUE = 10000000000
-
-    if len(cards) == 0:
-        return 'No cards!'
-    elif RANK in ['STRAIGHT', 'STRAIGHT FLUSH']:
-        if value % BASEVALUE == 0:
-            return '5 High'
-        else:
-            return '{} High'.format(ranks[0].rank)
-    elif RANK in ['QUADS', 'TRIPS', 'PAIR']:
-        return '{}\'s'.format(ranks[0].rank)
-    elif RANK == 'FULL HOUSE':
-        return '{}\'s full of {}\'s'.format(
-            ranks[0].rank, ranks[1].rank)
-    elif RANK == 'TWO PAIR':
-        return '{}\'s and {}\'s'.format(
-            ranks[0].rank, ranks[1].rank)
-    else:
-        return '{} High'.format(ranks[0].rank)
-
-
-def find_best_hand(cards):
-    """ Takes a list of cards and determines the best available 5 card hand and
-        returns that hand as a Hand.
+def score_ranklist(ranklist):
+    """ Calculates and returns the score of a sorted list of 5 cards.
+        Precondition: Hand should be ordered by highest value first, lowest last
     """
-    if len(cards) < HANDSIZE:
-        return None
-    combos = [c for c in itertools.combinations(cards, HANDSIZE)]
-
-    bestcombo, bestvalue = None, 0
-
-    for c in combos:
-        val = get_value(c)
-        if val > bestvalue:
-            bestcombo, bestvalue = c, val
-    return bestcombo
-
-
-def get_gap(card1, card2):
-    """ Return how many spaces are between the ranks of 2 cards.
-        Example: For 87, 8 - 7 = 1, but the gap is actually 0. Paired cards have no gap.
-    """
-    if card1.rank == card2.rank:
-        return -1
-
-    return abs(card1.val() - card2.val()) - 1
-
-
-def get_allgaps(cards):
-    """ Takes a list of cards and determines how many gaps are between all the
-        ranks (when they occur in sorted order. Should work regardless of order.)
-    """
-    ordered = sorted(cards)
-    gaps = 0
-
-    for i, c in enumerate(ordered):
-        if i == len(cards) - 1:
-            break
-        g = get_gap(c, ordered[i + 1])
-        if g == -1:
-            raise ValueError('Pair detected while attempting to parse connected cards!')
-        gaps += g
-    return gaps
-
-
-def chk_wheel(cards):
-    """ Check if the group of cards(passed as a rank dictionary) counts as a wheel
-        draw. The requirements are that an Ace must be present in the group of
-        cards and that all other cards must be no higher than a 5.  There must
-        also be no pairs present, otherwise the order of the draw will be disrupted.
-    """
-    rankdict = rank_dict(cards)
-    wheelcards = ['A', '2', '3', '4', '5']
-    if 'A' not in rankdict:
-        return False
-    for k, v in rankdict.items():
-        if k not in wheelcards:
-            return False
-        elif v > 1:
-            return False
-    return True
-
-
-def chk_straight_draw(cards, qty, gap):
-    """ Check for wheel draws, we should only have to check the first x cards,
-        where x is qty-1, because the Ace takes out one card. For this exceptional
-        case, we will ignore the gap because wheel draws are inherently gapped
-        anyway. We also add this to the draws list first so that if a better draw
-        comes up later it will be used instead.
-    """
-    # Remove any extra pairs first - they interfere with checking straight draws.
-    pared = remove_pairs(cards)
-
-    if qty > len(pared):
-        raise ValueError('qty cannot be larger than the length of the card list!')
-
-    draws = []
-
-    if max(pared).rank == 'A':
-        # Take the low cards and add the Ace (which should be at the end of the sorted list.
-        aceslice = pared[0: qty - 1]
-        aceslice.append(pared[-1])
-        if chk_wheel(aceslice):
-            draws.append(aceslice)
-
-    end_index = (len(pared) - qty) + 1
-    for i in range(end_index):
-        currentslice = pared[i: qty + i]
-        if get_allgaps(currentslice) <= gap:
-            draws.append(currentslice)
-    if draws:
-        # Return the highest draw found, which would be the last added.
-        return draws[-1]
-    else:
-        return None
+    score = 0
+    for i, c in enumerate(ranklist):
+        score += pc.RANKS[c[1]] * MULTIPLIERS[i]
+    return score
