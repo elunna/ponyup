@@ -55,9 +55,7 @@ def is_wheel(cards):
         straight, or A2345.
     """
     rankdict = rank_dict(cards)
-    # ranks = set(c.rank for c in cards)
     wheelcards = {'A', '2', '3', '4', '5'}
-    # return ranks == wheelcards
     return set(rankdict.keys()) == wheelcards
 
 
@@ -287,16 +285,7 @@ def suitedcard_dict(cards):
     """
     suits = {}
     for c in cards:
-        key = c.suit
-        suits.setdefault(key, []).append(c)  # Dict grouping
-    return suits
-
-
-def suit_dict(cards):
-    """ Returns a dictionary of quantity/suit pair counts. """
-    suits = {}
-    for c in cards:
-        suits[c.suit] = suits.get(c.suit, 0) + 1
+        suits.setdefault(c.suit, []).append(c)  # Dict grouping
     return suits
 
 

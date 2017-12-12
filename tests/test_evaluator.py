@@ -344,31 +344,6 @@ def test_scorepairhands_AAKK_returns31413000000():
     assert ev.score_pair_hands(cards) == 31413000000
 
 
-def test_suitdict_0Spades_counts0():
-    cl = tools.to_cards(['Kc', '2h'])
-    suitdict = ev.suit_dict(cl)
-    # 0 is the default in case there are no Aces
-    assert suitdict.get('s', 0) == 0
-
-
-def test_suitdict_0Spade_counts0():
-    cl = tools.to_cards(['Kc', 'Ah'])
-    suitdict = ev.suit_dict(cl)
-    assert suitdict.get('s', 0) == 0
-
-
-def test_suitdict_1Spade_counts1():
-    cl = tools.to_cards(['Kc', 'As'])
-    suitdict = ev.suit_dict(cl)
-    assert suitdict.get('s') == 1
-
-
-def test_suitdict_2Spade_counts2():
-    cl = tools.to_cards(['Kc', '2s', 'As'])
-    suitdict = ev.suit_dict(cl)
-    assert suitdict.get('s') == 2
-
-
 def test_suitedcarddict_0Spades_listlenEquals0():
     cl = tools.to_cards(['2h', 'Kc'])
     suitdict = ev.suitedcard_dict(cl)
