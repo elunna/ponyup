@@ -244,10 +244,10 @@ def rank_list(cards):
     """ Returns a list of quantity/rank pairs by making a rank dictionary,
         converting it to a list and sorting it by rank.
     """
-    Ranklist = namedtuple('Ranklist', ['quantity', 'rank'])
+    Ranklist = namedtuple('Ranklist', ['qty', 'rank'])
     ranks = rank_dict(cards)
-    L = [Ranklist(quantity=ranks[r], rank=r) for r in ranks]
-    return sorted(L, key=lambda x: (-x.quantity, -pc.RANKS[x.rank]))
+    L = [Ranklist(qty=ranks[r], rank=r) for r in ranks]
+    return sorted(L, key=lambda x: (-x.qty, -pc.RANKS[x.rank]))
 
 
 def remove_pairs(cards):
@@ -294,18 +294,18 @@ def score_pair_hands(cards):
 
     # Returns the value of a pair-type hand.
     if len(ranklist) > 1:
-        if ranklist[0].quantity == 3 and ranklist[1].quantity == 2:
+        if ranklist[0].qty == 3 and ranklist[1].qty == 2:
             return HANDTYPES['FULL HOUSE'] + score_ranklist(ranklist)
-        elif ranklist[0].quantity == 2 and ranklist[1].quantity == 2:
+        elif ranklist[0].qty == 2 and ranklist[1].qty == 2:
             return HANDTYPES['TWO PAIR'] + score_ranklist(ranklist)
 
-    if ranklist[0].quantity == 1:
+    if ranklist[0].qty == 1:
         return HANDTYPES['HIGH CARD'] + score_ranklist(ranklist)
-    elif ranklist[0].quantity == 2:
+    elif ranklist[0].qty == 2:
         return HANDTYPES['PAIR'] + score_ranklist(ranklist)
-    elif ranklist[0].quantity == 3:
+    elif ranklist[0].qty == 3:
         return HANDTYPES['TRIPS'] + score_ranklist(ranklist)
-    elif ranklist[0].quantity == 4:
+    elif ranklist[0].qty == 4:
         return HANDTYPES['QUADS'] + score_ranklist(ranklist)
 
 
