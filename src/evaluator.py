@@ -63,16 +63,8 @@ def dominant_suit(cards):
         cards.  If a tie is further needed to be broken because the suited cards
         are the same rank, break the tie by using the traditional ranking of suits.
     """
-    # First create a dictionary to count the suits
     suitdict = suitedcard_dict(cards)
-
-    domcount = 0
-
-    # Find the count of the most dominant suit in the list.
-    for s in suitdict:
-        cardsofsuit = len(suitdict[s])
-        if cardsofsuit > domcount:
-            domcount = cardsofsuit
+    domcount = max(len(s) for s in suitdict.values())
 
     # Count how many ties there are.
     tied = [s for s in suitdict if len(suitdict[s]) == domcount]
