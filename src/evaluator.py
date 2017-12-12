@@ -8,6 +8,7 @@ from collections import namedtuple
 Ranklist = namedtuple('Ranklist', ['quantity', 'rank'])
 HANDSIZE = 5
 MULTIPLIERS = (100000000, 1000000, 10000, 100, 1)
+FIVEHIGH, ACEHIGH = 5, 14
 
 HANDTYPES = {
     'ROYAL FLUSH':      100000000000,
@@ -204,16 +205,12 @@ def get_value(cards):
         having less than 5 cards automatically filters out the hands that require
         5: straights, flushes, full house, etc.
     """
-    #  cards = sorted(cards, key=lambda x: card.RANKS[x.rank])
-    #  ranklist = rank_list(cards)
-
     ranklist = rank_list(sorted(cards))
 
     if len(ranklist) < 5:
         return score_pair_hands(cards)
     elif len(ranklist) == HANDSIZE:
         # Returns the value of a non-pair hand.
-        FIVEHIGH, ACEHIGH = 5, 14
 
         straight_chk = is_straight(cards)
         if is_suited(cards):
