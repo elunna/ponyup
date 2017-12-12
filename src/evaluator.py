@@ -317,7 +317,4 @@ def score_ranklist(ranklist):
     """ Calculates and returns the score of a sorted list of 5 cards.
         Precondition: Hand should be ordered by highest value first, lowest last
     """
-    score = 0
-    for i, c in enumerate(ranklist):
-        score += pc.RANKS[c[1]] * MULTIPLIERS[i]
-    return score
+    return sum(pc.RANKS[c[1]] * MULTIPLIERS[i] for i, c in enumerate(ranklist))
