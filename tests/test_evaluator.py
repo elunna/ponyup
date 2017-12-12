@@ -321,27 +321,32 @@ def test_scorecardlist_AKQ_returns141312():
 
 def test_scorepairhands_1Ace_returns1400000000():
     cards = [pc.PlayingCard('A', 's')]
-    assert ev.score_pair_hands(cards) == 1400000000
+    ranklist = ev.rank_list(cards)
+    assert ev.score_pair_hands(cards, ranklist) == 1400000000
 
 
 def test_scorepairhands_2Aces_returns21400000000():
     cards = tools.to_cards(['As', 'Ah'])
-    assert ev.score_pair_hands(cards) == 21400000000
+    ranklist = ev.rank_list(cards)
+    assert ev.score_pair_hands(cards, ranklist) == 21400000000
 
 
 def test_scorepairhands_3Aces_returns41400000000():
     cards = tools.to_cards(['As', 'Ah', 'Ac'])
-    assert ev.score_pair_hands(cards) == 41400000000
+    ranklist = ev.rank_list(cards)
+    assert ev.score_pair_hands(cards, ranklist) == 41400000000
 
 
 def test_scorepairhands_4Aces_returns81400000000():
     cards = tools.to_cards(['As', 'Ah', 'Ac', 'Ad'])
-    assert ev.score_pair_hands(cards) == 81400000000
+    ranklist = ev.rank_list(cards)
+    assert ev.score_pair_hands(cards, ranklist) == 81400000000
 
 
 def test_scorepairhands_AAKK_returns31413000000():
     cards = tools.to_cards(['As', 'Ah', 'Kc', 'Kd'])
-    assert ev.score_pair_hands(cards) == 31413000000
+    ranklist = ev.rank_list(cards)
+    assert ev.score_pair_hands(cards, ranklist) == 31413000000
 
 
 def test_suitedcarddict_0Spades_listlenEquals0():

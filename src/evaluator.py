@@ -208,7 +208,7 @@ def get_value(cards):
     ranklist = rank_list(sorted(cards))
 
     if len(ranklist) < 5:
-        return score_pair_hands(cards)
+        return score_pair_hands(cards, ranklist)
     elif len(ranklist) == HANDSIZE:
         # Returns the value of a non-pair hand.
         return score_nonpair_hands(cards, ranklist)
@@ -270,27 +270,27 @@ def score_cardlist(cards):
     return score
 
 
-def score_pair_hands(cards):
+def score_pair_hands(cards, ranklist):
     """ Calculates the value of a hand that fits into the 'pair type' category:
         pairs, two-pairs, sets, full-houses, and quads.
     """
-    ranklist = rank_list(sorted(cards))
-
-    # Returns the value of a pair-type hand.
-    if len(ranklist) > 1:
-        if ranklist[0].qty == 3 and ranklist[1].qty == 2:
-            return HANDTYPES['FULL HOUSE'] + score_ranklist(ranklist)
-        elif ranklist[0].qty == 2 and ranklist[1].qty == 2:
-            return HANDTYPES['TWO PAIR'] + score_ranklist(ranklist)
 
     if ranklist[0].qty == 1:
-        return HANDTYPES['HIGH CARD'] + score_ranklist(ranklist)
+        value = HANDTYPES['HIGH CARD']
     elif ranklist[0].qty == 2:
-        return HANDTYPES['PAIR'] + score_ranklist(ranklist)
+        value = HANDTYPES['PAIR']
     elif ranklist[0].qty == 3:
-        return HANDTYPES['TRIPS'] + score_ranklist(ranklist)
+        value = HANDTYPES['TRIPS']
     elif ranklist[0].qty == 4:
-        return HANDTYPES['QUADS'] + score_ranklist(ranklist)
+        value = HANDTYPES['QUADS']
+
+    if len(ranklist) > 1:  # If we know we can check at least 2 ranks...
+        if ranklist[0].qty == 3 and ranklist[1].qty == 2:
+            value = HANDTYPES['FULL HOUSE']
+        elif ranklist[0].qty == 2 and ranklist[1].qty == 2:
+            value = HANDTYPES['TWO PAIR']
+
+    return value + score_ranklist(ranklist)
 
 
 def score_nonpair_hands(cards, ranklist):
