@@ -85,8 +85,7 @@ def dominant_suit(cards):
 
 
 def is_set(cards):
-    """ Return False if items contains any duplicate entries and True if they
-        are all unique.
+    """ Return True if all cards all unique, False otherwise.
     """
     return len(set(cards)) == len(cards)
 
@@ -108,11 +107,7 @@ def is_straight(cards):
 
 def is_suited(cards):
     """ Returns True if all the cards in the list match the same suit. """
-    suit = cards[0].suit
-    for c in cards:
-        if c.suit != suit:
-            return False
-    return True
+    return len(suitedcard_dict(cards)) == 1
 
 
 def is_validhand(cards):
