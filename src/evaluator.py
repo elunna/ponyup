@@ -211,23 +211,7 @@ def get_value(cards):
         return score_pair_hands(cards)
     elif len(ranklist) == HANDSIZE:
         # Returns the value of a non-pair hand.
-
-        straight_chk = is_straight(cards)
-        if is_suited(cards):
-            if straight_chk == ACEHIGH:
-                return HANDTYPES['ROYAL FLUSH']
-            elif straight_chk == FIVEHIGH:
-                return HANDTYPES['STRAIGHT FLUSH']
-            elif straight_chk > FIVEHIGH:
-                return HANDTYPES['STRAIGHT FLUSH'] + straight_chk * MULTIPLIERS[0]
-            else:
-                return HANDTYPES['FLUSH'] + score_ranklist(ranklist)
-        elif straight_chk == FIVEHIGH:
-            return HANDTYPES['STRAIGHT']
-        elif straight_chk:
-            return HANDTYPES['STRAIGHT'] + score_ranklist(ranklist)
-        else:
-            return HANDTYPES['HIGH CARD'] + score_ranklist(ranklist)
+        return score_nonpair_hands(cards, ranklist)
     else:
         return HANDTYPES['INVALID']
 
@@ -307,6 +291,26 @@ def score_pair_hands(cards):
         return HANDTYPES['TRIPS'] + score_ranklist(ranklist)
     elif ranklist[0].qty == 4:
         return HANDTYPES['QUADS'] + score_ranklist(ranklist)
+
+
+def score_nonpair_hands(cards, ranklist):
+    straight_chk = is_straight(cards)
+
+    if is_suited(cards):
+        if straight_chk == ACEHIGH:
+            return HANDTYPES['ROYAL FLUSH']
+        elif straight_chk == FIVEHIGH:
+            return HANDTYPES['STRAIGHT FLUSH']
+        elif straight_chk > FIVEHIGH:
+            return HANDTYPES['STRAIGHT FLUSH'] + straight_chk * MULTIPLIERS[0]
+        else:
+            return HANDTYPES['FLUSH'] + score_ranklist(ranklist)
+    elif straight_chk == FIVEHIGH:
+        return HANDTYPES['STRAIGHT']
+    elif straight_chk:
+        return HANDTYPES['STRAIGHT'] + score_ranklist(ranklist)
+    else:
+        return HANDTYPES['HIGH CARD'] + score_ranklist(ranklist)
 
 
 def score_ranklist(ranklist):
