@@ -54,9 +54,7 @@ def is_wheel(cards):
     """ Check if the group of cards(passed as a rank dictionary) counts as a 'wheel
         straight, or A2345.
     """
-    rankdict = rank_dict(cards)
-    wheelcards = {'A', '2', '3', '4', '5'}
-    return set(rankdict.keys()) == wheelcards
+    return set(rank_dict(cards).keys()) == {'A', '2', '3', '4', '5'}
 
 
 def dominant_suit(cards):
