@@ -4,8 +4,8 @@ import itertools
 from . import cardlist
 from . import playingcard as pc
 from collections import namedtuple
+from collections import defaultdict
 
-Ranklist = namedtuple('Ranklist', ['quantity', 'rank'])
 HANDSIZE = 5
 MULTIPLIERS = (100000000, 1000000, 10000, 100, 1)
 FIVEHIGH, ACEHIGH = 5, 14
@@ -234,9 +234,9 @@ def get_value(cards):
 
 def rank_dict(cards):
     """ Returns a dictionary of rank/counts for the list of cards. """
-    ranks = {}
+    ranks = defaultdict(int)
     for c in cards:
-        ranks[c.rank] = ranks.get(c.rank, 0) + 1
+        ranks[c.rank] += 1
     return ranks
 
 
@@ -244,6 +244,7 @@ def rank_list(cards):
     """ Returns a list of quantity/rank pairs by making a rank dictionary,
         converting it to a list and sorting it by rank.
     """
+    Ranklist = namedtuple('Ranklist', ['quantity', 'rank'])
     ranks = rank_dict(cards)
     L = [Ranklist(quantity=ranks[r], rank=r) for r in ranks]
     return sorted(L, key=lambda x: (-x.quantity, -pc.RANKS[x.rank]))
