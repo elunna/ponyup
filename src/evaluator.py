@@ -170,13 +170,7 @@ def is_suited(cards):
 
 def is_validhand(cards):
     """ Returns True if the cardlist is 5 unique cards. """
-    if len(cards) > 5:
-        return False
-    elif len(cards) < 5:
-        return False
-    elif not is_set(cards):
-        return False
-    return True
+    return len(set(cards)) == 5
 
 
 def find_best_hand(cards):
