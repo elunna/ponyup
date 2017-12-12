@@ -12,144 +12,19 @@ def ace():
     return pc.PlayingCard('A', 's')
 
 
-def test_chkstraightdraw_2card_0gap_275Q6K_returnsQK():
-    qty, gap = 2, 0
-    cards = tools.to_cards(['2c', '7s', '5h', 'Qd', '6s', 'Kh'])
-    expected = tools.to_cards(['Qd', 'Kh'])
-    assert ev.chk_straight_draw(cards, qty, gap) == expected
-
-
-def test_chkstraightdraw_2card_0gap_2A5Q6_returns56():
-    qty, gap = 2, 0
-    cards = tools.to_cards(['2c', 'As', '5h', 'Qd', '6s'])
-    expected = tools.to_cards(['5h', '6s'])
-    assert ev.chk_straight_draw(cards, qty, gap) == expected
-
-
-def test_chkstraightdraw_3card_0gap_AK_raisesException():
-    qty, gap = 3, 0
-    cards = tools.to_cards(['As', 'Kc'])
-    with pytest.raises(ValueError):
-        ev.chk_straight_draw(cards, qty, gap)
-
-
-def test_chkstraightdraw_3card_0gap_AKQ_returnsQKA():
-    qty, gap = 3, 0
-    cards = tools.to_cards(['As', 'Kc', 'Qd'])
-    expected = tools.to_cards(['Qd', 'Kc', 'As'])
-    assert ev.chk_straight_draw(cards, qty, gap) == expected
-
-
-def test_chkstraightdraw_3card_0gap_AK9_returnsNone():
-    qty, gap = 3, 0
-    cards = tools.to_cards(['As', 'Kc', '9d'])
-    assert ev.chk_straight_draw(cards, qty, gap) is None
-
-
-def test_chkstraightdraw_3card_0gap_AKQJ_returnsQKA():
-    qty, gap = 3, 0
-    cards = tools.to_cards(['As', 'Kc', 'Qd', 'Jd'])
-    expected = tools.to_cards(['Qd', 'Kc', 'As'])
-    assert ev.chk_straight_draw(cards, qty, gap) == expected
-
-
-def test_chkstraightdraw_3card_0gap_27J3KA_returns23A():
-    qty, gap = 3, 0
-    cards = tools.to_cards(['2d', '7h', 'Js', '3s', 'Ks', 'As'])
-    expected = tools.to_cards(['2d', '3s', 'As'])
-    assert ev.chk_straight_draw(cards, qty, gap) == expected
-
-
-def test_chkstraightdraw_3card_1gap_27T4KA_returns24A():
-    qty, gap = 3, 1
-    cards = tools.to_cards(['2d', '7h', 'Ts', '4s', 'Ks', 'As'])
-    expected = tools.to_cards(['2d', '4s', 'As'])
-    assert ev.chk_straight_draw(cards, qty, gap) == expected
-
-
-def test_chkstraightdraw_3card_1gap_JA5Q6_returnsJQA():
-    qty, gap = 3, 1
-    cards = tools.to_cards(['Jd', 'As', '5h', 'Qd', '6s'])
-    expected = tools.to_cards(['Jd', 'Qd', 'As'])
-    assert ev.chk_straight_draw(cards, qty, gap) == expected
-
-
-def test_chkstraightdraw_3card_1gap_JA596_returnsNone():
-    qty, gap = 3, 1
-    cards = tools.to_cards(['Jd', 'As', '5h', '9d', '6s'])
-    assert ev.chk_straight_draw(cards, qty, gap) is None
-
-
-def test_chkstraightdraw_4card_0gap_2J5Q6K_returnsNone():
-    qty, gap = 4, 0
-    cards = tools.to_cards(['2c', 'Js', '5h', 'Qd', '6s', 'Kh'])
-    assert ev.chk_straight_draw(cards, qty, gap) is None
-
-
-def test_chkstraightdraw_4card_0gap_A2234_returns234A():
-    qty, gap = 4, 0
-    cards = tools.to_cards(['Ah', '2h', '2c', '3d', '4h'])
-    expected = tools.to_cards(['2h', '3d', '4h', 'Ah'])
-    assert ev.chk_straight_draw(cards, qty, gap) == expected
-
-
-def test_chkstraightdraw_4card_1gap_43674_returns3467():
-    qty, gap = 4, 1
-    cards = tools.to_cards(['4c', '3c', '6h', '7d', '4d'])
-    expected = tools.to_cards(['3c', '4c', '6h', '7d'])
-    assert ev.chk_straight_draw(cards, qty, gap) == expected
-
-
-def test_chkstraightdraw_4card_1gap_34589A_returnsA345():
-    qty, gap = 4, 1
-    cards = tools.to_cards(['3h', '4s', '5d', '8h', '9d', 'Ad'])
-    expected = tools.to_cards(['3h', '4s', '5d', 'Ad'])
-    assert ev.chk_straight_draw(cards, qty, gap) == expected
-
-
-def test_chkwheel_A_returnsTrue():
-    cards = tools.to_cards(['As'])
-    assert ev.chk_wheel(cards)
-
-
-def test_chkwheel_A2_returnsTrue():
-    cards = tools.to_cards(['As', '2c'])
-    assert ev.chk_wheel(cards)
-
-
-def test_chkwheel_A23_returnsTrue():
-    cards = tools.to_cards(['As', '2c', '3d'])
-    assert ev.chk_wheel(cards)
-
-
-def test_chkwheel_A234_returnsTrue():
+def test_iswheel_A234_returnsFalse():
     cards = tools.to_cards(['As', '2c', '3d', '4d'])
-    assert ev.chk_wheel(cards)
+    assert ev.is_wheel(cards) is False
 
 
-def test_chkwheel_A2345_returnsTrue():
+def test_iswheel_A2345_returnsTrue():
     cards = tools.to_cards(['As', '2c', '3d', '4d', '5h'])
-    ev.chk_wheel(cards)
+    assert ev.is_wheel(cards)
 
 
-def test_chkwheel_AA23_returnsFalse():
+def test_iswheel_AA23_returnsFalse():
     cards = tools.to_cards(['As', 'Ah', '2c', '3d'])
-    assert ev.chk_wheel(cards) is False
-
-
-def test_chkwheel_A223_returnsFalse():
-    cards = tools.to_cards(['As', '2h', '2c', '3d'])
-    assert ev.chk_wheel(cards) is False
-
-
-def test_chkwheel_AKQJ_returnsFalse():
-    cards = tools.to_cards(['As', 'Kc', 'Qd', 'Jd'])
-    assert ev.chk_wheel(cards) is False
-
-
-def test_chkwheel_2345_returnsFalse():
-    cards = tools.to_cards(['2c', '3d', '4d', '5h'])
-    assert ev.chk_wheel(cards) is False
+    assert ev.is_wheel(cards) is False
 
 
 def test_dominantsuit_1card_returnssuit():
