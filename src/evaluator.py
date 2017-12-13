@@ -1,7 +1,6 @@
 """ Evaluates poker hands """
 
 import itertools
-from . import cardlist
 from . import playingcard as pc
 from collections import namedtuple
 from collections import defaultdict
@@ -35,20 +34,6 @@ DRAWTYPES = {
     '2 CONNECTED DRAW': 10,
     'HIGH CARD DRAW': 0
 }
-
-
-class PokerHand(cardlist.CardList):
-    def __init__(self, cards):
-        self.cards = cards
-
-    def value(self):
-        return get_value(self.cards)
-
-    def rank(self):
-        return get_type(self.value())
-
-    def desc(self):
-        return get_description(self.value(), self.cards)
 
 
 def is_wheel(cards):
